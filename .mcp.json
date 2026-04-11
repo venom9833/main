@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase",
+        "--access-token",
+        "sbp_c2b6564dd5fc754c0896db0b67ddfb3090e49ae2",
+        "--project-ref",
+        "fmjuhbcxkfuilvvdwvix"
+      ]
+    },
+    "code-review-graph": {
+      "command": "python",
+      "args": [
+        "-X", "utf8",
+        "-m", "code_review_graph",
+        "serve"
+      ],
+      "type": "stdio"
+    }
+  }
+}

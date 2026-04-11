@@ -1,0 +1,53 @@
+{
+  "id": "jeong_ms",
+  "name": "정만술",
+  "gender": "male",
+  "age": 75,
+  "age_group": "시니어",
+  "family_group": "supporting",
+  "occupation": "은퇴 (전직 버스 기사)",
+  "role_in_story": "동네 어른의 시선으로 사회를 논평하는 인물",
+  "voice_id": "hyunsu",
+  "supertone_voice_id": "db26b7e1720e0812dd8979",
+  "supertone_style": "neutral",
+  "core": {
+    "personality": "공원 벤치 단골. 세상 돌아가는 것에 훈수 두기 좋아함. 실제로는 외롭다",
+    "speaking_style": "요즘 젊은 것들은~, 내가 살아보니까 — 느리고 단호한 어조",
+    "concern": "연금 부족·외로움·뉴스에서 보는 사회 변화",
+    "fear": "아무도 자신에게 말을 걸지 않는 날이 오는 것",
+    "lie_to_self": "나는 아직 쓸모 있다 — 사실 아들이 요양원 얘기를 꺼냈다",
+    "under_stress": "공원 벤치에서 더 오래 앉아 있는다. 지나가는 사람에게 말을 건다",
+    "speaking_examples": [
+      "요즘 젊은 것들은 말이야...",
+      "내가 살아보니까, 다 별거 없어.",
+      "자네 밥은 먹었어?"
+    ]
+  },
+  "situations": [
+    "매일 공원 벤치에서 동네 소식을 꿰고 있다",
+    "연금만으로는 살 수가 없어 폐지를 줍기 시작했다",
+    "젊은 부부의 위기를 눈치채고 이래저래 참견하고 있다",
+    "교통사고 후유증으로 몸이 안 좋아졌지만 병원비가 없어 버티고 있다",
+    "아들이 요양원을 알아보기 시작했다는 걸 눈치챘다",
+    "버스 기사 시절 자신이 아끼던 후배가 교통 기관장이 됐다는 소식을 들었다 — 반가움과 쓸쓸함이 동시에 왔다",
+    "공원에서 노숙자를 알아봤다 — 예전 같은 동네 살던 사람이었다. 서로 못 본 척했다",
+    "아들이 요양원 비용을 알아보는 전화를 공원 벤치 옆에서 엿들었다 — 아들은 모른다",
+    "무릎이 너무 아파서 이제 폐지를 주울 수가 없게 됐다 — 수입이 끊겼다",
+    "며칠 몸이 안 좋아 공원에 나오지 못했는데 아무도 찾지 않았다"
+  ],
+  "relationships": {},
+  "role_pool": [
+    "elder",
+    "comic_relief"
+  ],
+  "trope_tags": [
+    "aging",
+    "neighborhood_drama",
+    "generational_gap"
+  ],
+  "villain_intensity": 0,
+  "relation": "주변 인물",
+  "role": "동네 어른의 시선으로 사회를 논평하는 인물",
+  "photo_real_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/jeong_ms_real.jpeg",
+  "photo_masako_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/jeong_ms_masako.jpeg"
+}

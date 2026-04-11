@@ -1,0 +1,51 @@
+{
+  "id": "kwon_so",
+  "name": "권순옥",
+  "style": "real",
+
+  "appearance_en": {
+    "face_shape": "round softened face, age-loosened jaw with faint jowl shadow, full cheeks with natural volume loss, bone structure entirely softened by age",
+    "skin": "warm beige Korean skin tone at 72, visible fine creping across cheeks and jaw, deep nasolabial folds, age spots at left temple and forehead, loose skin at neck, natural sebaceous texture — no filter, no retouching, the face of a woman who never prioritized skincare over function",
+    "eyes": "monolid, dark brown iris, outer corners dramatically drooped by age, heavy full upper lids, slightly reddened sclera, gaze flat and deliberately unreadable — the eyes of someone who has watched every dynamic in this household for years and reveals nothing",
+    "nose": "small broad flat nose, softly rounded tip, typical of Korean elder women, recedes into the face when expressionless",
+    "mouth": "thinned lips with visible perioral lines, resting expression in composed absolute neutral — not smiling, not frowning. The face that says nothing and controls the room",
+    "eyebrows": "sparse flat naturally grey brows, minimal arch, level — gives nothing away. No involuntary expression passes through them",
+    "distinctive_marks": "age spots at left temple and forehead, deep nasolabial folds, single faint horizontal crease above brows from sustained controlled expression, loose neck skin, no moles or scars",
+    "hair": "short silver-grey tight-permed hair — traditional Korean grandmother perm, small uniform waves, full crown, always neatly set. Respectability as armor",
+    "body": {
+      "height_cm": 157,
+      "weight_kg": 60,
+      "proportions": "compact broad frame, slight dorsal kyphosis, sturdy legs from a lifetime of housework, hands thick and capable, carries more weight in the midsection with age",
+      "posture": "shoulders drawn slightly inward, mild stoop — not frailty, strategic minimization of presence in a house she now shares but does not fully own",
+      "body_prompt": "157cm compact Korean grandmother, mild kyphotic stoop, broad sturdy frame, shoulders drawn inward, deliberate minimum-presence body language"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "dark conservative blouse in navy, dark grey or small muted floral — below-knee straight skirt or modest trousers, flat comfortable shoes. Clothes that project modest authority without effort",
+        "wardrobe_prompt": "dark conservative blouse in navy or dark grey, below-knee straight skirt or modest trousers, flat comfortable indoor shoes, no jewelry"
+      },
+      "home": {
+        "description": "plain dark cardigan over simple blouse, indoor slippers — slightly overdressed for the house, never truly off-duty",
+        "wardrobe_prompt": "dark plain cardigan over simple blouse, flat indoor slippers, modestly dressed at all times even at home"
+      },
+      "visiting": {
+        "description": "same dark blouse with a small jade or silver brooch — one deliberate concession to occasion",
+        "wardrobe_prompt": "dark conservative blouse, small jade or silver brooch at collar, modest visiting attire"
+      }
+    },
+    "emotion_baseline": "absolute composed neutral — not cold, not warm, entirely unreadable. The face of a woman who proved to herself decades ago that silence is more effective than any expression, and has never stopped using it",
+    "fal_identity_prompt": "72-year-old Korean grandmother, round soft face with jowl shadow and deep nasolabial folds, sparse flat grey brows, monolid dark brown eyes heavily drooped with age and unreadable flat gaze, short silver-grey tight-permed hair, small broad flat nose, thin lips in absolute composed neutral, 157cm compact broad-framed slightly stooped body, warm beige aged Korean skin with age spots and visible texture, strategic stillness as presence"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "photorealistic, ordinary Korean grandmother living in her son's home, no beauty filter, no skin retouching, visible natural aging — age spots, nasolabial folds, loose skin, realistic elder Korean woman, 50mm f1.8 lens, warm interior home ambient light, documentary street-cast appearance, cinematic quiet authority",
+  "negative_prompt": "illustration, anime, cartoon, painting, 3d render, ugly, deformed, extra fingers, extra limbs, young appearance, smooth flawless skin, beauty filter, airbrushed, model look, glamorous, warm smile, openly emotional, western features, retouching"
+}

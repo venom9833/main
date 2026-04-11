@@ -1,0 +1,50 @@
+{
+  "id": "yang_sj",
+  "name": "양서진",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "soft oval face, youthful rounded jaw, light cheekbones — slightly younger and softer than her sister, vulnerability more visible in the face structure",
+    "skin": "fair Korean skin, smooth with slightly warm undertone, less makeup than her sister — a freshness that hasn't yet been fully covered by professional armor",
+    "eyes": "double eyelid, dark brown iris, direct but with an involuntary softness she cannot quite control — a sharpness appears when she catches herself losing composure, subtle shadows under eyes from poor sleep",
+    "nose": "neat straight nose, slightly small, soft rounded tip — matches the younger softness of her face",
+    "mouth": "soft medium lips, naturally pink, resting expression slightly more open than her sister's — she has not yet learned to hold it perfectly still, lips tighten when suppressing emotion",
+    "eyebrows": "naturally shaped moderately arched brows, less groomed than her sister's but naturally clean, knits together when anxious or overthinking",
+    "distinctive_marks": "subtle dark circles from poor sleep, no moles or marks, faint flush appears at cheek when emotionally caught off guard",
+    "hair": "dark brown hair, medium length just below shoulder, fine texture, worn loose or in a casual low braid — not styled for authority, styled for herself",
+    "body": {
+      "height_cm": 164,
+      "weight_kg": 52,
+      "proportions": "slim frame, slightly less defined than her sister, shoulders a fraction narrower, overall lighter and less physically assertive presence",
+      "posture": "upright but without her sister's deliberateness — natural standing posture occasionally shifts weight to one foot, arms sometimes crossed when uncertain",
+      "body_prompt": "164cm slim Korean woman, naturally upright posture without performed composure, slightly softer physical presence, arms occasionally crossed when uncertain"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "law firm business casual — simple fitted blazer or structured cardigan, tailored blouse, straight trousers or pencil skirt, flat shoes or low heel",
+        "wardrobe_prompt": "simple structured blazer or fitted cardigan over tailored blouse, straight trousers or pencil skirt, flat shoes or low block heel, law firm business casual"
+      },
+      "casual": {
+        "description": "simple fitted cotton top or soft knit, straight jeans, sneakers or flats — younger and more relaxed than work",
+        "wardrobe_prompt": "simple fitted cotton top or soft knit sweater, straight-cut jeans, clean sneakers or ballet flats, minimal accessories"
+      },
+      "stressed": {
+        "description": "same casual clothes but arms wrapped or hugging herself, hair slightly messy, gaze avoidant",
+        "wardrobe_prompt": "same casual cotton or knit clothes, arms crossing or self-hugging, hair slightly disheveled, withdrawn body posture"
+      }
+    },
+    "emotion_baseline": "appears calm and logical on the surface, but the body gives her away before the face does — a slight hitch in breath, a fractional pause, a gaze held just too long",
+    "fal_identity_prompt": "soft oval-faced Korean woman early 40s, direct dark eyes with involuntary warmth and subtle under-eye shadow, naturally arched brows, neat slightly small nose, soft medium lips, dark brown medium hair loose or low casual braid, 164cm slim lighter posture than a seasoned professional, fair warm-tone Korean skin, composed but emotionally legible"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.72,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, clean delicate manga ink lines, warm-tone soft screen tone, muted warm palette with quiet tension, cinematic Korean drama composition, forbidden feeling rendered in stillness, subtle emotional conflict",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, overly cheerful, childish, chibi, idol look"
+}

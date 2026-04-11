@@ -1,0 +1,50 @@
+{
+  "id": "choi_ms",
+  "name": "최민성",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "broad weathered face, wide strong jaw, moderate cheekbones — built for outdoor physical work, carries the wear of two marriages and too many avoided conversations",
+    "skin": "medium Korean skin with weathered warm undertone, visible texture from outdoor sun exposure, nasolabial lines deepened by years of suppressed expression, pores visible",
+    "eyes": "single or light double eyelid, dark brown iris, slightly heavy upper lids from age and fatigue, gaze tends to look past people rather than at them when uncomfortable — avoidance disguised as confidence",
+    "nose": "medium-broad nose, rounded tip, slightly wide base — adds to the weathered physical presence of the face",
+    "mouth": "medium-full lips, often held closed with a slight tightening at the corners, jaw muscles visible when he is processing something he won't speak aloud",
+    "eyebrows": "medium-thick straight dark brows, flecked with some grey, slight permanent downward angle at outer edges giving a perpetual look of burden",
+    "distinctive_marks": "deep nasolabial fold lines, faint weathering lines across forehead, no scars or moles, neck tension visible when stressed",
+    "hair": "short dark hair with visible grey threading through at temples and sides, slightly coarse texture, simply combed without much product, a few hairs always slightly out of place",
+    "body": {
+      "height_cm": 176,
+      "weight_kg": 83,
+      "proportions": "stocky solid frame, broad chest, wide shoulders from physical labor, no visible fat excess but no sculpted definition — the body of a working man in his late 40s",
+      "posture": "stands planted and wide-based at work, droops slightly at home when guarding not required — the posture of a man who uses physical presence as armor",
+      "body_prompt": "176cm stocky solid broad-shouldered Korean man late 40s, heavy physical presence, slightly drooped shoulders when unguarded, quiet contained physical weight"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "open-collar dark work shirt or polo, dark thick-weave trousers or work pants, sometimes hard hat held or hung nearby — construction site field supervisor",
+        "wardrobe_prompt": "dark open-collar work shirt or polo, thick-weave dark work trousers, construction site field attire, no jacket or jacket hung over arm"
+      },
+      "casual": {
+        "description": "plain round-neck tee in grey or navy, dark jeans or heavy trousers, plain canvas or leather shoes — no style effort, just comfort",
+        "wardrobe_prompt": "plain round-neck tee in grey or dark navy, dark jeans or thick trousers, plain leather or canvas shoes, no accessories"
+      },
+      "stressed": {
+        "description": "same clothes but collar completely open, sleeves pushed up to elbow, jaw set, work shirt untucked slightly",
+        "wardrobe_prompt": "same dark shirt or tee with collar fully open, sleeves pushed to elbow, shirt slightly untucked, set jaw, weight heavy in posture"
+      }
+    },
+    "emotion_baseline": "surface of steady solidity — the look of a man who has made himself the wall between everyone else and the problem, and is privately exhausted by it",
+    "fal_identity_prompt": "broad weathered-faced Korean man late 50s, wide strong jaw, medium-broad nose, heavy-lidded dark eyes, medium-thick dark brows with grey threading, short dark-grey mixed hair simply combed, 176cm stocky broad-shouldered solid frame, weathered medium skin, quiet contained physical heaviness"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.72,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, bold clean manga ink lines, strong contrast screen tone, earthy muted grey-brown palette, cinematic Korean drama composition, physical solidity expressing emotional silence, heavy weight in stillness",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, childish, pretty, slim, youthful"
+}

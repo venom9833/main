@@ -1,0 +1,21 @@
+<div class="cat">
+  <div class="cat__ears">
+    <div class="cat__ear cat__ear--left"></div>
+    <div class="cat__ear cat__ear--right"></div>
+  </div>
+  <div class="cat__face">
+    <div class="cat__eyes">
+      <div class="cat__eye cat__eye--left"></div>
+      <div class="cat__eye cat__eye--right"></div>
+    </div>
+    <div class="cat__decoration cat__decoration--white"></div>
+    <div class="cat__mouth">
+      <div class="cat__canine"></div>
+      <div class="cat__snout"></div>
+    </div>
+  </div>
+  <div class="cat__nose">
+    <div class="cat__mustache cat__mustache--left"></div>
+    <div class="cat__mustache cat__mustache--right"></div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+linkdrop/agents/ Structure
+01_Planner_Agent: Scripting, storyboarding, and caption logic.
+
+02_Resource_Agent: TTS(Audio) generation and visual asset sourcing.
+
+03_Composer_Agent: Video assembly, timeline mapping, and rendering logic.
+
+04_Reviewer_Agent: Quality assurance, compliance, and error checking.
+
+05_Link_Agent: Export management and distribution link generation.
+
+linkdrop/agents/ 폴더 구조 (한글 번역)
+01_기획_에이전트: 시나리오 작성, 스토리보드 및 캡션 생성 로직.
+
+02_자원_에이전트: 음성(TTS) 생성 및 시각 자료 소싱.
+
+03_조립_에이전트: 영상 합성, 타임라인 매핑 및 렌더링 로직.
+
+04_검수_에이전트: 품질 확인, 정책 준수 및 오류 체크.
+
+05_링크_에이전트: 출력 관리 및 배포용 링크 생성.
+
+https://github.com/jacob-bd/notebooklm-mcp-cli
+
+https://gemini.google.com/app?utm_medium=paid-media&utm_campaign=nano_banana_pro_sem_bkws&gclsrc=aw.ds&gad_source=1&gad_campaignid=23041970058&gbraid=0AAAAApk5BhkDLDXvgo497PxQSEETteoCG&gclid=Cj0KCQiAwYrNBhDcARIsAGo3u32QxhZENvwJmCXIMrNjn-GHb64aBUsn0THrGtb25zGR40uc9s5b8lQaAorpEALw_wcB

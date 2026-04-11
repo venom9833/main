@@ -1,0 +1,1 @@
+([('main', '/Users/matowe/Desktop/mato_blog/dist/main', 'EXECUTABLE')],)

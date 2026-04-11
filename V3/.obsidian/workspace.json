@@ -1,0 +1,232 @@
+{
+  "main": {
+    "id": "6df4229d332255c7",
+    "type": "split",
+    "children": [
+      {
+        "id": "bb65255b4c90f910",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ab0e9590314f3c3b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "★  삼국지 야담  템플릿 01.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "★  삼국지 야담  템플릿 01"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "87c44f6126414f94",
+    "type": "split",
+    "children": [
+      {
+        "id": "9cc01258a9cf4043",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4f4813e8727c2486",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "파일 탐색기"
+            }
+          },
+          {
+            "id": "41429591417afe06",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "검색"
+            }
+          },
+          {
+            "id": "679eaa65bea7a80f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "북마크"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 249.5
+  },
+  "right": {
+    "id": "e451a7b4addc31a0",
+    "type": "split",
+    "children": [
+      {
+        "id": "b023de0b20508c82",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "88dbba0ca1474155",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "★  삼국지 야담  템플릿 01.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "★  삼국지 야담  템플릿 01 의 백링크"
+            }
+          },
+          {
+            "id": "9a8f93f672fcc450",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "★  삼국지 야담  템플릿 01.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "★  삼국지 야담  템플릿 01 의 나가는 링크"
+            }
+          },
+          {
+            "id": "3c3ad809e6dff5a1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "태그"
+            }
+          },
+          {
+            "id": "ea5d630c513e00d4",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "모든 속성"
+            }
+          },
+          {
+            "id": "1b5bbf289fbf91e4",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "★  삼국지 야담  템플릿 01.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "★  삼국지 야담  템플릿 01 의 개요"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "bases:새 베이스 생성하기": false
+    }
+  },
+  "active": "ab0e9590314f3c3b",
+  "lastOpenFiles": [
+    "V3.base",
+    "TODO/2026-01-24.md",
+    "TODO",
+    "Shop/HTML import/Attachments/list_gray.svg",
+    "Shop/HTML import/Attachments/gift_red.svg",
+    "Shop/HTML import/Attachments/folder_gray.svg",
+    "Shop/HTML import/Attachments/cursor-click_gray.svg",
+    "Shop/HTML import/Attachments",
+    "Shop/★ 쇼츠 구조 DB.md",
+    "Shop/★ 상황별 HOOK 리스트.md",
+    "Shop/HTML import",
+    "Shop",
+    "Prompt",
+    "Image/지도 형태 아이소메트릭 이미지 생성하기.md",
+    "Image/★ 이미지 작업 순서.md",
+    "Image/★ 스토리기반 이미지 대량 생산 (노트북 LM 기반).md",
+    "Image/★ 미드져니 파라미터.md",
+    "Image",
+    "Etc/잡다한 지식.md",
+    "Etc/영아부천하인 보고서.md",
+    "Etc/★ AI 툴 정보.md",
+    "Etc/1시간 안에 1년치 컨텐츠 만드는 비법.md",
+    "Etc",
+    "attached/143952.jpg",
+    "attached/112334.png",
+    "attached/112334.jpg",
+    "attached",
+    "★ 이미지 제작 기술서(상처가 아문 자리).md",
+    "★ 유튜브 업로드 템플릿 01.md",
+    "★ 삼국지 쇼츠 운영 전략.md",
+    "★  삼국지 야담  템플릿 01.md",
+    "시나리오/제4장 - 호뢰관 전투.md",
+    "시나리오/제3장 - 가짜 조서.md",
+    "시나리오/제2장 - 도원결의.md",
+    "시나리오/제1장 - 칠성보도.md",
+    "시나리오",
+    "바이브코딩/링크드랍.md",
+    "바이브코딩",
+    "Video/효과음.md",
+    "Video/이미지 전용 워크플로우.md",
+    "Video/이미지 전용 워크플로우 2.md",
+    "Video/★ 효과음 릴스 조회수 폭발한 캡컷 효과음 30가지.md",
+    "Video/★ 유튜브  동영상 역추출.md"
+  ]
+}

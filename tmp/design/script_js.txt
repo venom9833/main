@@ -1,0 +1,334 @@
+/**
+ * Tabs Pro - Production-Ready Implementation
+ *
+ * Features:
+ * - Full ARIA accessibility support
+ * - Event delegation for performance
+ * - Memory-safe notification system
+ * - Debounced resize handling
+ * - Keyboard navigation (Arrow keys, Home, End)
+ * - Screen reader announcements
+ * - Error boundaries
+ * - Clean architecture with ES6 class
+ */
+
+class EliteTabs {
+  // Private class fields
+  #tabsNav = null;
+  #tabIndicator = null;
+  #tabs = [];
+  #panels = [];
+  #toastContainer = null;
+  #liveRegion = null;
+  #currentIndex = 0;
+  #resizeObserver = null;
+  #isInitialized = false;
+
+  // Configuration
+  static CONFIG = Object.freeze({
+    DEBOUNCE_DELAY: 100,
+    TOAST_DURATION: 3000,
+    ANIMATION_DURATION: 300,
+    SELECTORS: {
+      tabsNav: "#tabsNav",
+      tabIndicator: "#tabIndicator",
+      tab: '[role="tab"]',
+      panel: '[role="tabpanel"]',
+      toastContainer: "#toastContainer",
+      liveRegion: "#liveRegion"
+    }
+  });
+
+  constructor() {
+    this.#init();
+  }
+
+  /**
+   * Initialize the tabs component
+   */
+  #init() {
+    try {
+      this.#cacheElements();
+      this.#validateElements();
+      this.#bindEvents();
+      this.#setupResizeObserver();
+      this.#updateIndicator(this.#tabs[0]);
+      this.#isInitialized = true;
+    } catch (error) {
+      console.error("EliteTabs initialization failed:", error);
+      this.#handleInitError();
+    }
+  }
+
+  /**
+   * Cache DOM elements for performance
+   */
+  #cacheElements() {
+    const { SELECTORS } = EliteTabs.CONFIG;
+
+    this.#tabsNav = document.querySelector(SELECTORS.tabsNav);
+    this.#tabIndicator = document.querySelector(SELECTORS.tabIndicator);
+    this.#tabs = Array.from(document.querySelectorAll(SELECTORS.tab));
+    this.#panels = Array.from(document.querySelectorAll(SELECTORS.panel));
+    this.#toastContainer = document.querySelector(SELECTORS.toastContainer);
+    this.#liveRegion = document.querySelector(SELECTORS.liveRegion);
+  }
+
+  /**
+   * Validate required elements exist
+   */
+  #validateElements() {
+    const requiredElements = {
+      tabsNav: this.#tabsNav,
+      tabIndicator: this.#tabIndicator,
+      tabs: this.#tabs.length > 0,
+      panels: this.#panels.length > 0
+    };
+
+    Object.entries(requiredElements).forEach(([name, exists]) => {
+      if (!exists) {
+        throw new Error(`Required element missing: ${name}`);
+      }
+    });
+
+    if (this.#tabs.length !== this.#panels.length) {
+      throw new Error("Tab and panel count mismatch");
+    }
+  }
+
+  /**
+   * Bind event listeners using delegation
+   */
+  #bindEvents() {
+    // Tab click events (event delegation)
+    this.#tabsNav.addEventListener("click", this.#handleTabClick.bind(this));
+
+    // Keyboard navigation
+    this.#tabsNav.addEventListener("keydown", this.#handleKeydown.bind(this));
+
+    // Settings button
+    const settingsBtn = document.getElementById("openSettingsBtn");
+    if (settingsBtn) {
+      settingsBtn.addEventListener("click", () => {
+        this.showToast("Settings panel opened successfully!");
+      });
+    }
+
+    // Toggle switches
+    document.querySelectorAll(".toggle input").forEach((toggle) => {
+      toggle.addEventListener("change", (e) => {
+        const label =
+          e.target.closest(".setting-item")?.querySelector("h4")?.textContent ||
+          "Setting";
+        const state = e.target.checked ? "enabled" : "disabled";
+        this.showToast(`${label} ${state}`);
+      });
+    });
+  }
+
+  /**
+   * Setup ResizeObserver for responsive indicator
+   */
+  #setupResizeObserver() {
+    let debounceTimer = null;
+
+    this.#resizeObserver = new ResizeObserver(() => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const activeTab = this.#tabs[this.#currentIndex];
+        if (activeTab) {
+          this.#updateIndicator(activeTab);
+        }
+      }, EliteTabs.CONFIG.DEBOUNCE_DELAY);
+    });
+
+    this.#resizeObserver.observe(this.#tabsNav);
+  }
+
+  /**
+   * Handle tab click events
+   */
+  #handleTabClick(event) {
+    const tab = event.target.closest('[role="tab"]');
+    if (!tab) return;
+
+    const index = this.#tabs.indexOf(tab);
+    if (index !== -1) {
+      this.#activateTab(index);
+    }
+  }
+
+  /**
+   * Handle keyboard navigation
+   */
+  #handleKeydown(event) {
+    const { key } = event;
+    const tabCount = this.#tabs.length;
+    let newIndex = this.#currentIndex;
+
+    switch (key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        newIndex = (this.#currentIndex + 1) % tabCount;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        newIndex = (this.#currentIndex - 1 + tabCount) % tabCount;
+        break;
+      case "Home":
+        newIndex = 0;
+        break;
+      case "End":
+        newIndex = tabCount - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    this.#activateTab(newIndex, true);
+  }
+
+  /**
+   * Activate a tab by index
+   */
+  #activateTab(index, setFocus = false) {
+    if (index === this.#currentIndex) return;
+    if (index < 0 || index >= this.#tabs.length) return;
+
+    const prevTab = this.#tabs[this.#currentIndex];
+    const prevPanel = this.#panels[this.#currentIndex];
+    const nextTab = this.#tabs[index];
+    const nextPanel = this.#panels[index];
+
+    // Update previous tab
+    prevTab.setAttribute("aria-selected", "false");
+    prevTab.setAttribute("tabindex", "-1");
+    prevPanel.setAttribute("aria-hidden", "true");
+
+    // Update next tab
+    nextTab.setAttribute("aria-selected", "true");
+    nextTab.setAttribute("tabindex", "0");
+    nextPanel.setAttribute("aria-hidden", "false");
+
+    // Update indicator
+    this.#updateIndicator(nextTab);
+
+    // Update current index
+    this.#currentIndex = index;
+
+    // Set focus if requested
+    if (setFocus) {
+      nextTab.focus();
+    }
+
+    // Announce to screen readers
+    this.#announce(`${nextTab.textContent.trim()} tab selected`);
+  }
+
+  /**
+   * Update the sliding indicator position
+   */
+  #updateIndicator(tab) {
+    if (!tab || !this.#tabIndicator || !this.#tabsNav) return;
+
+    const tabRect = tab.getBoundingClientRect();
+    const navRect = this.#tabsNav.getBoundingClientRect();
+    const scrollLeft = this.#tabsNav.scrollLeft;
+
+    const left = tabRect.left - navRect.left + scrollLeft;
+    const width = tabRect.width;
+
+    this.#tabIndicator.style.transform = `translateX(${left}px)`;
+    this.#tabIndicator.style.width = `${width}px`;
+  }
+
+  /**
+   * Announce message to screen readers
+   */
+  #announce(message) {
+    if (!this.#liveRegion) return;
+
+    this.#liveRegion.textContent = "";
+    // Force reflow for screen reader
+    void this.#liveRegion.offsetHeight;
+    this.#liveRegion.textContent = message;
+  }
+
+  /**
+   * Show a toast notification
+   */
+  showToast(message, duration = EliteTabs.CONFIG.TOAST_DURATION) {
+    if (!this.#toastContainer) return;
+
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = message;
+    toast.setAttribute("role", "alert");
+
+    this.#toastContainer.appendChild(toast);
+
+    // Auto-remove after duration
+    setTimeout(() => {
+      toast.classList.add("removing");
+      toast.addEventListener(
+        "animationend",
+        () => {
+          toast.remove();
+        },
+        { once: true }
+      );
+    }, duration);
+  }
+
+  /**
+   * Handle initialization errors gracefully
+   */
+  #handleInitError() {
+    // Fallback: make all panels visible
+    document.querySelectorAll('[role="tabpanel"]').forEach((panel) => {
+      panel.style.position = "relative";
+      panel.style.opacity = "1";
+      panel.style.visibility = "visible";
+      panel.style.marginBottom = "20px";
+    });
+  }
+
+  /**
+   * Cleanup method for SPA navigation
+   */
+  destroy() {
+    if (this.#resizeObserver) {
+      this.#resizeObserver.disconnect();
+    }
+    this.#isInitialized = false;
+  }
+
+  /**
+   * Get current active tab index
+   */
+  get activeIndex() {
+    return this.#currentIndex;
+  }
+
+  /**
+   * Programmatically switch to a tab
+   */
+  switchTo(index) {
+    this.#activateTab(index);
+  }
+}
+
+// Initialize when DOM is ready
+let tabsInstance = null;
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    tabsInstance = new EliteTabs();
+  });
+} else {
+  tabsInstance = new EliteTabs();
+}
+
+// Expose instance for debugging (remove in production)
+window.__eliteTabs = tabsInstance;

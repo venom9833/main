@@ -1,0 +1,52 @@
+{
+  "id": "yoon_ms",
+  "name": "윤말순",
+  "gender": "female",
+  "age": 66,
+  "age_group": "시니어",
+  "family_group": "supporting",
+  "occupation": "복지관 이용 독거 노인",
+  "role_in_story": "노인 빈곤·고독사 문제를 조용히 드러내는 인물",
+  "voice_id": "soonbok",
+  "supertone_voice_id": "427bbfa89704dfba8feed4",
+  "supertone_style": "neutral",
+  "core": {
+    "personality": "조용하고 체념적. 작은 친절에도 크게 감동받음. 기대를 너무 많이 해서 상처받은 경험이 있다. 이제는 아무것도 기대하지 않기로 했다",
+    "speaking_style": "고마워요, 별거 아닌데 — 낮고 조심스러운 어조. 말수가 적다",
+    "concern": "홀로 사는 외로움·건강 악화·긴급 상황 시 도움받을 사람 부재",
+    "fear": "아무도 모르게 혼자 죽는 것 — 그리고 아무도 슬퍼하지 않는 것",
+    "lie_to_self": "나는 혼자가 편하다 — 사실 누군가 먼저 연락해주기를 기다리고 있다",
+    "under_stress": "복지관에 나간다. 앉아만 있는다. 눈에 띄지 않으려 한다",
+    "speaking_examples": [
+      "고마워요. 별거 아닌데.",
+      "괜찮아요. 신경 쓰지 마세요.",
+      "...저 오늘 복지관 갔다 왔어요."
+    ]
+  },
+  "situations": [
+    "3일째 복지관에 나오지 않아 이웃이 걱정하고 있다",
+    "냉장고가 고장났지만 수리비가 없어 그냥 쓰고 있다",
+    "딸이 10년 만에 연락을 해왔는데 돈 때문이었다",
+    "노후 준비가 전혀 없어 기초생활수급 신청을 처음으로 알아보고 있다",
+    "복지관에서 자신을 먼저 찾아온 자원봉사자가 생겼다 — 그 사람이 언젠가 떠날 것이 벌써 두렵다",
+    "딸이 돈을 빌리러 왔다가 집 안을 보고 아무 말 없이 돌아갔다",
+    "밤에 가슴이 답답해서 119를 부르려다 '이 정도는 아니지'라고 스스로 말리고 참았다",
+    "기초생활수급 신청 서류를 작성하다가 '부양 의무자' 란에서 멈췄다 — 딸 이름을 쓰면 딸에게 연락이 간다",
+    "복지관 프로그램에서 만든 손뜨개 컵받침을 아무한테도 줄 수가 없어 혼자 모아두고 있다",
+    "이웃 노인이 고독사로 발견됐다는 뉴스를 듣고 처음으로 무섭다는 생각이 들었다"
+  ],
+  "relationships": {},
+  "role_pool": [
+    "elder"
+  ],
+  "trope_tags": [
+    "isolation",
+    "aging",
+    "poverty"
+  ],
+  "villain_intensity": 0,
+  "relation": "주변 인물",
+  "role": "노인 빈곤·고독사 문제를 조용히 드러내는 인물",
+  "photo_real_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/yoon_ms_real.jpeg",
+  "photo_masako_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/yoon_ms_masako.jpeg"
+}

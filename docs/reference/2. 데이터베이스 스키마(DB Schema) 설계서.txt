@@ -1,0 +1,119 @@
+
+# 📑 데이터베이스 스키마(DB Schema) 설계서
+
+이 스키마는 **Supabase(PostgreSQL)** 환경에 최적화되어 설계되었습니다.
+
+## 1. 핵심 엔티티 관계도 (ERD 요약)
+
+## 2. 테이블 상세 설계
+
+### ① profiles (사용자 기본 정보)
+
+회원의 기본 인적 사항 및 사업자 상태를 관리합니다.
+
+* id: UUID (Primary Key, Auth.users와 연결)
+* full_name: Text (실명, 시니어 유저 확인용)
+* role: Text (가입 등급: 작가, 대작가 등)
+* is_business: Boolean (사업자 여부, 3.3% 원천징수 판단 기준)
+* bank_account: Jsonb (정산용 은행명, 계좌번호, 예금주)
+* template_id: Integer (사용자가 선택한 템플릿 번호, **templates.id**와 연결)
+
+### ② design_assets (디자인 창고 리소스)
+
+`front_design.html`에서 전시되는 디자인 샘플 및 다운로드 리소스를 관리합니다.
+
+* id: Integer (Primary Key)
+* title: Text (디자인 제목)
+* description: Text (디자인 상세 설명)
+* thumbnail_url: Text (썸네일 이미지 경로 - thumb)
+* preview_url: Text (미리보기 페이지 링크 - link)
+* download_url: Text (리소스 다운로드 링크 - download)
+* created_at: Timestamp (등록일)
+
+### ③ referrals (3xN 매트릭스 계보)
+
+조직의 연결 관계를 관리하며, **Spillover** 로직의 핵심 데이터입니다.
+
+* user_id: UUID (회원 본인)
+* referrer_id: UUID (실제 추천인, **직접 수당 21,420원** 지급 대상)
+* parent_id: UUID (매트릭스상 바로 위 부모, **후원금 1,000원** 지급 대상)
+* position: Integer (부모 기준 1, 2, 3번 자리 중 어디인지)
+* depth: Integer (최상위로부터의 깊이)
+
+### ④ sales (매출 기록)
+
+전자책 판매가 일어날 때마다 생성되는 원천 데이터입니다.
+
+컬럼명,데이터 타입,설명
+id,UUID (PK),매출 고유 번호
+seller_id,UUID (FK),판매를 일으킨 회원 (수당 지급의 기준)
+product_price,Numeric,"판매가 (59,000원 고정 또는 가변)"
+status,Text,"결제 상태 (completed, refunded, pending)"
+payment_method,Text,"매출발생구분 (card, trans, vbank, phone)"
+card_issuer_name,Text,"카드사명 (예: 신한카드, 현대카드)"
+card_issuer_code,Text,"카드사 코드 (예: 01, 04 등 결제대행사(PG) 표준 코드)"
+payment_gateway_id,Text,PG사 거래 승인 번호 (취소/환불 시 필수 데이터)
+created_at,Timestamp,매출 발생 시각
+
+### ⑤ earnings (수당 및 정산 관리)
+
+판매 건별로 발생하는 본인 수당과 후원금을 기록하고 지급 일정을 관리합니다.
+
+컬럼명,데이터 타입,설명
+id: UUID (PK) 수당 고유 번호
+user_id: UUID (FK) 수당 수령자 (내 지갑 주인)
+sale_id: UUID (FK) 어떤 매출에서 발생했는지 연결
+amount: Numeric,"지급액 (21,420원 또는 1,000원)"
+type: Text, 내부 로직용 구분 (direct, upline_bonus)"
+display_label: Text,"사용자 표시용 구분 (직접 판매 수익, 팀 후원 보너스)"
+status,Text: "정산 상태 (pending, confirmed, paid, cancelled)"
+scheduled_payout_date,Date: 매출 발생 주 기준 3주차 수요일 (자동 계산)
+actual_payout_at: Timestamp  실제 입금 완료 시각
+description: Text  "예: ""홍길동 님의 전자책 판매 후원금"" (시니어용 설명)"
+
+
+---
+
+## 3. 핵심 제약 조건 및 비즈니스 트리거
+
+* **3명 제한 규칙**: `referrals` 테이블에서 동일한 `parent_id`와 연결된 하위 노드는 최대 3개로 제한합니다. (4번째부터는 자동 Spillover 로직 작동)
+* **지급 고립(Isolation)**: `sales` 발생 시 `earnings` 레코드는 오직 판매자 본인(`direct`)과 직근 상위 1인(`upline_bonus`)에게만 각각 하나씩 생성됩니다.
+* **날짜 자동 계산**: `Earnings` 레코드 생성 시 SQL 함수를 통해 `scheduled_payout_date`를 **매출 발생 주의 일요일 + 17일**로 자동 계산하여 입력합니다.
+
+---
+
+UX 아키텍트의 설계 의도
+시각적 직관성 (Display Label):
+
+DB에는 direct로 저장되더라도, 시니어 유저의 화면에는 **"직접 판매 수익"**이라는 한글 라벨을 데이터와 함께 내려줍니다. 안티그래비티에서 UI를 짤 때, 직접 수익은 파란색, 후원금은 주황색 등으로 색상 구분을 주어 가독성을 극대화합니다.
+
+투명한 보너스 출처 (Description):
+
+시니어들은 "이 1,000원이 대체 누가 사서 들어온 거냐"는 질문을 자주 하십니다. 수당이 생성될 때 description 필드에 "OOO 님 판매 지원비"와 같이 친절한 문구를 함께 생성하여 수입함의 신뢰도를 높입니다.
+
+"수당(earnings) 테이블에 시니어 유저가 이해하기 쉬운 display_label과 description 컬럼을 추가해줘. type이 direct이면 '직접 판매 수익'으로, upline_bonus이면 '팀 후원 보너스'로 표시되게 트리거를 짜줘. 또한, 모든 정산은 이전에 약속한 대로 매출 주 기준 3주차 수요일에 scheduled_payout_date가 박히도록 해줘."
+
+관리자 페이지에서 "이번 주 지급할 '직접 판매 수익'만 따로 뽑기" 등의 필터링이 가능해져 운영 효율이 상승합니다.
+
+특히 `earnings` 테이블의 `scheduled_payout_date`가 매출 발생 주의 3주 뒤 수요일로 계산되는 DB 함수(Function)와 트리거(Trigger)를 포함해줘."**
+
+시니어 유저들은 "돈이 언제 들어오는지"를 가장 궁금해합니다. 안티그래비티에서 UI를 다듬을 때 다음을 반영하세요.
+
+진행 상태바: [판매완료] -> [정산중] -> [수요일 입금 예정] 순으로 진행되는 상태를 시각적으로 보여줍니다.
+
+달력 표시: 이번 달 수요일 중 언제 입금이 되는지 달력에 아이콘으로 표시하여 직관성을 높입니다.
+
+구분,기간 및 일시,활동
+매출 집계 (1주차),월요일 ~ 일요일,판매 발생 및 수익 확정
+정산 검토 (2주차),월요일 ~ 일요일,환불/취소분 제외 및 최종 지급액 확정
+수당 지급 (3주차),수요일,등록된 계좌로 일괄 입금
+
+---
+
+항목,수당 금액,비율,지급 대상 및 조건
+직접 판매 수당,"₩21,420",약 36.3%,판매자 본인에게 즉시 지급 (최고 수준)
+후원 수당,"₩1,000",약 1.7%,직근 상위 1인에게만 지급 (법적 요건 준수)
+수당 합계,"₩22,420",38%,법적 상한선(38%) 이내 완벽 설계
+
+
+

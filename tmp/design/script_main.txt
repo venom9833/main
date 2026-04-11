@@ -1,0 +1,306 @@
+<!-- Background Effects -->
+<div class="bg-effects" aria-hidden="true">
+  <div class="bg-gradient"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+<!-- Live Region for Screen Readers -->
+<div class="live-region" role="status" aria-live="polite" id="liveRegion"></div>
+
+<!-- Main Container -->
+<main class="main-container">
+  <div class="tabs-wrapper">
+    <!-- Header -->
+    <header class="section-header">
+      <span class="section-badge">Premium Component</span>
+      <h1 class="section-title">Tabs Pro</h1>
+      <p class="section-subtitle">Experience next-generation interface design with seamless interactions</p>
+    </header>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs-nav" role="tablist" aria-label="Dashboard sections" id="tabsNav">
+      <div class="tab-indicator" id="tabIndicator" aria-hidden="true"></div>
+
+      <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-overview" id="tab-overview" tabindex="0" data-tab="overview">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9,22 9,12 15,12 15,22" />
+        </svg>
+        <span>Overview</span>
+      </button>
+
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-analytics" id="tab-analytics" tabindex="-1" data-tab="analytics">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>Analytics</span>
+      </button>
+
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-projects" id="tab-projects" tabindex="-1" data-tab="projects">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+        </svg>
+        <span>Projects</span>
+      </button>
+
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-team" id="tab-team" tabindex="-1" data-tab="team">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+        <span>Team</span>
+      </button>
+
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-settings" id="tab-settings" tabindex="-1" data-tab="settings">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+        <span>Settings</span>
+      </button>
+    </div>
+
+    <!-- Tab Panels -->
+    <div class="tabs-content">
+      <!-- Overview Panel -->
+      <section class="tab-panel" role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" aria-hidden="false" tabindex="0" style="--panel-color: #22d3ee; --panel-color-alt: #6366f1;">
+        <div class="panel-content">
+          <header class="panel-header">
+            <div class="panel-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9,22 9,12 15,12 15,22" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="panel-title">Dashboard Overview</h2>
+              <p class="panel-subtitle">Your complete business summary at a glance</p>
+            </div>
+          </header>
+          <div class="panel-body">
+            <p>Welcome to your premium dashboard experience. This interface provides comprehensive insights into your business operations with real-time data visualization and intelligent analytics.</p>
+            <div class="grid grid-4">
+              <article class="stat-card">
+                <div class="stat-value">2.4K</div>
+                <div class="stat-label">Active Users</div>
+              </article>
+              <article class="stat-card">
+                <div class="stat-value">$84K</div>
+                <div class="stat-label">Revenue</div>
+              </article>
+              <article class="stat-card">
+                <div class="stat-value">99.9%</div>
+                <div class="stat-label">Uptime</div>
+              </article>
+              <article class="stat-card">
+                <div class="stat-value">156</div>
+                <div class="stat-label">Projects</div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analytics Panel -->
+      <section class="tab-panel" role="tabpanel" id="panel-analytics" aria-labelledby="tab-analytics" aria-hidden="true" tabindex="0" style="--panel-color: #8b5cf6; --panel-color-alt: #a855f7;">
+        <div class="panel-content">
+          <header class="panel-header">
+            <div class="panel-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="panel-title">Advanced Analytics</h2>
+              <p class="panel-subtitle">Deep insights into your performance metrics</p>
+            </div>
+          </header>
+          <div class="panel-body">
+            <p>Leverage powerful analytics tools to understand user behavior, track conversions, and optimize your business strategies with data-driven decisions.</p>
+            <div class="grid grid-auto">
+              <article class="feature-card">
+                <h4>Real-time Tracking</h4>
+                <p>Monitor user activities as they happen with live data streams</p>
+              </article>
+              <article class="feature-card">
+                <h4>Conversion Funnels</h4>
+                <p>Visualize user journeys and identify drop-off points</p>
+              </article>
+              <article class="feature-card">
+                <h4>Custom Reports</h4>
+                <p>Generate tailored reports with flexible parameters</p>
+              </article>
+              <article class="feature-card">
+                <h4>Predictive Insights</h4>
+                <p>AI-powered forecasting for future trends</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Panel -->
+      <section class="tab-panel" role="tabpanel" id="panel-projects" aria-labelledby="tab-projects" aria-hidden="true" tabindex="0" style="--panel-color: #f43f5e; --panel-color-alt: #ec4899;">
+        <div class="panel-content">
+          <header class="panel-header">
+            <div class="panel-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="panel-title">Project Management</h2>
+              <p class="panel-subtitle">Organize and track all your projects efficiently</p>
+            </div>
+          </header>
+          <div class="panel-body">
+            <p>Streamline your workflow with our comprehensive project management tools. Collaborate with your team, set milestones, and deliver projects on time.</p>
+            <div class="grid grid-auto">
+              <article class="feature-card">
+                <h4>Mobile App v2.0</h4>
+                <p>Next generation mobile experience</p>
+                <span class="progress-badge in-progress">78% Complete</span>
+              </article>
+              <article class="feature-card">
+                <h4>Website Redesign</h4>
+                <p>Fresh new look and feel</p>
+                <span class="progress-badge in-progress">95% Complete</span>
+              </article>
+              <article class="feature-card">
+                <h4>API Integration</h4>
+                <p>Third-party service connections</p>
+                <span class="progress-badge planning">15% Complete</span>
+              </article>
+              <article class="feature-card">
+                <h4>Database Migration</h4>
+                <p>Cloud infrastructure upgrade</p>
+                <span class="progress-badge completed">Completed</span>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team Panel -->
+      <section class="tab-panel" role="tabpanel" id="panel-team" aria-labelledby="tab-team" aria-hidden="true" tabindex="0" style="--panel-color: #10b981; --panel-color-alt: #14b8a6;">
+        <div class="panel-content">
+          <header class="panel-header">
+            <div class="panel-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="panel-title">Team Members</h2>
+              <p class="panel-subtitle">Meet your talented collaborators</p>
+            </div>
+          </header>
+          <div class="panel-body">
+            <p>Our diverse team brings together expertise from various domains to deliver exceptional results.</p>
+            <div class="grid grid-4">
+              <article class="team-card">
+                <div class="avatar" aria-hidden="true">AS</div>
+                <h4>Alex Smith</h4>
+                <p>Lead Developer</p>
+              </article>
+              <article class="team-card">
+                <div class="avatar" aria-hidden="true">SR</div>
+                <h4>Sarah Ross</h4>
+                <p>UX Designer</p>
+              </article>
+              <article class="team-card">
+                <div class="avatar" aria-hidden="true">MJ</div>
+                <h4>Mike Johnson</h4>
+                <p>Product Manager</p>
+              </article>
+              <article class="team-card">
+                <div class="avatar" aria-hidden="true">LP</div>
+                <h4>Lisa Park</h4>
+                <p>Data Analyst</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Panel -->
+      <section class="tab-panel" role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" aria-hidden="true" tabindex="0" style="--panel-color: #f59e0b; --panel-color-alt: #eab308;">
+        <div class="panel-content">
+          <header class="panel-header">
+            <div class="panel-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="panel-title">Settings</h2>
+              <p class="panel-subtitle">Customize your experience</p>
+            </div>
+          </header>
+          <div class="panel-body">
+            <p>Fine-tune your dashboard preferences and account settings to match your workflow and requirements.</p>
+
+            <div class="cta-box">
+              <div class="cta-text">
+                <h4>Ready to get started?</h4>
+                <p>Configure your account settings and preferences now.</p>
+              </div>
+              <button class="cta-btn" id="openSettingsBtn" type="button">
+                Open Settings
+              </button>
+            </div>
+
+            <div class="settings-list">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Push Notifications</h4>
+                  <p>Receive alerts for important updates</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" checked aria-label="Toggle push notifications">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Two-Factor Auth</h4>
+                  <p>Add an extra layer of security</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" aria-label="Toggle two-factor authentication">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Dark Mode</h4>
+                  <p>Switch between light and dark themes</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" checked aria-label="Toggle dark mode">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

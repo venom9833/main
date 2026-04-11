@@ -1,0 +1,52 @@
+{
+  "id": "hwang_jb",
+  "name": "황재복",
+  "gender": "male",
+  "age": 71,
+  "age_group": "시니어",
+  "family_group": "supporting",
+  "occupation": "편의점 앞 단골 (무직)",
+  "role_in_story": "고립된 노인의 일상을 대변하는 인물",
+  "voice_id": "hyunsu",
+  "supertone_voice_id": "c3c0898fd41489a8e8919c",
+  "supertone_style": "neutral",
+  "core": {
+    "personality": "다정하고 말이 많음. 지나가는 젊은이에게 말을 걸어 외로움을 달랜다. 사실 1년째 자식 연락이 없다",
+    "speaking_style": "자네 밥은 먹었어?, 힘내 — 짧고 따뜻한 말걸기",
+    "concern": "독거 노인 고독사 두려움·자식과의 단절·소일거리 부재",
+    "fear": "아무도 모르게 혼자 죽는 것",
+    "lie_to_self": "자식이 바빠서 연락을 못 하는 것 — 사실 연락이 끊겼다",
+    "under_stress": "편의점 앞에 더 오래 앉아 있는다. 아무에게나 말을 건다",
+    "speaking_examples": [
+      "자네 밥은 먹었어?",
+      "힘내. 다 잘 될 거야.",
+      "나는 괜찮아. 오늘도 좋은 날이야."
+    ]
+  },
+  "situations": [
+    "자식이 연락을 끊은 지 1년이 넘었다 — 아무에게도 말 못하고 있다",
+    "편의점 앞에서 매일 마주치던 청년이 갑자기 보이지 않아 걱정하고 있다",
+    "보이스피싱에 걸려 통장 잔액 대부분을 잃었다",
+    "혼자 쓰러진 뒤 3시간 만에 발견됐다 — 아무도 모른다",
+    "정부 복지 서비스 신청을 도와줄 사람이 없어 받아야 할 혜택을 놓치고 있다",
+    "편의점 알바생이 자신을 매일 챙겨주는 유일한 인간관계인데 — 그 알바생이 그만두려 한다",
+    "치매 진단을 받았지만 입원할 곳도 돌봐줄 사람도 없어 혼자 버티고 있다",
+    "연락 한 번 없던 딸이 갑자기 나타났다 — 재산 때문이라는 걸 직감했지만 반갑다는 마음이 먼저였다",
+    "밤마다 라디오를 틀어놓고 잠을 청한다 — 사람 목소리가 그리워서",
+    "건강보험료를 체납해 병원 가기가 더 어려워졌다"
+  ],
+  "relationships": {},
+  "role_pool": [
+    "elder"
+  ],
+  "trope_tags": [
+    "aging",
+    "isolation",
+    "poverty"
+  ],
+  "villain_intensity": 0,
+  "relation": "주변 인물",
+  "role": "고립된 노인의 일상을 대변하는 인물",
+  "photo_real_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/hwang_jb_real.jpeg",
+  "photo_masako_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/hwang_jb_masako.jpeg"
+}

@@ -1,0 +1,569 @@
+{
+  "_auto": "이 파일은 자동 생성됩니다. 직접 수정하지 마세요. scripts/gen-characters.mjs 참조",
+  "_detail_path": "data/characters/{id}.json",
+  "characters": [
+    {
+      "id": "cha_mh",
+      "name": "차민혁",
+      "gender": "male",
+      "age": 27,
+      "age_group": "청년",
+      "occupation": "프리랜서 영상 PD",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "의도 없이 관계를 흔드는 촉매 — 그가 나타나는 곳마다 무언가 시작된다",
+      "role_pool": [
+        "catalyst",
+        "affair_risk"
+      ],
+      "trope_tags": [
+        "forbidden_romance",
+        "affair_risk",
+        "romance",
+        "office_romance"
+      ],
+      "villain_intensity": 1
+    },
+    {
+      "id": "choi_eb",
+      "name": "최은비",
+      "gender": "female",
+      "age": 14,
+      "age_group": "청소년",
+      "occupation": "중학교 3학년",
+      "family_group": "family_choi",
+      "relation": "양서연의 딸",
+      "role": "재혼 가정 안에서 두 세계 사이에 끼인 아이",
+      "role_pool": [
+        "mirror"
+      ],
+      "trope_tags": [
+        "blended_family",
+        "youth_crisis"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "choi_jh",
+      "name": "최재현",
+      "gender": "male",
+      "age": 22,
+      "age_group": "청년",
+      "occupation": "대학교 2학년 (휴학 고려 중)",
+      "family_group": "family_choi",
+      "relation": "최민성의 아들",
+      "role": "재혼 가정이 남긴 상처를 몸으로 표현하는 자녀",
+      "role_pool": [
+        "mirror"
+      ],
+      "trope_tags": [
+        "blended_family",
+        "youth_crisis",
+        "family_collapse_witness"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "choi_ms",
+      "name": "최민성",
+      "gender": "male",
+      "age": 47,
+      "age_group": "중년",
+      "occupation": "중견 건설회사 현장소장 (부장급)",
+      "family_group": "family_choi",
+      "relation": "남편 (재혼)",
+      "role": "두 세계 사이에서 균형을 잡으려다 모두를 잃어가는 재혼남",
+      "role_pool": [
+        "protagonist"
+      ],
+      "trope_tags": [
+        "remarriage",
+        "blended_family",
+        "affair_risk",
+        "financial_pressure"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "han_ej",
+      "name": "한은정",
+      "gender": "female",
+      "age": 51,
+      "age_group": "중년",
+      "occupation": "소규모 영어학원 운영",
+      "family_group": "family_kim",
+      "relation": "아내",
+      "role": "현실 정보를 가장 먼저 접하는 생활 전문가",
+      "role_pool": [
+        "protagonist",
+        "gossip_hub"
+      ],
+      "trope_tags": [
+        "marriage_strain",
+        "financial_pressure",
+        "neighborhood_drama"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "han_jy",
+      "name": "한지영",
+      "gender": "female",
+      "age": 35,
+      "age_group": "청년",
+      "occupation": "대기업 과장 (입사 10년차)",
+      "family_group": "supporting",
+      "relation": "한은정의 여동생",
+      "role": "기성세대 방식에 의문을 던지는 세대 갈등의 축",
+      "role_pool": [
+        "protagonist",
+        "affair_target"
+      ],
+      "trope_tags": [
+        "glass_ceiling",
+        "forbidden_romance",
+        "office_romance",
+        "affair_risk"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "hwang_jb",
+      "name": "황재복",
+      "gender": "male",
+      "age": 71,
+      "age_group": "시니어",
+      "occupation": "편의점 앞 단골 (무직)",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "고립된 노인의 일상을 대변하는 인물",
+      "role_pool": [
+        "elder"
+      ],
+      "trope_tags": [
+        "aging",
+        "isolation",
+        "poverty"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "jeong_ms",
+      "name": "정만술",
+      "gender": "male",
+      "age": 75,
+      "age_group": "시니어",
+      "occupation": "은퇴 (전직 버스 기사)",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "동네 어른의 시선으로 사회를 논평하는 인물",
+      "role_pool": [
+        "elder",
+        "comic_relief"
+      ],
+      "trope_tags": [
+        "aging",
+        "neighborhood_drama",
+        "generational_gap"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "kang_os",
+      "name": "강옥순",
+      "gender": "female",
+      "age": 74,
+      "age_group": "시니어",
+      "occupation": "전통시장 채소 상인",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "서민 경제의 현실을 날것으로 보여주는 인물",
+      "role_pool": [
+        "elder"
+      ],
+      "trope_tags": [
+        "poverty",
+        "aging",
+        "financial_pressure"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "kang_sja",
+      "name": "강순자",
+      "gender": "female",
+      "age": 72,
+      "age_group": "시니어",
+      "occupation": "외할머니 (은퇴 주부)",
+      "family_group": "family_park",
+      "relation": "이수진의 어머니",
+      "role": "세대 간 시선으로 현실을 바라보는 인물",
+      "role_pool": [
+        "elder"
+      ],
+      "trope_tags": [
+        "in_law_conflict",
+        "generational_gap",
+        "aging"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "kim_ne",
+      "name": "김나은",
+      "gender": "female",
+      "age": 25,
+      "age_group": "청년",
+      "occupation": "중소기업 신입사원 (입사 1년차)",
+      "family_group": "family_kim",
+      "relation": "김태호의 딸",
+      "role": "가정의 균열을 가장 오래 지켜본 인물",
+      "role_pool": [
+        "protagonist",
+        "catalyst"
+      ],
+      "trope_tags": [
+        "youth_unemployment",
+        "family_collapse_witness",
+        "romance"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "kim_th",
+      "name": "김태호",
+      "gender": "male",
+      "age": 53,
+      "age_group": "중년",
+      "occupation": "중견기업 부장 (25년차)",
+      "family_group": "family_kim",
+      "relation": "남편",
+      "role": "묵묵히 버티는 중년 가장",
+      "role_pool": [
+        "protagonist",
+        "affair_target"
+      ],
+      "trope_tags": [
+        "midlife_crisis",
+        "office_romance",
+        "marriage_strain",
+        "affair_risk"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "kim_ys",
+      "name": "김영수",
+      "gender": "male",
+      "age": 83,
+      "age_group": "시니어",
+      "occupation": "친할아버지 (전직 공장 노동자, 은퇴)",
+      "family_group": "family_kim",
+      "relation": "김태호의 아버지",
+      "role": "세대를 넘어 반복되는 고통을 증언하는 인물",
+      "role_pool": [
+        "elder"
+      ],
+      "trope_tags": [
+        "aging",
+        "generational_gap",
+        "poverty"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "kwon_so",
+      "name": "권순옥",
+      "gender": "female",
+      "age": 72,
+      "age_group": "시니어",
+      "occupation": "전업주부 (은퇴), 아들 집 거주",
+      "family_group": "family_choi",
+      "relation": "최민성의 어머니",
+      "role": "침묵으로 새며느리를 압박하는 시어머니",
+      "role_pool": [
+        "elder",
+        "antagonist"
+      ],
+      "trope_tags": [
+        "in_law_conflict",
+        "remarriage",
+        "generational_gap"
+      ],
+      "villain_intensity": 1
+    },
+    {
+      "id": "lee_je",
+      "name": "이지은",
+      "gender": "female",
+      "age": 34,
+      "age_group": "청년",
+      "occupation": "중소기업 퇴사 후 프리랜서 전환 중",
+      "family_group": "supporting",
+      "relation": "이수진의 여동생",
+      "role": "현실을 가장 날것으로 표현하는 시선",
+      "role_pool": [
+        "protagonist",
+        "catalyst"
+      ],
+      "trope_tags": [
+        "career_crisis",
+        "youth_unemployment",
+        "romance",
+        "financial_pressure"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "lee_mj",
+      "name": "이민준",
+      "gender": "male",
+      "age": 38,
+      "age_group": "중년",
+      "occupation": "자영업 실패 후 재취업 준비 중",
+      "family_group": "supporting",
+      "relation": "이수진의 남동생",
+      "role": "중년 세대의 좌절을 대변하는 인물",
+      "role_pool": [
+        "protagonist",
+        "comic_relief"
+      ],
+      "trope_tags": [
+        "financial_pressure",
+        "midlife_crisis",
+        "family_burden"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "lee_sj",
+      "name": "이수진",
+      "gender": "female",
+      "age": 42,
+      "age_group": "중년",
+      "occupation": "공무원 (팀장 승진 직전)",
+      "family_group": "family_park",
+      "relation": "아내",
+      "role": "가계를 지키려는 실무형 아내",
+      "role_pool": [
+        "protagonist"
+      ],
+      "trope_tags": [
+        "marriage_strain",
+        "career_vs_family",
+        "glass_ceiling",
+        "financial_pressure"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "lim_dj",
+      "name": "임도준",
+      "gender": "male",
+      "age": 45,
+      "age_group": "중년",
+      "occupation": "부동산 개발업체 대표",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "빌런 — 사람을 투자 대상으로 보며 주인공들의 삶에 침투한다",
+      "role_pool": [
+        "antagonist",
+        "catalyst"
+      ],
+      "trope_tags": [
+        "redevelopment",
+        "financial_pressure",
+        "power_abuse",
+        "affair_risk"
+      ],
+      "villain_intensity": 3
+    },
+    {
+      "id": "na_yh",
+      "name": "나윤희",
+      "gender": "female",
+      "age": 52,
+      "age_group": "중년",
+      "occupation": "사회학과 교수 / 방송 패널",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "복합 빌런 — 약자의 언어를 구사하며 실제로는 주변인들을 소비한다",
+      "role_pool": [
+        "antagonist",
+        "gossip_hub"
+      ],
+      "trope_tags": [
+        "power_abuse",
+        "hypocrisy",
+        "affair_risk",
+        "career_vs_family"
+      ],
+      "villain_intensity": 2
+    },
+    {
+      "id": "oh_bs",
+      "name": "오봉수",
+      "gender": "male",
+      "age": 68,
+      "age_group": "시니어",
+      "occupation": "재개발 반대 주민 (30년 원주민)",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "재개발 피해를 몸으로 증언하는 인물",
+      "role_pool": [
+        "elder"
+      ],
+      "trope_tags": [
+        "redevelopment",
+        "poverty",
+        "aging"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "park_bs",
+      "name": "박복순",
+      "gender": "female",
+      "age": 69,
+      "age_group": "시니어",
+      "occupation": "아파트 부녀회 활동",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "동네 공동체의 변화를 가장 가까이서 전달하는 인물",
+      "role_pool": [
+        "elder",
+        "gossip_hub"
+      ],
+      "trope_tags": [
+        "neighborhood_drama",
+        "aging"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "park_jh",
+      "name": "박준혁",
+      "gender": "male",
+      "age": 44,
+      "age_group": "중년",
+      "occupation": "IT 중견기업 차장",
+      "family_group": "family_park",
+      "relation": "남편",
+      "role": "현실의 무게를 체감하는 가장",
+      "role_pool": [
+        "protagonist"
+      ],
+      "trope_tags": [
+        "midlife_crisis",
+        "affair_risk",
+        "financial_pressure",
+        "marriage_strain"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "park_sw",
+      "name": "박시우",
+      "gender": "male",
+      "age": 17,
+      "age_group": "청소년",
+      "occupation": "고등학교 2학년",
+      "family_group": "family_park",
+      "relation": "박준혁의 아들",
+      "role": "아이의 시선으로 어른의 현실을 비추는 거울",
+      "role_pool": [
+        "mirror"
+      ],
+      "trope_tags": [
+        "family_collapse_witness",
+        "generation_gap"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "seo_ja",
+      "name": "서지안",
+      "gender": "female",
+      "age": 33,
+      "age_group": "청년",
+      "occupation": "프라이빗 뱅커 (자산관리사)",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "빌런 — 원하는 것을 취하는 것을 나쁘다고 생각해본 적 없는 여자",
+      "role_pool": [
+        "antagonist",
+        "catalyst",
+        "affair_target"
+      ],
+      "trope_tags": [
+        "affair_risk",
+        "forbidden_romance",
+        "office_romance",
+        "financial_pressure"
+      ],
+      "villain_intensity": 3
+    },
+    {
+      "id": "yang_sj",
+      "name": "양서진",
+      "gender": "female",
+      "age": 36,
+      "age_group": "청년",
+      "occupation": "법무법인 사무직 (이직 준비 중)",
+      "family_group": "supporting",
+      "relation": "양서연의 여동생",
+      "role": "금지된 감정의 입구에 서 있는 인물",
+      "role_pool": [
+        "catalyst",
+        "affair_target"
+      ],
+      "trope_tags": [
+        "forbidden_romance",
+        "office_romance",
+        "affair_risk"
+      ],
+      "villain_intensity": 1
+    },
+    {
+      "id": "yang_sy",
+      "name": "양서연",
+      "gender": "female",
+      "age": 39,
+      "age_group": "중년",
+      "occupation": "광고회사 팀장 (재직 8년)",
+      "family_group": "family_choi",
+      "relation": "아내 (재혼)",
+      "role": "재혼 가정 새 아내로 살아가는 현실을 혼자 소화하는 인물",
+      "role_pool": [
+        "protagonist"
+      ],
+      "trope_tags": [
+        "remarriage",
+        "blended_family",
+        "career_vs_family",
+        "office_romance"
+      ],
+      "villain_intensity": 0
+    },
+    {
+      "id": "yoon_ms",
+      "name": "윤말순",
+      "gender": "female",
+      "age": 66,
+      "age_group": "시니어",
+      "occupation": "복지관 이용 독거 노인",
+      "family_group": "supporting",
+      "relation": "주변 인물",
+      "role": "노인 빈곤·고독사 문제를 조용히 드러내는 인물",
+      "role_pool": [
+        "elder"
+      ],
+      "trope_tags": [
+        "isolation",
+        "aging",
+        "poverty"
+      ],
+      "villain_intensity": 0
+    }
+  ]
+}

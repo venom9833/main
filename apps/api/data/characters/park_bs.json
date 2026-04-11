@@ -1,0 +1,52 @@
+{
+  "id": "park_bs",
+  "name": "박복순",
+  "gender": "female",
+  "age": 69,
+  "age_group": "시니어",
+  "family_group": "supporting",
+  "occupation": "아파트 부녀회 활동",
+  "role_in_story": "동네 공동체의 변화를 가장 가까이서 전달하는 인물",
+  "voice_id": "soonbok",
+  "supertone_voice_id": "39f27eaab088024ff6f9ac",
+  "supertone_style": "neutral",
+  "core": {
+    "personality": "동네 정보통. 누가 이사 왔는지 누가 싸웠는지 다 알고 있음. 나쁜 의도가 아니라 공동체에 관심이 많은 것이다 — 스스로는 그렇게 생각한다",
+    "speaking_style": "내가 들었는데~, 그 집이 말이야 — 빠르고 수다스러운 어조",
+    "concern": "관리비 인상·층간소음 갈등·아파트 공동체 붕괴",
+    "fear": "자신이 퍼뜨린 소문이 자신에게 돌아오는 것 — 이미 시작됐다",
+    "lie_to_self": "나는 그냥 걱정이 돼서 말하는 것 — 사실 소문 내는 게 재밌다",
+    "under_stress": "더 많이 돌아다닌다. 더 많이 말한다. 정작 자신의 이야기는 하지 않는다",
+    "speaking_examples": [
+      "내가 들었는데, 그 집이 말이야...",
+      "아유, 걱정이 돼서 그러는 거야.",
+      "우리 아파트가 예전 같지 않아."
+    ]
+  },
+  "situations": [
+    "옆집 부부의 불화를 이미 알고 있으며 주변에 소문을 내고 있다",
+    "아파트 관리비 인상에 홀로 반대 서명 운동을 벌이고 있다",
+    "자신이 퍼뜨린 소문이 되돌아와 본인이 피해를 입게 됐다",
+    "부녀회장 선거에서 진 뒤 반목이 심해져 단지 내 파벌이 생겼다",
+    "자신이 퍼뜨린 이혼 소문이 사실이 아닌 것으로 밝혀졌는데 아무에게도 사과하지 않았다",
+    "남편이 치매 진단을 받아 부녀회 나가기가 힘들어졌지만 아무에게도 말하지 않았다",
+    "옆집 사람이 '당신 때문에 이혼 뻔했다'고 직접 찾아와 말했다",
+    "어느 날부터 엘리베이터에서 아무도 먼저 인사를 하지 않는다는 걸 눈치챘다",
+    "아파트 단톡방에서 자신이 조용히 내보내졌다 — 아무도 말하지 않았다",
+    "혼자 집에서 TV를 보다가 자신이 얼마나 외로운지 처음으로 실감했다"
+  ],
+  "relationships": {},
+  "role_pool": [
+    "elder",
+    "gossip_hub"
+  ],
+  "trope_tags": [
+    "neighborhood_drama",
+    "aging"
+  ],
+  "villain_intensity": 0,
+  "relation": "주변 인물",
+  "role": "동네 공동체의 변화를 가장 가까이서 전달하는 인물",
+  "photo_real_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/park_bs_real.jpeg",
+  "photo_masako_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/park_bs_masako.jpeg"
+}

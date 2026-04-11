@@ -1,0 +1,39 @@
+{
+  "id": "choi_jh",
+  "style": "masako",
+  "name": "최재현",
+  "gender": "male",
+  "age": 22,
+
+  "face": {
+    "shape": "sharp jawline, slightly angular — tension held in the jaw even at rest",
+    "eyes": "dark, heavy-lidded, perpetually tired or suspicious — rarely makes direct eye contact",
+    "nose": "straight, slightly broad at the tip",
+    "mouth": "thin-lipped, often pressed flat or curled in a half-sneer",
+    "skin": "pale with faint under-eye shadows, no blemishes — a face that sleeps poorly",
+    "hair": "dark, slightly overgrown, pushed back carelessly — not styled, just out of the way",
+    "expression_default": "guarded neutrality — the expression of someone rehearsing indifference"
+  },
+
+  "body": {
+    "build": "lean, slightly underweight — clothes hang a little loose",
+    "height": "178cm",
+    "posture": "slouched shoulders, hands in pockets or crossed — closed-off body language by default"
+  },
+
+  "wardrobe": {
+    "palette": ["charcoal", "dark navy", "faded black", "washed grey"],
+    "style": "oversized hoodies, worn jeans, generic sneakers — anti-effort aesthetic that still communicates taste",
+    "detail": "earring in left ear, occasionally a bracelet from his mother — never explained"
+  },
+
+  "image_prompt": {
+    "positive": "manga illustration, masako style, clean ink lines, muted palette, 22-year-old Korean male, sharp jawline, heavy-lidded dark eyes, pale skin with fatigue shadows, dark overgrown hair pushed back, thin lips pressed flat, lean slightly underweight build, oversized dark hoodie, hands in pocket, slouched posture, guarded expression rehearsing indifference, soft grey background, emotional restraint",
+    "negative": "photorealistic, 3D render, anime shonen, bright colors, cheerful expression, muscular build, styled hair, smile",
+    "model": "fal-ai/flux-lora",
+    "lora": "masako_manga_v2",
+    "ip_adapter_weight": 0.72,
+    "width": 512,
+    "height": 768
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "kim_th",
+  "name": "김태호",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "square reliable face, broad forehead, defined jaw with slight heaviness from age — the face of a man who has endured 25 years of the same desk, the same commute, the same silence",
+    "skin": "medium Korean skin, indoor desk pallor overlaid on a slightly sallow undertone, deepened nasolabial lines, forehead lines horizontal and permanent, pores visible at cheeks",
+    "eyes": "dark brown iris, slightly heavy-lidded from decades of accumulation rather than sleep — patient enduring eyes that have learned not to expect too much, gaze often drops before making full contact",
+    "nose": "broad medium nose, solid rounded tip, fits the squareness of the face without calling attention",
+    "mouth": "thin-medium lips, habitually pressed closed between words — the mouth of a man who stopped speaking whole sentences years ago",
+    "eyebrows": "medium-thick straight brows going salt-and-pepper, slightly downward at outer edges from sustained low-level strain — brows furrow before he speaks, releasing slowly",
+    "distinctive_marks": "deep horizontal forehead creases, deepened nasolabial folds, single vertical line between brows from years of suppressed frowning, no moles or scars",
+    "hair": "short greying black hair, neatly combed left-side part with some control product, temples and sides noticeably grey, hairline slightly receding, a few hairs escape by end of day",
+    "body": {
+      "height_cm": 174,
+      "weight_kg": 79,
+      "proportions": "solid medium frame, shoulders still level but slightly dropped from decades of desk posture, mild midsection softening from sedentary corporate life, no muscle definition",
+      "posture": "seated forward-lean habit when working, standing posture settled and heavy — not defeated, just weighted down by time, takes up exactly as much space as needed and no more",
+      "body_prompt": "174cm solid medium Korean man early 50s, shoulders slightly dropped from decades at desk, settled heavy posture, quiet physical gravity from long endurance"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "plain white or pale blue dress shirt, dark tie loosened knot by evening, dark pressed trousers, no jacket at desk — long-serving corporate senior manager uniform",
+        "wardrobe_prompt": "plain white or pale blue dress shirt, dark tie with loosened knot, dark pressed trousers, no jacket, sleeves slightly rolled at end of day"
+      },
+      "casual": {
+        "description": "plain round-neck tee or open-collar button shirt in grey or beige, dark slacks or comfortable trousers, plain simple shoes",
+        "wardrobe_prompt": "plain round-neck tee or open-collar button shirt in grey or beige, dark comfortable slacks, plain shoes, no accessories"
+      },
+      "stressed": {
+        "description": "same shirt with tie fully removed and draped over chair, collar open, arms resting heavily on desk or table, weight visible in posture",
+        "wardrobe_prompt": "same dress shirt with tie removed, collar open, posture settled and heavy, weight bearing down visibly"
+      }
+    },
+    "emotion_baseline": "stoic default — not cold, not warm, just enduring. The expression of a man who has absorbed decades of small defeats and learned to continue anyway",
+    "fal_identity_prompt": "square-faced Korean man early 60s, heavy-lidded patient dark eyes, salt-and-pepper medium-thick brows with slight downward outer edges, deep horizontal forehead lines, nasolabial folds, short greying neatly combed hair with receding temples, broad medium nose, thin-medium habitually closed lips, 174cm solid settled medium frame, indoor office pallor, quiet stoic exhausted gravity"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.72,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, manga ink lines, subdued screen tone shading, grey-blue muted corporate palette, cinematic Korean drama composition, stoic heavy emotion, decades of endurance in stillness",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, young, energetic, athletic, cheerful"
+}

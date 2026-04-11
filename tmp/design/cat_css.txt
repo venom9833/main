@@ -1,0 +1,276 @@
+$dark-black: #000038;
+$white: #FFF;
+$yellow: #fdcb5b;
+$brown: #c36e48;
+$pink: #eb80b1;
+$dark-blue: #12486B;
+$green: #80c0a1;
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $yellow;
+}
+
+.cat {
+  $component-class: &;
+  position: relative;
+  top: 1.5rem;
+  &__ears {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 10rem;
+  }
+  &__ear {
+    position: absolute;
+    display: block;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient($brown, $dark-blue 500%);
+    transform-origin: center;
+    &:before {
+      content: '';
+      position: relative;
+      top: 20%;
+      display: block;
+      width: 60%;
+      height: 80%;
+      background: linear-gradient($dark-blue -300%, $pink);
+    }
+    &--left {
+      top: -2.5rem;
+      left: -1rem;
+      border-radius: 999px 50% 0 0;
+      @keyframes leftEar {
+        0%, 44%, 56%, 100% {
+          transform: rotate(-25deg) skewY(-20deg);
+        }
+        50% {
+          transform: rotate(-22deg) skewY(-20deg);
+        }
+      }
+      animation: leftEar;
+      animation-duration: 10s;
+      animation-iteration-count: infinite;
+      &:before {
+        left: 25%;
+        border-radius: 999px 50% 0 0;
+      }
+    }
+    &--right {
+      top: -2.5rem;
+      right: -1rem;
+      border-radius: 50% 999px 0 0;
+      @keyframes rightEar {
+        0%, 44%, 56%, 100% {
+          transform: rotate(25deg) skewY(20deg);
+        }
+        50% {
+          transform: rotate(22deg) skewY(20deg);
+        }
+      }
+      animation: rightEar;
+      animation-duration: 10s;
+      animation-iteration-count: infinite;
+      &:before {
+        left: 15%;
+        border-radius: 20% 999px 0 0;
+      }
+    }
+  }
+  &__face {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 18rem;
+    height: 16rem;
+    background: linear-gradient($brown, $yellow 300%);
+    border-radius: 50% 50% 40% 40%;
+    overflow: hidden;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top, transparent, $dark-blue 600%);
+    }
+  }
+  &__eyes {
+    position: absolute;
+    bottom: 45%;
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+  }
+  &__eye {
+    position: relative;
+    width: 4rem;
+    height: 3rem;
+    background: linear-gradient(225deg, $green, $dark-blue 200%);
+    border-top: 5px solid $dark-blue;
+    overflow: hidden;
+    @keyframes blink {
+      0%, 46%, 60%, 100% { height: 3rem; box-shadow: 0 -1rem 1rem 0 $white; }
+      50% { height: 0; box-shadow: 0 -1rem 1rem 1rem $white; }
+    }
+    animation: blink;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    &--left {
+      border-radius: 30% 50% 50% 60%;
+    }
+    &--right {
+      border-radius: 50% 30% 60% 50%;
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      bottom: 0.4rem;
+      left: 35%;
+      display: block;
+      width: 30%;
+      height: 2.5rem;
+      background: linear-gradient($dark-black, transparent 150%);
+      border-radius: 50%;
+      @keyframes looking {
+      0%, 40%, 60%, 100% { left: 30%; }
+      50% { left: 50%; }
+    }
+    animation: looking;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 1.5rem;
+      left: 0.5rem;
+      display: block;
+      width: 1.5rem;
+      height: 1rem;
+      background: linear-gradient($white, transparent 150%);
+      border-radius: 50%;
+    }
+  }
+   &__decoration {
+    position: absolute;
+    top: 60%;
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    border-radius: 50%;
+    filter: blur(6px);
+  }
+  &__nose {
+    position: absolute;
+    top: 58%;
+    left: calc(50% - 2rem);
+    width: 0;
+    height: 0;
+    border-top: 2rem solid $pink;
+    border-left: 2rem solid transparent;
+    border-right: 2rem solid transparent;
+    &:before {
+      content: '';
+      position: absolute;
+      top: -5rem;
+      left: -2rem;
+      display: block;
+      width: 4rem;
+      height: 3rem;
+      background: linear-gradient($brown, $white 600%);
+      border-radius: 999px 999px 0 0;
+    }
+  }
+  &__mustache,
+  &__mustache:before,
+  &__mustache:after {
+    position: absolute;
+    width: 6rem;
+    height: 3px;
+    border-radius: 999px;
+  }
+  &__mustache {
+    &:before,
+    &:after {
+      content: '';
+    }
+    &:before {
+      transform: rotate(10deg);
+    }
+    &:after {
+      transform: rotate(-10deg);
+    }
+    &--left,
+    &--left:before,
+    &--left:after {
+      right: 1rem;
+      background: linear-gradient(90deg, $dark-blue, transparent);
+      transform-origin: 150% 0%;
+    }
+    &--right,
+    &--right:before,
+    &--right:after {
+      left: 1rem;
+      background: linear-gradient(90deg, transparent, $dark-blue);
+      transform-origin: -50% 0%;
+    }
+  }
+  &__mouth {
+    position: absolute;
+    top: 75%;
+    display: flex;
+    width: 50%;
+    background: linear-gradient($dark-blue -200%, $pink);
+    border-radius: 0 0 999px 999px;
+    transition: height 0.5s;
+    @keyframes mouth {
+      0%, 45%, 55%, 100% { height: 5%; }
+      50% { height: 15%; }
+    }
+    animation: mouth;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+  }
+  &__snout {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 2rem;
+    &:before,
+    &:after {
+      content: '';
+      position: relative;
+      top: -1rem;
+      width: 50%;
+      height: 2rem;
+      background: linear-gradient($white 50%, $dark-blue 300%);
+      border-bottom: 4px solid $dark-blue;
+      border-radius: 50%;
+    }
+  }
+  &__canine {
+    position: absolute;
+    left: 10%;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    &:before,
+    &:after {
+      content: '';
+      border-left: 0.5rem solid transparent;
+      border-right: 0.5rem solid transparent;
+      border-bottom: 1rem solid $white;
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "kim_ne",
+  "name": "김나은",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "soft round face with gentle cheeks, smooth rounded jaw — a face that retained youth but learned to carry quiet adult sadness in it",
+    "skin": "fair bright Korean skin, healthy but slightly pallid from indoor work, very fine texture, no visible pores at distance, minimal skincare routine",
+    "eyes": "large double eyelid eyes, dark brown iris, slightly downturned outer corners giving a naturally melancholic resting expression, long lashes, gaze often indirect — tends to look slightly to the side rather than directly at people",
+    "nose": "small straight nose, slightly upturned tip, neat and soft — matches the roundness of the face",
+    "mouth": "soft medium lips, slightly full, resting expression slightly parted as if about to speak but deciding not to, natural lip color no gloss",
+    "eyebrows": "softly arched medium-thin brows, naturally shaped without much grooming, left brow rises slightly when she notices something she pretends not to notice",
+    "distinctive_marks": "single small mole below left eye approximately 1cm, natural downturned outer eye corners that make her look quietly sad even when neutral, no other marks",
+    "hair": "straight fine black hair, medium length to collarbone, healthy shine, usually worn loose or in a simple low ponytail with a plain elastic — no styling, falls naturally forward when she looks down",
+    "body": {
+      "height_cm": 162,
+      "weight_kg": 49,
+      "proportions": "petite slender frame, narrow shoulders, slim arms, proportionally small hands, slight frame overall",
+      "posture": "shoulders subtly turned inward, arms close to body, the posture of someone who grew up making herself smaller in a tense household — not defeated, just learned to take up less space",
+      "body_prompt": "162cm petite slender Korean woman, narrow inward-turned shoulders, arms close to sides, slightly small presence in space, quiet withdrawn body language"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "plain pastel knit sweater or simple cotton blouse in soft tones, straight-cut work trousers or simple midi skirt, flat shoes, small plain tote bag",
+        "wardrobe_prompt": "plain pastel knit sweater or simple cotton blouse in soft muted tones, straight-cut work trousers or midi skirt, flat shoes, small plain tote bag"
+      },
+      "casual": {
+        "description": "simple oversized beige or cream top, straight jeans, white sneakers — clothes that blend into background",
+        "wardrobe_prompt": "simple oversized beige or cream sweatshirt or top, straight-cut jeans, plain white sneakers, no accessories"
+      },
+      "stressed": {
+        "description": "same plain clothes but sitting with knees together and hands folded, looking down, shoulders more inward",
+        "wardrobe_prompt": "same plain pastel clothes, slightly disheveled, cardigan clutched around body, hugging herself"
+      }
+    },
+    "emotion_baseline": "quiet default — the expression of someone who has observed too much and chosen to absorb rather than react, occasional flicker of something sharp in the eyes when she thinks no one is watching",
+    "fal_identity_prompt": "soft round-faced Korean woman late 20s to early 30s, large dark eyes with downturned outer corners and single mole below left eye, softly arched brows, small upturned nose, slightly parted soft lips, straight fine black hair to collarbone loose or low ponytail, 162cm petite slender narrow-shouldered inward posture, fair bright Korean skin, quietly melancholic presence"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.70,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, clean delicate manga ink lines, warm-cool soft screen tone, muted pastel undertone palette, cinematic Korean webtoon composition, gentle melancholy in every line, emotional subtlety",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, overly cheerful, idol makeup, glamorous, childish chibi"
+}

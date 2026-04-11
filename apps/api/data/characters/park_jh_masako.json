@@ -1,0 +1,50 @@
+{
+  "id": "park_jh",
+  "name": "박준혁",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "slim oval face, slightly angular jaw, not prominent cheekbones, overall soft but tired geometry",
+    "skin": "fair-medium Korean skin, indoor office pallor, slight grey undertone from chronic fatigue, no blemishes but dull texture",
+    "eyes": "double eyelid, dark brown iris, slightly drooping outer corners giving a perpetually tired look, whites slightly reddened, gaze tends to drift rather than hold contact",
+    "nose": "medium straight nose, slightly broad tip, unremarkable — the kind of nose no one notices",
+    "mouth": "thin lips, habitually pressed together, corners pulled very slightly downward at rest, reluctant smile when forced",
+    "eyebrows": "medium-thick straight dark brows, left brow slightly furrowed even at rest — a permanent low-grade worry line between them",
+    "distinctive_marks": "faint dark circles deep enough to cast shadow, single vertical stress crease between brows, no scars or moles",
+    "hair": "short black hair, fine texture, neat side part slightly left of center, temples beginning to thin imperceptibly, end-of-day strands fall across forehead",
+    "body": {
+      "height_cm": 178,
+      "weight_kg": 73,
+      "proportions": "average frame, narrow shoulders for height, slim waist, no muscle definition visible under clothing",
+      "posture": "shoulders rolled slightly forward and inward, head carried just ahead of spine — the posture of a man who has been bracing for bad news for years",
+      "body_prompt": "178cm slim average-frame Korean man, narrow shoulders slightly hunched forward, head slightly dropped, quiet physical exhaustion"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "grey or slate-blue dress shirt, dark charcoal trousers, tie loosened and collar button undone, no jacket, sleeves sometimes slightly rolled",
+        "wardrobe_prompt": "grey slate-blue dress shirt slightly wrinkled, dark charcoal trousers, loosened tie knot pulled down, collar button undone, no jacket"
+      },
+      "casual": {
+        "description": "plain white or beige round-neck tee, dark jeans, no accessories",
+        "wardrobe_prompt": "plain white or beige round-neck cotton t-shirt, dark straight jeans, no accessories, simple canvas shoes"
+      },
+      "stressed": {
+        "description": "same grey shirt but visibly rumpled, tie completely removed and draped over chair, slightly unshaven",
+        "wardrobe_prompt": "same grey dress shirt visibly creased and untucked, tie removed, 2-3 days dark stubble"
+      }
+    },
+    "emotion_baseline": "surface calm masking constant internal low-level dread — eyes slightly unfocused, jaw not quite relaxed, posture subtly defensive",
+    "fal_identity_prompt": "slim oval-faced Korean man early-to-mid 50s, dark circles casting shadow below eyes, slight stress crease between brows, drooping outer eye corners, short neat black hair with left-of-center side part, 178cm narrow-shouldered slightly hunched posture, indoor office pallor, quiet exhausted restraint"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.72,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, clean precise manga ink lines, layered soft screen tone shading, muted grey-blue color palette, cinematic Korean drama panel composition, expressive restrained eyes, emotional weight in stillness",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, bright saturated colors, childish, chibi, smiling happily"
+}

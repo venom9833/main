@@ -1,0 +1,51 @@
+{
+  "id": "choi_ms",
+  "name": "최민성",
+  "style": "real",
+
+  "appearance_en": {
+    "face_shape": "broad weathered face, wide defined jaw, moderate cheekbones — shaped by physical outdoor work and too many conversations he avoided having",
+    "skin": "medium Korean skin, warm undertone, visibly weathered from years of outdoor construction sites, deepened nasolabial folds, pores visible, texture uneven — lived-in not ugly",
+    "eyes": "dark brown iris, slightly heavy upper lids from age and accumulated fatigue, gaze tends to look past rather than at people — avoidance that resembles confidence at first glance",
+    "nose": "medium-broad nose, rounded slightly wide tip, solid and unremarkable in the overall face",
+    "mouth": "medium lips, habitually held closed with slight tension at corners, jaw muscle slightly visible when suppressing a response",
+    "eyebrows": "medium-thick straight brows with grey flecking at outer edges, slight downward angle at ends — permanently looks slightly burdened",
+    "distinctive_marks": "deep nasolabial folds, horizontal forehead lines, no scars or moles, neck tension lines visible under stress",
+    "hair": "short dark hair with visible grey threading at temples and sides, coarse slightly dry texture, simply combed with minimal product, always slightly imperfect by mid-day",
+    "body": {
+      "height_cm": 176,
+      "weight_kg": 83,
+      "proportions": "stocky solid frame, broad chest and shoulders from physical labor, no excess fat but no gym muscle — pure working man physique late 40s",
+      "posture": "wide-based and planted at work, slightly drooping at home when guard drops — uses physical mass as passive presence",
+      "body_prompt": "176cm stocky broad-shouldered Korean man late 40s, construction foreman physical presence, slightly heavy posture at rest, solid contained body language"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "dark open-collar long-sleeve work shirt or polo, thick-weave dark work trousers, field supervisor site attire, hard hat held or nearby",
+        "wardrobe_prompt": "dark open-collar long-sleeve work shirt or polo, thick dark work trousers, construction site field supervisor attire"
+      },
+      "casual": {
+        "description": "plain round-neck tee in grey or dark navy, dark heavy-cotton jeans or trousers, plain leather shoes, no accessories",
+        "wardrobe_prompt": "plain round-neck t-shirt in grey or dark navy, dark heavy-cotton jeans or trousers, plain leather or canvas shoes, no accessories"
+      },
+      "stressed": {
+        "description": "collar fully open, sleeves pushed past elbow, shirt or tee slightly untucked, heavy anchored posture",
+        "wardrobe_prompt": "same dark shirt with collar fully open, sleeves rolled past elbow, shirt slightly untucked, heavy physical presence"
+      }
+    },
+    "emotion_baseline": "solid and steady at surface — a man who has made himself the wall between problems and everyone else, quietly running out of wall",
+    "fal_identity_prompt": "broad weathered-faced Korean man late 50s, wide strong jaw, slightly heavy-lidded dark brown eyes, medium-thick dark brows with grey flecking, short dark grey-mixed hair simply combed, medium-broad rounded nose, 176cm stocky broad-shouldered working man physique, weathered medium warm-tone Korean skin, solid contained quiet presence"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "photorealistic, ordinary Korean construction foreman you would see on a job site, no beauty filter, no skin retouching, realistic weathered skin with visible pores and sun exposure, authentic physical working man presence, 50mm lens, construction site natural light or home ambient, street-cast blue-collar realism, cinematic restraint",
+  "negative_prompt": "illustration, anime, cartoon, 3d render, ugly, deformed, extra fingers, glamorous, slim body, youthful, idol look, heavy grooming, beauty filter, airbrushed skin, perfect complexion, smooth flawless skin, model look, celebrity appearance, skin retouching"
+}

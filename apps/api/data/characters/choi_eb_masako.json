@@ -1,0 +1,50 @@
+{
+  "id": "choi_eb",
+  "name": "최은비",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "soft round youthful face, full smooth cheeks, gentle rounded jaw — a child's face that has not yet hardened, though something behind the eyes already has",
+    "skin": "fair bright Korean skin, clear and smooth, no blemishes, the unearned clarity of early adolescence, slight pallor from sleep loss she hides from her mother",
+    "eyes": "large dark brown eyes, slightly wide, long natural lashes, gaze quietly watchful and careful — the eyes of a child who learned to read the room before stepping into it. Outer corners very slightly downturned, giving a naturally gentle resting expression",
+    "nose": "small, slightly upturned tip, soft and youthful — still entirely a child's nose",
+    "mouth": "soft full lips, naturally pink, closed gently in careful neutral — the mouth that produces '괜찮아요' reflexively whenever asked. Rarely opens to say what she means",
+    "eyebrows": "soft naturally arched medium brows, ungroomed and natural, left brow rises almost imperceptibly when she is pretending not to notice something",
+    "distinctive_marks": "no moles or scars, very faint shadows under eyes from nights she lay awake listening to the house settle",
+    "hair": "dark brown straight hair, medium length to shoulders, healthy natural shine, worn in a simple low ponytail with plain elastic or loose — no styling, falls forward when she looks down",
+    "body": {
+      "height_cm": 155,
+      "weight_kg": 43,
+      "proportions": "slim slight adolescent frame, narrow shoulders, thin arms, small hands — the proportions of a child who has not yet grown into herself",
+      "posture": "shoulders drawn subtly inward, arms held close to body — the learned smallness of a child who moved into an unfamiliar house and decided the safest strategy was to occupy as little space as possible",
+      "body_prompt": "155cm slim slight Korean middle school girl, narrow inward-drawn shoulders, arms close to body, quietly contained small physical presence"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "middle school uniform — white blouse, dark navy straight skirt below knee, neat and simple, collar button done, everything in order. The uniform as armor and anonymity",
+        "wardrobe_prompt": "middle school uniform white blouse, dark navy straight skirt below knee, collar buttoned, everything neat and in order"
+      },
+      "casual": {
+        "description": "simple pastel or white round-neck t-shirt, straight jeans or dark comfortable trousers, plain sneakers — clothes that disappear, chosen not to draw attention",
+        "wardrobe_prompt": "simple pale round-neck t-shirt or soft hoodie, straight jeans or comfortable trousers, plain white sneakers, no accessories"
+      },
+      "school_bag": {
+        "description": "standard middle school backpack, plain dark navy or black, slightly too large for her frame — a detail that makes her look younger than she is trying to seem",
+        "wardrobe_prompt": "standard dark navy or black middle school backpack, slightly oversized on her small frame"
+      }
+    },
+    "emotion_baseline": "carefully neutral — the expression of a child who decided that being fine was easier than explaining that she is not. Occasional flicker of something older in her eyes when she thinks no one is watching",
+    "fal_identity_prompt": "14-year-old Korean middle school girl, soft round youthful face with full cheeks, large dark brown slightly wide watchful eyes with gently downturned outer corners, natural soft arched brows, small upturned nose, soft full lips in gentle careful neutral, dark brown straight hair to shoulders in simple ponytail or loose, 155cm slim slight narrow-shouldered frame with inward posture, fair bright clear Korean skin, quiet contained adolescent presence"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.70,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, clean delicate manga ink lines, soft warm screen tone shading, gentle muted pastel palette, cinematic Korean drama webtoon composition, the quiet sadness of a child performing fine, emotional subtlety in stillness",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, overly cheerful, idol makeup, glamorous, adult appearance, mature features, chibi, exaggerated cute"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "park_jh",
+  "name": "박준혁",
+  "style": "real",
+
+  "appearance_en": {
+    "face_shape": "slim oval face, slightly angular jaw, soft cheekbones, overall gentle bone structure worn by time",
+    "skin": "fair-medium Korean skin tone, chronic indoor pallor, grey fatigue undertone, slightly uneven texture at nasolabial folds, pores visible at close range",
+    "eyes": "double eyelid, very dark brown iris nearly black, outer corners drooping with accumulated tiredness, reddish whites especially after drinking, tendency to avoid direct eye contact",
+    "nose": "medium bridge, slightly broad rounded tip, natural — disappears into the face unremarkably",
+    "mouth": "thin upper lip, slightly fuller lower lip, resting position pressed closed, corners marginally downturned, smile reaches eyes only with effort",
+    "eyebrows": "medium-thick dark straight brows, perpetual shallow furrow between them even when relaxed — a decade of suppressed worry etched in",
+    "distinctive_marks": "pronounced dark circles casting actual shadow under eyes, single deep vertical crease between brows, no moles or scars, left temple vein faintly visible when stressed",
+    "hair": "short fine black hair, neat left-of-center side part, imperceptibly thinning at temples, a few strands fall across forehead by late afternoon",
+    "body": {
+      "height_cm": 178,
+      "weight_kg": 73,
+      "proportions": "average lean frame, narrower shoulders than height suggests, no visible muscle, slight softening at midsection from sedentary lifestyle",
+      "posture": "chronic forward head position, shoulders internally rotated and dropped — years of desk work and suppressed anxiety in physical form",
+      "body_prompt": "178cm lean average-frame Korean man, narrow shoulders rolled inward, forward head posture, subtle physical defeat without being dramatic"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "grey or slate dress shirt slightly wrinkled, dark charcoal trousers with faint crease, tie loosened knot pulled down, collar button open, no jacket",
+        "wardrobe_prompt": "grey slate dress shirt slightly wrinkled, dark charcoal trousers, tie loosened knot pulled down, collar button undone, no jacket"
+      },
+      "casual": {
+        "description": "plain white or beige cotton tee, dark straight-leg jeans, simple canvas sneakers, no accessories",
+        "wardrobe_prompt": "plain white or beige cotton t-shirt, dark straight-leg jeans, simple white canvas sneakers, no accessories"
+      },
+      "stressed": {
+        "description": "same shirt visibly creased and untucked at back, tie fully removed, stubble 2–3 days, slightly glassy eyes",
+        "wardrobe_prompt": "same grey dress shirt visibly creased untucked, tie removed, 2-3 days stubble showing"
+      }
+    },
+    "emotion_baseline": "resting face carries a faint trace of suppressed worry — not obviously sad, just the face of someone who stopped expecting things to get better",
+    "fal_identity_prompt": "slim oval-faced Korean man early-to-mid 50s, pronounced dark circles casting shadow under eyes, medium-thick dark brows with permanent slight furrow, drooping outer eye corners, short neat black hair side part, 178cm lean narrow-shouldered with forward head posture, fair-medium pallid Korean skin, quiet exhaustion in every detail"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "photorealistic, ordinary Korean man you would pass on the street, no beauty filter, no skin retouching, visible pores and natural skin texture, realistic fatigue and aging, 50mm f1.8 lens, cool-toned office ambient light, street-cast everyday appearance, cinematic restraint",
+  "negative_prompt": "illustration, anime, cartoon, painting, 3d render, ugly, deformed, extra fingers, extra limbs, muscular, tan skin, smiling, happy expression, glamorous, beauty filter, airbrushed skin, perfect complexion, smooth flawless skin, model look, idol look, celebrity appearance, skin retouching"
+}

@@ -1,0 +1,43 @@
+{
+  "id": "han_jy",
+  "name": "한지영",
+  "style": "real",
+
+  "appearance_en": {
+    "face_shape": "strong defined heart-shaped face, prominent angular cheekbones, narrow pointed chin — a face that is striking before it is pretty, the kind that takes a moment to understand and then cannot be forgotten",
+    "skin": "warm medium-dark olive Korean skin, natural golden undertone, no foundation — the confidence to show pores and the faint tan line from commuting. Clear and luminous without effort, which makes the effort everyone else is making obvious",
+    "eyes": "single eyelid (monolid), dark deep-set eyes, long dense lashes, gaze heavy-lidded and unhurried — the eyes that assess slowly and completely before responding. When she is done deciding, everyone in the room knows. The eyes that registered 형부's message and did not look away from the screen for three seconds",
+    "nose": "straight slightly strong nose, defined bridge, clean tip — a nose that anchors the face rather than disappearing into it",
+    "mouth": "full well-shaped lips, naturally deeper-toned, slightly parted at rest — the mouth that says '그게 왜 당연해요?' quietly, which makes it worse",
+    "eyebrows": "thick natural dark brows, strong arch, not groomed into submission — the brow she grew into in her 30s after years of over-plucking, now the most distinctive thing on her face",
+    "distinctive_marks": "a small beauty mark at the left cheekbone, just below the outer eye corner — appears in every photo. High angular cheekbones cast slight shadow beneath. Golden skin catches light differently from everyone else in the office",
+    "hair": "sleek blunt collarbone-length bob, dark with a slight natural wave, worn down — deliberate and architectural. The one part of her appearance she has taken back from corporate convention",
+    "body": {
+      "height_cm": 168,
+      "weight_kg": 55,
+      "proportions": "tall slim frame with long legs and defined shoulders — the body that reads as authority before she speaks. Moves economically, nothing wasted",
+      "posture": "straight, unhurried, takes up exactly the space she occupies — not aggressive, not deferential. The posture of someone who stopped performing relaxation around the time she stopped expecting fairness",
+      "body_prompt": "168cm tall slim Korean woman, defined angular shoulders, long legs, unhurried upright posture that takes up exactly the space she occupies"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "clean minimal tailored trousers in charcoal or black, fitted fine-knit turtleneck or structured open-collar shirt — no blazer, no accessories except a single thin gold ring. Dressed to subtract rather than add",
+        "wardrobe_prompt": "fitted fine-knit turtleneck or clean open-collar structured shirt, tailored charcoal or black trousers, no blazer, single thin gold ring, minimal"
+      }
+    },
+    "emotion_baseline": "heavy-lidded and unhurried — the face that is always two moves ahead and sees no reason to announce it. The beauty mark catches the light. The feeling about 형부 is somewhere in there, unnamed",
+    "fal_identity_prompt": "35-year-old Korean woman, strong heart-shaped face with prominent angular cheekbones and narrow chin, single eyelid deep-set dark eyes with long lashes and heavy-lidded unhurried gaze, thick natural strongly arched dark brows, straight defined-bridge nose, full naturally darker lips slightly parted, small beauty mark at left cheekbone below outer eye, sleek blunt collarbone-length dark bob, 168cm tall defined-shoulder slim frame, warm medium-dark olive Korean skin with natural golden undertone"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "photorealistic, striking Korean corporate woman in her 30s, no beauty filter, no skin retouching, natural warm olive skin with visible luminosity, monolid eyes, architectural blunt bob, beauty mark at cheekbone, 50mm lens, cool office or window light with warm skin contrast, documentary precision, cinematic restraint",
+  "negative_prompt": "illustration, anime, cartoon, 3d render, ugly, deformed, extra fingers, double eyelid, pale skin, soft round face, permed hair, bun, beauty filter, airbrushed, model look, glamorous, retouching, bland expression"
+}

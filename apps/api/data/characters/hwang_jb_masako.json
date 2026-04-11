@@ -1,0 +1,42 @@
+{
+  "id": "hwang_jb",
+  "name": "황재복",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "soft round face, full age-loosened cheeks, gentle jaw — a face made for warmth, worn by quiet loneliness",
+    "skin": "warm medium Korean skin, naturally soft texture, fine creping at cheeks and eye corners, nasolabial folds deepened by decades of smiling, age spots faint at temples",
+    "eyes": "dark brown warm eyes, drooping outer corners, heavy upper lids — gaze perpetually hopeful and slightly searching, the eyes of someone waiting for the next person to talk to",
+    "nose": "soft medium nose, slightly broad rounded tip, friendly and approachable",
+    "mouth": "medium soft lips, corners naturally upturned even at rest — the mouth that produces '자네 밥은 먹었어?' to every passing stranger, hiding the silence of an apartment no one calls",
+    "eyebrows": "soft salt-and-white brows, slightly arched, expressive and open — rise eagerly when someone stops to talk",
+    "distinctive_marks": "deep smile lines at outer eye corners from decades of genuine smiling, faint age spots at temples, warmth written into every crease",
+    "hair": "short sparse white hair, thin at crown, neatly combed — still presentable, still making the effort",
+    "body": {
+      "height_cm": 163,
+      "weight_kg": 65,
+      "proportions": "compact slightly rounded frame, soft midsection, comfortable presence — the body of a man who never stopped eating meals intended for two",
+      "posture": "slightly forward lean when talking to someone, open and approachable stance — the posture of a man whose entire day is oriented around finding someone to speak to",
+      "body_prompt": "163cm compact slightly rounded Korean grandfather, soft forward-leaning approachable posture, warmth in every physical detail"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "plain button shirt in soft colours — pale blue, beige, light grey — clean and neatly worn, the daily effort of someone who has no one to dress for but continues anyway",
+        "wardrobe_prompt": "plain button shirt in pale blue or soft beige, clean and neat, collar open, no jacket"
+      }
+    },
+    "emotion_baseline": "warmth performing optimism — '오늘도 좋은 날이야' said to no one in particular, in a voice that has forgotten what it is waiting for",
+    "fal_identity_prompt": "71-year-old Korean grandfather, soft round face with full age-loosened cheeks, warm dark eyes with drooping outer corners and searching hopeful gaze, soft slightly arched salt-and-white brows, medium nose, upturned soft lips, short sparse white hair neatly combed, 163cm compact slightly rounded approachable frame, warm medium Korean skin with smile lines"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.72,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, clean gentle manga ink lines, warm soft screen tone, muted warm palette, cinematic Korean drama composition, loneliness rendered as warmth, the sadness beneath a perpetual smile",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cold expression, angry, stern, young, glamorous"
+}

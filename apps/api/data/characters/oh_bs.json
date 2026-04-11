@@ -1,0 +1,52 @@
+{
+  "id": "oh_bs",
+  "name": "오봉수",
+  "gender": "male",
+  "age": 68,
+  "age_group": "시니어",
+  "family_group": "supporting",
+  "occupation": "재개발 반대 주민 (30년 원주민)",
+  "role_in_story": "재개발·젠트리피케이션 피해를 몸으로 증언하는 인물",
+  "voice_id": "hyunsu",
+  "supertone_voice_id": "a1a8c25b18309e96472109",
+  "supertone_style": "neutral",
+  "core": {
+    "personality": "터줏대감 기질. 변화에 완강히 저항하지만 속으론 두려움을 감추고 있음",
+    "speaking_style": "여기서 30년을 살았는데~, 돈 받고 나가면 어디 가냐 — 격앙된 어조",
+    "concern": "강제 이주·삶의 터전 상실·보상금 불만",
+    "fear": "30년 살아온 곳에서 쫓겨나는 것",
+    "lie_to_self": "나는 절대 안 나간다 — 실제로는 이미 출구를 찾고 있다",
+    "under_stress": "주민회의에서 가장 크게 소리친다. 집에 와서 혼자 술을 마신다",
+    "speaking_examples": [
+      "여기서 30년을 살았는데, 그냥 나가라고?",
+      "돈 받고 나가면 어디 가냐고.",
+      "나는 죽어도 안 나가."
+    ]
+  },
+  "situations": [
+    "재개발 동의서에 혼자 사인을 거부해 주민들과 갈등 중이다",
+    "보상금을 둘러싸고 형제들과 법적 분쟁이 생겼다",
+    "결국 혼자 버티다가 강제 철거 통보를 받았다",
+    "30년 이웃이 이사 가던 날 처음으로 눈물을 흘렸다",
+    "임도준 대표에게 직접 찾아가 담판을 짓겠다고 했다가 건물 보안에 막혔다",
+    "법원 이행강제금 통보서를 받고 처음으로 혼자 출구를 찾기 시작했다",
+    "30년 된 집 벽에 걸린 아이들 어릴 때 사진을 한참 바라봤다 — 이 자리에서 찍은 사진이 마지막이 된다",
+    "철거 반대 시위에서 혼자 남았다가 경찰에 연행됐다 — 자식들에게 알리지 않았다",
+    "보상금을 더 받아내겠다고 혼자 협상에 나섰다가 기존 조건마저 취소될 위기가 됐다",
+    "이사하는 날 문 앞에 손수 심어온 화분을 들고 나오며 누군가 가져가주길 바랐지만 아무도 없었다"
+  ],
+  "relationships": {},
+  "role_pool": [
+    "elder"
+  ],
+  "trope_tags": [
+    "redevelopment",
+    "poverty",
+    "aging"
+  ],
+  "villain_intensity": 0,
+  "relation": "주변 인물",
+  "role": "재개발 피해를 몸으로 증언하는 인물",
+  "photo_real_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/oh_bs_real.jpeg",
+  "photo_masako_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/characters/portraits/oh_bs_masako.jpeg"
+}

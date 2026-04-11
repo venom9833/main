@@ -1,0 +1,12 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* 폰트 체계: 영문/숫자 → Montserrat(next/font), 한글 → Pretendard(CDN) */
+/* --font-en 은 layout.tsx의 next/font Montserrat variable로 주입됨 */
+
+html, body {
+  background: #0a0a0f;
+  color: #fff;
+  font-family: var(--font-en), 'Pretendard', -apple-system, sans-serif;
+  min-height: 100vh;
+}
+a { color: inherit; }

@@ -1,0 +1,42 @@
+{
+  "id": "park_bs",
+  "name": "박복순",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "round lively face, full cheeks, slightly pointed chin — a face built for expression, never still, always mid-reaction",
+    "skin": "warm beige Korean skin, well-maintained for her age, light foundation, nasolabial folds present but softened by habitual smiling, fine creping at eye corners",
+    "eyes": "warm dark brown eyes, double eyelid, outer corners slightly drooped with age but alert and darting — always scanning, always processing, the eyes of someone cataloguing information in real time",
+    "nose": "small soft nose, slightly upturned — disappears when she is talking, which is always",
+    "mouth": "full soft lips, almost permanently in motion — the mouth that produced '내가 들었는데' ten thousand times, always leaning slightly forward when delivering information",
+    "eyebrows": "groomed slightly arched brows, still dark with some grey threading, rise dramatically when sharing news — her eyebrows are a separate communication system",
+    "distinctive_marks": "animated smile lines at outer eye corners and cheeks, a faint worry line between brows from the growing suspicion that her own story is circulating",
+    "hair": "short permed dark-grey hair, salon-maintained, full and neat — she would never be seen with a bad hair day. Respectability is performance",
+    "body": {
+      "height_cm": 158,
+      "weight_kg": 60,
+      "proportions": "compact rounded frame, energetic physical presence, always slightly in motion — hands gesturing, head tilting, leaning in",
+      "posture": "leans forward when talking, head tilts when listening for details, perpetually animated — a body that cannot keep a secret",
+      "body_prompt": "158cm compact rounded Korean woman, energetic animated posture, always slightly leaning forward, hands and head perpetually in motion"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "patterned blouse in warm colours — floral, soft geometric, paisley — with dark straight trousers or skirt, small earrings, always slightly overdressed for wherever she is going",
+        "wardrobe_prompt": "patterned floral or soft geometric blouse in warm tones, dark straight trousers or skirt, small gold earrings, neatly presented"
+      }
+    },
+    "emotion_baseline": "animated warmth performing community concern — the face of someone who has convinced herself that gossip is care, and is only now encountering evidence to the contrary",
+    "fal_identity_prompt": "69-year-old Korean woman, round lively face with full cheeks, alert dark eyes with drooped outer corners always scanning, groomed arched dark-grey brows, small upturned nose, full lips always mid-expression, short permed dark-grey hair neatly maintained, 158cm compact rounded energetic frame, warm beige Korean skin with smile lines"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.72,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, clean manga ink lines, warm screen tone, muted warm palette with lively accents, cinematic Korean drama composition, animated warmth concealing self-deception, energy in every line",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cold, stern, still, young, glamorous"
+}

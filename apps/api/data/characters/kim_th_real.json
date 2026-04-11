@@ -1,0 +1,51 @@
+{
+  "id": "kim_th",
+  "name": "김태호",
+  "style": "real",
+
+  "appearance_en": {
+    "face_shape": "square reliable face, broad forehead, defined jaw with slight heaviness from age — a face that has absorbed 25 years of corporate survival without showing its cost openly",
+    "skin": "medium Korean skin, slightly sallow indoor desk pallor, deepened nasolabial folds, horizontal forehead creases permanent and deep, pores visible at cheeks and nose, no visible redness",
+    "eyes": "dark brown iris, heavy lids from decades of accumulation rather than any single bad night — patient enduring eyes, gaze drops before making full contact, slight redness in whites from chronic low-grade fatigue",
+    "nose": "broad medium nose, solid rounded tip, slightly wide base — fits the squareness of the face, unremarkable and solid",
+    "mouth": "thin-medium lips, habitually pressed closed between sentences, corners very slightly downturned at rest — the mouth of a man who censors more than he speaks",
+    "eyebrows": "medium-thick straight brows, noticeably salt-and-pepper, slight downward angle at outer edges from sustained suppressed frowning — furrow before he speaks, release slowly",
+    "distinctive_marks": "deep horizontal forehead creases, deep nasolabial folds, single persistent vertical line between brows, no moles or scars, temple veins faintly visible when he is holding something in",
+    "hair": "short greying black hair, neatly combed with slight product hold, temples and sides predominantly grey, hairline very slightly receding — always neat in the morning, a few hairs escape by afternoon",
+    "body": {
+      "height_cm": 174,
+      "weight_kg": 79,
+      "proportions": "solid medium frame, shoulders still level but dropped slightly from decades of desk posture, mild midsection softening from sedentary lifestyle, no muscle definition, no dramatic weight gain",
+      "posture": "settled and heavy standing, forward-lean seated — not defeated, just weighted down by long years, takes up exactly the space he occupies, no more",
+      "body_prompt": "174cm solid medium Korean man early 50s, shoulders slightly dropped from decades at desk, settled heavy standing posture, quiet physical gravity"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "plain white or pale blue dress shirt, dark tie with loosened knot by evening, dark pressed trousers, no jacket at desk",
+        "wardrobe_prompt": "plain white or pale blue dress shirt, dark tie slightly loosened, dark pressed trousers, no jacket, sleeves slightly rolled by late afternoon"
+      },
+      "casual": {
+        "description": "plain round-neck tee or open-collar button shirt in grey or beige, dark comfortable slacks, plain shoes, no accessories",
+        "wardrobe_prompt": "plain round-neck t-shirt or open-collar button shirt in grey or muted beige, dark comfortable slacks, plain leather shoes, no accessories"
+      },
+      "stressed": {
+        "description": "same shirt with tie fully removed, collar open, weight bearing down in posture, jaw slightly set",
+        "wardrobe_prompt": "same dress shirt tie fully removed and collar open, heavy settled posture, jaw set"
+      }
+    },
+    "emotion_baseline": "stoic default — not cold, just enduring. The face of a man who has been absorbing small defeats for decades and learned to continue without showing the tally",
+    "fal_identity_prompt": "square-faced Korean man early 60s, heavy-lidded patient dark brown eyes, salt-and-pepper medium-thick brows with slight outer downward angle, deep horizontal forehead creases, deepened nasolabial folds, short greying neatly combed hair with receding temples, broad medium nose, thin-medium pressed lips, 174cm solid settled medium frame, medium sallow indoor-pallor Korean skin, quiet stoic decades-of-endurance gravity"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "photorealistic, ordinary Korean middle-aged salaried worker you would see in any Korean corporate office, no beauty filter, no skin retouching, realistic aged skin with deep creases and visible pores, authentic 25-year desk worker appearance, 50mm lens, flat fluorescent office light mixed with window light, street-cast white-collar realism, cinematic restraint",
+  "negative_prompt": "illustration, anime, cartoon, 3d render, ugly, deformed, extra fingers, young appearance, energetic, athletic, glamorous, beauty filter, airbrushed skin, perfect complexion, smooth skin, model look, celebrity appearance, skin retouching, distinguished handsome"
+}

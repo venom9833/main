@@ -1,0 +1,42 @@
+{
+  "id": "yoon_ms",
+  "name": "윤말순",
+  "style": "masako",
+
+  "appearance_en": {
+    "face_shape": "narrow oval face, slightly sunken cheeks, delicate bone structure now more visible than it was — a face that was once fuller, before the quiet decades of less",
+    "skin": "pale yellowed Korean skin, translucent and papery at the temples, fine close-set wrinkles across cheeks and forehead, deep nasolabial folds from a life of worry without resolution, age spots at temples and forehead — skin that has seen sun only in passing, through welfare centre windows",
+    "eyes": "dark brown eyes, lids heavy with age, gaze quiet and inward — the eyes of someone who stopped expecting things to change and found a specific kind of peace in it. Still scanning, but gently, still hoping without naming it",
+    "nose": "small soft slightly pinched nose, fine-boned",
+    "mouth": "thin lips, slightly pursed at rest — the mouth that says '괜찮아요' reflexively before the person has finished asking",
+    "eyebrows": "thin sparse brows, gone mostly grey, flat without arch — the face that has learned not to show surprise because surprises have not, on balance, been good",
+    "distinctive_marks": "deep worry line between brows, fine close-set vertical lines at lip corners, hollow beneath cheekbones, translucent temples",
+    "hair": "short grey permed hair, thinning at crown, kept neat for welfare centre visits — the one thing still within her control",
+    "body": {
+      "height_cm": 154,
+      "weight_kg": 45,
+      "proportions": "slight thin frame, shoulders drawn inward, the body of someone who has learned to take up as little space as possible",
+      "posture": "slightly curved inward at shoulders, hands folded in lap when sitting — the posture of someone who is always a little unsure whether they are allowed to be where they are",
+      "body_prompt": "154cm slight thin Korean grandmother, drawn-in shoulders, folded hands, body that has learned to take up minimal space"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "pale grey or muted beige cardigan over thin blouse, dark trousers, worn but clean — the same cardigan for years, chosen because it disappears",
+        "wardrobe_prompt": "pale grey cardigan over thin blouse, dark trousers, worn soft shoes, neat but faded"
+      }
+    },
+    "emotion_baseline": "quiet and resigned — not visibly sad, just very still. The face of someone who has decided not to want things, and almost succeeded",
+    "fal_identity_prompt": "66-year-old Korean woman, narrow oval face with sunken cheeks, heavy-lidded inward-gazing dark eyes, thin sparse grey brows, small soft nose, thin pursed lips, short thinning grey permed hair, 154cm slight drawn-in-shoulder frame, pale yellowed papery Korean skin with fine close-set wrinkles and age spots"
+  },
+
+  "fal_route": "fal-ai/flux-lora",
+  "fal_params": {
+    "num_inference_steps": 28,
+    "guidance_scale": 3.5,
+    "image_size": "landscape_16_9"
+  },
+  "ip_adapter_weight": 0.72,
+  "reference_url": "",
+  "style_prompt": "masako style illustration, clean manga ink lines, muted cool-grey screen tone, pale quiet palette, cinematic Korean welfare-centre composition, stillness as a survival strategy, the body of someone who has learned not to ask",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cheerful, warm, energetic, young, glamorous, soft"
+}
