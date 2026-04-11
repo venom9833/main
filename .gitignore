@@ -19,4 +19,9 @@ V3/.obsidian/plugins/
 *.json.bak
 remotion-preview/
 tts_audio/
+# 제외 디렉토리
+docs/
+output/
 source/
+tmp/
+V3/
