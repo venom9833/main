@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean gentle manga ink lines, warm soft screen tone, muted warm palette, cinematic Korean drama composition, loneliness rendered as warmth, the sadness beneath a perpetual smile",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cold expression, angry, stern, young, glamorous"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, warm expressive grandfather face radiating gentle optimism over deep loneliness, convenience store exterior or park bench with painterly amber afternoon warmth, cinematic backlighting with soft amber rim glow, iridescent late-afternoon light, magical realism of warmth that outlasts its audience, soft golden natural light, Korean drama cinematic composition, loneliness rendered entirely as persistent warmth",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, cold expression, angry, stern, young, glamorous"
 }

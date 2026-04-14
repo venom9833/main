@@ -1,0 +1,43 @@
+{
+  "id": "seo_ja",
+  "name": "서지안",
+  "style": "noir_oil",
+
+  "appearance_en": {
+    "face_shape": "sharp elongated oval face, high defined cheekbones, clean narrow jaw — the face that a room notices before it decides to. Classically structured, the kind that reads as cold until the exact moment she chooses otherwise",
+    "skin": "pale cool Korean skin, flawless maintained surface — not airbrushed, but the result of discipline. Foundation-matched precisely, no powder excess. The skin of someone for whom appearance is infrastructure",
+    "eyes": "deep double-eyelid dark eyes, long outer corners that extend and slightly upturn, heavy upper lids that give the gaze weight — the eyes that assess without revealing assessment. Looks at people the way analysts look at balance sheets: completely, neutrally, and with conclusions already formed",
+    "nose": "straight high-bridge nose, defined and slightly strong — gives the face structure that photographs as authority",
+    "mouth": "well-shaped full lips, cooler-toned natural color, resting expression slightly parted and neutral — the mouth that produces '고객님이 원하시는 게 뭔지 알 것 같아요' in a register so precisely calibrated it feels like relief rather than seduction",
+    "eyebrows": "cleanly shaped dark brows with precise arch — maintained but not overworked. The brow that lowers very slightly when she has identified something useful",
+    "distinctive_marks": "the face is the distinctive mark. No moles, no asymmetry — the kind of symmetry that unsettles rather than reassures",
+    "hair": "dark straight hair, collarbone to shoulder length, impeccably maintained — worn down in precise condition or in a sleek low knot. Never between styles",
+    "body": {
+      "height_cm": 167,
+      "weight_kg": 52,
+      "proportions": "slim elongated frame, long neck, precise posture — the body of someone for whom physical presentation is a professional instrument",
+      "posture": "perfectly upright, controlled, never casual — the posture that signals she is always in a professional context, even when she is not",
+      "body_prompt": "167cm slim elongated Korean woman, long neck, impeccably upright controlled posture, the body of someone who treats physical presentation as infrastructure"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "precisely fitted blazer in charcoal, navy, or cream over a silk blouse, tailored straight trousers, mid-heel pointed pumps, single understated earring — dressed to be taken seriously, not to be liked",
+        "wardrobe_prompt": "precisely fitted blazer in charcoal or navy, silk blouse, tailored straight trousers, mid-heel pointed pumps, single understated gold earring"
+      }
+    },
+    "emotion_baseline": "cool and assessing — the face that is always reading the room and never showing the reading. The moment she smiles, it is a decision, not a reflex",
+    "fal_identity_prompt": "33-year-old Korean woman, sharp elongated oval face with high defined cheekbones and narrow jaw, deep double-eyelid dark eyes with long upturned outer corners and heavy lids, precisely arched dark brows, straight high-bridge nose, well-shaped full cool-toned lips slightly parted, dark straight impeccably maintained collarbone-length hair or sleek low knot, 167cm slim elongated perfectly upright frame, pale cool maintained Korean skin"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black as her primary environment and preference, warm amber of calculated warmth deployed as instrument, steel blue of clinical precision applied to human capital, painterly figurative realism, Korean drama cinematic composition, predatory composure rendered in cold deliberate oil weight",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, warm expression, casual, approachable, round face, glamorous overstatement"
+}

@@ -4,10 +4,11 @@ import type { PipelineStep } from '@/types/series';
 const VISIBLE_STEPS = [
   { key: 'source',    label: '소스',    states: ['awaiting_source_upload'] },
   { key: 'world',     label: '세계관',  states: ['world', 'awaiting_world_approval'] },
-  { key: 'casting',   label: '캐릭터',  states: ['casting', 'awaiting_casting_approval', 'architect'] },
+  { key: 'casting',   label: '캐릭터',  states: ['casting', 'awaiting_casting_approval'] },
+  { key: 'architect', label: '설계',    states: ['architect'] },
   { key: 'script',    label: '대본',    states: ['script', 'awaiting_script_approval'] },
   { key: 'keyframe',  label: '키프레임', states: ['awaiting_keyframe_setup', 'keyframe'] },
-  { key: 'tts',       label: 'TTS',     states: ['tts'] },
+  { key: 'tts',       label: 'TTS',     states: ['awaiting_tts', 'tts'] },
   { key: 'render',    label: '렌더',    states: ['render', 'awaiting_upload_approval'] },
   { key: 'upload',    label: '업로드',  states: ['upload', 'naver_upload', 'youtube_manage', 'chapter_done', 'done'] },
 ];
@@ -22,6 +23,7 @@ function isAwaitingApproval(step: string): boolean {
     || step === 'awaiting_casting_approval'
     || step === 'awaiting_script_approval'
     || step === 'awaiting_keyframe_setup'
+    || step === 'awaiting_tts'
     || step === 'awaiting_upload_approval';
 }
 

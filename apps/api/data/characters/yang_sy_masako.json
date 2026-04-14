@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean manga ink lines, soft screen tone shading, cool-warm mixed palette, cinematic Korean drama composition, controlled quiet emotional depth, professional woman unraveling slowly",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, overly glamorous, idol look, childish, chibi"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, composed oval face beneath professional exterior, warm-lit modern workspace or apartment with painted atmospheric depth, cinematic dramatic backlighting with soft cool-warm rim lights, iridescent prism light from glass surfaces, magical realism of controlled unraveling, soft diffused natural light, Korean drama cinematic composition, quiet professional woman containing more than she reveals in every line",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, overly glamorous, idol look, childish, chibi"
 }

@@ -28,8 +28,8 @@
   },
 
   "image_prompt": {
-    "positive": "manga illustration, masako style, clean ink lines, muted palette, 17-year-old Korean male, soft teenage jaw, wide-set deep brown observant eyes, small upturned nose, dark overgrown straight hair, pressed-shut full lips, carefully neutral expression monitoring without being caught, school uniform navy jacket, earphones around neck, slightly hunched posture, soft indoor background, adolescent restraint",
-    "negative": "photorealistic, 3D render, cheerful smile, action pose, muscular, stylized shonen, bright saturated colors",
+    "positive": "Studio Ghibli heartwarming hand-painted watercolor illustration, masako style, 17-year-old Korean male, soft teenage jaw, wide-set deep brown observant eyes, small upturned nose, dark straight slightly overgrown hair, pressed-shut lips in careful neutral, school uniform navy jacket, earphones around neck, slightly hunched monitoring posture, cinematic backlighting with soft cool rim glow, iridescent light through school windows, magical realism of an observer who has learned to be invisible, soft diffused school interior light, adolescent restraint",
+    "negative": "photorealistic, 3D render, cheerful smile, action pose, muscular, anime shonen, bright saturated colors, manga ink lines, screen tone, looking at camera, eye contact, facing camera",
     "model": "fal-ai/flux-lora",
     "lora": "masako_manga_v2",
     "ip_adapter_weight": 0.72,

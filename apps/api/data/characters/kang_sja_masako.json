@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, layered soft screen tone shading, warm muted earth-tone palette, cinematic Korean drama panel composition, expressive restrained eyes carrying hidden grief, emotional weight in stillness and silence",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, bright saturated colors, childish, chibi, smiling happily, young appearance, beauty filter"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, soft oval grandmother face with knowing eyes and traditional composure, warm domestic kitchen setting with gentle morning light through small window, cinematic backlighting with soft golden rim glow, iridescent morning light over kitchen warmth, magical realism of grandmotherly composure concealing hidden grief, soft warm natural light, Korean drama cinematic composition, emotional weight held in watchful stillness and quiet restraint",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, bright saturated colors, childish, chibi, smiling happily, young appearance, beauty filter"
 }

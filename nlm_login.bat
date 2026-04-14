@@ -1,5 +1,5 @@
 @echo off
-title LinkDropV2 - NotebookLM Login
+title LinkDropV3 - NotebookLM Login
 cd /d "%~dp0"
 setlocal
 
@@ -24,14 +24,14 @@ if errorlevel 1 (
     set CHROME_PROFILE=%USERPROFILE%\.notebooklm-mcp-cli\chrome-profile
 
     if exist "C:\Program Files\Google\Chrome\Application\chrome.exe" (
-        set CHROME="C:\Program Files\Google\Chrome\Application\chrome.exe"
+        set "CHROME=C:\Program Files\Google\Chrome\Application\chrome.exe"
     ) else if exist "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" (
-        set CHROME="C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+        set "CHROME=C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
     ) else (
-        set CHROME="%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"
+        set "CHROME=%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"
     )
 
-    start "" %CHROME% --remote-debugging-port=9222 --remote-allow-origins=* "--user-data-dir=%CHROME_PROFILE%" %NLM_URL%
+    start "" "%CHROME%" --remote-debugging-port=9222 --remote-allow-origins=* --user-data-dir="%CHROME_PROFILE%" %NLM_URL%
 
     echo Chrome is opening. Log in with your Google account.
     echo When the NotebookLM page appears, come back here.
@@ -44,7 +44,7 @@ if errorlevel 1 (
 
 :: [2/4] 로그인 (자동 → 수동 fallback)
 echo [2/4] Extracting session (auto mode)...
-cd /d "%~dp0packages\tools\notebooklm-cli"
+cd /d "C:\LinkDropV2\packages\tools\notebooklm-cli"
 uv run nlm login
 if errorlevel 1 (
     echo.
@@ -70,19 +70,18 @@ if errorlevel 1 (
 echo.
 
 :: [4/4] 기존 백엔드 정리 후 재시작
-echo [4/4] Restarting Backend Server...
-for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8000 ^| findstr LISTENING') do (
+echo [4/4] Restarting Backend Server (Port 8001)...
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8001 ^| findstr LISTENING') do (
     taskkill /F /PID %%a /T >nul 2>&1
 )
-taskkill /F /IM python.exe /T >nul 2>&1
-timeout /t 1 /nobreak >nul
+timeout /t 2 /nobreak >nul
 
 cd /d "%~dp0apps\api"
-start "LinkDrop-Backend" /min cmd /c ".venv\Scripts\python.exe main.py"
-echo    - Backend restarted in background.
+start "LinkDrop3-Backend" /min cmd /c ".venv\Scripts\python.exe -X utf8 main.py"
+echo    - Backend restarted in background (Port 8001).
 
 timeout /t 5 /nobreak >nul
-start "" "http://localhost:3000/admin/notebook-login"
+start "" "http://localhost:3100/series/keyframe-nlm"
 
 echo.
 echo ============================================================

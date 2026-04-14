@@ -1,0 +1,43 @@
+{
+  "id": "na_yh",
+  "name": "나윤희",
+  "style": "noir_oil",
+
+  "appearance_en": {
+    "face_shape": "refined oval face, defined moderate cheekbones, clean jaw softened precisely by age — the face that television has made familiar and familiarity has made trustworthy. A face that looks like it has seen everything, which is the most useful thing a face can look like",
+    "skin": "warm medium-fair Korean skin, naturally luminous at 52 — maintained but not concealed. Fine lines at outer eye corners and nasolabial folds present and unfought, the visible age of a woman who has built a career on the credibility of not hiding things",
+    "eyes": "warm dark brown eyes, double eyelid, outer corners with natural age droop softened by decades of practiced warmth — the eyes that look directly into a camera or a person with the same specific attention. The gaze that makes interviewees trust her with things they should not say on record",
+    "nose": "straight well-proportioned nose, defined and clean — the nose that photographs well, which matters",
+    "mouth": "well-shaped medium lips, naturally warm-toned, the smile precise and arrived — the smile of someone who has calibrated it over twenty years of television. In private the mouth goes still and completely different",
+    "eyebrows": "cleanly shaped brows with soft arch, dark with natural silver threading — not fighting the silver, deploying it as gravitas",
+    "distinctive_marks": "fine smile lines at outer eye corners, a small graceful mole at the right jaw corner — has appeared on television for twenty years and become part of the recognisable face",
+    "hair": "silver-threaded dark hair in a sleek precise blunt bob at jaw length — the haircut chosen fifteen years ago that became the signature. The silver was allowed in. It was a strategy",
+    "body": {
+      "height_cm": 163,
+      "weight_kg": 56,
+      "proportions": "slim composed frame, long neck, deliberate upright posture — the body of someone for whom every public appearance is a performance, including the ones that look effortless",
+      "posture": "poised and deliberate — the posture learned from years of broadcast, now unconscious and always on",
+      "body_prompt": "163cm slim composed Korean woman, long neck, broadcast-poised upright posture, the ease of a woman whose public presentation has become her private one"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "structured midi dress or tailored trousers with elegant blouse in muted intellectual tones — dusty blue, warm grey, deep burgundy. Simple quality jewellery. Dressed to look like she is not thinking about how she is dressed, which requires considerable thought",
+        "wardrobe_prompt": "tailored structured midi dress or elegant blouse with straight trousers, muted intellectual tones, simple quality jewellery, effortless-intellectual professional appearance"
+      }
+    },
+    "emotion_baseline": "warmth performing accessibility — the face of someone whose job for twenty years has been to seem like the most trustworthy person in the room. In unguarded moments, the warmth does not drop so much as pause",
+    "fal_identity_prompt": "52-year-old Korean woman, refined oval face with defined cheekbones and naturally age-softened jaw, warm dark double-eyelid eyes with natural outer-corner droop and decades of practiced warmth, cleanly arched brows with silver threading, straight well-proportioned nose, well-shaped medium warm-toned lips with calibrated smile, silver-threaded dark jaw-length blunt bob, small mole at right jaw corner, 163cm slim broadcast-poised composed frame, warm medium-fair luminous Korean skin with unfought fine lines"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of what the camera never shows, warm amber of broadcast warmth calculated to the second as primary light, steel blue of the face behind the face, painterly figurative realism, Korean drama cinematic composition, silver-threaded blunt bob as visual signature, the warmth that is most dangerous because it is partially real",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, cold, aggressive, young, glamorous, airbrushed"
+}

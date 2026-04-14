@@ -65,6 +65,15 @@ async def get_series(series_id: str):
 async def patch_series(series_id: str, req: PatchSeriesRequest):
     db = get_supabase()
     patch = {k: v for k, v in req.model_dump().items() if v is not None}
+
+    # JSON 객체 필드는 덮어쓰지 않고 기존 값에 merge
+    json_fields = [f for f in ("settings", "world_data") if f in patch]
+    if json_fields:
+        cur = db.table("v3_series").select(", ".join(json_fields)).eq("id", series_id).single().execute()
+        for f in json_fields:
+            existing = (cur.data or {}).get(f) or {}
+            patch[f] = {**existing, **patch[f]}
+
     db.table("v3_series").update(patch).eq("id", series_id).execute()
     return {"ok": True}
 
@@ -254,3 +263,47 @@ async def stream_pipeline(series_id: str):
             "X-Accel-Buffering": "no",
         },
     )
+
+
+# ---------------------------------------------------------------------------
+# Kling image-to-video
+# ---------------------------------------------------------------------------
+
+class KlingRequest(BaseModel):
+    scene_ids: Optional[list[str]] = None   # None이면 keyframe_done 전체
+    model: str = "v3/standard"             # "v3/standard" | "v2.1/pro" | "v2.1/master"
+    duration: str = "5"                    # "5" | "10"
+    aspect_ratio: str = "16:9"
+    max_concurrent: int = 2
+
+
+@router.post("/{series_id}/kling")
+async def run_kling(series_id: str, req: KlingRequest, background_tasks: BackgroundTasks):
+    """keyframe_url → Kling AI → kling_clip_url (MP4)
+
+    - scene_ids 미지정: keyframe_done 상태 씬 전체
+    - 이미 kling_clip_url이 있는 씬은 자동 스킵 (캐시)
+    - 비용: v3/standard $0.10/5초, v2.1/pro $0.20/5초
+    """
+    from services.kling_service import run_kling as _run_kling
+    from core.config import settings
+    if not settings.FAL_KEY:
+        raise HTTPException(400, "FAL_KEY 환경변수가 설정되지 않았습니다.")
+
+    background_tasks.add_task(
+        _run_kling,
+        series_id,
+        req.scene_ids,
+        req.model,
+        req.duration,
+        req.aspect_ratio,
+        req.max_concurrent,
+    )
+    return {"ok": True, "message": "Kling 변환 시작 (백그라운드 실행)"}
+
+
+@router.get("/{series_id}/cost")
+async def get_cost(series_id: str):
+    """시리즈 전체 API 비용 합계 (cost_usd 컬럼 기준)"""
+    from services.kling_service import get_series_cost
+    return await get_series_cost(series_id)

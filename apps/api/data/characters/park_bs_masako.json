@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean manga ink lines, warm screen tone, muted warm palette with lively accents, cinematic Korean drama composition, animated warmth concealing self-deception, energy in every line",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cold, stern, still, young, glamorous"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, animated round grandmother face perpetually mid-expression, apartment complex common area or community setting with warm sociable painterly light, cinematic backlighting with cheerful warm rim glow, iridescent morning gossip light through window glass, magical realism of warmth that has convinced itself it is not gossip, soft warm animated natural light, Korean drama cinematic composition, animated energy and self-deception in every lively brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, cold, stern, still, young, glamorous"
 }

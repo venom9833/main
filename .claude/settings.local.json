@@ -91,7 +91,10 @@
       "Bash(C:/LinkDropV2/apps/api/.venv/Scripts/python -X utf8 tmp/upload_longform_to_r2.py)",
       "Bash(C:/LinkDropV2/apps/api/.venv/Scripts/python -c ':*)",
       "Bash(sort -k3 -rn)",
-      "Bash(xargs -I{} git ls-tree -r {})"
+      "Bash(xargs -I{} git ls-tree -r {})",
+      "Bash(.venv/Scripts/python.exe -c \"import notebooklm_mcp_cli; print\\(dir\\(notebooklm_mcp_cli\\)\\)\")",
+      "Bash(.venv/Scripts/pip show:*)",
+      "Bash(.venv/Scripts/python.exe:*)"
     ]
   }
 }

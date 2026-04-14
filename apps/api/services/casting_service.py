@@ -169,6 +169,107 @@ def get_available_tropes() -> list[str]:
     return list(TROPE_TAG_MAP.keys())
 
 
+# ── 미등록 조연 외모 생성 ─────────────────────────────────────────────────────
+
+async def generate_guest_cast(
+    series_id: str,
+    guest_info: list[dict],  # [{name, scenes: [{text, image_hint}]}]
+) -> dict:
+    """미등록 조연 이름 목록 → 경량 Gemini 외모 생성 → world_data.guest_cast 저장.
+
+    guest_info 구조:
+      [{"name": "송현아", "scenes": [{"text": "...", "image_hint": "..."}]}]
+
+    저장 구조 (world_data.guest_cast):
+      {
+        "송현아": {
+          "fal_identity_prompt": "...",
+          "body_prompt": "...",
+          "wardrobe": {
+            "default":  {"wardrobe_prompt": "..."},
+            "casual":   {"wardrobe_prompt": "..."},
+            "stressed": {"wardrobe_prompt": "..."}
+          },
+          "negative_prompt": "..."
+        }
+      }
+    """
+    from services.gemini_helper import call_gemini, extract_json
+
+    db = get_supabase()
+    guest_cast: dict = {}
+
+    for info in guest_info:
+        name = info.get("name", "")
+        if not name:
+            continue
+
+        # 등장 씬 컨텍스트 (최대 3씬)
+        ctx_lines: list[str] = []
+        for s in (info.get("scenes") or [])[:3]:
+            if s.get("image_hint"):
+                ctx_lines.append(f"- 장면: {s['image_hint']}")
+            if s.get("text"):
+                ctx_lines.append(f"  서술: {s['text'][:120]}")
+        ctx_text = "\n".join(ctx_lines) or "등장 장면 정보 없음"
+
+        prompt = (
+            f"다음 조연 캐릭터의 외모를 생성하라. 한국 드라마 현실적 인물 기준.\n\n"
+            f"이름: {name}\n"
+            f"등장 씬 컨텍스트:\n{ctx_text}\n\n"
+            "아래 JSON만 출력 (설명·마크다운 코드블록 없이):\n"
+            '{\n'
+            '  "fal_identity_prompt": "영문 외모 묘사 — 나이대 Korean man/woman, 주요 얼굴 특징, 체형 요약 (2문장 이내)",\n'
+            '  "body_prompt": "영문 체형/자세 묘사 (1문장)",\n'
+            '  "wardrobe_default": "영문 일반 의상 묘사 (1문장)",\n'
+            '  "wardrobe_casual": "영문 캐주얼/집 의상 묘사 (1문장)",\n'
+            '  "wardrobe_stressed": "영문 긴장 상황 의상 묘사 (1문장)"\n'
+            '}'
+        )
+
+        try:
+            raw = await call_gemini(prompt, max_tokens=400, temperature=0.5)
+            data = extract_json(raw)
+            if data and data.get("fal_identity_prompt"):
+                guest_cast[name] = {
+                    "fal_identity_prompt": data.get("fal_identity_prompt", ""),
+                    "body_prompt":         data.get("body_prompt", ""),
+                    "wardrobe": {
+                        "default":  {"wardrobe_prompt": data.get("wardrobe_default", "")},
+                        "casual":   {"wardrobe_prompt": data.get("wardrobe_casual", "")},
+                        "stressed": {"wardrobe_prompt": data.get("wardrobe_stressed", "")},
+                    },
+                    "negative_prompt": (
+                        "photorealistic, anime, flat cartoon, CGI, 3d render, "
+                        "ugly, deformed, extra limbs, text, watermark"
+                    ),
+                }
+        except Exception:
+            # Gemini 실패 → 이름 텍스트 폴백 보장
+            guest_cast[name] = {
+                "fal_identity_prompt": "",
+                "body_prompt": "",
+                "wardrobe": {},
+                "negative_prompt": "",
+            }
+
+    if not guest_cast:
+        return {}
+
+    # world_data.guest_cast 저장
+    res = await asyncio.to_thread(
+        lambda: db.table("v3_series").select("world_data").eq("id", series_id).single().execute()
+    )
+    world: dict = (res.data or {}).get("world_data") or {}
+    world["guest_cast"] = {**(world.get("guest_cast") or {}), **guest_cast}
+
+    await asyncio.to_thread(
+        lambda: db.table("v3_series").update({"world_data": world}).eq("id", series_id).execute()
+    )
+
+    return guest_cast
+
+
 # ── V3 파이프라인 연동 ────────────────────────────────────────────────────────
 
 async def run_casting(series_id: str) -> dict:

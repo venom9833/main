@@ -1,7 +1,90 @@
-# LinkDrop V2 — Claude 프로젝트 지침
+# LinkDrop V3 — Claude 프로젝트 지침
 
-## 모든 에이젼트는 최초 로드 시 해당문서를 먼저 정독한다  
+## ★★★ V3 독립성 원칙
+**V3는 V2와 완전히 독립된 프로젝트다.**
+사용자가 명시적으로 지정하지 않는 한 `C:\LinkDropV2` 경로의 파일·문서·메모리를 읽거나 참조하지 않는다.
+
+## 모든 에이전트는 최초 로드 시 해당 문서를 먼저 정독한다
 C:/LinkDropV3/docs/rules/51_V3_시리즈_자동화_설계도.md
+
+---
+
+## 대화 시작 시 필독 문서 (51~62번 설계 문서 요약)
+
+**51~62번 문서가 V3의 단일 소스입니다. 코드 수정 전 관련 문서를 반드시 확인할 것.**
+
+| 문서 | 제목 | 핵심 요약 |
+|------|------|----------|
+| **51번** | 자동화 설계도 | Phase A-D 전략 / 1화 집중 원칙 / autoApprove 플래그 (`v3_series.settings`) |
+| **52번** | 세계관 | resolution_methods + narrative_povs 2개 선택 → Gemini 제약 주입 / world_options.json v2.0 |
+| **53번** | 마스터코드(씬과 컷) | **HOOK 2회 등장 = 설계 의도** (scene_index=0 복사본 + 원본 위치) / ch##s##nc## 체계 / dialogue 컷 상한 |
+| **54번** | 캐릭터 | 27명 풀 / `{id}_masako.json` + `{id}_noir_oil.json` / `fal_params.lora_url=null` (Phase D) |
+| **55번** | TTS | 1캐릭터=1Supertone 성우 / edge-tts 폴백 / 27명 배정 완료 / EXTRA_VOICE_MAP |
+| **56번** | ~~NLM키프레임~~ | **폐기됨** — 참조 금지 |
+| **57번** | API 키프레임 | `image_hint` 우선 사용 / `image_prompt` 사용 금지 (photorealistic 오염) |
+| **58번** | 키프레임 UI | bg_url / char_url / lipsync_url 마이그레이션 완료 / 컷 타입별 LEFT 버튼 분기 |
+| **59번** | 화풍 | `masako` + `noir_oil` 2종 확정 / `real` 삭제 완료 / art_styles.json 등록 완료 |
+| **60번** | 캐스팅 | guest_cast POST-SCRIPT 후처리 **미구현** (`generate_guest_cast()` 없음) |
+| **61번** | 이미지 프롬프트 | prompt_composer.py / cut_type 자동 분기 / OTS 구도 / build_bg_prompt / build_char_prompt |
+| **62번** | 패럴랙스 렌더링 | `production` + `animation_type` 분기 → v3_scenes에 **미반영** (다음 구현 최우선) |
+
+---
+
+## ★★★ 절대 변경 불가 설계 결정
+
+### 1. HOOK 컷 2회 등장 — 삭제·제거 금지 (53번)
+
+```
+재생순서  scene_index  마스터코드     설명
+[1]        0        ch01s00hc01  ← HOOK 복사본 (_parse_scenes_json이 자동 생성, 콜드오픈)
+[2]        1        ch01s01nc01  ← 대본 처음부터
+...
+[N]        4        ch01s04hc01  ← HOOK 원본 (서사 흐름 속 자연 위치)
+```
+→ scene_index=0 복사본 + 원본 위치 동일 컷 2개 = **정상 설계**, 버그 아님. 절대 삭제 금지.
+
+### 2. dialogue 컷 상한 (53번)
+
+| 챕터 | dialogue 컷 최대 |
+|------|----------------|
+| ch01 | 3개 |
+| ch02 이후 | 5개 |
+
+`_build_structure_prompt()` 프롬프트에 반드시 명시.
+
+### 3. image_hint vs image_prompt (57번)
+
+- **`image_hint`만 사용** — 한국어 시각 묘사, 렌더 기준
+- **`image_prompt` 사용 금지** — Gemini 자동 `photorealistic` 추가 → masako 화풍 오염 발생
+
+### 4. v3_scenes 미구현 필드 (62번 §1 — 다음 구현 최우선)
+
+```python
+# v3_scenes에 반드시 추가해야 할 필드
+production      # "split" | "composite" | "bg_only"
+animation_type  # "parallax" | "ken_burns" | "lipsync"
+
+# 분기 기준
+narration + 0인  → production="bg_only",    animation_type="ken_burns"
+narration + 1인  → production="split",      animation_type="parallax"
+narration + 2인+ → production="composite",  animation_type="ken_burns"
+dialogue         → production="composite",  animation_type="lipsync"
+```
+
+---
+
+## ★ 미구현 항목 (다음 대화 즉시 확인)
+
+| 우선순위 | 항목 | 관련 문서 |
+|----------|------|----------|
+| **최우선** | v3_scenes에 `production` + `animation_type` 컬럼 추가 + compose-prompt 분기 구현 | 62번 §1 |
+| **긴급** | ch01 클리프행어 수정 (series_plan "언니가 사라지기 직전" 내용 포함) | series_plan |
+| **중요** | dialogue 30% 상한 강제 (`_build_structure_prompt()` 명시) | 53번 |
+| **미구현** | guest_cast POST-SCRIPT 후처리 (`generate_guest_cast()`, `detect_guest_cast()`) | 60번 |
+| **개선** | image_hint 우선 전환 (photorealistic 오염 차단) | 57번 |
+| **장기** | LoRA 학습 파이프라인 (참조 이미지 수집부터 시작) | Phase D |
+
+---
 
 ## Context7 자동 사용 규칙
 
@@ -98,10 +181,51 @@ LinkDrop V2의 `/series/` 파이프라인은 다음 구조적 문제를 안고 �
 - supabase-py 쿼리(`table().select()`, `upsert()` 등) 작성 시
 
 
+## MCP 서버
+
+**MCP 관련 모든 정보는 `C:\LinkDropV3\packages\mcp-servers\` 에 집중한다.**
+
+```
+C:\LinkDropV3\packages\mcp-servers\
+├── linkdrop-api\          # V3 FastAPI(포트 8001)를 MCP 도구로 노출 (FastMCP 3.x)
+│   ├── server.py          # 도구 구현 (시리즈·챕터·위키·파이프라인 제어)
+│   └── manifest.json      # 도구 목록 + 메타데이터
+└── notebooklm\            # NotebookLM MCP (notebooklm-mcp-cli 0.5.21)
+    └── manifest.json      # 도구 목록 + 메타데이터 (실행 파일: V3 venv)
+```
+
+**설정 파일**: `C:\LinkDropV3\.mcp.json` — 모든 MCP 서버 등록 단일 진입점
+
+| 서버 | 종류 | 실행 |
+|------|------|------|
+| `linkdrop-api` | V3 커스텀 | `packages/mcp-servers/linkdrop-api/server.py` |
+| `notebooklm` | 패키지 | `apps/api/.venv/Scripts/notebooklm-mcp.exe` |
+| `context7` | 서드파티 | npx |
+| `supabase` (plugin) | 서드파티 | `mcp__plugin_supabase_supabase__*` 도구군 |
+| `code-review-graph` | 서드파티 | python 모듈 |
+
+### Supabase DDL/마이그레이션 규칙
+- **DDL(ALTER TABLE 등)은 반드시 `mcp__plugin_supabase_supabase__apply_migration` 사용**
+- project_id: `fmjuhbcxkfuilvvdwvix`
+- 인증이 필요한 경우 `mcp__plugin_supabase_supabase__authenticate` 호출 후 진행
+- `mcp__supabase__*` 계열(npx)은 인증 토큰 없어 403 발생 — 사용 금지
+- SQL 조회는 `mcp__plugin_supabase_supabase__execute_sql` 사용
+
+### 규칙
+- 새 MCP 서버 추가 시 `packages/mcp-servers/<서버명>/manifest.json` 생성 + `.mcp.json` 등록
+- 커스텀 서버는 `server.py`도 함께 작성
+- V3 API 엔드포인트 추가 시 `linkdrop-api/server.py` 도구도 함께 업데이트
+- 인증 정보(토큰·쿠키)는 `manifest.json`에 경로만 기록, 파일 자체는 커밋 금지
+
+---
+
 ## 프로젝트 구조
 
 ```
 C:\LinkDropV3\
+├── packages\
+│   └── mcp-servers\       # ★ MCP 서버 집중 관리
+│       └── linkdrop-api\
 ├── apps/
 │   ├── api/                          # FastAPI 백엔드 (포트 8100)
 │   │   ├── core/
@@ -150,8 +274,8 @@ C:\LinkDropV3\
 ├── supabase/
 │   └── migrations/                   # V3 전용 마이그레이션 (v3_ prefix)
 ├── docs/
-│   └── rules/                        # C:\LinkDropV2\docs\rules 규칙 적용본
-└── .env                              # V2와 동일 Supabase + Gemini 키 공유
+│   └── rules/                        # V3 설계 규칙 (51~54번)
+└── .env                              # Supabase + Gemini + R2 키
 ```
 
 ## 기술 스택
@@ -232,6 +356,26 @@ url = f"{os.environ['R2_PUBLIC_URL']}/r2/path/image.png"
 실행하기 전 필요한 맥락을 파악할 수 있도록 사용자에게 질문하기.
 복잡한 문제라면  사용자가 애초에 올바른 질문을 하고 있는지부터 점검해줘.
 </investigate_before_answering>
+
+<delete_protocol>
+★★★ 기존 코드 삭제·대폭 수정 전 필수 절차 ★★★
+
+이 프로젝트는 장기 설계 논의를 거쳐 구현됐다.
+"버그처럼 보이는 코드"가 실제로는 설계 의도인 경우가 반복적으로 발생했다.
+코드를 삭제하거나 크게 수정하기 전에 반드시:
+
+  1. docs/DESIGN_DECISIONS.md 확인 — 해당 패턴이 등록되어 있는지
+  2. 코드 내 "★ 설계 의도" 주석 확인
+  3. 관련 설계 문서(51~62번) 해당 섹션 확인
+
+위 세 가지를 확인하고도 의도를 모르겠으면 삭제하지 말고 사용자에게 먼저 확인할 것.
+
+삭제 금지 패턴 (docs/DESIGN_DECISIONS.md 전체 목록):
+  - v3_scenes에 동일 컷 2개 (scene_index=0 + 원본) → HOOK 설계 (53번)
+  - _absorb_dialogue_cuts() 재호출 → Pass 2 대사 흡수 (53번)
+  - _orig_scene_index / _orig_cut_index 임시 필드 → scene_code 계산용
+  - mixed 컷 타입 분기 → Gemini 폴백 처리
+</delete_protocol>
 
 <debugging_protocol>
 버그/오류 발생 시 반드시 이 순서를 따를 것:

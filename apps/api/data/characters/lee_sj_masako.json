@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, soft screen tone shading, cool muted palette, cinematic Korean drama composition, dignified emotional restraint, quiet authority in stillness",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, overly cute, childish, chibi, excessive emotion"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, composed oval face of quiet professional authority, clean government office or outdoor setting with balanced cool natural light, cinematic backlighting with even cool rim glow, iridescent light from office windows, magical realism of composure as professional armor, soft diffused cool natural light, Korean drama cinematic composition, dignified emotional restraint and watchful efficiency in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, overly cute, childish, chibi, excessive emotion"
 }

@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, manga ink lines, subdued screen tone shading, grey-blue muted corporate palette, cinematic Korean drama composition, stoic heavy emotion, decades of endurance in stillness",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, young, energetic, athletic, cheerful"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, expressive face of quiet stoic endurance, corporate indoor space with warm afternoon window light painted in soft layers, cinematic backlighting with gentle tired rim glow, iridescent dust-light through office glass, magical realism of slow interior erosion, soft diffused office natural light, Korean drama cinematic composition, stoic heavy emotion of decades absorbed in silence",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, young, energetic, athletic, cheerful"
 }

@@ -1,0 +1,43 @@
+{
+  "id": "cha_mh",
+  "name": "차민혁",
+  "style": "noir_oil",
+
+  "appearance_en": {
+    "face_shape": "soft oval face, smooth jaw, high but gentle cheekbones — the face that reads as harmless until you realise everyone in the room is looking at it",
+    "skin": "warm light beige Korean skin, natural and unguarded — the clear skin of someone who sleeps well and does not think about it. Fine barely-visible pores, no blemishes",
+    "eyes": "dark brown long-lashed eyes, double eyelid, outer corners slightly upturned — gaze warm and present, the eyes that make whoever they are looking at feel like the most interesting person in the room. This is not a technique. That is the problem",
+    "nose": "straight medium nose with a slightly rounded tip, proportional and forgettable — the face draws attention elsewhere",
+    "mouth": "naturally full lips with slightly upturned corners at rest, the smile arrives slowly and reaches the eyes first — the smile that people describe later without being able to explain why they remember it",
+    "eyebrows": "medium natural dark brows, slight arch, not groomed — the brow of someone who has never considered grooming his brows because no one has ever suggested it was necessary",
+    "distinctive_marks": "a small birthmark at the left jaw corner, visible only in close proximity. The kind of face that photographs worse than it looks in person — the animation is the point",
+    "hair": "dark slightly tousled medium-length hair, naturally textured, falls across forehead without effort — the hair that looks like he just woke up because he did, and it looks like this anyway",
+    "body": {
+      "height_cm": 182,
+      "weight_kg": 70,
+      "proportions": "tall lean frame, long arms, narrow shoulders — the body of someone who moves through space without awareness of how much of it he occupies",
+      "posture": "relaxed and slightly folded — often leaning against something, hands in pockets, never performing. The posture that makes formal spaces look overly serious",
+      "body_prompt": "182cm tall lean Korean man, relaxed slightly folded posture, long limbs, natural ease in any space he occupies"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "oversized washed cotton shirt or plain crewneck, loose dark trousers or jeans, clean worn sneakers — the clothes of someone who is not thinking about clothes",
+        "wardrobe_prompt": "oversized washed cotton shirt or plain crewneck, loose dark jeans or trousers, clean worn sneakers, no accessories"
+      }
+    },
+    "emotion_baseline": "warm and present — the face that is genuinely interested in whoever is speaking. This is not calculation. That is exactly the problem",
+    "fal_identity_prompt": "27-year-old Korean man, soft oval face with smooth jaw and gentle cheekbones, warm dark long-lashed double-eyelid eyes with upturned corners, natural slightly arched dark brows, straight medium nose, naturally full upturned-corner lips, dark slightly tousled medium-length natural hair across forehead, small birthmark at left jaw corner, 182cm tall lean relaxed-posture frame, warm light beige Korean skin clear and unguarded"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of ambiguity surrounding genuine warmth, warm amber of unguarded natural ease as primary light, steel blue of unintended consequences accumulating around him, painterly figurative realism, Korean drama cinematic composition, warmth that requires no calculation which is therefore the most dangerous kind",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, cold, aggressive, idol look, glamorous, posed, airbrushed"
+}

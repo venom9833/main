@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean manga ink lines, muted earthy screen tone, warm-grey palette, cinematic Korean drama composition, 40 years of quiet labour in every line, dignity in exhaustion",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cheerful, young, glamorous, soft features"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, weathered market grandmother face carrying 40 years of quiet labour painted in earthy warmth, traditional market setting with warm canvas-filtered morning light, cinematic backlighting with worn amber rim glow, iridescent light through market awnings, magical realism of resilience at its quiet limit, soft diffused morning market light, Korean drama cinematic composition, dignity in exhaustion rendered with honest painterly weight",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, cheerful, young, glamorous, soft features"
 }

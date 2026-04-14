@@ -1,0 +1,43 @@
+{
+  "id": "oh_bs",
+  "name": "오봉수",
+  "style": "noir_oil",
+
+  "appearance_en": {
+    "face_shape": "broad heavy face, wide strong cheekbones, deep-set jaw held in permanent tension — shaped by 30 years of fighting the same neighbourhood battle",
+    "skin": "medium-dark Korean skin, heavily sun-weathered, deep carved nasolabial folds, rough horizontal forehead lines, visible age spots, coarse outdoor texture — the face of a man who has lived his entire life outside",
+    "eyes": "dark brown faded heavy-lidded eyes, direct combative gaze — perpetually ready for confrontation. Whites slightly reddened from chronic agitation and poor sleep",
+    "nose": "broad flat nose, wide bulbous tip, prominent and unignorable",
+    "mouth": "medium lips pressed tightly closed, jaw muscles faintly visible — the mouth of a man whose default state is barely contained argument",
+    "eyebrows": "thick salt-and-pepper brows, nearly always furrowed, rise dramatically when provoked",
+    "distinctive_marks": "deep nasolabial folds, carved forehead lines, visible age spots at temples, neck tension cords visible under stress",
+    "hair": "short coarse salt-and-pepper hair, thinning at crown, simply combed with no product",
+    "body": {
+      "height_cm": 165,
+      "weight_kg": 74,
+      "proportions": "compact solid frame, broad shoulders set slightly forward, barrel chest, thickened midsection, sturdy planted legs",
+      "posture": "wide-based forward-leaning — always positioned as if about to make a point or block an exit",
+      "body_prompt": "165cm compact solid Korean man, broad forward-set shoulders, barrel chest, firmly planted wide combative posture"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "plain dark work shirt or padded vest over worn shirt, practical dark trousers — never once thought about clothing",
+        "wardrobe_prompt": "plain dark work shirt or padded vest over worn shirt, practical dark trousers, no accessories"
+      }
+    },
+    "emotion_baseline": "defiant at rest — anger worn as armor over grief he has never named",
+    "fal_identity_prompt": "68-year-old Korean man, broad heavy face with wide cheekbones and set jaw, thick furrowed salt-and-pepper brows, heavy-lidded faded combative eyes, broad flat nose, tightly pressed lips with jaw muscles faintly visible, short coarse salt-and-pepper hair, 165cm compact solid broad-shouldered planted posture, medium-dark heavily weathered Korean skin"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of thirty years of the same argument with the world, warm amber of the neighbourhood he will not leave as primary light, steel blue of defiance slowly understanding it is also grief, painterly figurative realism, Korean drama cinematic composition, stubbornness in the face of a demolition notice rendered in oil weight",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, gentle, soft, smiling, young, slim, airbrushed"
+}

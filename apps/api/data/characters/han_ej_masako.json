@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, layered soft screen tone shading, muted warm-cream color palette with dusty rose accents, cinematic Korean drama panel composition, expressive eyes hiding exhaustion behind a trained smile, emotional weight in the gap between performance and reality",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, bright saturated colors, childish, chibi, genuinely happy expression, youthful, glamorous"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, expressive face performing warmth with practiced precision, soft warm domestic interior background with golden morning light, cinematic backlighting with glowing rim light through lace curtains, iridescent prism light leaks from window glass, magical realism of a smile held one breath too long, soft diffused morning sunlight through a large window, Korean drama cinematic composition, the gap between performed warmth and hidden exhaustion rendered in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, bright saturated colors, childish, chibi, genuinely happy expression, youthful, glamorous"
 }

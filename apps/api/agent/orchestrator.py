@@ -15,6 +15,7 @@ _AWAITING_STEPS = {
     PipelineStep.AWAITING_CASTING_APPROVAL,
     PipelineStep.AWAITING_SCRIPT_APPROVAL,
     PipelineStep.AWAITING_KEYFRAME_SETUP,
+    PipelineStep.AWAITING_TTS,
     PipelineStep.AWAITING_UPLOAD_APPROVAL,
 }
 
@@ -25,6 +26,7 @@ _AUTO_APPROVE_KEYS: dict[PipelineStep, str] = {
     PipelineStep.AWAITING_CASTING_APPROVAL: "autoApproveCasting",
     PipelineStep.AWAITING_SCRIPT_APPROVAL:  "autoApproveScript",
     PipelineStep.AWAITING_KEYFRAME_SETUP:   "autoApproveKeyframe",
+    PipelineStep.AWAITING_TTS:              "autoApproveTts",
     PipelineStep.AWAITING_UPLOAD_APPROVAL:  "autoApproveUpload",
 }
 
@@ -63,6 +65,7 @@ async def run_pipeline(series_id: str, start_step: PipelineStep = PipelineStep.A
                     PipelineStep.AWAITING_CASTING_APPROVAL: "casting",
                     PipelineStep.AWAITING_SCRIPT_APPROVAL:  "script",
                     PipelineStep.AWAITING_KEYFRAME_SETUP:   "keyframe_setup",
+                    PipelineStep.AWAITING_TTS:              "tts",
                     PipelineStep.AWAITING_UPLOAD_APPROVAL:  "upload",
                 }
                 next_step = APPROVAL_TRANSITIONS.get(_key_map.get(step, ""))
@@ -101,7 +104,7 @@ async def run_pipeline(series_id: str, start_step: PipelineStep = PipelineStep.A
                         await asyncio.sleep(wait)
 
         if not success:
-            _update_series(db, series_id, PipelineStep.FAILED, error=f"{step} 실패")
+            _update_series(db, series_id, PipelineStep.FAILED, error=f"step={step.value} 실패")
             await event_bus.publish(series_id, {"type": "done", "step": "failed"})
             return
 
@@ -159,11 +162,34 @@ async def _run_architect(series_id: str):
 
 async def _run_script(series_id: str):
     from services.script_service import run_script
+    from services.wiki_service import run_lint
+    from services.reviser_service import run_reviser
+
     await run_script(series_id)
 
+    # 대본 생성 직후 자동 품질 루프: Lint → Revise
+    # 실패해도 파이프라인은 계속 진행 (awaiting_script_approval로 이동)
+    try:
+        await run_lint(series_id)
+    except Exception as e:
+        print(f"[auto-lint] 실패 (무시): {e}")
+
+    try:
+        result = await run_reviser(series_id)
+        revised = result.get("revised", 0)
+        if revised:
+            print(f"[auto-revise] {revised}개 챕터 자동 수정 완료: {result.get('chapters')}")
+        else:
+            print(f"[auto-revise] 수정 필요 항목 없음")
+    except Exception as e:
+        print(f"[auto-revise] 실패 (무시): {e}")
+
 async def _run_keyframe(series_id: str):
-    from services.keyframe_service import run_keyframe
-    await run_keyframe(series_id)
+    """키프레임 단계 — 자동 생성 없음. 씬 JSON(image_hint 등)은 대본 구조화 시 이미 생성됨.
+    사용자는 /series/keyframe 페이지에서 직접 검토·개별 재생성.
+    이 단계는 즉시 완료 → TTS로 진행.
+    """
+    return {"ok": True, "skipped": True, "note": "키프레임 자동생성 비활성 — 씬 JSON 사용"}
 
 async def _run_tts(series_id: str):
     from services.tts_service import run_tts

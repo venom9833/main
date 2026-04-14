@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import {
   getSeries, getSeriesStatus, approvePipelineStep,
   retryPipelineStep
@@ -13,11 +13,14 @@ import CastingReviewPanel from '@/components/CastingReviewPanel';
 import type { Series, PipelineStep, Chapter } from '@/types/series';
 
 const API = 'http://localhost:8001/api/v1';
-const TERMINAL_STEPS = new Set(['done', 'failed', 'chapter_done', 'awaiting_world_approval', 'awaiting_casting_approval', 'awaiting_script_approval', 'awaiting_keyframe_setup', 'awaiting_upload_approval']);
+const TERMINAL_STEPS = new Set(['done', 'failed', 'chapter_done', 'awaiting_world_approval', 'awaiting_casting_approval', 'awaiting_script_approval', 'awaiting_keyframe_setup', 'awaiting_tts', 'awaiting_upload_approval']);
 
 export default function SeriesDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+
   const [series, setSeries] = useState<Series | null>(null);
+
   const [step, setStep] = useState<PipelineStep>('idle');
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -28,6 +31,12 @@ export default function SeriesDetailPage() {
   const [scriptRegen, setScriptRegen] = useState(false);
   const [scriptRevise, setScriptRevise] = useState(false);
   const [revisionKey, setRevisionKey] = useState(0);
+  const [scriptApproving, setScriptApproving] = useState<string | null>(null);
+  const reviseAbortRef = useRef(false);
+  const [lintLoading, setLintLoading] = useState(false);
+  const [lintRevising, setLintRevising] = useState(false);
+  const [lintReport, setLintReport] = useState('');
+  const [lintReviseResult, setLintReviseResult] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     try {
@@ -35,7 +44,7 @@ export default function SeriesDetailPage() {
       setStep(st.pipeline_step);
       setError(st.error_detail ?? null);
       // 대본 완료 이후 단계에서 챕터 목록 갱신
-      const scriptDoneSteps = ['awaiting_script_approval', 'awaiting_keyframe_setup', 'keyframe', 'tts', 'render', 'awaiting_upload_approval', 'chapter_done', 'done'];
+      const scriptDoneSteps = ['awaiting_script_approval', 'awaiting_keyframe_setup', 'keyframe', 'awaiting_tts', 'tts', 'render', 'awaiting_upload_approval', 'chapter_done', 'done'];
       if (scriptDoneSteps.includes(st.pipeline_step)) {
         fetch(`${API}/series/${id}/chapters`).then(r => r.ok ? r.json() : []).then(setChapters).catch(() => {});
       }
@@ -78,17 +87,56 @@ export default function SeriesDetailPage() {
 
   useEffect(() => {
     if (TERMINAL_STEPS.has(step)) return;
-    const es = new EventSource(`${API}/series/${id}/stream`);
-    es.onmessage = (e) => {
-      const event = JSON.parse(e.data);
-      if (event.type === 'ping') return;
-      refresh();
-      loadSeries();
-      if (event.type === 'done') es.close();
+    let closed = false;
+    let retries = 0;
+    let currentEs: EventSource | null = null;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+    function connect() {
+      if (closed) return;
+      currentEs = new EventSource(`${API}/series/${id}/stream`);
+      currentEs.onmessage = async (e) => {
+        const event = JSON.parse(e.data);
+        if (event.type === 'ping') return;
+        retries = 0; // 수신 성공 → 재시도 카운트 리셋
+        await loadSeries();
+        refresh();
+        if (event.type === 'done') { currentEs?.close(); }
+      };
+      currentEs.onerror = () => {
+        currentEs?.close();
+        if (closed) return;
+        retries++;
+        if (retries <= 3) {
+          // 지수 백오프: 2s, 4s, 6s
+          setTimeout(connect, retries * 2000);
+        } else if (!pollTimer) {
+          // SSE 3회 연속 실패 → 3초 폴링으로 전환
+          pollTimer = setInterval(() => { if (!closed) refresh(); }, 3000);
+        }
+      };
+    }
+
+    connect();
+    return () => {
+      closed = true;
+      currentEs?.close();
+      if (pollTimer) clearInterval(pollTimer);
     };
-    es.onerror = () => es.close();
-    return () => es.close();
   }, [id, step, refresh, loadSeries]);
+
+  // awaiting_world_approval 고착 방지 — openingHook 미확보 시 2초 간격 재시도
+  // series 상태가 바뀔 때마다 재평가 → openingHook 확보되면 자동 중단
+  useEffect(() => {
+    if (step !== 'awaiting_world_approval') return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((series as any)?.world_data?.openingHook) return; // 이미 확보됨
+    const timer = setInterval(() => loadSeries(), 2000);
+    return () => clearInterval(timer);
+  }, [step, series, loadSeries]);
+
+  // 언마운트 시 handleScriptRevise 폴링 루프 중단
+  useEffect(() => { return () => { reviseAbortRef.current = true; }; }, []);
 
   if (notFound) return (
     <div style={{ padding: '3rem 2rem', fontFamily: "var(--font-en), 'Pretendard', sans-serif", textAlign: 'center' }}>
@@ -113,12 +161,15 @@ export default function SeriesDetailPage() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (snap0 as any[]).map((c) => [c.chapter as number, (c.content ?? '') as string])
     );
+    reviseAbortRef.current = false;
     setScriptRevise(true);
     try {
       await fetch(`${API}/series/${id}/revise-script`, { method: 'POST' });
       // 최대 120초 폴링 (1.5초 간격) — POST 이후 내용 변경 감지
       for (let i = 0; i < 80; i++) {
+        if (reviseAbortRef.current) break; // 언마운트 시 즉시 중단
         await new Promise(r => setTimeout(r, 1500));
+        if (reviseAbortRef.current) break;
         const snap = await fetch(`${API}/series/${id}/chapters`).then(r => r.json()).catch(() => []);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const changed = (snap as any[]).some((c) => (c.content ?? '') !== (contents0.get(c.chapter) ?? ''));
@@ -144,6 +195,55 @@ export default function SeriesDetailPage() {
       refresh();
     } finally {
       setScriptRegen(false);
+    }
+  };
+
+  const handleLintAndRevise = async () => {
+    if (!confirm('위키 기준으로 대본을 검수한 뒤 수정 필요 항목을 자동 재작성합니다.\n계속하시겠습니까?')) return;
+    setLintLoading(true);
+    setLintReport('');
+    setLintReviseResult(null);
+    try {
+      // 1단계: Lint 검수
+      const lintRes = await fetch(`${API}/wiki/${id}/lint`, { method: 'POST' });
+      const lintData = await lintRes.json();
+      const report = lintData.report ?? '';
+      setLintReport(report);
+
+      // 2단계: 자동 수정
+      setLintLoading(false);
+      setLintRevising(true);
+      const reviseRes = await fetch(`${API}/wiki/${id}/revise`, { method: 'POST' });
+      const reviseData = await reviseRes.json();
+      const count = reviseData.revised ?? 0;
+      setLintReviseResult(count > 0 ? `챕터 ${reviseData.chapters?.join(', ')}화 재작성 완료.` : '수정 필요 항목이 없습니다.');
+      if (count > 0) { setRevisionKey(k => k + 1); refresh(); }
+    } finally {
+      setLintLoading(false);
+      setLintRevising(false);
+    }
+  };
+
+  const handleApproveWithProvider = async (artStyle: string) => {
+    if (scriptApproving) return;
+    setScriptApproving('gemini');
+    try {
+      // 1. artStyle 저장
+      await fetch(`${API}/series/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ settings: { keyframeProvider: 'gemini', artStyle } }),
+      });
+      // 2. 대본 승인 → awaiting_keyframe_setup 전이
+      await approvePipelineStep(id, 'script');
+      // 3. 키프레임 설정 즉시 승인 → keyframe 단계 진입 (Gemini 미호출 — 씬 JSON 그대로 사용)
+      await approvePipelineStep(id, 'keyframe_setup');
+      // 4. 키프레임 검토 페이지로 이동
+      router.push(`/series/keyframe?series_id=${id}`);
+    } catch {
+      refresh();
+    } finally {
+      setScriptApproving(null);
     }
   };
 
@@ -245,16 +345,16 @@ export default function SeriesDetailPage() {
               </span>
               <span style={{ flex: 1 }} />
               <button
-                onClick={handleScriptRevise}
-                disabled={scriptRevise || scriptRegen}
+                onClick={handleLintAndRevise}
+                disabled={lintLoading || lintRevising || scriptRevise || scriptRegen}
                 style={{
                   padding: '0.3rem 0.85rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 600,
                   border: '1px solid rgba(99,102,241,0.4)', background: 'rgba(99,102,241,0.08)',
-                  color: (scriptRevise || scriptRegen) ? 'rgba(255,255,255,0.25)' : '#a5b4fc',
-                  cursor: (scriptRevise || scriptRegen) ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
+                  color: (lintLoading || lintRevising || scriptRevise || scriptRegen) ? 'rgba(255,255,255,0.25)' : '#a5b4fc',
+                  cursor: (lintLoading || lintRevising || scriptRevise || scriptRegen) ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
                 }}
               >
-                {scriptRevise ? '교정 중…' : '대본 교정'}
+                {lintLoading ? '검수 중…' : lintRevising ? '교정 중…' : '대본 교정'}
               </button>
               <button
                 onClick={handleScriptRegenerate}
@@ -280,13 +380,71 @@ export default function SeriesDetailPage() {
             <ScriptDownloadPanel series={series} chapters={chapters} busy={scriptRevise || scriptRegen} />
           )}
 
-          <ApprovalPanel
-            seriesId={id} step={step}
-            onApprove={async () => {
-              await approvePipelineStep(id, 'script');
+          <ScriptApprovalButtons
+            approving={scriptApproving}
+            disabled={scriptRevise || scriptRegen}
+            onApprove={handleApproveWithProvider}
+          />
+
+          {/* Lint 결과 패널 */}
+          {(lintReport || lintReviseResult) && (
+            <div style={{ borderRadius: '16px', border: '1px solid rgba(99,102,241,0.3)', background: 'rgba(99,102,241,0.05)', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.85rem 1.25rem', borderBottom: '1px solid rgba(99,102,241,0.15)' }}>
+                <span style={{ fontWeight: 700, color: '#a78bfa', fontSize: '0.9rem' }}>🔍 Lint 보고서</span>
+                <button
+                  onClick={() => { setLintReport(''); setLintReviseResult(null); }}
+                  style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '1.1rem' }}
+                >✕</button>
+              </div>
+              {lintReviseResult && (
+                <div style={{ padding: '0.7rem 1.25rem', background: 'rgba(16,185,129,0.1)', borderBottom: '1px solid rgba(16,185,129,0.2)', color: '#6ee7b7', fontWeight: 600, fontSize: '0.85rem' }}>
+                  ✅ {lintReviseResult}
+                </div>
+              )}
+              <pre style={{ padding: '1.25rem', whiteSpace: 'pre-wrap', color: 'rgba(255,255,255,0.8)', fontSize: '0.83rem', lineHeight: 1.7, margin: 0, maxHeight: '500px', overflowY: 'auto' }}>
+                {lintReport}
+              </pre>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TTS 시작 승인 — 키프레임 검토 완료 후 TTS 생성 시작 */}
+      {step === 'awaiting_tts' && (
+        <div style={{
+          marginTop: '2rem',
+          background: 'linear-gradient(135deg, rgba(17,24,39,0.95), rgba(30,27,75,0.97))',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: '20px',
+          padding: '2rem',
+          color: '#e2e8f0',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}>
+          <h2 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>🎙 음성(TTS) 생성 시작</h2>
+          <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem' }}>
+            키프레임 검토가 완료됐습니다. 아래 버튼을 누르면 모든 컷의 음성을 자동 생성합니다.
+          </p>
+          <button
+            onClick={async () => {
+              await approvePipelineStep(id, 'tts');
               refresh();
             }}
-          />
+            style={{
+              padding: '0.75rem 2rem',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: '1rem',
+              border: 'none',
+              cursor: 'pointer',
+              alignSelf: 'flex-start',
+            }}
+          >
+            TTS 생성 시작
+          </button>
         </div>
       )}
 
@@ -338,7 +496,7 @@ export default function SeriesDetailPage() {
 
 const STEP_LABELS: Record<string, string> = {
   awaiting_source_upload: '소스 업로드', world: '세계관 생성', casting: '캐스팅',
-  script: '대본 생성', keyframe: '키프레임 생성',
+  script: '대본 생성', keyframe: '키프레임 생성', awaiting_tts: 'TTS 시작 대기',
   tts: '음성(TTS) 생성', render: '영상 렌더링', upload: 'YouTube 업로드',
 };
 
@@ -1206,6 +1364,80 @@ function ChapterDonePanel({ seriesId, completedChapter, onNext }: {
   );
 }
 
+const ART_STYLES = [
+  { key: 'masako',   label: '마사코 스타일' },
+  { key: 'noir_oil', label: '누아르 유화'   },
+] as const;
+type ArtStyleType = typeof ART_STYLES[number]['key'];
+
+function ScriptApprovalButtons({
+  approving, disabled = false, onApprove,
+}: {
+  approving: string | null;
+  disabled?: boolean;
+  onApprove: (artStyle: string) => void;
+}) {
+  const [artStyle, setArtStyle] = useState<ArtStyleType>('masako');
+  const isBusy = !!approving || disabled;
+  return (
+    <div style={{
+      padding: '1.5rem 2rem',
+      background: 'rgba(245,158,11,0.07)',
+      border: '1px solid rgba(245,158,11,0.25)',
+      borderRadius: '16px',
+    }}>
+      <p style={{
+        fontSize: '0.82rem', color: 'rgba(255,255,255,0.4)',
+        textAlign: 'center', marginBottom: '1rem',
+      }}>
+        대본을 승인하고 화풍을 선택하세요
+      </p>
+
+      {/* 화풍 선택 */}
+      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.25rem' }}>
+        {ART_STYLES.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => !isBusy && setArtStyle(key)}
+            disabled={isBusy}
+            style={{
+              padding: '0.4rem 1.2rem', borderRadius: '20px',
+              border: artStyle === key ? '1.5px solid rgba(245,158,11,0.8)' : '1px solid rgba(255,255,255,0.15)',
+              background: artStyle === key ? 'rgba(245,158,11,0.18)' : 'transparent',
+              color: artStyle === key ? '#f59e0b' : 'rgba(255,255,255,0.4)',
+              fontSize: '0.82rem', fontWeight: artStyle === key ? 700 : 400,
+              cursor: isBusy ? 'not-allowed' : 'pointer',
+              transition: 'all 0.15s',
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* 승인 버튼 */}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <button
+          onClick={() => !isBusy && onApprove(artStyle)}
+          disabled={isBusy}
+          style={{
+            padding: '0.7rem 2rem', borderRadius: '12px', border: 'none',
+            background: approving
+              ? 'rgba(245,158,11,0.45)'
+              : isBusy ? 'rgba(245,158,11,0.12)' : 'linear-gradient(135deg, #f59e0b, #d97706)',
+            color: isBusy && !approving ? 'rgba(255,255,255,0.25)' : '#fff',
+            fontSize: '0.92rem', fontWeight: 700,
+            cursor: isBusy ? 'not-allowed' : 'pointer',
+            transition: 'all 0.15s',
+          }}
+        >
+          {approving ? '처리 중…' : '대본 승인 → 키프레임 제작'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function ErrorPanel({ error, onRetry }: { error: string; onRetry: () => void }) {
   return (
     <div style={{ padding: '1.5rem', background: 'rgba(239,68,68,0.08)', borderRadius: '12px', border: '1px solid rgba(239,68,68,0.25)', marginTop: '1rem' }}>
@@ -1290,6 +1522,7 @@ const LOG_STEP_LABELS: Record<string, string> = {
   script: '대본 생성',
   awaiting_script_approval: '대본 승인 대기',
   keyframe: '키프레임 생성',
+  awaiting_tts: 'TTS 시작 대기',
   tts: 'TTS 음성 생성',
   render: '영상 렌더링',
   awaiting_upload_approval: '업로드 승인 대기',

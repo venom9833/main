@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, cool-warm contrast screen tone, dark authoritative palette with silver accent, cinematic Korean drama composition, the gravity of a man who has not been wrong in years and may not notice when he finally is",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, young, smooth, idol look, flashy, aggressive, glamorous"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, authoritative angular face with earned silver temples painted in warm confident light, upscale interior or development site with rich natural ambient light, cinematic dramatic backlighting with confident silver-warm rim glow, iridescent light from polished glass and premium surfaces, magical realism of a man who has not been wrong in years, soft diffused warm interior light, Korean drama cinematic composition, quiet menace and gravity composed in painterly warmth",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, young, smooth, idol look, flashy, aggressive, glamorous"
 }

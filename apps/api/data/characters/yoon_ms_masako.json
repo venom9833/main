@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean manga ink lines, muted cool-grey screen tone, pale quiet palette, cinematic Korean welfare-centre composition, stillness as a survival strategy, the body of someone who has learned not to ask",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cheerful, warm, energetic, young, glamorous, soft"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, narrow frail grandmother face of absolute quiet resignation, welfare centre or small room with a single window painted in sparse gentle light, cinematic backlighting with faint soft rim glow from one small window, iridescent pale light on thin papery skin, magical realism of the decision not to want things and the peace almost found in it, soft sparse natural light, Korean drama cinematic composition, stillness as survival strategy in every quiet brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, cheerful, warm, energetic, young, glamorous"
 }

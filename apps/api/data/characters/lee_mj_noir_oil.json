@@ -1,0 +1,51 @@
+{
+  "id": "lee_mj",
+  "name": "이민준",
+  "style": "noir_oil",
+
+  "appearance_en": {
+    "face_shape": "soft round face with a slight double chin forming — the face of someone who stopped monitoring it when more important things fell apart",
+    "skin": "somewhat sallow, pores visible on nose and cheeks, jaw shadow by afternoon — the skin of irregular sleep and convenience store meals",
+    "eyes": "dark brown, slightly puffy from poor sleep and too many late-night screens, gaze tends to slide from direct contact — not evasive exactly, just tired of being read",
+    "nose": "broad, slightly fleshy, unremarkable",
+    "mouth": "easily forms a self-deprecating half-smile — the one that appears just before anyone notices something is wrong",
+    "eyebrows": "dark, moderately full, often slightly furrowed even in neutral — the brows of a man doing math he cannot solve",
+    "distinctive_marks": "slight puffiness under eyes, early frown line between brows, old small scar on chin from the café incident he never talks about",
+    "hair": "dark brown, slightly overgrown and pushed back by hand — three weeks past needing a cut that keeps getting deferred",
+    "body": {
+      "height_cm": 172,
+      "weight_kg": 78,
+      "proportions": "once more compact when running the café — now softening around the middle from months of inactivity",
+      "posture": "slightly contracted around family, more open when alone — the body language of a man measuring how much space he is allowed to take",
+      "body_prompt": "172cm soft-middled Korean man in his late 30s, shoulders slightly drawn in, body contracted as if apologizing for taking up space"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "oversized faded navy hoodie, grey jogger pants, old sneakers — not deliberate casualwear but the clothes that remained after motivation left",
+        "wardrobe_prompt": "oversized faded navy hoodie, grey jogger pants, old worn sneakers, phone in hand or pocket"
+      },
+      "casual": {
+        "description": "same hoodie and joggers, collar pulled up — at home, trying to disappear into the corner of the sofa",
+        "wardrobe_prompt": "oversized faded navy hoodie with collar pulled up, grey jogger pants, phone on lap"
+      },
+      "stressed": {
+        "description": "same clothes but visibly slept-in — hoodie wrinkled, slight grease stain on sleeve, hair pressed flat on one side",
+        "wardrobe_prompt": "wrinkled faded navy hoodie with visible sleeve stain, grey jogger pants, hair flattened on one side from lying down"
+      }
+    },
+    "emotion_baseline": "the quick assembly of 'I'm fine' — a practiced half-smile deployed before anyone can decide to look closer",
+    "fal_identity_prompt": "38-year-old Korean man, soft round face with forming double chin, slightly puffy dark eyes that slide from direct contact, dark brown overgrown hair pushed back by hand, quick self-deprecating half-smile, 172cm softened build with contracted shoulders, oversized faded navy hoodie, grey jogger pants, phone in hand"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of a man who lost the thread and cannot find where it went, warm amber catching the soft planes of a face still assembling 'I'm fine' for the forty-ninth time today, steel blue of the three-week-overdue haircut and the three-week-overdue decision, painterly figurative realism, Korean drama cinematic composition",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, confident, successful, styled, airbrushed"
+}

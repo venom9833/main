@@ -17,6 +17,7 @@ class PipelineStep(str, Enum):
     AWAITING_SCRIPT_APPROVAL = "awaiting_script_approval"
     AWAITING_KEYFRAME_SETUP = "awaiting_keyframe_setup"
     KEYFRAME = "keyframe"
+    AWAITING_TTS = "awaiting_tts"   # 키프레임 검토 후 사용자가 TTS 시작 버튼 클릭
     TTS = "tts"
     RENDER = "render"
     AWAITING_UPLOAD_APPROVAL = "awaiting_upload_approval"
@@ -37,7 +38,7 @@ AUTO_TRANSITIONS: dict[PipelineStep, PipelineStep] = {
     PipelineStep.ARCHITECT:     PipelineStep.SCRIPT,
     # 챕터 구간
     PipelineStep.SCRIPT:        PipelineStep.AWAITING_SCRIPT_APPROVAL,
-    PipelineStep.KEYFRAME:      PipelineStep.TTS,
+    PipelineStep.KEYFRAME:      PipelineStep.AWAITING_TTS,
     PipelineStep.TTS:           PipelineStep.RENDER,
     PipelineStep.RENDER:        PipelineStep.AWAITING_UPLOAD_APPROVAL,
     PipelineStep.UPLOAD:        PipelineStep.YOUTUBE_MANAGE,
@@ -52,6 +53,7 @@ APPROVAL_TRANSITIONS: dict[str, PipelineStep] = {
     "casting":        PipelineStep.ARCHITECT,
     "script":         PipelineStep.AWAITING_KEYFRAME_SETUP,
     "keyframe_setup": PipelineStep.KEYFRAME,
+    "tts":            PipelineStep.TTS,
     "upload":         PipelineStep.UPLOAD,
 }
 

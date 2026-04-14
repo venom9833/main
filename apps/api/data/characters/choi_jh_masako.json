@@ -28,8 +28,8 @@
   },
 
   "image_prompt": {
-    "positive": "manga illustration, masako style, clean ink lines, muted palette, 22-year-old Korean male, sharp jawline, heavy-lidded dark eyes, pale skin with fatigue shadows, dark overgrown hair pushed back, thin lips pressed flat, lean slightly underweight build, oversized dark hoodie, hands in pocket, slouched posture, guarded expression rehearsing indifference, soft grey background, emotional restraint",
-    "negative": "photorealistic, 3D render, anime shonen, bright colors, cheerful expression, muscular build, styled hair, smile",
+    "positive": "Studio Ghibli heartwarming hand-painted watercolor illustration, masako style, 22-year-old Korean male, sharp jawline, heavy-lidded dark eyes, pale skin with fatigue shadows, dark overgrown hair pushed back, thin lips pressed flat, lean slightly underweight build, oversized dark hoodie, hands in pocket, slouched guarded posture, cinematic backlighting with cool rim glow, iridescent light through window on pale skin, magical realism of rehearsed indifference, soft diffused interior light, adolescent emotional restraint",
+    "negative": "photorealistic, 3D render, anime shonen, bright colors, cheerful expression, muscular build, styled hair, smile, manga ink lines, screen tone, looking at camera, eye contact, facing camera",
     "model": "fal-ai/flux-lora",
     "lora": "masako_manga_v2",
     "ip_adapter_weight": 0.72,

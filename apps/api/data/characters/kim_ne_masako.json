@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.70,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean delicate manga ink lines, warm-cool soft screen tone, muted pastel undertone palette, cinematic Korean webtoon composition, gentle melancholy in every line, emotional subtlety",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, overly cheerful, idol makeup, glamorous, childish chibi"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, soft round expressive face with naturally melancholic undertone, quiet indoor office or home setting with diffused warm painterly light, cinematic backlighting with soft warm rim glow, iridescent window light filtering through fine hair, magical realism of quiet observation absorbed into calm, soft diffused natural light, Korean drama cinematic composition, gentle melancholy rendered in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, overly cheerful, idol makeup, glamorous, childish chibi"
 }

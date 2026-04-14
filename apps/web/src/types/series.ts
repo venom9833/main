@@ -11,6 +11,7 @@ export type PipelineStep =
   | 'awaiting_script_approval'
   | 'awaiting_keyframe_setup'
   | 'keyframe'
+  | 'awaiting_tts'
   | 'tts'
   | 'render'
   | 'awaiting_upload_approval'
@@ -121,6 +122,7 @@ export interface WikiPage {
   id: string;
   seriesId: string;
   slug: WikiSlug;
+  title?: string;
   contentMd: string;
   updatedAt: string;
 }

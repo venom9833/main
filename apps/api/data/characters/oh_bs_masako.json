@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, bold manga ink lines, strong grey-brown screen tone, earthy muted palette, cinematic Korean drama composition, defiance masking fear, physical stubbornness in every line",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, gentle, soft, smiling, young, slim"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, combative weathered grandfather face with deep stubborn lines painted in earthy warmth, old neighbourhood alley or redevelopment site with worn painterly amber light, cinematic backlighting with defensive warm rim glow, iridescent light through cracked tiles and aged concrete, magical realism of defiance masking the fear beneath it, warm weathered natural light, Korean drama cinematic composition, physical stubbornness in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, gentle, soft, smiling, young, slim"
 }

@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean delicate manga ink lines, warm-tone soft screen tone, muted warm palette with quiet tension, cinematic Korean drama composition, forbidden feeling rendered in stillness, subtle emotional conflict",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, overly cheerful, childish, chibi, idol look"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, soft oval face with warmth that escapes composed exterior, law office or soft casual indoor setting with gentle warm painterly light, cinematic backlighting with soft warm rim glow, iridescent light from glass windows catching involuntary flush, magical realism of emotion too honest to fully contain, soft diffused natural light, Korean drama cinematic composition, forbidden feeling rendered in subtle body language and involuntary warmth",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, overly cheerful, childish, chibi, idol look"
 }

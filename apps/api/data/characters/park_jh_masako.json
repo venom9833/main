@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, layered soft screen tone shading, muted grey-blue color palette, cinematic Korean drama panel composition, expressive restrained eyes, emotional weight in stillness",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, bright saturated colors, childish, chibi, smiling happily"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, tired slim face of quiet chronic dread, indoor office or apartment setting with cool-warm fading painterly light, cinematic backlighting with dim tired rim glow, iridescent light through rain-touched or fluorescent-lit windows, magical realism of low-grade dread as daily weather, soft diffused fading natural light, Korean drama cinematic composition, emotional weight of sustained bracing for bad news in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, bright saturated colors, childish, chibi, smiling happily"
 }

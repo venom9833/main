@@ -5,15 +5,12 @@
       "args": ["-y", "@upstash/context7-mcp"]
     },
     "supabase": {
-      "command": "npx",
+      "command": "C:/LinkDropV3/apps/api/.venv/Scripts/python.exe",
       "args": [
-        "-y",
-        "@supabase/mcp-server-supabase",
-        "--access-token",
-        "sbp_c2b6564dd5fc754c0896db0b67ddfb3090e49ae2",
-        "--project-ref",
-        "fmjuhbcxkfuilvvdwvix"
-      ]
+        "-X", "utf8",
+        "C:/LinkDropV3/packages/mcp-servers/supabase/server.py"
+      ],
+      "type": "stdio"
     },
     "code-review-graph": {
       "command": "python",
@@ -22,6 +19,22 @@
         "-m", "code_review_graph",
         "serve"
       ],
+      "type": "stdio"
+    },
+    "linkdrop-api": {
+      "command": "C:/LinkDropV3/apps/api/.venv/Scripts/python.exe",
+      "args": [
+        "-X", "utf8",
+        "C:/LinkDropV3/packages/mcp-servers/linkdrop-api/server.py"
+      ],
+      "env": {
+        "V3_API_URL": "http://localhost:8001"
+      },
+      "type": "stdio"
+    },
+    "notebooklm": {
+      "command": "C:/LinkDropV3/apps/api/.venv/Scripts/notebooklm-mcp.exe",
+      "args": ["--transport", "stdio"],
       "type": "stdio"
     }
   }

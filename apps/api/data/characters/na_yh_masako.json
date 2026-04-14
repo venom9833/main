@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, warm-cool intellectual screen tone, muted authoritative palette, cinematic Korean drama composition, the warmth that is most dangerous because it is partially real, silver-threaded blunt bob as the signature visual element, the mole at the jaw as the anchor",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cold, aggressive, young, glamorous, beauty filter, idol look"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, broadcast-polished oval face with strategic warmth and silver-threaded jaw-length bob, studio or academic setting with warm professional painterly light, cinematic backlighting with broadcast-quality warm rim glow, iridescent studio light with intentional silver gleam, magical realism of warmth most dangerous because it is partially real, soft diffused warm broadcast light, Korean drama cinematic composition, silver-threaded blunt bob as visual signature, mole at jaw as compositional anchor",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, cold, aggressive, young, glamorous, beauty filter, idol look"
 }

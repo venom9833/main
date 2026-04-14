@@ -1,12 +1,21 @@
 import asyncio
-import os
 from image_backends.base import ImageBackend
+from core.config import settings
+
+
+_GEMINI_TIMEOUT = 90.0  # Gemini 이미지 생성 최대 대기 (초) — 초과 시 RuntimeError
 
 
 class GeminiBackend(ImageBackend):
     async def generate(self, hint: str, width: int = 1920, height: int = 1080, **kwargs) -> bytes:
         art_style = kwargs.get("art_style", "masako")
-        return await asyncio.to_thread(self._sync_generate, hint, art_style)
+        try:
+            return await asyncio.wait_for(
+                asyncio.to_thread(self._sync_generate, hint, art_style),
+                timeout=_GEMINI_TIMEOUT,
+            )
+        except asyncio.TimeoutError:
+            raise RuntimeError(f"Gemini 이미지 생성 타임아웃 ({_GEMINI_TIMEOUT}초 초과)")
 
     def _sync_generate(self, hint: str, art_style: str) -> bytes:
         from google import genai
@@ -24,9 +33,9 @@ class GeminiBackend(ImageBackend):
             f"Avoid: {negative_prompt}"
         )
 
-        client = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY", ""))
+        client = genai.Client(api_key=settings.GOOGLE_API_KEY)
         response = client.models.generate_content(
-            model="gemini-2.0-flash-exp-image-generation",
+            model="gemini-2.5-flash-image",
             contents=full_prompt,
             config=genai_types.GenerateContentConfig(
                 response_modalities=["IMAGE"],

@@ -1,0 +1,51 @@
+{
+  "id": "yang_sj",
+  "name": "양서진",
+  "style": "noir_oil",
+
+  "appearance_en": {
+    "face_shape": "soft oval face, rounded jaw, lightly defined cheekbones — younger and softer than her older sister, vulnerability not yet fully masked",
+    "skin": "fair Korean skin with slightly warm undertone, smooth natural texture, minimal makeup in most settings — natural freshness still showing through",
+    "eyes": "double eyelid, dark brown iris, direct gaze but not commanding — soft involuntary warmth she cannot fully suppress, subtle shadows under eyes from disrupted sleep",
+    "nose": "neat straight nose, slightly small, soft rounded tip, proportional and natural",
+    "mouth": "soft medium lips, naturally warm pink, resting expression slightly more open than professional default — tightens when holding back speech",
+    "eyebrows": "naturally shaped moderately arched dark brows, clean without being groomed for authority, draws together lightly when anxious",
+    "distinctive_marks": "faint dark circles from inconsistent sleep, no moles or scars, light natural flush at cheekbones when emotionally caught off guard",
+    "hair": "dark brown medium hair just below shoulder, fine texture, worn loose in natural waves or low casual braid — softer styling than her sister",
+    "body": {
+      "height_cm": 164,
+      "weight_kg": 52,
+      "proportions": "slim frame, shoulders slightly narrower than her sister, slim arms and waist, lighter and less physically assertive",
+      "posture": "naturally upright but without performed deliberateness — weight occasionally shifts, arms cross when uncertain, not a polished professional stance",
+      "body_prompt": "164cm slim Korean woman, naturally upright posture without deliberate composure, slightly open unguarded body language, arms sometimes crossing"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "law firm business casual — fitted cardigan or simple blazer over blouse, tailored trousers or pencil skirt, flat shoes or low block heel",
+        "wardrobe_prompt": "fitted cardigan or simple blazer over tailored blouse, straight trousers or pencil skirt, flat shoes or low block heel"
+      },
+      "casual": {
+        "description": "simple fitted cotton top or soft lightweight knit, straight jeans, sneakers or ballet flats, minimal accessories",
+        "wardrobe_prompt": "simple fitted cotton top or lightweight knit sweater, straight-cut jeans, sneakers or ballet flats, no heavy accessories"
+      },
+      "stressed": {
+        "description": "same casual clothes, arms crossed or self-hugging, hair partially loose, gaze avoidant, voice and body both tightening",
+        "wardrobe_prompt": "same casual clothes with arms crossed or self-hugging, hair partially loose from any styling, slightly withdrawn"
+      }
+    },
+    "emotion_baseline": "presents as calm and logical — the body and breath betray her before the face does, gaze that holds a moment too long, small involuntary pauses before speaking",
+    "fal_identity_prompt": "soft oval-faced Korean woman early 40s, direct dark eyes with natural involuntary warmth and slight under-eye shadow, naturally arched brows, neat slightly small nose, soft medium lips, dark brown medium hair loose or low braid, 164cm slim lighter posture than a seasoned professional, fair warm-tone Korean skin, composed but emotionally visible"
+  },
+
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of the feeling she cannot fully contain, warm amber of warmth that escapes the composed exterior as primary light, steel blue of the pause before she catches herself, painterly figurative realism, Korean drama cinematic composition, forbidden emotion rendered as involuntary body language in oil",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, overly cheerful, idol look, airbrushed"
+}

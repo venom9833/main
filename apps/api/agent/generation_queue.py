@@ -35,6 +35,8 @@ class GenerationQueue:
             asyncio.create_task(self._worker())
         return await fut
 
+    _TASK_TIMEOUT = 120.0  # 단일 작업 최대 대기 (초) — 개별 Gemini 호출 무한 블록 방지
+
     async def _worker(self):
         self._running = True
         try:
@@ -43,9 +45,10 @@ class GenerationQueue:
                 await self._rate_limit()
                 try:
                     if asyncio.iscoroutinefunction(task.fn):
-                        result = await task.fn(*task.args, **task.kwargs)
+                        coro = task.fn(*task.args, **task.kwargs)
                     else:
-                        result = await asyncio.to_thread(task.fn, *task.args, **task.kwargs)
+                        coro = asyncio.to_thread(task.fn, *task.args, **task.kwargs)
+                    result = await asyncio.wait_for(coro, timeout=self._TASK_TIMEOUT)
                     fut = self._results.pop(task.task_id, None)
                     if fut and not fut.done():
                         fut.set_result(result)

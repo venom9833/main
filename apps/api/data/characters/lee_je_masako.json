@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean manga ink lines, cool-neutral screen tone, muted modern palette, cinematic Korean drama composition, the energy of justified frustration held precisely at the surface, directness as a survival tool",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, passive, soft, demure, young-cute, glamorous, cheerful"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, alert oval face with direct energy and precisely held frustration, contemporary urban setting with honest natural painted light, cinematic backlighting with clear warm rim glow, iridescent city window light, magical realism of justified anger kept exactly at the surface, soft diffused natural light, Korean drama cinematic composition, directness as a survival strategy rendered in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, passive, soft, demure, young-cute, glamorous, cheerful"
 }

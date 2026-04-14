@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, warm-cool contrast screen tone, muted palette with golden olive skin warmth against cool corporate environment, cinematic Korean drama composition, monolid eyes rendered with weight and intent, beauty mark at cheekbone, blunt bob architectural in ink, the feeling that is not yet named visible in the negative space",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, double eyelid, pale skin, soft round face, permed hair, bun, open cheerful expression, glamorous, cute"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, expressive monolid face with architectural bone structure and warm golden olive skin, modern corporate or urban setting contrasting warm skin against cool painted environment, cinematic dramatic backlighting casting deep cheekbone shadow, iridescent city light from glass surfaces, magical realism of a feeling not yet named, soft diffused warm light, Korean drama cinematic composition, monolid gaze rendered with unhurried weight and intent, beauty mark at cheekbone as compositional anchor",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, double eyelid, pale skin, soft round face, permed hair, open cheerful expression, glamorous, cute"
 }

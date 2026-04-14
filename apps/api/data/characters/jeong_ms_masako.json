@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, bold clean manga ink lines, strong warm-grey screen tone, earthy muted palette, cinematic Korean drama composition, opinionated weight in stillness, decades of outdoor life in every line",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, young, slim, cheerful, gentle expression, soft features"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, weathered opinionated grandfather face with solid bone structure painted in earthy warmth, park bench or neighbourhood outdoor setting with warm natural light through leaves, cinematic backlighting with strong warm earthy rim glow, iridescent light filtered through foliage, magical realism of settled certainty accumulated over decades, soft warm outdoor natural light, Korean drama cinematic composition, physical weight of earned conviction in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, young, slim, cheerful, gentle expression, soft features"
 }

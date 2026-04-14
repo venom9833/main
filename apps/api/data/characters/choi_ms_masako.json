@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, bold clean manga ink lines, strong contrast screen tone, earthy muted grey-brown palette, cinematic Korean drama composition, physical solidity expressing emotional silence, heavy weight in stillness",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, childish, pretty, slim, youthful"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, expressive weathered face carrying unspoken burden, construction site atmospheric background with painterly depth and dust-filtered light, cinematic dramatic backlighting with warm amber rim light glow, iridescent light leaks through concrete dust and work lamps, magical realism of working-class endurance, soft diffused natural light, Korean drama cinematic composition, physical solidity expressing emotional silence, heavy weight held in absolute stillness",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, childish, pretty, slim, youthful"
 }

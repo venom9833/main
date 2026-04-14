@@ -3,21 +3,22 @@
 
   "masako": {
     "label": "마사코 스타일",
-    "description": "웹툰 일러스트 — 먹선, 스크린톤, 절제된 감정 표현",
-    "base_style_prompt": "masako style illustration, clean manga ink lines, soft screen tone shading, muted color palette, cinematic Korean drama composition, expressive emotional restraint, webtoon panel aesthetic",
-    "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, bright saturated colors, childish, chibi",
-    "bg_prompt_suffix": "empty scene no people, masako style illustration, manga ink lines, muted tones",
-    "pillow_palette": [[15, 12, 30], [50, 35, 75]],
-    "pillow_accent": [160, 100, 200]
+    "description": "지브리풍 70% + 실사풍 30% — 손그림 수채화 질감, 따뜻한 자연광, 반사실적 인물 비례",
+    "base_style_prompt": "Studio Ghibli inspired painterly illustration, soft hand-painted brushwork, warm natural color palette, gentle diffused natural lighting, atmospheric depth with soft bokeh, semi-realistic human proportions and facial expressions, watercolor-textured shadows, lush detailed background elements, emotional warmth and nostalgic cinematic quality, Korean drama cinematic framing, subtle realistic skin and fabric texture",
+    "negative_prompt": "flat anime, hard manga ink lines, screen tone, chibi, full photorealistic, 3d render, harsh high contrast, cold desaturated, western comic, heavy black outlines, digital flat cel shading, neon colors, ugly, deformed, extra limbs",
+    "bg_prompt_suffix": "no people, empty scene, Studio Ghibli inspired painterly background, soft atmospheric depth, warm natural lighting, hand-painted landscape textures, cinematic Korean drama setting",
+    "pillow_palette": [[30, 25, 18], [80, 65, 45]],
+    "pillow_accent": [200, 160, 100]
   },
 
-  "real": {
-    "label": "리얼리티 스타일",
-    "description": "한국 드라마 실사 — 50mm 렌즈, 자연 채광, 영화적 구도",
-    "base_style_prompt": "photorealistic, Korean drama cinematography, 50mm lens shallow depth of field, natural cinematic lighting, realistic skin texture, cinematic restraint, Korean drama still cut",
-    "negative_prompt": "illustration, anime, cartoon, painting, drawing, cgi, 3d render, ugly, deformed, extra fingers, extra limbs, NSFW",
-    "bg_prompt_suffix": "no people, empty scene, Korean drama cinematography, natural lighting, 50mm lens",
-    "pillow_palette": [[18, 22, 35], [45, 55, 80]],
-    "pillow_accent": [80, 120, 180]
+  "noir_oil": {
+    "label": "누아르 유화",
+    "description": "4색 팔레트 누아르 유화 — deep black / warm amber / steel blue / dark crimson 포인트 (씬별 오브젝트 1개)",
+    "base_style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black shadow and darkness, warm amber primary light source, steel blue secondary shadow and city cold, painterly figurative realism, Korean drama cinematic composition",
+    "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark",
+    "bg_prompt_suffix": "no people, empty scene, oil painting thick impasto, noir chiaroscuro, four-color palette: deep black deep black shadow, warm amber light source, steel blue city cold, Korean drama cinematic setting",
+    "crimson_rule": "single dark crimson accent on ONE emotional object per scene only — do not spread across the image",
+    "pillow_palette": [[10, 8, 6], [80, 55, 20]],
+    "pillow_accent": [120, 20, 30]
   }
 }

@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.70,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean delicate manga ink lines, soft warm screen tone shading, gentle muted pastel palette, cinematic Korean drama webtoon composition, the quiet sadness of a child performing fine, emotional subtlety in stillness",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, overly cheerful, idol makeup, glamorous, adult appearance, mature features, chibi, exaggerated cute"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, soft youthful expressive face carrying quiet adult sadness within a child's features, school hallway or classroom setting with gentle diffused painterly light, cinematic backlighting with soft warm rim glow, iridescent light through school windows, magical realism of a child performing fine, soft diffused morning light, Korean drama cinematic composition, adolescent emotional subtlety painted into every line",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, overly cheerful, idol makeup, glamorous, adult appearance, mature features, chibi, exaggerated cute"
 }

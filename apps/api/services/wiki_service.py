@@ -458,8 +458,12 @@ async def run_lint(series_id: str) -> str:
     chapters = chapters_res.data or []
 
     lint_prompt_raw = (_PROMPTS_DIR / "wiki_lint.md").read_text(encoding="utf-8")
-    # SYSTEM_INSTRUCTION 블록 제거 (프롬프트 본문만)
-    lint_guide = re.sub(r"<!-- SYSTEM_INSTRUCTION -->[\s\S]+?<!-- /SYSTEM_INSTRUCTION -->", "", lint_prompt_raw).strip()
+    # wiki_query.md SYSTEM_INSTRUCTION 추출 → INCLUDE 지시문 실제 교체
+    wiki_query_raw = (_PROMPTS_DIR / "wiki_query.md").read_text(encoding="utf-8")
+    query_si_m = re.search(r"<!-- SYSTEM_INSTRUCTION -->([\s\S]+?)<!-- /SYSTEM_INSTRUCTION -->", wiki_query_raw)
+    wiki_query_si = query_si_m.group(1).strip() if query_si_m else ""
+    lint_guide = re.sub(r"<!-- INCLUDE: wiki_query\.md#SYSTEM_INSTRUCTION -->", wiki_query_si, lint_prompt_raw)
+    lint_guide = lint_guide.replace("<!-- SYSTEM_INSTRUCTION -->", "").replace("<!-- /SYSTEM_INSTRUCTION -->", "").strip()
 
     pages_text = "\n\n".join(
         f"### [{p['slug']}]\n{(p['content_md'] or '')[:800]}" for p in pages

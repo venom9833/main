@@ -100,7 +100,7 @@ def resolve_voice(voice_id: str | None) -> str:
 # Supertone API
 # tts_voice 컬럼에 "st:{supertone_voice_id}" 형식으로 저장되면 이 경로 사용
 # ─────────────────────────────────────────────────────────────────────────────
-_SUPERTONE_BASE = "https://api.supertoneapi.com"
+_SUPERTONE_BASE = "https://supertoneapi.com"
 
 
 def _supertone_tts_sync(text: str, voice_id: str, output_path: str, style: str = "neutral") -> None:

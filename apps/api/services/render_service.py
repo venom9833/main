@@ -98,6 +98,19 @@ async def _render_clip(series_id: str, scene: dict, db) -> str | None:
 
             clip_path = tmpdir / f"clip_{scene['chapter']}_{scene['scene_index']}c{scene.get('cut_index', 1)}.mp4"
 
+            # Ken Burns 효과 — scene_index 기반 5종 순환, on/N 방식으로 항상 20% 이동 보장
+            _EFFECTS = ["zoom_in", "zoom_out", "pan_right", "pan_left", "diagonal"]
+            _eff = _EFFECTS[scene.get("scene_index", 0) % len(_EFFECTS)]
+            N = total_frames
+            _ZP = {
+                "zoom_in":  f"zoompan=z='min(1.0+on/{N}*0.2,1.2)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={N}:s={_W}x{_H}:fps={_FPS}",
+                "zoom_out": f"zoompan=z='max(1.001,1.2-on/{N}*0.2)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={N}:s={_W}x{_H}:fps={_FPS}",
+                "pan_right": f"zoompan=z='1.2':x='on/{N}*(iw*0.15)':y='ih/2-(ih/zoom/2)':d={N}:s={_W}x{_H}:fps={_FPS}",
+                "pan_left":  f"zoompan=z='1.2':x='iw*0.15*(1-on/{N})':y='ih/2-(ih/zoom/2)':d={N}:s={_W}x{_H}:fps={_FPS}",
+                "diagonal":  f"zoompan=z='min(1.0+on/{N}*0.2,1.2)':x='on/{N}*(iw*0.1)':y='on/{N}*(ih*0.08)':d={N}:s={_W}x{_H}:fps={_FPS}",
+            }
+            zoompan = _ZP[_eff]
+
             # FFmpeg zoompan Ken Burns
             cmd = [
                 "ffmpeg", "-y",
@@ -106,9 +119,7 @@ async def _render_clip(series_id: str, scene: dict, db) -> str | None:
                 "-vf", (
                     f"scale={_W}:{_H}:force_original_aspect_ratio=decrease,"
                     f"pad={_W}:{_H}:(ow-iw)/2:(oh-ih)/2,"
-                    f"zoompan=z='min(zoom+0.001,1.05)':"
-                    f"x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':"
-                    f"d={total_frames}:s={_W}x{_H}:fps={_FPS}"
+                    f"{zoompan}"
                 ),
                 "-c:v", "libx264", "-preset", "fast", "-crf", "23",
                 "-c:a", "aac", "-b:a", "128k",

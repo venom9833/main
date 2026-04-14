@@ -45,6 +45,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, layered soft screen tone shading, muted cool-grey palette with dark navy accents, cinematic Korean drama panel composition, silence as emotional weight, stillness with concealed intent, every line restrained",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, bright colors, childish, chibi, warm smile, openly emotional, young appearance"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, compact grandmother face of absolute controlled neutrality, traditional domestic interior setting with muted composed natural light, cinematic backlighting with restrained cool rim glow, iridescent subdued light through half-drawn curtains, magical realism of silence as the ultimate power, soft contained natural light, Korean drama cinematic composition, every brushstroke restrained and deliberately still, concealed intent in absolute stillness",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, bright colors, childish, chibi, warm smile, openly emotional, young appearance"
 }

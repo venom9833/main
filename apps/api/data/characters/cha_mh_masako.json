@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean soft manga ink lines, warm-neutral screen tone, muted warm palette, cinematic Korean drama composition, genuine warmth as the most dangerous quality, the ambiguity of good intentions in every line",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, cold, aggressive, idol-styled, glamorous, posed"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style, genuinely warm expressive face with natural ease, casual urban outdoor setting with soft warm painterly light, cinematic backlighting with golden rim glow, iridescent natural lens-light and gentle sparkle, magical realism of warmth that is simply real and therefore most dangerous, soft diffused daylight, Korean drama cinematic composition, genuine presence as the most ambiguous quality in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, cold, aggressive, idol-styled, glamorous, posed"
 }

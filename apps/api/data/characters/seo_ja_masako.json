@@ -37,6 +37,6 @@
   },
   "ip_adapter_weight": 0.72,
   "reference_url": "",
-  "style_prompt": "masako style illustration, clean precise manga ink lines, cool blue-grey screen tone, minimal cold palette, cinematic Korean drama composition, intelligence as the dominant physical feature, the beauty that is most dangerous when it finally smiles",
-  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, warm, casual, round face, approachable, cheerful, glamorous overstatement"
+  "style_prompt": "Studio Ghibli heartwarming hand-painted watercolor art style with cool precision, expressive face of calculated beauty and deliberate composure, sleek professional interior with cool ambient painterly light, cinematic dramatic backlighting with sharp silver rim lights, iridescent prism refractions from glass and polished surfaces, magical realism of predatory stillness, cool diffused interior light, Korean drama cinematic composition, intelligence as the dominant aesthetic force in every brushstroke",
+  "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, manga ink lines, screen tone, looking at camera, eye contact, facing camera, warm, casual, round face, approachable, cheerful, glamorous overstatement"
 }

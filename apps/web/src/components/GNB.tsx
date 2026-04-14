@@ -5,10 +5,11 @@ export default function GNB() {
   const path = usePathname();
 
   const navItems = [
-    { label: '내 시리즈',  href: '/' },
-    { label: '새 시리즈', href: '/create' },
-    { label: '캐릭터',    href: '/characters' },
-    { label: '감정선',    href: '/characters/emoline' },
+    { label: '내 시리즈',    href: '/' },
+    { label: '새 시리즈',   href: '/create' },
+    { label: '캐릭터',      href: '/characters' },
+    { label: '감정선',      href: '/characters/emoline' },
+    { label: '키프레임',    href: '/series/keyframe' },
   ];
 
   return (

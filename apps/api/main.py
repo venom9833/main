@@ -1,8 +1,10 @@
 """LinkDropV3 API — 포트 8001"""
 import json
 import pathlib
+import tempfile
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Form, HTTPException
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Any
@@ -11,6 +13,7 @@ from core.database import get_supabase
 from routers import pipeline, wiki
 from routers.chapters import router as chapters_router
 from routers.youtube import router as youtube_router
+from routers.chat import router as chat_router
 
 app = FastAPI(title="LinkDrop V3", version="0.1.0")
 
@@ -26,6 +29,7 @@ app.include_router(pipeline.router)
 app.include_router(wiki.router)
 app.include_router(chapters_router)
 app.include_router(youtube_router)
+app.include_router(chat_router)
 
 
 @app.get("/health")
@@ -34,8 +38,11 @@ def health():
 
 
 @app.get("/api/v1/characters")
-def get_characters():
-    """캐릭터 전체 목록 — _index.json + 개별 portrait URL 병합"""
+def get_characters(style: str = "masako"):
+    """캐릭터 전체 목록 — _index.json + 개별 portrait URL + 화풍별 외형 데이터 병합.
+
+    style: 화풍 키 (masako | noir_oil). 해당 스타일 파일 없으면 masako로 폴백.
+    """
     data_dir = pathlib.Path(__file__).parent / "data" / "characters"
     index = json.loads((data_dir / "_index.json").read_text(encoding="utf-8"))
     result = []
@@ -43,13 +50,40 @@ def get_characters():
         detail_path = data_dir / f"{c['id']}.json"
         if detail_path.exists():
             detail = json.loads(detail_path.read_text(encoding="utf-8"))
+            core = detail.get("core") or {}
+            # 요청 화풍 → masako 폴백 순서로 스타일 파일 로드
+            style_appearance: dict = {}
+            style_prompt_str = ""
+            for candidate in ([style] if style != "masako" else []) + ["masako"]:
+                candidate_path = data_dir / f"{c['id']}_{candidate}.json"
+                if candidate_path.exists():
+                    style_data = json.loads(candidate_path.read_text(encoding="utf-8"))
+                    style_appearance = style_data.get("appearance_en") or {}
+                    style_prompt_str = style_data.get("style_prompt", "")
+                    break
+            # style_prompt 없으면 art_styles.json base_style_prompt 폴백
+            if not style_prompt_str:
+                art_styles_path = pathlib.Path(__file__).parent / "data" / "art_styles.json"
+                if art_styles_path.exists():
+                    art_styles = json.loads(art_styles_path.read_text(encoding="utf-8"))
+                    style_prompt_str = (art_styles.get(style) or art_styles.get("masako", {})).get("base_style_prompt", "")
             c = {**c,
                  "voice_id":             detail.get("voice_id", ""),
                  "supertone_voice_id":   detail.get("supertone_voice_id", ""),
                  "supertone_style":      detail.get("supertone_style", ""),
                  "photo_real_url":       detail.get("photo_real_url", ""),
                  "photo_masako_url":     detail.get("photo_masako_url", ""),
-                 "situations":           detail.get("situations", [])}
+                 "situations":           detail.get("situations", []),
+                 "personality":          core.get("personality", ""),
+                 "speaking_style":       core.get("speaking_style", ""),
+                 "speaking_examples":    core.get("speaking_examples", []),
+                 "relationships":        detail.get("relationships", {}),
+                 # 이미지 생성용 외형 데이터 (요청 화풍 기준)
+                 "fal_identity_prompt":  style_appearance.get("fal_identity_prompt", ""),
+                 "wardrobe":             style_appearance.get("wardrobe", {}),
+                 "body_prompt":          (style_appearance.get("body") or {}).get("body_prompt", ""),
+                 "style_prompt":         style_prompt_str,
+                 "appearance_style":     style}  # 실제 로드된 화풍 키
         result.append(c)
     return result
 
@@ -256,5 +290,55 @@ def get_world_options():
     # _meta 제외하고 반환
     return {k: v for k, v in data.items() if not k.startswith("_")}
 
+@app.post("/api/v1/tts")
+async def tts_preview(
+    text: str = Form(...),
+    voice: str = Form("ko-KR-SunHiNeural"),
+    series_id: str = Form(""),
+    scene_code: str = Form(""),
+):
+    """단일 컷 TTS 미리듣기 — Supertone(st:) 또는 edge-tts MP3 반환 + 로컬 저장"""
+    import asyncio, re
+    from services.tts_service import _edge_tts, _supertone_tts
+
+    if not text.strip():
+        raise HTTPException(400, "text 필수")
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        mp3_path = pathlib.Path(tmpdir) / "preview.mp3"
+        if voice.startswith("st:"):
+            st_part = voice[3:]
+            st_parts = st_part.split(":", 1)
+            st_voice_id = st_parts[0]
+            st_style = st_parts[1] if len(st_parts) > 1 else "neutral"
+            await _supertone_tts(text, st_voice_id, str(mp3_path), style=st_style)
+        else:
+            await _edge_tts(text, str(mp3_path), voice=voice)
+        audio_bytes = mp3_path.read_bytes()
+
+    # 로컬 저장 — series_id + scene_code 있을 때만
+    if series_id and scene_code:
+        try:
+            db = get_supabase()
+            ser_res = await asyncio.to_thread(
+                lambda: db.table("v3_series").select("series_code").eq("id", series_id).single().execute()
+            )
+            series_code_val = (ser_res.data or {}).get("series_code") or series_id
+            ch_match = re.search(r'ch(\d+)', scene_code)
+            chapter = int(ch_match.group(1)) if ch_match else 1
+            out_dir = pathlib.Path(__file__).parent.parent.parent / "output" / series_code_val / f"ch{chapter:02d}"
+            out_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / f"{scene_code}.mp3").write_bytes(audio_bytes)
+            print(f"[TTS] 저장: {out_dir / scene_code}.mp3")
+        except Exception as e:
+            print(f"[TTS] 로컬 저장 실패 (무시): {e}")
+
+    return StreamingResponse(
+        iter([audio_bytes]),
+        media_type="audio/mpeg",
+        headers={"Content-Disposition": f"inline; filename={scene_code or 'preview'}.mp3"},
+    )
+
+
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=False)

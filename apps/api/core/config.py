@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     SUPERTONE_NARRATOR_FEMALE_ID: str = "195e1922033a6168f0c90f"
     SUPERTONE_CHILD_FEMALE_ID: str = "400c24c9a2718734a5b404"
     SUPERTONE_CHILD_MALE_ID: str = "59901b1bf6d0a41d49397f"
+    FAL_KEY: str = ""  # fal.ai API 키 — Kling image-to-video
 
     class Config:
         env_file = str(Path(__file__).parent.parent.parent.parent / ".env")
