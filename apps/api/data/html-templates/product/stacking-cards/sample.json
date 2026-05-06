@@ -1,0 +1,126 @@
+{
+  "product": {
+    "name": "Parseable",
+    "category": "SaaS",
+    "tagline": "팀의 로그를 10배 빠르게 검색합니다",
+    "version": "v3.2"
+  },
+  "stats": [
+    { "value": "99.9%", "label": "가동률" },
+    { "value": "<100ms", "label": "쿼리 응답" },
+    { "value": "500TB+", "label": "일일 처리량" }
+  ],
+  "features_heading": "FEATURES",
+  "features": [
+    {
+      "icon": "⚡",
+      "title": "초고속 쿼리",
+      "desc": "Apache Arrow 기반 컬럼형 스토리지로 기존 Elasticsearch 대비 쿼리 속도 10배. 수억 건 로그도 100ms 이내 응답."
+    },
+    {
+      "icon": "🔍",
+      "title": "SQL 쿼리 지원",
+      "desc": "익숙한 SQL 문법으로 로그를 분석합니다. 별도 쿼리 언어 없이 `SELECT * FROM logs WHERE error = true` 형태로 즉시 시작."
+    },
+    {
+      "icon": "📊",
+      "title": "실시간 대시보드",
+      "desc": "드래그&드롭으로 커스텀 대시보드를 구성합니다. 알림 임계값 설정, Slack·PagerDuty 연동으로 장애를 즉시 감지."
+    },
+    {
+      "icon": "🔒",
+      "title": "데이터 주권 보장",
+      "desc": "AWS, GCP, Azure 어디서든 또는 온프레미스 셀프호스팅. 로그 데이터가 내 인프라를 벗어나지 않습니다."
+    }
+  ],
+  "workflow_heading": "WORKFLOW",
+  "workflow": [
+    {
+      "icon": "📡",
+      "title": "로그 수집",
+      "desc": "Fluentd, Logstash, Vector, 또는 HTTP API로 기존 로그 파이프라인에 즉시 연결합니다. 설정 변경 없이 1분 내 데이터 유입 시작."
+    },
+    {
+      "icon": "🗂️",
+      "title": "자동 인덱싱",
+      "desc": "JSON, 텍스트, 구조화되지 않은 로그 모두 자동 파싱 및 인덱싱됩니다. 스키마 사전 정의 불필요, 바로 쿼리 가능."
+    },
+    {
+      "icon": "🔬",
+      "title": "쿼리 & 분석",
+      "desc": "웹 콘솔 또는 API로 SQL 쿼리를 실행합니다. 에러 패턴, 레이턴시 분포, 사용자 행동을 실시간으로 분석합니다."
+    },
+    {
+      "icon": "🚨",
+      "title": "알림 & 대응",
+      "desc": "임계값 초과 즉시 알림 발송. Runbook 자동화 연동으로 알림 수신 → 자동 조치까지 완전 자동화가 가능합니다."
+    }
+  ],
+  "use_cases_heading": "USE CASES",
+  "use_cases": [
+    {
+      "icon": "👩‍💻",
+      "role": "백엔드 개발자",
+      "benefit": "프로덕션 에러가 발생했을 때 수십 개 서버 로그를 수동으로 grep하던 시간이 사라집니다. 에러 발생 즉시 Slack 알림이 오고, 대시보드에서 10초 만에 원인 스택 트레이스를 확인할 수 있습니다."
+    },
+    {
+      "icon": "🏢",
+      "role": "DevOps / SRE 팀",
+      "benefit": "분산된 마이크로서비스의 로그를 단일 창에서 관리합니다. 서비스별 에러율, 레이턴시 대시보드를 5분 만에 구성하고, 온콜 경보 피로를 80% 줄일 수 있습니다."
+    },
+    {
+      "icon": "📋",
+      "role": "컴플라이언스 / 감사",
+      "benefit": "ISO 27001, SOC2, GDPR 컴플라이언스에 필요한 로그 보존과 접근 감사 기록을 자동으로 관리합니다. 감사 보고서 생성이 클릭 한 번으로 완료됩니다."
+    }
+  ],
+  "pricing_heading": "PRICING",
+  "plans": [
+    {
+      "name": "Starter",
+      "price": "무료",
+      "period": "영구",
+      "featured": false,
+      "features": [
+        "일 10GB 로그 수집",
+        "30일 보존",
+        "3개 팀원",
+        "기본 SQL 쿼리",
+        "커뮤니티 지원"
+      ]
+    },
+    {
+      "name": "Pro",
+      "price": "₩89,000",
+      "period": "/월",
+      "featured": true,
+      "features": [
+        "일 500GB 로그 수집",
+        "90일 보존",
+        "무제한 팀원",
+        "고급 SQL + 집계 함수",
+        "알림 & Slack 연동",
+        "커스텀 대시보드",
+        "이메일 우선 지원"
+      ]
+    },
+    {
+      "name": "Enterprise",
+      "price": "문의",
+      "period": "",
+      "featured": false,
+      "features": [
+        "무제한 로그 수집",
+        "무제한 보존",
+        "SSO / SAML 인증",
+        "온프레미스 설치",
+        "SLA 99.95%",
+        "전담 지원 매니저"
+      ]
+    }
+  ],
+  "cta_heading": "지금 14일 무료로 시작하세요",
+  "cta_body": "신용카드 없이, 설치 없이, 5분 만에 로그 수집을 시작할 수 있습니다. 지금 등록하면 Pro 기능을 14일 무료로 사용하실 수 있습니다.",
+  "cta_primary": "무료로 시작하기",
+  "cta_secondary": "데모 예약"
+}

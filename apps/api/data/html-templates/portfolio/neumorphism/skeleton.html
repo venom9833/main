@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.profile.name }} — {{ content.profile.role }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="pnm-page">
+
+  <!-- ─── Hero ─── -->
+  <header class="pnm-hero">
+    <div class="pnm-avatar">{{ content.profile.avatar_emoji }}</div>
+    <div class="pnm-hero-text">
+      <h1 class="pnm-name">{{ content.profile.name }}</h1>
+      <p class="pnm-role">{{ content.profile.role }}</p>
+      {% if content.profile.location %}<p class="pnm-location">📍 {{ content.profile.location }}</p>{% endif %}
+      <p class="pnm-tagline">{{ content.profile.tagline }}</p>
+    </div>
+  </header>
+
+  <!-- ─── Stats ─── -->
+  <div class="pnm-facts">
+    {% for fact in content.facts %}
+    <div class="pnm-fact">
+      <span class="pnm-fact-value">{{ fact.value }}</span>
+      <span class="pnm-fact-label">{{ fact.label }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- ─── Projects ─── -->
+  <section class="pnm-card">
+    <h2 class="pnm-section-title">{{ content.work_heading }}</h2>
+    <div class="pnm-projects">
+      {% for proj in content.projects %}
+      <div class="pnm-project">
+        <span class="pnm-proj-cat">{{ proj.category }}</span>
+        <h3 class="pnm-proj-title">{{ proj.title }}</h3>
+        <p class="pnm-proj-desc">{{ proj.desc }}</p>
+        <div class="pnm-proj-tags">
+          {% for tag in proj.tags %}<span class="pnm-pill">{{ tag }}</span>{% endfor %}
+        </div>
+        {% if proj.result %}<p class="pnm-proj-result">→ {{ proj.result }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ─── Skills ─── -->
+  <section class="pnm-card">
+    <h2 class="pnm-section-title">{{ content.skills_heading }}</h2>
+    <div class="pnm-skill-groups">
+      {% for sg in content.skill_groups %}
+      <div class="pnm-skill-group">
+        <span class="pnm-skill-label">{{ sg.group }}</span>
+        <div class="pnm-skill-tags">
+          {% for skill in sg.items %}<span class="pnm-skill-tag">{{ skill }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ─── Process ─── -->
+  <section class="pnm-card">
+    <h2 class="pnm-section-title">{{ content.process_heading }}</h2>
+    <div class="pnm-process">
+      {% for step in content.process %}
+      <div class="pnm-proc-step">
+        <div class="pnm-proc-num">0{{ loop.index }}</div>
+        <span class="pnm-proc-icon">{{ step.icon }}</span>
+        <h3 class="pnm-proc-title">{{ step.title }}</h3>
+        <p class="pnm-proc-desc">{{ step.desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ─── Testimonials ─── -->
+  <section class="pnm-card">
+    <h2 class="pnm-section-title">{{ content.testimonials_heading }}</h2>
+    <div class="pnm-testimonials">
+      {% for t in content.testimonials %}
+      <blockquote class="pnm-testimonial">
+        <p class="pnm-quote">"{{ t.quote }}"</p>
+        <footer class="pnm-quote-author">
+          <strong>{{ t.name }}</strong>
+          <span>{{ t.role }}</span>
+        </footer>
+      </blockquote>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ─── Contact ─── -->
+  <section class="pnm-card pnm-contact-card">
+    <h2 class="pnm-section-title">{{ content.contact_heading }}</h2>
+    <div class="pnm-contact-list">
+      {% for item in content.contact_items %}
+      <a class="pnm-contact-btn" {% if item.url %}href="{{ item.url }}" target="_blank"{% else %}href="#"{% endif %}>
+        <span class="pnm-contact-icon">{{ item.icon }}</span>
+        <span class="pnm-contact-label">{{ item.label }}</span>
+        <span class="pnm-contact-value">{{ item.value }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

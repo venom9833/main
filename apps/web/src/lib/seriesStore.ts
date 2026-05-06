@@ -1,3 +1,9 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 
 /**
@@ -102,9 +108,12 @@ function toScene(raw: any): Scene {
     seriesId: raw.series_id,
     chapter: raw.chapter,
     sceneIndex: raw.scene_index,
+    sceneCode: raw.scene_code,
     text: raw.text,
     imageHint: raw.image_hint,
     isHook: raw.is_hook,
+    type: raw.type || 'narration',
+    subScenes: raw.sub_scenes || [],
     ttsUrl: raw.tts_url,
     srtUrl: raw.srt_url,
     clipUrl: raw.clip_url,

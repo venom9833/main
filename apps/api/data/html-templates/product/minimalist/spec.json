@@ -1,0 +1,86 @@
+{
+  "id": "product",
+  "label": "제품 소개",
+  "version": "2.0.0",
+  "mode": "skeleton",
+  "description": "헤드라인·특징 3개·수치·가격표가 담긴 미니멀 제품 소개 페이지. SaaS·앱·서비스 소개에 최적.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "background":    "#ffffff",
+    "surface":       "#f8fafc",
+    "text_primary":  "#0f172a",
+    "text_secondary":"#64748b",
+    "accent":        "#0ea5e9",
+    "accent_dark":   "#0284c7",
+    "accent_light":  "#f0f9ff",
+    "divider":       "#e2e8f0",
+    "card_border":   "#e2e8f0",
+    "highlight_border": "#0ea5e9",
+    "badge_bg":      "#f0f9ff",
+    "badge_text":    "#0284c7"
+  },
+  "content_schema": {
+    "type": "object",
+    "properties": {
+      "product_name": { "type": "string", "description": "제품·서비스명" },
+      "tagline":      { "type": "string", "description": "핵심 문구 (15자 내외, 강렬하게)" },
+      "description":  { "type": "string", "description": "제품 설명 2~3문장" },
+      "cta_label":    { "type": "string", "description": "메인 CTA 버튼 텍스트 (예: 무료로 시작하기)" },
+      "cta_url":      { "type": "string", "description": "CTA URL (없으면 #)" },
+      "badge":        { "type": "string", "description": "히어로 상단 뱃지 (예: 베타 무료 · 오픈 소스)" },
+      "features": {
+        "type": "array",
+        "description": "핵심 특징 3개 (정확히 3개)",
+        "items": {
+          "type": "object",
+          "properties": {
+            "icon":        { "type": "string", "description": "이모지" },
+            "title":       { "type": "string", "description": "특징 제목" },
+            "description": { "type": "string", "description": "2문장 설명" }
+          },
+          "required": ["icon", "title", "description"]
+        }
+      },
+      "stats": {
+        "type": "array",
+        "description": "임팩트 수치 3개",
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string", "description": "예: 10만+, 99.9%, 3초" },
+            "label": { "type": "string", "description": "예: 활성 사용자, 가동률" }
+          },
+          "required": ["value", "label"]
+        }
+      },
+      "pricing": {
+        "type": "array",
+        "description": "가격 티어 1~3개",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":        { "type": "string", "description": "예: Free, Pro, Enterprise" },
+            "price":       { "type": "string", "description": "예: 무료, ₩29,000" },
+            "period":      { "type": "string", "description": "예: /월, /년" },
+            "features":    { "type": "array", "items": { "type": "string" }, "description": "3~5개 기능 목록" },
+            "cta":         { "type": "string", "description": "버튼 텍스트" },
+            "highlighted": { "type": "boolean", "description": "추천 플랜 여부" }
+          },
+          "required": ["name", "price", "features", "cta", "highlighted"]
+        }
+      },
+      "testimonial": {
+        "type": "object",
+        "description": "추천사 (선택)",
+        "properties": {
+          "quote":  { "type": "string" },
+          "author": { "type": "string" },
+          "role":   { "type": "string" }
+        }
+      },
+      "footer_text": { "type": "string", "description": "푸터 문구 (예: © 2025 제품명 · 이용약관)" }
+    },
+    "required": ["product_name", "tagline", "description", "cta_label", "cta_url", "features", "stats", "pricing"]
+  }
+}

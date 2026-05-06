@@ -2,90 +2,68 @@
 import asyncio
 import json
 import re
+import subprocess
 import tempfile
 from pathlib import Path
 from core.config import settings
 from core.database import get_supabase
 from agent.generation_queue import get_tts_queue
 
-# 기본 나레이션 음성
-_DEFAULT_VOICE  = "ko-KR-SunHiNeural"
-_NARRATOR_VOICE = "ko-KR-InJoonNeural"  # 중성적 나레이터
+# ─────────────────────────────────────────────────────────────────────────────
+# edge-tts 한국어 나레이터 목소리 (나레이션 컷 전용 — ttsGender 설정 기준)
+#   여성: SunHiNeural
+#   남성: HyunsuMultilingualNeural
+# ─────────────────────────────────────────────────────────────────────────────
+_MALE_VOICE   = "ko-KR-HyunsuMultilingualNeural"   # 남성 나레이터
+_FEMALE_VOICE = "ko-KR-SunHiNeural"                # 여성 나레이터 (기본)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# edge-tts 한국어 목소리: 총 9개 (남4 + 여5) — 이게 전부입니다
-# ─────────────────────────────────────────────────────────────────────────────
-# 남성 4개:
-#   BongJinNeural  — 중후한 중년 남성 (50대급, 낮고 무게감)
-#   GookMinNeural  — 젊은 남성 (20~30대, 가장 어린 느낌)
-#   InJoonNeural   — 나레이터급 전문직 남성 (안정적, 중립)
-#   HyunsuNeural   — 단단하고 강한 남성 (에너지·긴장감)
-#
-# 여성 5개:
-#   SunHiNeural    — 따뜻한 여성 표준 (아내·어머니·주인공)
-#   JiMinNeural    — 밝은 젊은 여성 (20대 활기)
-#   YuJinNeural    — 활동적 여성 (직장인·적극적)
-#   SeoHyeonNeural — 조용한 젊은 여성 (내성적·섬세)
-#   SoonBokNeural  — 중년/시니어 여성 (60대+ 느낌)
-# ─────────────────────────────────────────────────────────────────────────────
+_DEFAULT_VOICE  = _FEMALE_VOICE   # 성별 미지정 기본값
+_NARRATOR_VOICE = _FEMALE_VOICE   # 나레이터 기본값 (ttsGender 미지정 시)
 
 # 캐릭터 voice_id → edge-tts 음성명 매핑
-# 캐릭터 JSON의 voice_id 필드에 입력하는 값을 키로 사용
+# 성별 기준으로 2개로 수렴 (MS edge-tts 한국어 음성 축소에 따른 정책 변경)
 VOICE_MAP: dict[str, str] = {
-    # ── 9개 기본 별칭 (권장) ─────────────────────────────────────────────────
-    "bongjin":    "ko-KR-BongJinNeural",    # 중후한 남성 (50대급)
-    "gookmin":    "ko-KR-GookMinNeural",    # 젊은 남성 (20~30대)
-    "injoon":     "ko-KR-InJoonNeural",     # 나레이터급 전문직 남성
-    "hyunsu":     "ko-KR-HyunsuNeural",     # 단단한 강한 남성
-    "sunhi":      "ko-KR-SunHiNeural",      # 따뜻한 여성 (표준)
-    "jimin":      "ko-KR-JiMinNeural",      # 밝은 여성 (20대)
-    "yujin":      "ko-KR-YuJinNeural",      # 활동적 여성
-    "seohyeon":   "ko-KR-SeoHyeonNeural",   # 조용한 여성 (섬세)
-    "soonbok":    "ko-KR-SoonBokNeural",    # 중년/시니어 여성
+    # ── 현재 별칭 ────────────────────────────────────────────────────────────
+    "hyunsu":     _MALE_VOICE,     # 남성
+    "sunhi":      _FEMALE_VOICE,   # 여성
 
-    # ── 하위 호환 별칭 (기존 JSON의 voice_id 값 유지) ────────────────────────
-    "andrew":     "ko-KR-BongJinNeural",
-    "dohyun":     "ko-KR-GookMinNeural",
-    "gwangsu":    "ko-KR-InJoonNeural",
-    "harrison":   "ko-KR-HyunsuNeural",
-    "angelina":   "ko-KR-SunHiNeural",
-    "chiki":      "ko-KR-JiMinNeural",
-    "dayun":      "ko-KR-YuJinNeural",
-    "grace":      "ko-KR-SeoHyeonNeural",
-    "jihu":       "ko-KR-JiMinNeural",
-    "misook":     "ko-KR-SoonBokNeural",
-    "tilly":      "ko-KR-YuJinNeural",
+    # ── 하위 호환 — 기존 캐릭터 JSON voice_id 값 → 성별 기준 리매핑 ──────────
+    # 남성 계열
+    "bongjin":    _MALE_VOICE,
+    "gookmin":    _MALE_VOICE,
+    "injoon":     _MALE_VOICE,
+    "andrew":     _MALE_VOICE,
+    "dohyun":     _MALE_VOICE,
+    "gwangsu":    _MALE_VOICE,
+    "harrison":   _MALE_VOICE,
+    # 여성 계열
+    "angelina":   _FEMALE_VOICE,
+    "chiki":      _FEMALE_VOICE,
+    "dayun":      _FEMALE_VOICE,
+    "grace":      _FEMALE_VOICE,
+    "jihu":       _FEMALE_VOICE,
+    "jimin":      _FEMALE_VOICE,
+    "misook":     _FEMALE_VOICE,
+    "seohyeon":   _FEMALE_VOICE,
+    "soonbok":    _FEMALE_VOICE,
+    "tilly":      _FEMALE_VOICE,
+    "yujin":      _FEMALE_VOICE,
 }
 
 # 엑스트라(캐스팅 외) 화자 → edge-tts 폴백 목소리
-# 키 형식: "{age_group}_{gender}" 또는 "{gender}"
-# speaker_age_group: teen / young / adult / elder / child
-# speaker_gender: male / female
 EXTRA_VOICE_MAP: dict[str, str] = {
-    # 성별만 지정된 경우 (기본 폴백)
-    "male":              "ko-KR-InJoonNeural",     # 성인 남성 기본
-    "female":            "ko-KR-SunHiNeural",      # 성인 여성 기본
-
-    # 나이대 + 성별 조합 ─────────────────────────────────────────────────────
-    # 청소년 (10대)
-    "teen_male":         "ko-KR-GookMinNeural",    # 10대 남
-    "teen_female":       "ko-KR-JiMinNeural",      # 10대 여
-
-    # 청년 (20~30대)
-    "young_male":        "ko-KR-GookMinNeural",    # 20~30대 남
-    "young_female":      "ko-KR-YuJinNeural",      # 20~30대 여 (활동적)
-
-    # 중년 (40~50대)
-    "adult_male":        "ko-KR-BongJinNeural",    # 40~50대 남
-    "adult_female":      "ko-KR-SunHiNeural",      # 40~50대 여
-
-    # 시니어 (60대+)
-    "elder_male":        "ko-KR-BongJinNeural",    # 60대+ 남
-    "elder_female":      "ko-KR-SoonBokNeural",    # 60대+ 여
-
-    # 아동
-    "child_male":        "ko-KR-GookMinNeural",    # 아동 남
-    "child_female":      "ko-KR-JiMinNeural",      # 아동 여
+    "male":        _MALE_VOICE,
+    "female":      _FEMALE_VOICE,
+    "teen_male":   _MALE_VOICE,
+    "teen_female": _FEMALE_VOICE,
+    "young_male":  _MALE_VOICE,
+    "young_female":_FEMALE_VOICE,
+    "adult_male":  _MALE_VOICE,
+    "adult_female":_FEMALE_VOICE,
+    "elder_male":  _MALE_VOICE,
+    "elder_female":_FEMALE_VOICE,
+    "child_male":  _MALE_VOICE,
+    "child_female":_FEMALE_VOICE,
 }
 
 
@@ -188,9 +166,19 @@ async def _generate_scene_tts(series_id: str, scene: dict, db):
         )
         return
 
-    # tts_voice 컬럼 우선 사용 (script_service가 speaker → voice 해석해서 저장)
-    # 없으면 기본 나레이터 음성 폴백
-    voice = scene.get("tts_voice") or _NARRATOR_VOICE
+    # tts_voice 컬럼 우선 사용
+    # - Supertone(st:) → 캐릭터 고유 성우 → 그대로 사용
+    # - edge-tts(ko-KR-*) 또는 없음 → 나레이션용 edge-tts: 시리즈 ttsGender 기준
+    raw_voice = scene.get("tts_voice") or ""
+    if raw_voice.startswith("st:"):
+        voice = raw_voice
+    else:
+        # 나레이션 컷 — 시리즈 ttsGender 설정으로 edge-tts 성별 결정
+        ser_res = await asyncio.to_thread(
+            lambda: db.table("v3_series").select("settings").eq("id", series_id).single().execute()
+        )
+        tts_gender = ((ser_res.data or {}).get("settings") or {}).get("ttsGender", "female")
+        voice = _MALE_VOICE if tts_gender == "male" else _FEMALE_VOICE
 
     try:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -213,17 +201,31 @@ async def _generate_scene_tts(series_id: str, scene: dict, db):
 
             # R2 업로드
             cut_idx = scene.get("cut_index", 1)
-            r2_key_mp3 = f"v3/{series_id}/tts/ch{scene['chapter']}_s{scene['scene_index']}c{cut_idx}.mp3"
-            r2_key_srt = f"v3/{series_id}/tts/ch{scene['chapter']}_s{scene['scene_index']}c{cut_idx}.srt"
+            r2_prefix = f"v3/{series_id}/tts/ch{scene['chapter']}_s{scene['scene_index']}c{cut_idx}"
+            r2_key_mp3 = f"{r2_prefix}.mp3"
+            r2_key_srt = f"{r2_prefix}.srt"
+            r2_key_wav = f"{r2_prefix}.wav"
 
-            tts_url = await asyncio.to_thread(_upload_r2, str(mp3_path), r2_key_mp3)
-            srt_url = await asyncio.to_thread(_upload_r2, str(srt_path), r2_key_srt)
+            # MP3→WAV 변환 (ffmpeg)
+            wav_path = Path(tmpdir) / f"scene_{scene_id}.wav"
+            subprocess.run(
+                ["ffmpeg", "-y", "-i", str(mp3_path), str(wav_path)],
+                check=True,
+                capture_output=True,
+            )
+
+            tts_url, srt_url, wav_url = await asyncio.gather(
+                asyncio.to_thread(_upload_r2, str(mp3_path), r2_key_mp3),
+                asyncio.to_thread(_upload_r2, str(srt_path), r2_key_srt),
+                asyncio.to_thread(_upload_r2, str(wav_path), r2_key_wav),
+            )
 
         # DB 갱신
         await asyncio.to_thread(
             lambda: db.table("v3_scenes").update({
                 "tts_url": tts_url,
                 "srt_url": srt_url,
+                "wav_url": wav_url,
                 "status": "tts_done",
             }).eq("id", scene_id).execute()
         )
@@ -277,7 +279,7 @@ def _sentence_boundary_to_words(events: list[dict]) -> list[dict]:
     return words
 
 
-def _make_srt(word_events: list[dict], output_path: str, words_per_chunk: int = 5):
+def _make_srt(word_events: list[dict], output_path: str, words_per_chunk: int = 3):
     """단어 타이밍 → SRT 자막 파일"""
     def _fmt(sec: float) -> str:
         h = int(sec // 3600)
@@ -301,8 +303,12 @@ def _make_srt(word_events: list[dict], output_path: str, words_per_chunk: int = 
     Path(output_path).write_text("\n".join(lines), encoding="utf-8")
 
 
-def _upload_r2(local_path: str, r2_key: str) -> str:
-    """로컬 파일 → R2 업로드 → Public URL 반환"""
+def _upload_r2(local_path: str, r2_key: str, *, assets: bool = False) -> str:
+    """로컬 파일 → R2 업로드 → Public URL 반환.
+
+    assets=True: R2_ASSETS_BUCKET / R2_ASSETS_PUBLIC_URL (공용 에셋 버킷)
+    assets=False: R2_BUCKET / R2_PUBLIC_URL (시리즈 콘텐츠 버킷, 기본값)
+    """
     import boto3
     s3 = boto3.client(
         "s3",
@@ -310,13 +316,18 @@ def _upload_r2(local_path: str, r2_key: str) -> str:
         aws_access_key_id=settings.R2_ACCESS_KEY_ID,
         aws_secret_access_key=settings.R2_SECRET_ACCESS_KEY,
     )
-    _EXT_TYPES = {".mp3": "audio/mpeg", ".srt": "text/plain", ".png": "image/png", ".mp4": "video/mp4"}
+    _EXT_TYPES = {
+        ".mp3": "audio/mpeg", ".wav": "audio/wav", ".ogg": "audio/ogg",
+        ".srt": "text/plain", ".png": "image/png", ".mp4": "video/mp4",
+    }
     ext = Path(local_path).suffix.lower()
     content_type = _EXT_TYPES.get(ext, "application/octet-stream")
+    bucket = settings.R2_ASSETS_BUCKET if assets else settings.R2_BUCKET
+    public_url = settings.R2_ASSETS_PUBLIC_URL if assets else settings.R2_PUBLIC_URL
     s3.upload_file(
         local_path,
-        settings.R2_BUCKET,
+        bucket,
         r2_key,
         ExtraArgs={"ContentType": content_type},
     )
-    return f"{settings.R2_PUBLIC_URL}/{r2_key}"
+    return f"{public_url}/{r2_key}"

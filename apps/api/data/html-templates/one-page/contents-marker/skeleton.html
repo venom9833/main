@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.person.name }} — {{ content.person.title }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  {% if shared_cm_css %}<style>{{ shared_cm_css }}</style>{% endif %}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="cm-layout">
+
+  <table-of-contents></table-of-contents>
+
+  <!-- 프로필 헤더 -->
+  <header class="cm-header" id="pre">
+    <span class="op-avatar">{{ content.person.avatar_emoji }}</span>
+    <h1 class="op-name">{{ content.person.name }}</h1>
+    <p class="op-title">{{ content.person.title }}</p>
+    {% if content.person.location %}
+    <p class="op-location">{{ content.person.location }}</p>
+    {% endif %}
+    <p class="op-tagline">{{ content.person.tagline }}</p>
+  </header>
+
+  <main class="cm-main">
+    <article>
+
+      <!-- 소개 -->
+      <section id="about">
+        <h2>{{ content.about_heading }}</h2>
+        {% for para in content.about %}<p>{{ para }}</p>{% endfor %}
+      </section>
+
+      <!-- 기술 -->
+      <section id="skills">
+        <h2>{{ content.skills_heading }}</h2>
+        <div class="op-skill-groups">
+          {% for sg in content.skill_groups %}
+          <div class="op-skill-group">
+            <span class="op-skill-group-label">{{ sg.group }}</span>
+            <div class="op-skill-tags">
+              {% for skill in sg.skills %}
+              <span class="op-skill-tag">{{ skill }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- 경력 -->
+      <section id="experience">
+        <h2>{{ content.experience_heading }}</h2>
+        {% for exp in content.experiences %}
+        <div class="op-exp-item" id="{{ exp.id }}">
+          <div class="op-exp-header">
+            <div>
+              <h3 class="op-exp-role">{{ exp.role }}</h3>
+              <span class="op-exp-company">{{ exp.company }}</span>
+            </div>
+            <span class="op-exp-period">{{ exp.period }}</span>
+          </div>
+          <ul class="op-exp-bullets">
+            {% for bullet in exp.bullets %}
+            <li>{{ bullet }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </section>
+
+      <!-- 프로젝트 -->
+      <section id="projects">
+        <h2>{{ content.projects_heading }}</h2>
+        {% for proj in content.projects %}
+        <div class="op-project" id="{{ proj.id }}">
+          <div class="op-project-header">
+            <h3>{{ proj.title }}</h3>
+            {% if proj.url %}<a class="op-project-link" href="{{ proj.url }}" target="_blank">↗</a>{% endif %}
+          </div>
+          <p>{{ proj.desc }}</p>
+          <div class="op-project-tags">
+            {% for tag in proj.tags %}
+            <span class="op-project-tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+
+      <!-- 연락처 -->
+      <section id="contact">
+        <h2>{{ content.contact_heading }}</h2>
+        <div class="op-contact-list">
+          {% for item in content.contact_items %}
+          <div class="op-contact-item">
+            <span class="op-contact-icon">{{ item.icon }}</span>
+            <div class="op-contact-body">
+              <span class="op-contact-label">{{ item.label }}</span>
+              {% if item.url %}
+              <a class="op-contact-value" href="{{ item.url }}" target="_blank">{{ item.value }}</a>
+              {% else %}
+              <span class="op-contact-value">{{ item.value }}</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <hr/>
+
+  <footer class="cm-footer">
+    <p>{{ content.person.name }} — {{ content.person.title }}</p>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  var tocEl = document.querySelector('table-of-contents');
+  if (!tocEl) return;
+  var article = document.querySelector('article');
+  if (!article) return;
+  var headings = Array.from(article.querySelectorAll('h2'));
+  if (!headings.length) return;
+
+  var nav = document.createElement('nav');
+  nav.setAttribute('aria-label', 'Table of Contents');
+
+  var label = document.createElement('h2');
+  label.textContent = '목차';
+  nav.appendChild(label);
+
+  var ol = document.createElement('ol');
+  headings.forEach(function(h) {
+    var id = h.id || h.closest('section[id]')?.id;
+    if (!id) {
+      id = h.textContent.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+      h.id = id;
+    }
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + id;
+    a.textContent = h.textContent.trim();
+    li.appendChild(a);
+    ol.appendChild(li);
+  });
+  nav.appendChild(ol);
+
+  var hr = document.createElement('hr');
+  hr.className = 'split';
+  nav.appendChild(hr);
+
+  var back = document.createElement('div');
+  back.className = 'cm-back-to-top';
+  back.innerHTML = '<a href="#pre">↑ 처음으로</a>';
+  nav.appendChild(back);
+
+  tocEl.appendChild(nav);
+})();
+</script>
+</body>
+</html>

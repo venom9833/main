@@ -1,0 +1,442 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "LinkDrop V3" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e6]:
+        - generic [ref=e7]: 웹소설+영상
+    - generic [ref=e8]:
+      - link "내 시리즈" [ref=e9] [cursor=pointer]:
+        - /url: /
+      - link "새 시리즈" [ref=e10] [cursor=pointer]:
+        - /url: /create
+      - link "캐릭터" [ref=e11] [cursor=pointer]:
+        - /url: /characters
+      - link "감정선" [ref=e12] [cursor=pointer]:
+        - /url: /characters/emoline
+      - link "키프레임" [ref=e13] [cursor=pointer]:
+        - /url: /series/keyframe
+      - link "MP4합성" [ref=e14] [cursor=pointer]:
+        - /url: /series/mp4combine
+  - generic [ref=e15]:
+    - generic [ref=e49]:
+      - generic [ref=e50]: 회귀자의 두 번째 파도
+      - generic [ref=e51]: · 경제 드라마, 타임슬립 스릴러
+      - generic [ref=e52]:
+        - generic [ref=e53]: A
+        - text: 최민성
+        - generic [ref=e54]: ↔
+        - generic [ref=e55]: B
+        - text: 양서연
+      - button "👩 나레이션 여" [ref=e56] [cursor=pointer]:
+        - generic [ref=e57]: 👩
+        - text: 나레이션
+        - generic [ref=e58]: 여
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: AI
+        - generic [ref=e21]: 키프레임
+      - combobox [ref=e23] [cursor=pointer]:
+        - option "— 시리즈 선택 —"
+        - option "요양원 리포트"
+        - option "세상밖으로"
+        - option "디지털 낙원"
+        - option "할머니의 마지막 겨울 포차"
+        - option "급식 아줌마 비리 추적단"
+        - option "갤러리 M"
+        - option "강철의 꽃"
+        - option "산골 리턴즈"
+        - option "블랙 코트"
+        - option "구급상자 없는 나라"
+        - option "재벌의 그림자"
+        - option "회귀자의 두 번째 파도" [selected]
+      - generic [ref=e62]: 컷 33개 · gemini · 16:9
+      - button "🗑 컷 삭제" [ref=e63] [cursor=pointer]
+      - button "▣ 9:16 미리보기" [ref=e64] [cursor=pointer]
+      - button "▶ MP4 합성" [ref=e65] [cursor=pointer]
+    - generic [ref=e24]:
+      - generic [ref=e66]:
+        - button "HOOK s07hc04 K+영상 더빙" [ref=e68] [cursor=pointer]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: HOOK
+            - generic [ref=e71]: s07hc04
+          - generic [ref=e74]:
+            - generic [ref=e75]: K+영상
+            - generic [ref=e76]: 더빙
+        - generic [ref=e80]:
+          - button "s01nc01 영상 더빙" [ref=e82] [cursor=pointer]:
+            - generic [ref=e84]: s01nc01
+            - generic [ref=e87]:
+              - generic [ref=e88]: 영상
+              - generic [ref=e89]: 더빙
+          - button "s01nc02 영상 더빙" [ref=e91] [cursor=pointer]:
+            - generic [ref=e93]: s01nc02
+            - generic [ref=e96]:
+              - generic [ref=e97]: 영상
+              - generic [ref=e98]: 더빙
+          - button "s01nc03 영상 더빙" [ref=e100] [cursor=pointer]:
+            - generic [ref=e102]: s01nc03
+            - generic [ref=e105]:
+              - generic [ref=e106]: 영상
+              - generic [ref=e107]: 더빙
+          - button "s01nc04 영상 더빙" [ref=e109] [cursor=pointer]:
+            - generic [ref=e111]: s01nc04
+            - generic [ref=e114]:
+              - generic [ref=e115]: 영상
+              - generic [ref=e116]: 더빙
+          - button "s01nc05 영상 더빙" [ref=e118] [cursor=pointer]:
+            - generic [ref=e120]: s01nc05
+            - generic [ref=e123]:
+              - generic [ref=e124]: 영상
+              - generic [ref=e125]: 더빙
+          - button "s02nc01 영상 더빙" [ref=e127] [cursor=pointer]:
+            - generic [ref=e129]: s02nc01
+            - generic [ref=e132]:
+              - generic [ref=e133]: 영상
+              - generic [ref=e134]: 더빙
+          - button "s02nc02 K+영상 더빙" [ref=e136] [cursor=pointer]:
+            - generic [ref=e138]: s02nc02
+            - generic [ref=e141]:
+              - generic [ref=e142]: K+영상
+              - generic [ref=e143]: 더빙
+          - button "s02nc03 K 더빙" [ref=e145] [cursor=pointer]:
+            - generic [ref=e147]: s02nc03
+            - generic [ref=e150]:
+              - generic [ref=e151]: K
+              - generic [ref=e152]: 더빙
+          - button "s02nc04 K 더빙" [ref=e154] [cursor=pointer]:
+            - generic [ref=e156]: s02nc04
+            - generic [ref=e159]:
+              - generic [ref=e160]: K
+              - generic [ref=e161]: 더빙
+          - button "s02nc05 K 더빙" [ref=e163] [cursor=pointer]:
+            - generic [ref=e165]: s02nc05
+            - generic [ref=e168]:
+              - generic [ref=e169]: K
+              - generic [ref=e170]: 더빙
+          - button "s02nc06 영상 더빙" [ref=e172] [cursor=pointer]:
+            - generic [ref=e174]: s02nc06
+            - generic [ref=e177]:
+              - generic [ref=e178]: 영상
+              - generic [ref=e179]: 더빙
+          - button "s03nc01 K 더빙" [ref=e181] [cursor=pointer]:
+            - generic [ref=e183]: s03nc01
+            - generic [ref=e186]:
+              - generic [ref=e187]: K
+              - generic [ref=e188]: 더빙
+          - button "s03nc02 K 더빙" [ref=e190] [cursor=pointer]:
+            - generic [ref=e192]: s03nc02
+            - generic [ref=e195]:
+              - generic [ref=e196]: K
+              - generic [ref=e197]: 더빙
+          - button "s03nc03 K 더빙" [ref=e199] [cursor=pointer]:
+            - generic [ref=e201]: s03nc03
+            - generic [ref=e204]:
+              - generic [ref=e205]: K
+              - generic [ref=e206]: 더빙
+          - button "s03nc04 K 더빙" [ref=e208] [cursor=pointer]:
+            - generic [ref=e210]: s03nc04
+            - generic [ref=e213]:
+              - generic [ref=e214]: K
+              - generic [ref=e215]: 더빙
+          - button "s03nc05 K+영상 더빙" [ref=e217] [cursor=pointer]:
+            - generic [ref=e219]: s03nc05
+            - generic [ref=e222]:
+              - generic [ref=e223]: K+영상
+              - generic [ref=e224]: 더빙
+          - button "s03nc06 K 더빙" [ref=e226] [cursor=pointer]:
+            - generic [ref=e228]: s03nc06
+            - generic [ref=e231]:
+              - generic [ref=e232]: K
+              - generic [ref=e233]: 더빙
+          - button "s04nc01 K+영상 더빙" [ref=e235] [cursor=pointer]:
+            - generic [ref=e237]: s04nc01
+            - generic [ref=e240]:
+              - generic [ref=e241]: K+영상
+              - generic [ref=e242]: 더빙
+          - button "s04nc02 K+영상 더빙" [ref=e244] [cursor=pointer]:
+            - generic [ref=e246]: s04nc02
+            - generic [ref=e249]:
+              - generic [ref=e250]: K+영상
+              - generic [ref=e251]: 더빙
+          - button "s04nc03 K+영상 더빙" [ref=e253] [cursor=pointer]:
+            - generic [ref=e255]: s04nc03
+            - generic [ref=e258]:
+              - generic [ref=e259]: K+영상
+              - generic [ref=e260]: 더빙
+          - button "s05nc01 K+영상 더빙" [ref=e262] [cursor=pointer]:
+            - generic [ref=e264]: s05nc01
+            - generic [ref=e267]:
+              - generic [ref=e268]: K+영상
+              - generic [ref=e269]: 더빙
+          - button "s06nc01 K+영상 더빙" [ref=e271] [cursor=pointer]:
+            - generic [ref=e273]: s06nc01
+            - generic [ref=e276]:
+              - generic [ref=e277]: K+영상
+              - generic [ref=e278]: 더빙
+          - button "s06nc02 K 더빙" [ref=e280] [cursor=pointer]:
+            - generic [ref=e282]: s06nc02
+            - generic [ref=e285]:
+              - generic [ref=e286]: K
+              - generic [ref=e287]: 더빙
+          - button "s06nc03 K 더빙" [ref=e289] [cursor=pointer]:
+            - generic [ref=e291]: s06nc03
+            - generic [ref=e294]:
+              - generic [ref=e295]: K
+              - generic [ref=e296]: 더빙
+          - button "s06nc04 영상 더빙" [ref=e298] [cursor=pointer]:
+            - generic [ref=e300]: s06nc04
+            - generic [ref=e303]:
+              - generic [ref=e304]: 영상
+              - generic [ref=e305]: 더빙
+          - button "s06nc05 K 더빙" [ref=e307] [cursor=pointer]:
+            - generic [ref=e309]: s06nc05
+            - generic [ref=e312]:
+              - generic [ref=e313]: K
+              - generic [ref=e314]: 더빙
+          - button "s06nc06 K 더빙" [ref=e316] [cursor=pointer]:
+            - generic [ref=e318]: s06nc06
+            - generic [ref=e321]:
+              - generic [ref=e322]: K
+              - generic [ref=e323]: 더빙
+          - button "s06nc07 K+영상 더빙" [ref=e325] [cursor=pointer]:
+            - generic [ref=e327]: s06nc07
+            - generic [ref=e330]:
+              - generic [ref=e331]: K+영상
+              - generic [ref=e332]: 더빙
+          - button "s07nc01 K+영상 더빙" [ref=e334] [cursor=pointer]:
+            - generic [ref=e336]: s07nc01
+            - generic [ref=e339]:
+              - generic [ref=e340]: K+영상
+              - generic [ref=e341]: 더빙
+          - button "s07nc02 K+영상 더빙" [ref=e343] [cursor=pointer]:
+            - generic [ref=e345]: s07nc02
+            - generic [ref=e348]:
+              - generic [ref=e349]: K+영상
+              - generic [ref=e350]: 더빙
+          - button "s07nc03 K 더빙" [ref=e352] [cursor=pointer]:
+            - generic [ref=e354]: s07nc03
+            - generic [ref=e357]:
+              - generic [ref=e358]: K
+              - generic [ref=e359]: 더빙
+          - button "s07hc04 ★ K+영상 더빙" [ref=e361] [cursor=pointer]:
+            - generic [ref=e363]: s07hc04
+            - generic [ref=e364]: ★
+            - generic [ref=e366]:
+              - generic [ref=e367]: K+영상
+              - generic [ref=e368]: 더빙
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e371]: 회귀자의 두 번째 파도 - 1화HOOK
+            - button "▶" [ref=e32] [cursor=pointer]
+          - generic [ref=e372]:
+            - generic [ref=e373]:
+              - generic [ref=e374]: HINT
+              - generic [ref=e375]: close-up of the man's fingers frozen on the envelope, his gaze fixed on the next date and item written inside, showing a mix of hope and unease
+            - paragraph [ref=e377]: 최민성의 손가락이 봉투를 쥔 채 굳었다. 그의 시선은 봉투 안쪽, 다음 날짜와 종목이 적힌 새로운 문구에 머물렀다. 봉투는 다음 희망을 제시하고 있었지만, 동시에 알 수 없는 불안감을 던지고 있었다.
+          - generic [ref=e378]:
+            - generic [ref=e379]:
+              - generic [ref=e380]: RAW 대본
+              - generic [ref=e381]: 컷 1 / 33
+              - button "수정" [ref=e382] [cursor=pointer]
+            - generic [ref=e383]:
+              - generic [ref=e384] [cursor=pointer]:
+                - generic [ref=e385]:
+                  - generic [ref=e386]: s07hc04
+                  - generic [ref=e387]: HOOK
+                  - generic [ref=e388]: 나레이션
+                - paragraph [ref=e389]: 최민성의 손가락이 봉투를 쥔 채 굳었다. 그의 시선은 봉투 안쪽, 다음 날짜와 종목이 적힌 새로운 문구에 머물렀다. 봉투는 다음 희망을 제시하고 있었지만, 동시에 알 수 없는 불안감을 던지고 있었다.
+              - generic [ref=e390] [cursor=pointer]:
+                - generic [ref=e391]:
+                  - generic [ref=e392]: s01nc01
+                  - generic [ref=e393]: 나레이션
+                - paragraph [ref=e394]: 서류 더미 위, 희미한 형광등 불빛 아래서 파산 신청 서류 조각들이 제멋대로 흩어져 있었다. 찢겨진 종이들이 그의 손가락 사이에서 바스락거렸다.
+              - generic [ref=e395] [cursor=pointer]:
+                - generic [ref=e396]:
+                  - generic [ref=e397]: s01nc02
+                  - generic [ref=e398]: 나레이션
+                - paragraph [ref=e399]: 컴퓨터 모니터의 차가운 빛이 그의 얼굴을 잠식했다. 뉴스 헤드라인은 '글로벌 경제 위기 심화', '수출 기업 불안' 따위의 단어를 뱉어냈다. 귓가에 맴도는 건 끊임없이 삐걱거리는 사무실 의자 소리뿐이었다.
+              - generic [ref=e400] [cursor=pointer]:
+                - generic [ref=e401]:
+                  - generic [ref=e402]: s01nc03
+                  - generic [ref=e403]: 나레이션
+                - paragraph [ref=e404]: 그는 눈을 감았다. 3년 전, 모든 것이 무너졌던 순간이 스쳐 지나갔다. 주식과 부동산, 평생을 바쳐 쌓아 올린 모든 것이 한순간에 사라졌다. 봉투, 그 의문의 봉투를 열지 말았어야 했다는 후회가 늦게야 밀려들었다.
+              - generic [ref=e405] [cursor=pointer]:
+                - generic [ref=e406]:
+                  - generic [ref=e407]: s01nc04
+                  - generic [ref=e408]: 나레이션
+                - paragraph [ref=e409]: 그의 손이 찢겨진 서류 조각들을 쥐었다. 손톱이 살을 파고들었다. 다시 쌓아 올려야 했다. 이번엔 다르게. 그의 눈은 모니터 속 주식 차트를 뚫어져라 응시했다.
+              - generic [ref=e410] [cursor=pointer]:
+                - generic [ref=e411]:
+                  - generic [ref=e412]: s01nc05
+                  - generic [ref=e413]: 나레이션
+                - paragraph [ref=e414]: 휴대폰 진동이 테이블 위 서류를 떨게 했다. 액정에는 ‘송현아’라는 이름이 선명했다. 시간은 이미 밤 11시를 넘기고 있었다. 그는 액정을 응시했다. 아들을 지켜야 한다는 집념이 손끝에서 맴돌았다. 그러나 그는 봉투를 놓지 않았다. 결국 진동이 멎을 때까지 그대로 두었다.
+              - generic [ref=e415] [cursor=pointer]:
+                - generic [ref=e416]:
+                  - generic [ref=e417]: s02nc01
+                  - generic [ref=e418]: 💬 양서연
+                - paragraph [ref=e419]: 아직 안 잤어?
+              - generic [ref=e420] [cursor=pointer]:
+                - generic [ref=e421]:
+                  - generic [ref=e422]: s02nc02
+                  - generic [ref=e423]: 나레이션
+                - paragraph [ref=e424]: 뒤에서 들리는 양서연의 목소리에 최민성의 어깨가 굳었다. 그는 휴대폰을 뒤집어 놓으며 고개를 돌렸다. 양서연은 흐트러진 머리칼을 쓸어 올리며 부엌으로 향했다. 얼음이 든 물컵을 가져온 서연이 그의 맞은편에 앉았다. 물컵에서는 그와 똑같은 찬 기운이 배어 나왔다.
+              - generic [ref=e425] [cursor=pointer]:
+                - generic [ref=e426]:
+                  - generic [ref=e427]: s02nc03
+                  - generic [ref=e428]: 💬 최민성
+                - paragraph [ref=e429]: 보고서 마무리 좀 하느라.
+              - generic [ref=e430] [cursor=pointer]:
+                - generic [ref=e431]:
+                  - generic [ref=e432]: s02nc04
+                  - generic [ref=e433]: 나레이션
+                - paragraph [ref=e434]: 그의 시선이 모니터 화면의 그래프에서 서연의 얼굴로 옮겨갔다. 그녀의 눈 밑에는 옅은 그림자가 드리워져 있었다.
+              - generic [ref=e435] [cursor=pointer]:
+                - generic [ref=e436]:
+                  - generic [ref=e437]: s02nc05
+                  - generic [ref=e438]: 💬 양서연
+                - paragraph [ref=e439]: 내일 일찍 나가야 하잖아.
+              - generic [ref=e440] [cursor=pointer]:
+                - generic [ref=e441]:
+                  - generic [ref=e442]: s02nc06
+                  - generic [ref=e443]: 💬 최민성
+                - paragraph [ref=e444]: 다 했어. 이제 들어가서 자.
+              - generic [ref=e445] [cursor=pointer]:
+                - generic [ref=e446]:
+                  - generic [ref=e447]: s03nc01
+                  - generic [ref=e448]: 💬 양서연
+                - paragraph [ref=e449]: 오늘 재현이한테 무슨 일 있었어?
+              - generic [ref=e450] [cursor=pointer]:
+                - generic [ref=e451]:
+                  - generic [ref=e452]: s03nc02
+                  - generic [ref=e453]: 나레이션
+                - paragraph [ref=e454]: 그의 손목을 쥔 서연의 손가락에 힘이 들어갔다. 최민성의 심장이 쿵, 하고 내려앉았다.
+              - generic [ref=e455] [cursor=pointer]:
+                - generic [ref=e456]:
+                  - generic [ref=e457]: s03nc03
+                  - generic [ref=e458]: 💬 최민성
+                - paragraph [ref=e459]: 무슨 소리야.
+              - generic [ref=e460] [cursor=pointer]:
+                - generic [ref=e461]:
+                  - generic [ref=e462]: s03nc04
+                  - generic [ref=e463]: 💬 양서연
+                - paragraph [ref=e464]: 재현이가, 날 보고 ‘저 여자’라고 불렀어.
+              - generic [ref=e465] [cursor=pointer]:
+                - generic [ref=e466]:
+                  - generic [ref=e467]: s03nc05
+                  - generic [ref=e468]: 나레이션
+                - paragraph [ref=e469]: 서연의 목소리가 한 옥타브 높아졌다. 최민성의 눈빛이 흔들렸다. 그는 애써 시선을 피했다. 재현이가 서연에게 했던 말 ‘엄마는 왜 매일 집에 늦게 와? 그 여자처럼’ 그의 귓가에 다시 맴돌았다. 아이가 무심코 내뱉은 말 한마디가 양서연의 마음에 비수가 되어 박혔을 거였다. 그는 재현이의 입을 막지 못했다. 오히려 그 상황을 벗어나려 했다. 그 생각이 그의 목을 졸랐다.
+              - generic [ref=e470] [cursor=pointer]:
+                - generic [ref=e471]:
+                  - generic [ref=e472]: s03nc06
+                  - generic [ref=e473]: 💬 최민성
+                - paragraph [ref=e474]: 아이잖아. 그냥 하는 말이지.
+              - generic [ref=e475] [cursor=pointer]:
+                - generic [ref=e476]:
+                  - generic [ref=e477]: s04nc01
+                  - generic [ref=e478]: 💬 양서연
+                - paragraph [ref=e479]: 그냥 하는 말이라고? 어떤 엄마가 자기 아들한테 그런 말을 해.
+              - generic [ref=e480] [cursor=pointer]:
+                - generic [ref=e481]:
+                  - generic [ref=e482]: s04nc02
+                  - generic [ref=e483]: 💬 최민성
+                - paragraph [ref=e484]: 서연아. 재현이 힘들게 하지 마. 알잖아, 우리 아들.
+              - generic [ref=e485] [cursor=pointer]:
+                - generic [ref=e486]:
+                  - generic [ref=e487]: s04nc03
+                  - generic [ref=e488]: 나레이션
+                - paragraph [ref=e489]: 서연의 얼굴에서 웃음기가 사라졌다. 그녀의 입술이 굳게 닫혔다. 최민성은 재빨리 휴대폰을 집어 들었다. 전처의 연락, 아들의 말, 서연의 날 선 시선. 모든 것이 자신을 옥죄는 것 같았다.
+              - generic [ref=e490] [cursor=pointer]:
+                - generic [ref=e491]:
+                  - generic [ref=e492]: s05nc01
+                  - generic [ref=e493]: 나레이션
+                - paragraph [ref=e494]: 그날 밤, 최민성은 서재 침대에 누워 천장을 응시했다. 서연은 안방 침대에 누워 잠이 오지 않는 듯 뒤척였다. 거실은 고요했지만, 최민성의 머릿속은 복잡했다.
+              - generic [ref=e495] [cursor=pointer]:
+                - generic [ref=e496]:
+                  - generic [ref=e497]: s06nc01
+                  - generic [ref=e498]: 나레이션
+                - paragraph [ref=e499]: 아침, 최민성은 눈을 뜨자마자 다시 컴퓨터 앞에 앉았다. 모니터에는 어제의 폭락장이 그대로 이어지고 있었다. 주식 계좌는 이미 바닥을 드러낸 지 오래였다. 손가락이 무의식적으로 마우스 휠을 내렸다.
+              - generic [ref=e500] [cursor=pointer]:
+                - generic [ref=e501]:
+                  - generic [ref=e502]: s06nc02
+                  - generic [ref=e503]: 나레이션
+                - paragraph [ref=e504]: 그때, 화면 한쪽에 작은 팝업창이 떴다.
+              - generic [ref=e505] [cursor=pointer]:
+                - generic [ref=e506]:
+                  - generic [ref=e507]: s06nc03
+                  - generic [ref=e508]: 나레이션
+                - paragraph [ref=e509]: 당신이 바꾼 미래는, 당신만을 위한 것이 아닐 수 있습니다.
+              - generic [ref=e510] [cursor=pointer]:
+                - generic [ref=e511]:
+                  - generic [ref=e512]: s06nc04
+                  - generic [ref=e513]: 나레이션
+                - paragraph [ref=e514]: 그는 망설였다. 찢겨진 파산 신청 서류 조각들이 그의 눈에 들어왔다. 그 서류 조각들 아래에서, 봉투 하나가 고개를 내밀었다. 어젯밤 술에 취해 던져버렸던, 그러나 기어이 제 존재를 드러내고 있는 낡은 갈색 봉투였다. 봉투는 마치 그를 조롱하듯 묘한 기운을 내뿜고 있었다. 봉투에서는 희미하게 낯선 향수 냄새가 풍겨왔다.
+              - generic [ref=e515] [cursor=pointer]:
+                - generic [ref=e516]:
+                  - generic [ref=e517]: s06nc05
+                  - generic [ref=e518]: 나레이션
+                - paragraph [ref=e519]: 최민성은 조심스럽게 봉투를 집어 들었다. 봉투 표면에는 펜으로 꾹꾹 눌러 쓴 글씨가 보였다.
+              - generic [ref=e520] [cursor=pointer]:
+                - generic [ref=e521]:
+                  - generic [ref=e522]: s06nc06
+                  - generic [ref=e523]: 나레이션
+                - paragraph [ref=e524]: 20XX년 X월 XX일, A 만기옵션 매도 나스닥 매수. 절대적인 기회.
+              - generic [ref=e525] [cursor=pointer]:
+                - generic [ref=e526]:
+                  - generic [ref=e527]: s06nc07
+                  - generic [ref=e528]: 나레이션
+                - paragraph [ref=e529]: 그는 코웃음을 쳤다. 말도 안 되는 이야기였다. 하지만 그는 잃을 것이 없었다. 그는 홀린 듯 봉투에 적힌 날짜와 종목을 확인했다. 그리고 시험 삼아, 작은 금액으로 옵션을 매도하고 나스닥을 매수했다. 잃어도 큰 타격이 없을 정도의 돈이었다.
+              - generic [ref=e530] [cursor=pointer]:
+                - generic [ref=e531]:
+                  - generic [ref=e532]: s07nc01
+                  - generic [ref=e533]: 나레이션
+                - paragraph [ref=e534]: 며칠 뒤, 최민성의 휴대폰에서 알림음이 울렸다. 매도했던 옵션은 폭락했고, 매수했던 나스닥은 예상치 못한 호재로 급등했다. 봉투의 정보가 정확히 맞아떨어진 것이다. 그의 심장이 거세게 뛰었다. 계좌 잔고는 미미하게나마 불어나 있었다.
+              - generic [ref=e535] [cursor=pointer]:
+                - generic [ref=e536]:
+                  - generic [ref=e537]: s07nc02
+                  - generic [ref=e538]: 나레이션
+                - paragraph [ref=e539]: 그는 다시 봉투를 꺼내 들었다. 이번에는 봉투 안쪽에 적힌 작은 글씨가 눈에 들어왔다.
+              - generic [ref=e540] [cursor=pointer]:
+                - generic [ref=e541]:
+                  - generic [ref=e542]: s07nc03
+                  - generic [ref=e543]: 나레이션
+                - paragraph [ref=e544]: 당신이 바꾼 미래는, 당신만을 위한 것이 아닐 수 있습니다.
+              - generic [ref=e545] [cursor=pointer]:
+                - generic [ref=e546]:
+                  - generic [ref=e547]: s07hc04
+                  - generic [ref=e548]: HOOK
+                  - generic [ref=e549]: 나레이션
+                - paragraph [ref=e550]: 최민성의 손가락이 봉투를 쥔 채 굳었다. 그의 시선은 봉투 안쪽, 다음 날짜와 종목이 적힌 새로운 문구에 머물렀다. 봉투는 다음 희망을 제시하고 있었지만, 동시에 알 수 없는 불안감을 던지고 있었다.
+        - generic [ref=e34]:
+          - generic [ref=e552]:
+            - button "① TTS 생성" [ref=e553] [cursor=pointer]
+            - button "② 켄번스 재생성" [ref=e554] [cursor=pointer]
+            - button "✅ MP4 교체" [ref=e555] [cursor=pointer]:
+              - generic [ref=e556]: ✅
+              - text: MP4 교체
+            - button "🖼️ 이미지 교체" [ref=e557] [cursor=pointer]:
+              - generic [ref=e558]: 🖼️
+              - text: 이미지 교체
+            - button "🤖 API 사용" [ref=e559] [cursor=pointer]:
+              - generic [ref=e560]: 🤖
+              - text: API 사용
+          - generic [ref=e561]:
+            - generic [ref=e562]:
+              - generic [ref=e563]: 1컷 프롬프트s07hc04
+              - button "복사" [ref=e564] [cursor=pointer]
+              - generic [ref=e565]: 👤 NARRATION
+            - textbox "배경 이미지 프롬프트 — 복사 후 외부 생성 → 업로드" [ref=e566]: "Bright office, phone notification, worn envelope, Choi Min-sung's office, atmosphere of mixed surprise and anxiety, mysterious mood, subtle tension., no people no characters, empty architectural scene, low-poly geometric interior or urban exterior, flat facet surfaces, seven-color background palette only near-black #180A20 dark purple #462374 deep mauve #7D2E67 medium purple #B752B8 orchid pink #D67DD1 lavender #AC8AE1 silver-white #DDDDDD, hard geometric shadow edges, cinematic Korean drama setting"
+            - paragraph [ref=e568]: "봉투 위로 얼어붙은 남자의 손가락 클로즈업. 남자의 시선은 봉투 안에 적힌 다음 날짜와 항목에 고정되어 있으며, 희망과 불안이 뒤섞인 표정을 짓고 있다. 낮 시간, 밝은 사무실, 전화 알림, 낡은 봉투, 최민성 사무실, 놀라움과 불안이 뒤섞인 분위기, 신비로운 분위기, 미묘한 긴장감. 50대 후반의 넓고 풍화된 얼굴의 한국인 남자, 넓고 강한 턱, 살짝 처진 짙은 갈색 눈, 회색 반점이 섞인 중간 두께의 짙은 눈썹, 짧은 짙은 회색 머리카락은 단정하게 빗겨져 있고, 중간 너비의 둥근 코, 176cm의 땅딸막하고 어깨가 넓은 노동자 체격, 풍화된 중간 웜톤 한국인 피부, 견고하고 절제된 조용한 존재감. 176cm의 땅딸막하고 어깨가 넓은 40대 후반의 한국인 남자, 건설 현장 감독의 신체적 존재감, 쉬고 있을 때 약간 무거운 자세, 견고하고 절제된 몸짓, 어두운 오픈 칼라 긴팔 작업 셔츠 또는 폴로, 두꺼운 어두운 작업 바지, 건설 현장 감독 복장. 로우 폴리 하드 폴리곤 메시 일러스트레이션, 모든 표면은 평평한 면이며 그라데이션이나 블렌딩 없음, 6가지 색상 팔레트만 사용: 짙은 검정 #111118, 짙은 남색 #1A2840, 밝은 파랑 #4A90D9, 흰색 #F5F5F5, 자연스러운 피부색 #D4BEA0, 진홍색 #C0392B (액센트로만 사용). 날카로운 기하학적 그림자 가장자리, 3등신 치비 스타일 캐릭터, 한국 드라마 영화적 구도, 텍스트 없음, 글자 없음, 라벨 없음, 표지 없음, 캡션 없음."
+    - button "💬" [ref=e35] [cursor=pointer]
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]: ✨
+          - generic [ref=e40]: Gemini 어시스턴트
+          - button "재분석" [ref=e41] [cursor=pointer]
+        - generic [ref=e569]: s07hc04 · 나레이션
+      - generic [ref=e44]:
+        - textbox "질문 입력… (Enter 전송 / Shift+Enter 줄바꿈)" [ref=e45]
+        - button "↑" [disabled] [ref=e46]
+  - alert [ref=e570]

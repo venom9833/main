@@ -33,9 +33,6 @@ globs: "**/*"
 - 우회 시도 전에 근본 원인부터 파악
 - 열어보지 않은 코드에 대해 추측 금지
 
-## Windows 특이사항 체크
+## Windows 특이사항
 
-- **줄 바꿈**: bat/cmd 파일은 반드시 CRLF (`\r\n`)
-- **인코딩**: Python은 `-X utf8`, bat은 `chcp 65001`
-- **경로**: bat 내부에서 `%~dp0` 사용 (자기 자신 경로 기준)
-- **cmd 출력 캡처**: `cmd /c`는 불안정 → `powershell -Command` 우선 사용
+windows.md 참조.

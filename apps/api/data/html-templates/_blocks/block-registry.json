@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "note": "guide/report의 blocks 모드 전환 시 사용. 현재는 skeleton 모드 사용 중.",
+  "blocks": {
+    "step":      { "html": "step.html",      "css": "step.css",      "status": "planned" },
+    "callout":   { "html": "callout.html",   "css": "callout.css",   "status": "planned" },
+    "flow_card": { "html": "flow_card.html", "css": "flow_card.css", "status": "planned" },
+    "checklist": { "html": "checklist.html", "css": "checklist.css", "status": "planned" },
+    "data_table":{ "html": "data_table.html","css": "data_table.css","status": "planned" }
+  }
+}

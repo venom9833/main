@@ -1,11 +1,22 @@
+# ============================================================
+# WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+# 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+# V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+# 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+# ============================================================
 """대본 생성 서비스 — RAG 컨텍스트 주입 + 챕터별 생성"""
 import asyncio
 import json
+import logging
 import re
 from datetime import datetime, timezone
 from pathlib import Path
 from core.database import get_supabase
+
+# 이 모듈 전용 로거 — 서비스 계층 디버그/경고 메시지 출력에 사용
+logger = logging.getLogger(__name__)
 from services.gemini_helper import call_gemini
+from services.openrouter_helper import call_judge_with_fallback, load_judge_prompt, get_revise_threshold
 from services.wiki_service import build_rag_context, auto_update_wiki
 
 _CHAR_DATA_DIR = Path(__file__).parent.parent / "data" / "characters"
@@ -29,6 +40,39 @@ def _load_char_situations(char_id: str) -> list[str]:
         return data.get("situations") or []
     except Exception:
         return []
+
+
+def _load_char_relationships(char_id: str) -> dict:
+    """캐릭터 JSON의 relationships 객체를 반환한다.
+
+    world_data에 charARelationships가 없는 기존 시리즈를 위한 fallback 함수.
+    파일이 없거나 오류가 발생하면 빈 딕셔너리를 반환한다.
+    """
+    if not char_id:
+        return {}
+    path = _CHAR_DATA_DIR / f"{char_id}.json"
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return data.get("relationships") or {}
+    except Exception:
+        return {}
+
+
+def _fmt_char_relationships(char_name: str, rels: dict) -> str:
+    """캐릭터 관계 딕셔너리를 프롬프트 블록 형태의 텍스트로 변환한다.
+
+    토큰 절약을 위해 각 항목은 최대 60자로 truncate하고 최대 6개만 포함한다.
+    LLM이 charB를 charA의 배우자로 잘못 묘사하지 않도록 관계를 명시한다.
+    """
+    if not rels:
+        return f"  ({char_name} 관계 정보 없음)"
+    lines = [f"  {char_name}의 현재 가족·관계:"]
+    for person, desc in list(rels.items())[:6]:  # 최대 6개 항목
+        short = desc[:60] if len(desc) > 60 else desc
+        lines.append(f"    - {person}: {short}")
+    return "\n".join(lines)
 
 
 def _load_system_instruction() -> str:
@@ -122,47 +166,111 @@ async def _detect_and_generate_guest_cast(
     await generate_guest_cast(series_id, guest_info)
 
 
+async def _generate_outline(
+    world: dict, chapter: int, role: str, prev_ending: str,
+) -> str:
+    """PRE-PASS — 챕터 청사진 조립.
+
+    🔒 LD-005: storyArc 있으면 Python 직접 조립 (Gemini 0회).
+    arc 없을 때만 Gemini PRE-PASS 호출 (~1200 tokens).
+    실패 시 빈 문자열 반환 (STEP1은 청사진 없이 계속 진행).
+    """
+    arc = (world.get("storyArc") or {}).get(f"ch{chapter:02d}", "")
+    role_guide = _ROLE_GUIDE.get(role, _ROLE_GUIDE["전개"])
+    ch01_cliff = world.get("ch01Cliffhanger", "") if chapter == 1 else ""
+    cliffhanger_note = f"★ 마지막 클리프행어 필수: {ch01_cliff}" if ch01_cliff else ""
+    prev_section = f"## 직전 챕터 마지막 장면\n{prev_ending.strip()}" if prev_ending else ""
+
+    # 🔒 LD-005: storyArc 있으면 Python 직접 조립 — Gemini 호출 없음
+    if arc:
+        parts = [f"## 이번 챕터 방향\n{arc}"]
+        if cliffhanger_note:
+            parts.append(cliffhanger_note)
+        if prev_section:
+            parts.append(prev_section)
+        parts.append(role_guide)
+        return "## 청사진 (비트별 가이드)\n" + "\n\n".join(parts)
+
+    # arc 없음 → Gemini PRE-PASS 호출
+    prompt = (
+        f"{cliffhanger_note}\n{prev_section}\n\n{role_guide}\n\n"
+        "위 정보를 바탕으로 이번 챕터의 7비트 청사진을 작성하라.\n"
+        "각 비트는 구체적인 행동·발견·사건으로만 기술한다 — 감정 서술 금지.\n"
+        "각 비트 2~3문장 이내. 마지막 비트(⑦)는 ★ 표시.\n\n"
+        "### 비트 ① — {이름}\n{구체적 장면 묘사}\n...\n### 비트 ⑦ — {이름} ★\n{구체적 장면 묘사}"
+    )
+    # ⚠️ GEMINI-PAID: PRE-PASS 청사진 — arc 없을 때만 호출. Phase 2에서 Cerebras로 전환 예정
+    result = await call_gemini(
+        prompt,
+        system_instruction=_SYSTEM_INSTRUCTION,
+        max_tokens=1200,
+        temperature=0.4,
+    )
+    if not result or not result.strip():
+        return ""
+    return "## 청사진 (비트별 가이드)\n" + result.strip()
+
+
 async def _lint_and_revise(narrative: str, world: dict, chapter: int) -> str:
-    """STEP 1.5 — 대본 자동 Lint (7원칙) → 위반 있으면 자동 Revise"""
+    """STEP 1.5 — 3-Judge 병렬 Lint (style/structure/causality) → 임계치 초과 시 Revise.
+
+    각 Judge는 call_judge_with_fallback()을 통해 Cerebras/NVIDIA/OpenRouter/Gemini-Free
+    폴백 체인으로 실행 — Gemini 유료 호출 없음.
+    Revise(재작성)만 Gemini 유료 사용.
+    """
+    series_title = world.get("seriesTitle") or world.get("title") or "시리즈"
+    narrative_prompt = (
+        f"다음은 「{series_title}」 {chapter}화 대본이다.\n\n"
+        f"## 대본\n{narrative}\n\n"
+        "위 대본에서 담당 원칙 위반 항목을 JSON으로 출력하라."
+    )
+
+    # ── 3-Judge 병렬 호출 (Cerebras/NVIDIA/OpenRouter/Gemini-Free) ─────────
+    style_sys = load_judge_prompt("style")
+    structure_sys = load_judge_prompt("structure")
+    causality_sys = load_judge_prompt("causality")
+
+    (style_key, style_tickets), (struct_key, struct_tickets), (caus_key, caus_tickets) = (
+        await asyncio.gather(
+            call_judge_with_fallback("style", narrative_prompt, style_sys),
+            call_judge_with_fallback("structure", narrative_prompt, structure_sys),
+            call_judge_with_fallback("causality", narrative_prompt, causality_sys),
+        )
+    )
+
+    all_tickets: list[dict] = style_tickets + struct_tickets + caus_tickets
+    active_count = sum(1 for k in (style_key, struct_key, caus_key) if k is not None)
+
+    if not all_tickets:
+        return narrative  # 위반 없음 또는 전체 Judge 실패 — 원본 유지
+
+    # ── Revise 임계치 판단 ────────────────────────────────────────────────
+    high_min, medium_min = get_revise_threshold(active_count)
+    high_count = sum(1 for t in all_tickets if t.get("severity") == "high")
+    medium_count = sum(1 for t in all_tickets if t.get("severity") == "medium")
+
+    needs_revise = (high_count >= high_min) or (medium_count >= medium_min)
+    if not needs_revise:
+        return narrative  # 경미한 위반 — 재작성 불필요
+
+    # ── Revise: ticket 목록 기반 재작성 (Gemini 유료 1회) ────────────────
     prompts_dir = Path(__file__).parent.parent / "prompts"
     reviser_instruction = (prompts_dir / "reviser.md").read_text(encoding="utf-8")
 
-    series_title = world.get("seriesTitle") or world.get("title") or "시리즈"
-
-    # ── Lint: 7원칙 위반만 집중 점검 ──────────────────────────────────────
-    lint_prompt = (
-        f"다음은 「{series_title}」 {chapter}화 대본이다.\n\n"
-        f"## 대본\n{narrative}\n\n"
-        "위 대본을 문체 헌장 7원칙으로 점검한다.\n"
-        "각 위반 항목을 아래 형식으로만 출력한다:\n\n"
-        "### 수정 필요\n"
-        "- [원칙N] 위반 문장 원문 → 수정 방향\n\n"
-        "위반이 없으면 반드시: ### 수정 필요\n없음\n\n"
-        "섹션 1(대본 퀄리티) 외 다른 섹션은 출력하지 않는다."
+    ticket_summary = "\n".join(
+        f"- [{t.get('axis','?')}:{t.get('principle_id','?')}] "
+        f"severity={t.get('severity','?')} | {t.get('excerpt','')[:60]} → {t.get('fix_direction','')[:80]}"
+        for t in all_tickets
     )
-
-    lint_report = await call_gemini(
-        lint_prompt,
-        system_instruction=_SYSTEM_INSTRUCTION,
-        max_tokens=1500,
-        temperature=0.1,
-    )
-
-    # "수정 필요" 항목 실제 존재 여부 확인
-    m = re.search(r"###\s*수정\s*필요\s*([\s\S]+)", lint_report or "")
-    issues_text = m.group(1).strip() if m else ""
-    if not issues_text or issues_text.startswith("없음"):
-        return narrative  # 위반 없음 — 원본 그대로 사용
-
-    # ── Revise: lint 결과 기반 재작성 ────────────────────────────────────
     revise_prompt = (
         f"## 원본 대본 ({chapter}화)\n{narrative}\n\n"
-        f"## Lint 보고서\n{lint_report}\n\n"
-        "Lint 보고서의 '수정 필요' 항목을 반영해 대본을 재작성하라.\n"
+        f"## Judge 위반 티켓 (총 {len(all_tickets)}개, active_judges={active_count})\n"
+        f"{ticket_summary}\n\n"
+        "위 티켓의 수정 방향을 반영해 대본을 재작성하라.\n"
         "서사 흐름·인물·사건 순서는 반드시 유지한다.\n"
         "출력: 순수 한국어 서사 본문만 (JSON·마크다운 코드블록 없이)."
     )
-
+    # ⚠️ GEMINI-PAID: Revise — Judge 임계치 초과 시에만 실행 (조건부 호출)
     revised = await call_gemini(
         revise_prompt,
         system_instruction=reviser_instruction,
@@ -187,7 +295,7 @@ async def run_script(series_id: str) -> dict:
     series_code: str | None = res.data.get("series_code")
     role = _CHAPTER_ROLES[chapter - 1] if chapter <= len(_CHAPTER_ROLES) else "전개"
     _settings: dict = res.data.get("settings") or {}
-    _art_style: str = _settings.get("artStyle", "masako")
+    _art_style: str = _settings.get("artStyle", "polystyle")
     _guest_cast: dict = world.get("guest_cast") or {}
 
     # 직전 챕터 엔딩 로드
@@ -228,8 +336,15 @@ async def run_script(series_id: str) -> dict:
     except Exception:
         emoline_edges = []
 
+    # ── PRE-PASS: 7비트 청사진 생성 (소형 Gemini 호출 → STEP1 방향 고정) ──
+    outline_block = ""
+    try:
+        outline_block = await _generate_outline(world, chapter, role, prev_ending)
+    except Exception:
+        pass  # PRE-PASS 실패해도 STEP1은 계속 진행
+
     # ── STEP 1: 대본 생성 (순수 한국어 서사) ──────────────────────────────
-    narrative_prompt = _build_narrative_prompt(world, chapter, role, rag_ctx, prev_ending, prev_metas, emoline_edges)
+    narrative_prompt = _build_narrative_prompt(world, chapter, role, rag_ctx, prev_ending, prev_metas, emoline_edges, outline_block)
     narrative = await call_gemini(
         narrative_prompt,
         system_instruction=_SYSTEM_INSTRUCTION,
@@ -412,6 +527,7 @@ def _build_narrative_prompt(
     prev_ending: str,
     prev_metas: list[dict],
     emoline_edges: list | None = None,
+    outline_block: str = "",
 ) -> str:
     """STEP 1 — 순수 대본 생성 프롬프트. JSON 구조 없음. 서사에만 집중."""
     char_a = world.get("charAName", "주인공A")
@@ -450,8 +566,7 @@ def _build_narrative_prompt(
             f"  → 대본에서 {name}은 이 비밀을 숨긴 채 행동. 상대방이 눈치채는 복선만 허용."
         ) if secret else ""
 
-        return "\n".join(filter(None, [
-            f"## {name}",
+        inner = "\n".join(filter(None, [
             f"- 직업: {world.get(f'{prefix}Occupation', '')}",
             f"- 겉모습: {world.get(f'{prefix}PublicFace', '')}",
             f"- 속모습: {world.get(f'{prefix}Shadow', '')}",
@@ -461,6 +576,7 @@ def _build_narrative_prompt(
             f"- Need: {world.get(f'{prefix}Need', '')}",
             f"- 말투: {world.get(f'{prefix}SpeakingStyle', '')}",
         ]))
+        return f'<character name="{name}">\n{inner}\n</character>'
 
     # 이전 챕터 복선 누적
     prev_meta_section = ""
@@ -511,10 +627,45 @@ def _build_narrative_prompt(
     if chapter > 1:
         arc = world.get("storyArc") or {}
         ch_key = f"ch{chapter:02d}"
-        if ch_key in arc:
+        # outline_block이 있으면 arc가 이미 포함됨 (LD-005 Python 조립) → 중복 주입 방지
+        if ch_key in arc and not outline_block:
             arc_hint = f"\n## 이번 챕터 방향 (세계관 가이드라인)\n{arc[ch_key]}\n"
 
+    _outline_section = f"\n{outline_block}\n" if outline_block else ""
+
+    # ── Gate 3 (LD-017): 두 주인공의 관계 상태 블록 조립 ───────────────────────
+    # world_data에 필드가 없는 기존 시리즈는 캐릭터 JSON에서 직접 fallback 로드
+    rel_start = world.get("relationshipAtCh01Start") or "strangers"
+    rel_desc = world.get("relationshipAtCh01Description") or "두 사람은 이 시점에 서로를 모른다"
+
+    char_a_id = world.get("charA", "")
+    char_b_id = world.get("charB", "")
+
+    # world_data에 관계 딕셔너리가 있으면 그것을 우선 사용, 없으면 캐릭터 JSON fallback
+    char_a_rels = world.get("charARelationships") or _load_char_relationships(char_a_id)
+    char_b_rels = world.get("charBRelationships") or _load_char_relationships(char_b_id)
+
+    # strangers 조건에서의 경고 메시지 — LLM이 관계를 혼동하지 않도록 명시
+    strangers_warning = ""
+    if rel_start == "strangers":
+        strangers_warning = f"""
+⚠️ 관계 상태가 "strangers"이므로 아래 규칙을 절대 위반하지 않는다:
+  - {char_a}와 {char_b}는 이 챕터에서 같은 집에 거주하거나 부부·동거인·연인으로 등장하면 절대 안 된다.
+  - {char_a}의 가족(배우자·자녀 등)이 위에 명시된 경우, {char_b}가 그 역할을 대신하면 절대 안 된다.
+  - {char_b}는 이 챕터에서 직접 등장하지 않거나, 환영·편지·목소리 등 간접 형태로만 등장할 수 있다."""
+
+    relationship_block = f"""<relationship_constraint chapter="{chapter}" status="{rel_start}" locked="ABSOLUTE">
+## ★ 두 주인공의 현재 관계 (ch{chapter} 시작 시점 — 절대 변경 금지)
+- 관계 상태: {rel_start}
+- 설명: {rel_desc}
+{_fmt_char_relationships(char_a, char_a_rels)}
+{_fmt_char_relationships(char_b, char_b_rels)}
+{strangers_warning}
+</relationship_constraint>"""
+
     return f"""=== CONTEXT ===
+
+{relationship_block}
 
 ## 세계관
 - 주제: {world.get('topic', '')}
@@ -537,6 +688,7 @@ def _build_narrative_prompt(
 {prev_meta_section}
 {ch01_block}
 {arc_hint}
+{_outline_section}
 === TASK ===
 
 **챕터 {chapter} ({role})**의 대본을 쓴다. 이 챕터만 쓴다.
@@ -553,17 +705,21 @@ def _build_narrative_prompt(
 [비트6] 반전 또는 발견
 [비트7] 닫는 훅{"(다음화 예고 없이, 장면 여운으로)" if chapter == 1 else ""}
 
+<genre_constraint genre="{world.get('genre', '')}">
 ## 장르 일관성 (절대 준수)
 이 작품의 장르: {world.get('genre', '')}
 → 모든 씬·대사·사건은 이 장르의 톤 안에서만 처리한다.
 → 장르 외부의 클리셰 요소(예: 회귀·스릴러 작품에 통속 멜로 패턴 삽입)를 혼입하지 않는다.
 → 이 챕터에서 전면에 드러낼 갈등은 **1개**. 나머지는 배경 복선으로만 처리한다.
+</genre_constraint>
 
+<prohibition>
 ## 금지 클리셰 (다음 패턴은 절대 쓰지 않는다)
 - 주인공이 상대 핸드폰·메시지·통화를 우연히 목격 → 직접 행동·선택·충돌로 대체
 - "난 괜찮아", "괜찮은 척하자" 류의 자기 위로 독백 → 구체적 신체 행동·반응으로 대체
 - 조연이 주인공에게 "제발 ~해주세요", "~도 좀 알아주세요" 류의 직접 호소 대사 → 간접 암시·행동으로 대체
 - 짧은 분량 안에 3개 이상 갈등을 동시에 제시 → 주갈등 1개를 깊이 파고들 것
+</prohibition>
 
 ## 분량
 - 전체 2,500~4,000자
@@ -636,12 +792,26 @@ def _build_speaker_voice_map(world: dict) -> dict[str, str]:
             return st
         return resolve_voice(voice_id) if voice_id else _NARRATOR_VOICE
 
-    # 주연 (charA~D) — world에 char_id 없으므로 이름으로만 처리
+    # fullCastDetails를 id/voice 조회용 인덱스로 미리 빌드
+    _full_cast_index: dict[str, dict] = {}
+    for _c in (world.get("fullCastDetails") or []):
+        _n = (_c.get("name") or "").strip()
+        if _n:
+            _full_cast_index[_n] = _c
+
+    # 주연 (charA~D)
+    # charXId가 비어있을 경우 fullCastDetails에서 이름 매칭으로 char_id 보완
+    # → supertone_voice_id 로드 가능하게 함
     for prefix in ("charA", "charB", "charC", "charD"):
         name     = world.get(f"{prefix}Name", "").strip()
         char_id  = world.get(f"{prefix}Id", "").strip()
         voice_id = world.get(f"{prefix}Voice", "").strip()
         if name:
+            if not char_id:
+                _fc = _full_cast_index.get(name, {})
+                char_id  = (_fc.get("id") or "").strip()
+                if not voice_id:
+                    voice_id = (_fc.get("voice_id") or "").strip()
             mapping[name] = _resolve(char_id, voice_id)
 
     # 조연 fullCastDetails
@@ -688,15 +858,14 @@ def _compute_production_type(cut_type: str, char_names: list) -> tuple[str, str]
     | type       | 캐릭터 수 | production  | animation_type |
     |------------|---------|-------------|----------------|
     | dialogue   | —       | composite   | lipsync        |
-    | narration  | 1명     | split       | parallax       |
+    | narration  | 1명     | composite   | ken_burns      | ← parallax 보류 (LD-004)
     | narration  | 2명+    | composite   | ken_burns      |
     | narration  | 0명     | bg_only     | ken_burns      |
     """
+    # 🔒 LD-004: parallax 보류 — narration 전 타입 ken_burns 적용
     if cut_type == "dialogue":
         return "composite", "lipsync"
-    elif len(char_names) == 1:
-        return "split", "parallax"
-    elif len(char_names) >= 2:
+    elif len(char_names) >= 1:
         return "composite", "ken_burns"
     else:
         return "bg_only", "ken_burns"
@@ -744,7 +913,7 @@ def _parse_scenes_json(raw: str, chapter: int, world: dict | None = None) -> lis
             cuts = [{
                 "cut_index": 1,
                 "text": scene.get("text", ""),
-                "image_focus": "",
+                "image_hint": "",
                 "image_prompt": scene.get("image_prompt", ""),
                 "duration_seconds": scene.get("duration_seconds", 4.5),
                 "is_hook": scene.get("is_hook", False),  # 구형: 씬 레벨 is_hook 수용
@@ -752,22 +921,8 @@ def _parse_scenes_json(raw: str, chapter: int, world: dict | None = None) -> lis
 
         for cut_i, cut in enumerate(cuts):
             cut_idx = cut.get("cut_index", cut_i + 1)
-            # ★ 씬1(scene_index=1) c01 슬롯 의도적 공백 규칙 (53번 문서 참조)
-            #
-            # 배경:
-            #   HOOK 복사본은 scene_index=0, cut_index=1 → scene_code: ch01s00hc01
-            #   영상 재생 순서: [s00hc01] → [s01nc??] → ... → [HOOK 원본]
-            #
-            # 문제:
-            #   씬1 첫 컷이 nc01이면 "nc01은 유효한가?" 혼동이 반복 발생
-            #   (실제 2026-04 필터 오용 사례: nc01을 무효 코드로 잘못 제거)
-            #
-            # 해결:
-            #   씬1(scene_index=1)의 모든 컷에 +1 오프셋 → c02부터 시작
-            #   → s01nc01은 시스템에 절대 존재하지 않음 (존재하면 버그 신호)
-            #   → 씬2 이후(scene_index>=2)는 nc01부터 정상 시작
-            if scene_idx == 1:
-                cut_idx += 1
+            # LD-015 (2026-04-18): nc01 gap 제거 — 씬1도 nc01부터 정상 시작
+            # HOOK 복사본은 scenes[0](scene_index=0)으로 별도 존재하므로 nc01 슬롯 충돌 없음
             is_hook = bool(cut.get("is_hook", False))
             cut_type = cut.get("type", "narration")
             if cut_type not in ("narration", "dialogue", "mixed"):
@@ -796,7 +951,7 @@ def _parse_scenes_json(raw: str, chapter: int, world: dict | None = None) -> lis
                         "scene_index":      scene_idx,
                         "cut_index":        sub_cut_base + seg_i + 1,
                         "text":             seg["text"][:2000],
-                        "image_hint":       cut.get("image_focus", "") if seg_i == 0 else "",
+                        "image_hint":       cut.get("image_hint", "") if seg_i == 0 else "",
                         "image_prompt":     cut.get("image_prompt", "") if seg_i == 0 else "",
                         "duration_seconds": float(cut.get("duration_seconds", 4.5)) / max(len(segs), 1),
                         "is_hook":          is_hook and seg_i == 0,
@@ -829,7 +984,7 @@ def _parse_scenes_json(raw: str, chapter: int, world: dict | None = None) -> lis
                 "scene_index":      scene_idx,
                 "cut_index":        cut_idx,
                 "text":             (cut.get("text", ""))[:2000],
-                "image_hint":       cut.get("image_focus", ""),
+                "image_hint":       cut.get("image_hint", ""),
                 "image_prompt":     cut.get("image_prompt", ""),
                 "duration_seconds": float(cut.get("duration_seconds", 4.5)),
                 "is_hook":          is_hook,
@@ -935,7 +1090,7 @@ async def regenerate_chapter(series_id: str, chapter: int) -> dict:
     )
     world: dict = res.data.get("world_data") or {}
     _settings: dict = res.data.get("settings") or {}
-    _art_style: str = _settings.get("artStyle", "masako")
+    _art_style: str = _settings.get("artStyle", "polystyle")
     _guest_cast: dict = world.get("guest_cast") or {}
 
     # chapter_role 동적 결정
@@ -1001,7 +1156,7 @@ async def regenerate_chapter(series_id: str, chapter: int) -> dict:
         .eq("chapter", chapter)
         .execute()
     )
-    scenes = _parse_scenes_json(structure_raw, chapter)
+    scenes = _parse_scenes_json(structure_raw, chapter, world)
     scenes = await _absorb_dialogue_cuts(scenes, chapter)  # Pass 2: 대사 흡수
     await _save_scenes(db, series_id, chapter, scenes, series_code,
                        art_style=_art_style, guest_cast=_guest_cast)
@@ -1052,7 +1207,7 @@ async def revise_chapter_content(series_id: str, chapter: int) -> dict:
     world: dict = series_res.data.get("world_data") or {}
     series_code: str | None = series_res.data.get("series_code")
     _settings: dict = series_res.data.get("settings") or {}
-    _art_style: str = _settings.get("artStyle", "masako")
+    _art_style: str = _settings.get("artStyle", "polystyle")
     _guest_cast: dict = world.get("guest_cast") or {}
 
     revise_prompt = (
@@ -1144,7 +1299,7 @@ async def _save_scenes(
     scenes: list[dict],
     series_code: str | None,
     *,
-    art_style: str = "masako",
+    art_style: str = "polystyle",
     guest_cast: dict | None = None,
 ):
     """컷 리스트 → v3_scenes upsert (scene_code 포함)
@@ -1170,17 +1325,34 @@ async def _save_scenes(
             code_scene_idx, code_cut_idx, scene["is_hook"]
         )
         # prompt_composer 버전으로 image_prompt 덮어쓰기
-        # 실패 시 Gemini 생성본 유지 (파이프라인 중단 방지)
+        # 실패 시 빈 문자열로 초기화 — Gemini 생성 photorealistic 프롬프트 차단 (LD-003)
         try:
             scene["image_prompt"] = build_cut_image_prompt(
                 scene, art_style, guest_cast=guest_cast or {}
             )
         except Exception:
-            pass
+            scene["image_prompt"] = ""  # LD-003: 폴백 시 빈 문자열 — Gemini 생성 프롬프트 차단
         await asyncio.to_thread(
             lambda s=scene: db.table("v3_scenes").upsert(
                 s, on_conflict="series_id,chapter,scene_index,cut_index"
             ).execute()
+        )
+
+    # DB upsert 완료 후 ch{N}.json 동기화 — DB가 소스 오브 트루스
+    if series_code:
+        rows = await asyncio.to_thread(
+            lambda: db.table("v3_scenes")
+            .select("*")
+            .eq("series_id", series_id)
+            .eq("chapter", chapter)
+            .order("scene_index")
+            .order("cut_index")
+            .execute()
+        )
+        chapter_dir = Path(__file__).parent.parent.parent.parent / "output" / series_code / f"ch{chapter:02d}"
+        chapter_dir.mkdir(parents=True, exist_ok=True)
+        (chapter_dir / f"ch{chapter:02d}.json").write_text(
+            json.dumps(rows.data, ensure_ascii=False, indent=2), encoding="utf-8"
         )
 
 
@@ -1250,7 +1422,7 @@ def _build_structure_prompt(narrative: str, world: dict, chapter: int) -> str:
 - `scene_hint`: 이 씬을 관통하는 핵심 시각 키워드 (조명·질감·날씨·오브젝트, 15자 이내)
 - 예: "낡은 카페, 빗줄기 창문, 차가운 블루 톤"
 - 예: "심야 사무실 형광등, 파란 모니터 빛"
-- **이 씬에 속한 모든 컷의 image_prompt는 반드시 scene_hint로 시작해야 한다**
+- **이 씬에 속한 모든 컷의 image_hint는 한국어로 작성한다**
 
 ### 2단계 — 컷 분할 (씬 확정 후, 씬 내부를 세분화)
 
@@ -1271,11 +1443,11 @@ def _build_structure_prompt(narrative: str, world: dict, chapter: int) -> str:
 - `text`: 이 컷에서 TTS로 읽힐 텍스트 — **따옴표 없이** 원문 내용만 (TTS가 따옴표를 읽음)
   - narration 컷: 나레이션 문장 그대로
   - dialogue 컷: 대사 내용만 (따옴표 제외) — 예: `아빠, 괜찮아?`
-- `image_focus`: what the camera shows in this cut **(English only, NO Korean character names)**
-  캐릭터는 이름 대신 외형·역할로 묘사: "the man", "the woman", "the middle-aged man in a suit", "the female lead" 등
-  예: "close-up of trembling coffee cup on desk", "medium shot of the man's expression hardening"
-- `image_prompt`: **씬의 scene_hint + image_focus**를 영문으로 통합한 키프레임 생성 프롬프트
-  형식: "[scene_hint 영문 번역], [image_focus 영문 번역], cinematic, 16:9, no text, photorealistic"
+- `image_hint`: 이 컷에서 카메라가 포착하는 **단일 순간·단일 프레임** 시각 묘사 **(반드시 한국어)**
+  캐릭터는 이름 대신 외형·역할로 묘사: "남자", "여자", "정장 차림의 중년 남성", "여주인공" 등
+  예: "떨리는 커피잔 클로즈업, 책상 위", "남자의 표정이 굳어지는 미디엄샷"
+  **⚠️ 절대 금지**: 시퀀스 언어 사용 불가 — "then", "montage", "cut to", "then a shot of", "then a cut to", "flashback", "sequence" 등 시간 흐름·장면 전환을 암시하는 표현 금지.
+  image_hint는 정지된 한 장의 사진처럼 묘사한다. 복수 장면을 나열하지 말 것.
 - `duration_seconds`: text 글자수 ÷ 100 (소수점 1자리)
 
 ---
@@ -1305,8 +1477,7 @@ def _build_structure_prompt(narrative: str, world: dict, chapter: int) -> str:
           "type": "narration",
           "speaker": null,
           "text": "나레이션 문장 (따옴표 없이, TTS가 읽을 내용만)",
-          "image_focus": "close-up of trembling coffee cup on desk",
-          "image_prompt": "scene_hint(영문) + image_focus(영문), cinematic, 16:9, no text, photorealistic",
+          "image_hint": "책상 위 커피잔 클로즈업, 손이 떨리는 장면",
           "duration_seconds": 4.5
         }},
         {{
@@ -1317,8 +1488,7 @@ def _build_structure_prompt(narrative: str, world: dict, chapter: int) -> str:
           "speaker_gender": "male",
           "speaker_age_group": "adult",
           "text": "대사 내용만 (따옴표 제외, 예: 아빠 괜찮아?)",
-          "image_focus": "medium shot of speaker's hardening expression",
-          "image_prompt": "scene_hint(영문) + image_focus(영문), cinematic, 16:9, no text, photorealistic",
+          "image_hint": "화자의 표정이 굳어지는 미디엄샷",
           "duration_seconds": 2.5
         }}
       ]
@@ -1330,7 +1500,7 @@ def _build_structure_prompt(narrative: str, world: dict, chapter: int) -> str:
 1. **절차**: 씬 경계 먼저 확정 → 씬 내부 컷 분할 (순서 역전 금지)
 2. **텍스트 원문 분배**: 대본 내용을 그대로 컷 text에 할당 — 새로 창작하지 말 것
 3. **씬 구분**: 공간·시간·등장인물·문맥 큰 흐름 변경 기준으로 분절
-4. **scene_hint**: 15자 이내 핵심 시각 키워드 — 해당 씬 모든 컷의 image_prompt 첫 부분에 반드시 포함
+4. **scene_hint**: 15자 이내 핵심 시각 키워드 — 해당 씬 분위기를 대표하는 한국어 시각 키워드
 5. **is_hook**: 전체 대본에서 감정 충격이 가장 강렬한 컷 1개에만 true — 첫 씬 첫 컷 금지
 6. **수량**: 씬 6~8개, 씬당 컷 3~7개, 총 컷 20~35개, cut_index는 씬마다 1부터 리셋
 7. **대사 컷 필수 필드**: speaker(이름), speaker_gender(male|female), speaker_age_group(child|teen|young|adult|elder)
@@ -1343,6 +1513,38 @@ def _build_structure_prompt(narrative: str, world: dict, chapter: int) -> str:
 """
 
 
+def _merge_consecutive_dialogue(cuts: list[dict]) -> list[dict]:
+    """Pass 1.5 — 동일 화자 연속 dialogue 컷을 1개로 병합 (HOOK 컷 제외)."""
+    result = []
+    i = 0
+    while i < len(cuts):
+        cut = cuts[i]
+        if cut.get("type") != "dialogue" or cut.get("is_hook"):
+            result.append(cut)
+            i += 1
+            continue
+        speaker = cut.get("speaker")
+        group = [cut]
+        j = i + 1
+        while (
+            j < len(cuts)
+            and cuts[j].get("type") == "dialogue"
+            and cuts[j].get("speaker") == speaker
+            and not cuts[j].get("is_hook")
+        ):
+            group.append(cuts[j])
+            j += 1
+        if len(group) > 1:
+            merged = dict(cut)
+            merged["text"] = " ".join(c.get("text", "") for c in group)
+            merged["image_hint"] = group[-1].get("image_hint") or cut.get("image_hint")
+            result.append(merged)
+        else:
+            result.append(cut)
+        i = j
+    return result
+
+
 async def _absorb_dialogue_cuts(cuts: list[dict], chapter: int) -> list[dict]:
     """
     Pass 2 — dialogue 컷이 상한을 초과할 경우, 핵심 대사 외 나머지를
@@ -1351,6 +1553,9 @@ async def _absorb_dialogue_cuts(cuts: list[dict], chapter: int) -> list[dict]:
     보존 우선순위: is_hook 컷 > 앞쪽 순서
     """
     from services.tts_service import _NARRATOR_VOICE
+
+    # Pass 1.5: 동일 화자 연속 컷 병합 (cap 계산 전에 수행)
+    cuts = _merge_consecutive_dialogue(cuts)
 
     cap = 3 if chapter == 1 else 5
     d_indices = [i for i, c in enumerate(cuts) if c.get("type") == "dialogue"]
@@ -1381,32 +1586,72 @@ async def _absorb_dialogue_cuts(cuts: list[dict], chapter: int) -> list[dict]:
         '[{"n": 1, "text": "변환된 나레이션"}, ...]'
     )
 
+    # ── 1차: LLM 간접 인용 변환 시도 (Cerebras → ... → Gemini Free) ──────────
+    # extract_json은 dict 전용이므로 배열 응답은 직접 파싱한다.
+    text_map: dict[int, str] = {}
+    llm_ok = False
     try:
-        from services.gemini_helper import call_gemini, extract_json
-        raw = await call_gemini(batch_prompt, max_tokens=2000, temperature=0.3)
-        converted = extract_json(raw)
-        if not isinstance(converted, list):
-            return cuts
+        import re as _re, json as _json
+        from services.gemini_helper import call_free_llm
+        raw = await call_free_llm(batch_prompt, max_tokens=2000, temperature=0.3)
+        # 코드펜스 제거 (닫힘 없는 잘린 응답 포함)
+        _txt = _re.sub(r'```(?:json|JSON)?\s*', '', raw)
+        _txt = _re.sub(r'```', '', _txt).strip()
+        # 배열 추출
+        _arr = _re.search(r'\[[\s\S]*\]', _txt)
+        if _arr:
+            converted = _json.loads(_arr.group(0))
+            if isinstance(converted, list):
+                text_map = {
+                    item["n"]: item["text"]
+                    for item in converted
+                    if isinstance(item, dict) and "n" in item and "text" in item
+                }
+                llm_ok = any(v for v in text_map.values())  # 빈 문자열 응답 = 실패로 처리
+    except Exception as e:
+        logger.warning("[_absorb_dialogue_cuts] LLM 변환 실패 → Python 폴백 진입: %s", e)
 
-        text_map = {item["n"]: item["text"] for item in converted if "n" in item and "text" in item}
-
-        result = [dict(c) for c in cuts]
+    # ── 2차: LLM 실패/부분 실패 시 Python 결정론적 narration 폴백 ────────────
+    # 🔒 LD-002: dialogue cap(ch01=3, ch02+=5) 준수는 LLM 가용성과 독립이어야 한다.
+    if not llm_ok or len(text_map) < len(absorb_indices):
         for n, idx in enumerate(absorb_indices, 1):
             if n in text_map and text_map[n]:
-                _char_names = (result[idx].get("scene_meta") or {}).get("characters") or []
-                _prod, _anim = _compute_production_type("narration", _char_names)
-                result[idx] = {
-                    **result[idx],
-                    "type":         "narration",
-                    "text":         text_map[n],
-                    "speaker":      None,
-                    "tts_voice":    _NARRATOR_VOICE,
-                    "production":   _prod,
-                    "animation_type": _anim,
-                }
+                continue  # LLM이 변환한 항목은 유지
+            # 화자 이름과 원본 대사를 이용해 간단한 간접 인용문 생성
+            speaker = (cuts[idx].get("speaker") or "그").strip() or "그"
+            original = (cuts[idx].get("text") or "").strip()
+            original = original.strip('"\'"“”‘’')
+            if original.endswith(("다.", "요.", "?", "!", ".")):
+                quoted = original
+            elif original:
+                quoted = original + "."
+            else:
+                quoted = "무언가."
+            base = quoted[:-1] if quoted.endswith(".") else quoted
+            text_map[n] = f"{speaker}는 {base}라고 말했다."
+
+    # ── 3차: cuts 변환 적용 ────────────────────────────────────────────────
+    try:
+        result = [dict(c) for c in cuts]
+        for n, idx in enumerate(absorb_indices, 1):
+            converted_text = text_map.get(n)
+            if not converted_text:
+                continue
+            _char_names = (result[idx].get("scene_meta") or {}).get("characters") or []
+            _prod, _anim = _compute_production_type("narration", _char_names)
+            result[idx] = {
+                **result[idx],
+                "type":           "narration",
+                "text":           converted_text,
+                "speaker":        None,
+                "tts_voice":      _NARRATOR_VOICE,
+                "production":     _prod,
+                "animation_type": _anim,
+            }
         return result
-    except Exception:
-        return cuts  # 실패 시 원본 유지
+    except Exception as e:
+        logger.error("[_absorb_dialogue_cuts] 폴백 적용 실패 — 원본 반환 (LD-002 위반 위험): %s", e)
+        return cuts
 
 
 async def _extract_chapter_meta(content: str, chapter: int) -> dict:
@@ -1422,6 +1667,7 @@ async def _extract_chapter_meta(content: str, chapter: int) -> dict:
   "planted_foreshadows": ["심은 복선1", "심은 복선2"],
   "open_threads": ["미해결 실마리1", "미해결 실마리2"]
 }}"""
-    raw = await call_gemini(prompt, max_tokens=512, temperature=0.3)
-    from services.gemini_helper import extract_json
+    # 🟢 FREE-LLM: 복선 추출 — 저비용 무료 API 사용
+    from services.gemini_helper import call_free_llm, extract_json
+    raw = await call_free_llm(prompt, max_tokens=512, temperature=0.3)
     return extract_json(raw)

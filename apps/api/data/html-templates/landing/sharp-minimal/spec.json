@@ -1,0 +1,27 @@
+{
+  "id": "landing/sharp-minimal",
+  "mode": "ai_freeform",
+  "label": "샤프 미니멀 랜딩",
+  "description": "Swiss Style 기반 날카로운 미니멀 랜딩페이지. 여백·타이포그래피·그리드만으로 완성되는 건축적 디자인. 이미지 없이 CSS만으로 고급스러운 비주얼 완성.",
+  "palette": {
+    "base": "#E9E9E9",
+    "white": "#FFFFFF",
+    "black": "#000000",
+    "dark_gray": "#333333",
+    "dark_bg": "#111111"
+  },
+  "typography": {
+    "font_primary": "Inter, Helvetica Neue, Arial, sans-serif",
+    "base_size": "1rem",
+    "line_height": 1.6
+  },
+  "layout": {
+    "type": "single-column-scroll",
+    "maxWidth": "1200px"
+  },
+  "tone": {
+    "voice": "전문적, 건축적, 예리한 미니멀리즘",
+    "length": "각 섹션 간결하게"
+  },
+  "design_spec_raw": "# DESIGN SPEC: Sharp-Edged Minimalism Landing Page\n# Style: Refined Minimal — Swiss Style / Bauhaus inspired\n# NO external images required — CSS only\n\n## Global Design Settings\n\nTone: Professional, architectural, sharp-edged minimalism\n\nColor Palette:\n  Base background: #E9E9E9 (light gray) or #FFFFFF (white)\n  Text: #000000 (jet black) or #333333 (dark gray)\n  Accent: #000000 (black) — used for bold lines and emphasized text\n  Dark sections: #111111 background with #FFFFFF text — for high-impact areas\n  Divider lines: 1px solid #000 or 2px solid #000\n\nTypography:\n  Headings: Inter, Helvetica Neue, Arial — ultra-bold, decoratively positioned\n  Body: Inter or system-ui — small size, generous letter-spacing (0.05em), line-height 1.8\n  Numbers: Large Western type for emphasis (e.g., 01, 02, 03 or statistical figures)\n  Section labels: uppercase, letter-spacing 0.2em, small font-size (0.75rem)\n\nLayout Rules:\n  - Use strict grid system (CSS Grid)\n  - Place section number + title label top-left of every section (e.g., '01. INTRODUCTION')\n  - Intentionally leave large empty areas (negative space) — luxury feeling\n  - NO rounded corners — all elements use sharp 0px border-radius\n  - Thin black divider lines between sections (1px)\n  - Mobile responsive (stack to single column on mobile)\n\n## Page Structure (6 Sections)\n\n### Section 1: HERO — Title Typography\n- Massive headline text (font-size: clamp(4rem, 10vw, 10rem)) positioned asymmetrically (NOT centered)\n- Small section label top-left: '01. CONCEPT'\n- Subtitle ultra-small (0.9rem) positioned as contrast\n- One-word or short-phrase main title — visual anchor\n- Thin horizontal rule (1px black) below\n- Background: white #FFFFFF\n\n### Section 2: INTRODUCTION — Text + Data Emphasis\n- Asymmetrical 2-column layout (CSS Grid: 1fr 2fr)\n- Left: oversized bold number or key stat (font-size: 6rem, color: #000)\n- Right: paragraph text with generous line-height\n- Section label: '02. ABOUT'\n- Thin vertical divider line between columns\n\n### Section 3: FEATURES — 3-Step Columns\n- 3-column grid layout\n- Each column: large number pillar (01, 02, 03) at top — font-size 3rem, bold\n- Below number: bold title (1.1rem)\n- Below title: description text (0.9rem, color: #555)\n- NO icons — typography contrast only\n- Thick top border on each column (3px solid #000)\n- Section label: '03. FEATURES'\n\n### Section 4: STATEMENT — Dark Mode Full Width\n- Full-width dark background (#111111)\n- White text\n- Single large statement sentence (font-size: clamp(1.8rem, 4vw, 3rem))\n- Positioned off-center or asymmetrically\n- No other elements — pure negative space\n- Section label: '04. STATEMENT' in small white text top-left\n\n### Section 5: DETAILS — Two Column Split\n- 50:50 grid split with thick center divider (2px solid #000)\n- Left column: 'PROBLEM' — dark gray background (#333), white text\n- Right column: 'SOLUTION' — white background, black text\n- Each side: bold heading + 3-4 bullet points\n- Section label: '05. OVERVIEW'\n\n### Section 6: CONTACT — Centered Dark Mode CTA\n- Dark background (#111111) full-width\n- White text, centered\n- Large email or contact link\n- Minimal CTA button: white border, transparent background, white text\n- Hover: white background, black text (CSS transition)\n- Section label: '06. CONTACT' in small white text top-left\n\n## CSS Rules\n- Google Fonts: @import Inter from Google Fonts (ALLOWED)\n- All transitions: 0.2s ease\n- Hover on links: opacity 0.7\n- No box-shadows (clean, flat aesthetic)\n- Padding: generous (section padding: 8rem 2rem on desktop, 4rem 1.5rem on mobile)\n- Max-width container: 1200px, margin: 0 auto\n- Each section gets a data-section attribute for accessibility\n\n## Edit Comments (REQUIRED in output HTML)\nEvery editable text area MUST have a comment: <!-- ✏️ [field name] -->\nExample:\n<!-- ✏️ 메인 타이틀 -->\n<h1 class=\"hero-title\">여기에 핵심 메시지</h1>"
+}

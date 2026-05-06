@@ -1,3 +1,9 @@
+# ============================================================
+# WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+# 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+# V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+# 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+# ============================================================
 """캐릭터 누끼 이미지 생성 서비스
 
 흐름:
@@ -45,7 +51,7 @@ async def generate_char_keyframe(series_id: str, scene_code: str) -> dict:
         .execute()
     )
     ser_data = ser_res.data or {}
-    art_style = (ser_data.get("settings") or {}).get("artStyle", "masako")
+    art_style = (ser_data.get("settings") or {}).get("artStyle", "polystyle")
     guest_cast = (ser_data.get("world_data") or {}).get("guest_cast") or {}
 
     # ── char_prompt 조합 ──────────────────────────────────────────────────

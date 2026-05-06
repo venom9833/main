@@ -1,3 +1,9 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -23,9 +29,10 @@ interface Character {
   supertone_style?: string;
   photo_real_url?: string;
   photo_masako_url?: string;
+  photo_polystyle_url?: string;
 }
 
-type Style = 'real' | 'masako';
+type Style = 'poly' | 'masako';
 
 /* ── 가족 그룹 메타 ── */
 const FAMILY_META: Record<string, { label: string; color: string; glow: string }> = {
@@ -45,13 +52,13 @@ const VILLAIN_LABEL: Record<number, string> = {
 
 /* ── CharCard ── */
 function CharCard({ char }: { char: Character }) {
-  const [style, setStyle] = useState<Style>('real');
+  const [style, setStyle] = useState<Style>('poly');
   const [stVoiceId, setStVoiceId] = useState(char.supertone_voice_id ?? '');
   const [stStyle, setStStyle] = useState(char.supertone_style ?? '');
   const [stSaving, setStSaving] = useState(false);
   const [stSaved, setStSaved] = useState(false);
   const meta  = FAMILY_META[char.family_group] ?? FAMILY_META.supporting;
-  const imgSrc = style === 'real' ? char.photo_real_url : char.photo_masako_url;
+  const imgSrc = style === 'poly' ? char.photo_polystyle_url : char.photo_masako_url;
 
   async function handleSupertoneVoiceSave() {
     if (!stVoiceId.trim()) return;
@@ -105,9 +112,9 @@ function CharCard({ char }: { char: Character }) {
         (e.currentTarget as HTMLElement).style.boxShadow = '';
       }}
     >
-      {/* 실사 / 마사코 탭 */}
+      {/* 폴리 / 마사코 탭 */}
       <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-        {(['real', 'masako'] as Style[]).map(s => (
+        {(['poly', 'masako'] as Style[]).map(s => (
           <button key={s} onClick={() => setStyle(s)} style={{
             flex: 1, padding: '5px 0', fontSize: 9, fontWeight: 700,
             border: 'none', cursor: 'pointer',
@@ -115,7 +122,7 @@ function CharCard({ char }: { char: Character }) {
             color: style === s ? '#fff' : 'rgba(255,255,255,0.3)',
             transition: 'all 0.15s',
           }}>
-            {s === 'real' ? '실사' : '마사코'}
+            {s === 'poly' ? '폴리' : '마사코'}
           </button>
         ))}
       </div>
@@ -309,7 +316,7 @@ export default function CharactersPage() {
     }}>
       {/* 타이틀 바 */}
       <div style={{
-        position: 'sticky', top: 56, zIndex: 40,
+        position: 'sticky', top: 82, zIndex: 40,
         background: 'rgba(10,10,20,0.85)',
         backdropFilter: 'blur(12px)',
         borderBottom: '1px solid rgba(255,255,255,0.07)',

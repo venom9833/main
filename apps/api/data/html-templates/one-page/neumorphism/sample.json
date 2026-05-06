@@ -1,0 +1,106 @@
+{
+  "person": {
+    "name": "송하윤",
+    "title": "UX 디자이너 & 브랜드 디렉터",
+    "avatar_emoji": "🌿",
+    "tagline": "브랜드에 인간적인 언어를 입힙니다",
+    "location": "서울시 용산구"
+  },
+  "about_heading": "소개",
+  "about": [
+    "저는 사용자가 서비스를 처음 만나는 순간, 그 첫인상이 모든 것을 결정한다고 믿습니다. 7년간 스타트업과 브랜드 에이전시를 오가며 60개 이상의 프로젝트를 리드했습니다.",
+    "UX 설계와 브랜드 아이덴티티를 함께 다루는 것이 제 강점입니다. 인터뷰와 데이터 분석으로 사용자를 이해하고, 그 이해를 시각 언어로 변환해 브랜드에 일관된 이야기를 만듭니다.",
+    "현재는 소셜 임팩트 스타트업과 사회적 기업의 브랜딩을 집중적으로 지원하고 있습니다. 좋은 가치를 가진 조직이 더 많은 사람에게 닿을 수 있도록 돕는 일에서 보람을 느낍니다."
+  ],
+  "skills_heading": "전문 영역",
+  "skill_groups": [
+    {
+      "group": "UX 설계",
+      "skills": ["사용자 인터뷰", "IA 설계", "와이어프레임", "프로토타이핑", "사용성 테스트", "접근성 검토"]
+    },
+    {
+      "group": "브랜드 디자인",
+      "skills": ["브랜드 전략", "로고 설계", "타이포그래피", "컬러 시스템", "가이드라인 제작"]
+    },
+    {
+      "group": "디자인 도구",
+      "skills": ["Figma", "Adobe Illustrator", "Principle", "Maze", "Hotjar"]
+    },
+    {
+      "group": "커뮤니케이션",
+      "skills": ["프레젠테이션", "클라이언트 미팅", "팀 코칭", "디자인 리뷰"]
+    }
+  ],
+  "experience_heading": "경력",
+  "experiences": [
+    {
+      "role": "UX 디자인 리드",
+      "company": "소셜 임팩트 플랫폼 Greenway",
+      "period": "2023.06 — 현재",
+      "bullets": [
+        "환경 기부 앱의 전체 UX 재설계, 완료율 54% → 81%로 향상",
+        "디자인 시스템 구축 및 iOS/Android 가이드라인 문서화",
+        "매월 사용자 인터뷰 8회 진행 및 인사이트 공유"
+      ]
+    },
+    {
+      "role": "브랜드 디자이너",
+      "company": "크리에이티브 에이전시 StudioK",
+      "period": "2020.03 — 2023.05",
+      "bullets": [
+        "핀테크, 헬스케어, 교육 분야 스타트업 25개 브랜딩 리드",
+        "팀 내 프리랜서 매니지먼트 및 프로세스 표준화",
+        "연간 매출 300% 성장에 기여한 핵심 클라이언트 관계 유지"
+      ]
+    }
+  ],
+  "projects_heading": "주요 작업",
+  "projects": [
+    {
+      "title": "Greenway 앱 리디자인",
+      "desc": "환경 기부 앱의 전체 플로우를 재설계했습니다. 복잡한 기부 과정을 3단계로 단순화하고, 기부 임팩트를 시각화해 재방문율을 43% 높였습니다.",
+      "tags": ["UX 리서치", "App 디자인", "Figma", "A/B 테스트"],
+      "url": "https://behance.net/songha/greenway"
+    },
+    {
+      "title": "소셜 기업 5곳 브랜드 패키지",
+      "desc": "사회적 기업 5곳의 브랜드 아이덴티티를 동시에 진행했습니다. 각각 다른 분야와 타겟이지만 일관된 '진정성' 언어를 유지하면서 차별화된 시각 언어를 만들었습니다.",
+      "tags": ["브랜드 전략", "로고", "가이드라인", "스토리텔링"],
+      "url": "https://behance.net/songha/social-brands"
+    },
+    {
+      "title": "의료 스타트업 UX 감사",
+      "desc": "20개 이상의 화면을 가진 환자 관리 SaaS의 전체 UX를 감사했습니다. 147개 개선 포인트를 도출하고, 우선순위 로드맵을 제공했습니다.",
+      "tags": ["UX 감사", "헬스케어", "접근성", "컨설팅"],
+      "url": ""
+    }
+  ],
+  "contact_heading": "연락처",
+  "contact_items": [
+    {
+      "icon": "📧",
+      "label": "이메일",
+      "value": "hayoon.song@example.com",
+      "url": "mailto:hayoon.song@example.com"
+    },
+    {
+      "icon": "🎨",
+      "label": "Behance",
+      "value": "behance.net/songha",
+      "url": "https://behance.net/songha"
+    },
+    {
+      "icon": "💼",
+      "label": "LinkedIn",
+      "value": "linkedin.com/in/hayoonsong",
+      "url": "https://linkedin.com/in/hayoonsong"
+    },
+    {
+      "icon": "📸",
+      "label": "Instagram",
+      "value": "@hayoon.design",
+      "url": "https://instagram.com/hayoon.design"
+    }
+  ],
+  "footer_text": "© 2026 송하윤 · 서울 · 프리랜서 가능"
+}

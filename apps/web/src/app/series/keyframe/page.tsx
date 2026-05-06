@@ -1,6 +1,15 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import Modal9x16 from '@/components/Modal9x16';
+import { useSubtitleOverlay } from '@/hooks/useSubtitleOverlay';
 
 const API = 'http://localhost:8001/api/v1';
 
@@ -35,10 +44,11 @@ interface SeriesSummary {
     genre?: string; style?: string;
     fullCast?: CastMember[];
   };
-  settings?: { keyframeProvider?: string; artStyle?: string };
+  settings?: { keyframeProvider?: string; artStyle?: string; ttsGender?: 'female' | 'male' };
 }
 
 interface SceneParsed {
+  id: string;           // v3_scenes.id (UUID) — 삭제 API 호출 시 사용
   index: number;
   sceneIndex: number;
   cutIndex: number;
@@ -56,12 +66,11 @@ interface SceneParsed {
   bgUrl: string;
   charUrl: string;
   lipsyncUrl: string;
+  kbMode: string;     // 'ken_burns' | 'hybrid' | '' — kenburns_service 마커
   ttsVoice: string;   // DB tts_voice 컬럼 (dialogue 컷 캐릭터 성우)
   storedTtsUrl: string; // DB tts_url 컬럼 (이미 생성된 TTS)
   sceneCharacters: string[]; // scene_meta.characters — 이 컷 등장인물
 }
-
-const SUBTITLE_STEP = 5;
 
 /** "20260413_095022_ch01s07hc04" → "s07hc04" */
 function sceneCodeSuffix(code: string): string {
@@ -83,6 +92,8 @@ function ctrlBtn(disabled: boolean): React.CSSProperties {
 }
 
 export default function KeyframePage() {
+  const router = useRouter();
+
   // ── 시리즈 ────────────────────────────────────────────────────────────────
   const [seriesList, setSeriesList] = React.useState<SeriesSummary[]>([]);
   const [seriesId, setSeriesId]     = React.useState('');
@@ -91,24 +102,27 @@ export default function KeyframePage() {
   // ── 씬/UI 상태 ──────────────────────────────────────────────────────────
   const [scenes, setScenes]           = React.useState<SceneParsed[]>([]);
   const [selectedIdx, setSelectedIdx] = React.useState(0);
-  const [subtitleY, setSubtitleY]     = React.useState(80);
-  const [subtitleBg, setSubtitleBg]   = React.useState(() => localStorage.getItem('ld_subtitle_bg') === '1');
   const [isPlaying, setIsPlaying]     = React.useState(false);
   const [loadingResult, setLoadingResult] = React.useState(false);
   const [ttsLoading, setTtsLoading]   = React.useState(false);
   const [ttsUrl, setTtsUrl]           = React.useState<string | null>(null);
+  const [rawEditMode, setRawEditMode] = React.useState(false);
+  const [rawEditText, setRawEditText] = React.useState('');
   const [ttsDoneSet, setTtsDoneSet]   = React.useState<Set<string>>(new Set());
   const [ttsDurationMap, setTtsDurationMap] = React.useState<Record<string, number>>({});
-  const [displayText, setDisplayText] = React.useState('');
-  const [isTyping, setIsTyping]       = React.useState(false);  // 자막 애니메이션 독립 상태
   const [imgAnim, setImgAnim]         = React.useState<'zoom' | 'slide' | null>(null);
   const [provider, setProvider]       = React.useState<'gemini' | 'pillow'>('gemini');
   const [promptText, setPromptText]   = React.useState('');
   const [regenLoading, setRegenLoading] = React.useState(false);
   const [promptLoading, setPromptLoading] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
+  const [koTranslation, setKoTranslation] = React.useState('');
+  const [translating, setTranslating] = React.useState(false);
   const [bgPromptText, setBgPromptText]         = React.useState('');
   const [bgUploadLoading, setBgUploadLoading]   = React.useState(false);
+  const [gridPromptText, setGridPromptText]     = React.useState('');
+  const [gridPromptLoading, setGridPromptLoading] = React.useState(false);
+  const [gridCopied, setGridCopied]             = React.useState(false);
   const [lipsyncUploadLoading, setLipsyncUploadLoading] = React.useState(false);
   const [charPromptText, setCharPromptText] = React.useState('');
   const [pipelineStep, setPipelineStep] = React.useState('');
@@ -116,14 +130,47 @@ export default function KeyframePage() {
   const [ttsGender, setTtsGender] = React.useState<'female' | 'male'>('female');
   const [kbLoading, setKbLoading] = React.useState(false);
   const [kbResult, setKbResult]   = React.useState<{processed:number;skipped:number;errors:string[]} | null>(null);
-  const [confirmedCuts, setConfirmedCuts] = React.useState<Set<string>>(new Set());
+  const [kbSingleLoading, setKbSingleLoading] = React.useState(false);
+  const [ttsBatchLoading, setTtsBatchLoading] = React.useState(false);
+  const [ttsBatchMsg, setTtsBatchMsg]         = React.useState<string | null>(null);
+  const [modal9x16Open, setModal9x16Open]     = React.useState(false);
+  // 컷 삭제 로딩 상태 — 삭제 중인 컷 UUID를 저장 (버튼 비활성화용)
+  const [deletingSceneId, setDeletingSceneId] = React.useState<string | null>(null);
+  const [deleteMode, setDeleteMode]           = React.useState(false);
+  const [mp4BtnHover, setMp4BtnHover]         = React.useState(false);
+  // ── [임시] 폰트 테스트용 — 테스트 완료 후 삭제 ────────────────────────────
+  const [previewFont, setPreviewFont] = React.useState(() => {
+    try { return localStorage.getItem('ld_subtitle_font') || 'NotoSerifKR-Regular'; } catch { return 'NotoSerifKR-Regular'; }
+  });
+
+  // 마운트 시 전체 폰트 프리로드 → 선택 즉시 전환
+  React.useEffect(() => {
+    [
+      'NotoSerifKR-Regular','NotoSerifKR-Black',
+      'Pretendard-Regular','Pretendard-Medium',
+      'PretendardJP-Regular','PretendardJP-SemiBold',
+      'Montserrat-Regular','SeoulAlrim-Medium',
+    ].forEach(f => document.fonts.load(`16px "${f}"`).catch(() => {}));
+  }, []);
+
+  // ── 자막 오버레이 hook ─────────────────────────────────────────────────────
+  // 기존 인라인 charTimerRef + typingText + startTypingEffect + stopTypingEffect를
+  // useSubtitleOverlay hook으로 통합. 16:9 기준 maxCharsPerLine=30 적용.
+  const {
+    displayText: typingText,
+    stopCharTimer: stopTypingEffect,
+    startTyping: startTypingHook,
+    syncToAudio,
+    subtitleBg, setSubtitleBg,
+    subtitleY, subtitleUp, subtitleDown,
+  } = useSubtitleOverlay('ld_subtitle_y', 'ld_subtitle_bg', 80);
 
   const audioRef        = React.useRef<HTMLAudioElement | null>(null);
   const videoRef        = React.useRef<HTMLVideoElement | null>(null);
-  const charTimerRef    = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const playTimerRef    = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const bgInputRef      = React.useRef<HTMLInputElement | null>(null);
-  const lipsyncInputRef = React.useRef<HTMLInputElement | null>(null);
+  const lipsyncInputRef   = React.useRef<HTMLInputElement | null>(null);
+  const gridUploadInputRef = React.useRef<HTMLInputElement | null>(null);
   const scriptRowRef    = React.useRef<HTMLDivElement | null>(null);
   const chatEndRef      = React.useRef<HTMLDivElement | null>(null);
 
@@ -162,19 +209,17 @@ export default function KeyframePage() {
       .catch(() => {});
   }, [seriesInfo?.settings?.artStyle]);
 
-  // ── 확정 컷 localStorage 복원 ─────────────────────────────────────────────
+  // ── URL 파라미터 — 공식 라우터: ?series_id=... 필수 ─────────────────────
   React.useEffect(() => {
-    try {
-      const stored = localStorage.getItem('ld_confirmed_cuts');
-      if (stored) setConfirmedCuts(new Set(JSON.parse(stored)));
-    } catch {}
-  }, []);
-
-  // ── URL 파라미터 ──────────────────────────────────────────────────────────
-  React.useEffect(() => {
-    const sid = new URLSearchParams(window.location.search).get('series_id');
-    if (sid) setSeriesId(sid);
-  }, []);
+    const params = new URLSearchParams(window.location.search);
+    const sid = params.get('series_id');
+    if (!sid) {
+      // series_id 없으면 루트로 차단
+      router.replace('/');
+      return;
+    }
+    setSeriesId(sid);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── 파이프라인 상태 로드 ──────────────────────────────────────────────────
   React.useEffect(() => {
@@ -216,6 +261,7 @@ export default function KeyframePage() {
         setSeriesInfo(s);
         const p = s.settings?.keyframeProvider;
         if (p === 'pillow' || p === 'gemini') setProvider(p);
+        if (s.settings?.ttsGender) setTtsGender(s.settings.ttsGender as 'female' | 'male');
       }
 
       const cRes = await fetch(`${API}/series/${sid}/chapters/1/local-scenes`).catch(() => null);
@@ -228,6 +274,7 @@ export default function KeyframePage() {
         }[] = await cRes.json();
 
         const list: SceneParsed[] = cuts.map((c, i) => ({
+          id: c.id,
           index: i + 1,
           sceneIndex: c.scene_index,
           cutIndex: c.cut_index,
@@ -244,6 +291,7 @@ export default function KeyframePage() {
           bgUrl: c.bg_url || '',
           charUrl: c.char_url || '',
           lipsyncUrl: c.lipsync_url || '',
+          kbMode: (c as any).kb_mode || '',
           ttsVoice: c.tts_voice || '',
           storedTtsUrl: c.tts_url || '',
           sceneCharacters: Array.isArray(c.scene_meta?.characters) ? c.scene_meta!.characters as string[] : [],
@@ -256,10 +304,17 @@ export default function KeyframePage() {
         const doneFromLocal = new Set(list.filter(s => !!s.storedTtsUrl).map(s => s.sceneCode));
         if (doneFromLocal.size) setTtsDoneSet(doneFromLocal);
 
-        // output 폴더 → MP3 duration 측정 (ttsDoneSet은 위에서 이미 처리)
+        // output 폴더 → MP3/WAV duration 측정 + ttsDoneSet 보정
         const ofRes = await fetch(`${API}/series/${sid}/chapters/1/output-files`).catch(() => null);
         if (ofRes?.ok) {
           const of = await ofRes.json() as { tts_done: string[]; tts_durations: Record<string, number> };
+          if (of.tts_done?.length) {
+            setTtsDoneSet(prev => {
+              const merged = new Set(prev);
+              for (const code of of.tts_done) merged.add(code);
+              return merged;
+            });
+          }
           if (of.tts_durations && Object.keys(of.tts_durations).length) setTtsDurationMap(of.tts_durations);
         }
       }
@@ -274,8 +329,9 @@ export default function KeyframePage() {
     if (!isPlaying || !scenes.length) return;
     const sc = scenes[selectedIdx];
     // 실제 TTS 재생 길이 우선 — 없으면 텍스트 기반 추정치
+    // +0.5s 여백: 마지막 음절이 잘리지 않도록
     const actualDur = ttsDurationMap[sc?.sceneCode ?? ''];
-    const sec = Math.max(2, actualDur ?? sc?.estimatedSec ?? 4);
+    const sec = Math.max(2, (actualDur ?? sc?.estimatedSec ?? 4) + 0.5);
     playTimerRef.current = setTimeout(() => {
       setSelectedIdx(i => {
         if (i >= scenes.length - 1) { setIsPlaying(false); return i; }
@@ -286,23 +342,20 @@ export default function KeyframePage() {
   // ttsDurationMap이 업데이트(loadedmetadata)되면 타이머 재시작
   }, [isPlaying, selectedIdx, scenes, ttsDurationMap]);
 
+  // ── 타이핑 자막 헬퍼 ─────────────────────────────────────────────────────
+  // hook으로 통합됨 — stopTypingEffect / startTypingHook은 useSubtitleOverlay에서 제공
+
   // ── 씬 변경 시 TTS 초기화 + 프롬프트 조합 ────────────────────────────────
   React.useEffect(() => {
-    setTtsLoading(false); setIsPlaying(false); setIsTyping(false);
-    setDisplayText(''); setImgAnim(null); setCharPromptText('');
-    if (charTimerRef.current) { clearInterval(charTimerRef.current); charTimerRef.current = null; }
-    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; }
+    setTtsLoading(false); setIsPlaying(false);
+    setRawEditMode(false); setRawEditText('');
+    setImgAnim(null); setCharPromptText('');
+    stopTypingEffect();
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.removeAttribute('src'); }
     if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; }
 
     const s = scenes[selectedIdx];
     if (!s || !seriesId) { setTtsUrl(null); setPromptText(''); setBgPromptText(''); return; }
-
-    // 컷별 저장된 자막 Y 위치 복원 (localStorage 기반)
-    try {
-      const map = localStorage.getItem('ld_subtitle_y_map');
-      const parsed = map ? JSON.parse(map) : {};
-      setSubtitleY(parsed[s.sceneCode] !== undefined ? parsed[s.sceneCode] : 80);
-    } catch { setSubtitleY(80); }
 
     // DB에 저장된 TTS URL이 있으면 즉시 재생 가능하게 세팅
     setTtsUrl(s.storedTtsUrl || null);
@@ -310,17 +363,35 @@ export default function KeyframePage() {
     setPromptLoading(true);
     setPromptText('');
     setBgPromptText('');
+    setKoTranslation('');
     fetch(`${API}/series/${seriesId}/scenes/${s.sceneCode}/compose-prompt`)
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (d?.prompt)      setPromptText(d.prompt);
         if (d?.bg_prompt)   setBgPromptText(d.bg_prompt);
         if (d?.char_prompt) setCharPromptText(d.char_prompt);
+        // 프롬프트 로드 완료 후 한국어 번역 요청
+        const textToTranslate = d?.prompt || d?.bg_prompt || '';
+        if (textToTranslate) {
+          setTranslating(true);
+          fetch(`${API}/series/translate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: textToTranslate }),
+          })
+            .then(r => r.ok ? r.json() : null)
+            .then(t => { if (t?.korean) setKoTranslation(t.korean); })
+            .catch(() => {})
+            .finally(() => setTranslating(false));
+        }
       })
       .catch(() => setPromptText(s.imageHint || ''))
       .finally(() => setPromptLoading(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedIdx, seriesId]);
+  }, [selectedIdx, seriesId, scenes.length]);
+
+  // ── ?cut= URL 동기화 제거 — selectedIdx는 내부 state로만 관리 ──────────
+
 
   // ── 대본 뷰 — 선택 컷으로 자동 스크롤 ────────────────────────────────────
   React.useEffect(() => {
@@ -487,69 +558,33 @@ export default function KeyframePage() {
   }, [ttsUrl]);
 
   // ── TTS ──────────────────────────────────────────────────────────────────
-  const stopCharTimer = () => {
-    if (charTimerRef.current) { clearInterval(charTimerRef.current); charTimerRef.current = null; }
-    setIsTyping(false); setDisplayText('');
-  };
-
-  const startTyping = (text: string, durationSec: number) => {
-    stopCharTimer(); setDisplayText(''); setIsTyping(true);
-
-    // 마침표·느낌표·물음표 뒤에서 분리 → 문장 단위 순차 표시 (지나간 문장은 지움)
-    const parts: string[] = [];
-    let buf = '';
-    for (const ch of Array.from(text)) {
-      buf += ch;
-      if ('.!?。！？'.includes(ch)) {
-        const s = buf.trim();
-        if (s) parts.push(s);
-        buf = '';
-      }
-    }
-    if (buf.trim()) parts.push(buf.trim());
-    if (parts.length === 0) return;
-
-    const totalChars = Array.from(text).length;
-    const msPerChar = Math.max(30, (durationSec * 1000) / totalChars);
-
-    let partIdx = 0;
-    let charIdx = 0;
-
-    charTimerRef.current = setInterval(() => {
-      if (partIdx >= parts.length) { stopCharTimer(); return; }
-      const partChars = Array.from(parts[partIdx]);
-      charIdx++;
-      setDisplayText(partChars.slice(0, charIdx).join(''));
-      if (charIdx >= partChars.length) {
-        partIdx++;
-        charIdx = 0;
-        setDisplayText(''); // 문장 완료 → 즉시 지우고 다음 문장 시작
-        if (partIdx >= parts.length) stopCharTimer();
-      }
-    }, msPerChar);
-  };
-
   const togglePlay = () => {
     const audio = audioRef.current;
     const video = videoRef.current;
     const scene = scenes[selectedIdx];
     if (!audio || !ttsUrl || !scene?.text) return;
     if (isPlaying) {
-      audio.pause(); video?.pause(); stopCharTimer(); setIsPlaying(false); setImgAnim(null);
+      audio.pause(); video?.pause(); setIsPlaying(false); setImgAnim(null);
+      stopTypingEffect();
     } else {
       const anim: 'zoom' | 'slide' = Math.random() < 0.5 ? 'zoom' : 'slide';
-      setImgAnim(anim); setDisplayText('');
-      // MP3 재생
-      audio.currentTime = 0; audio.play().catch(() => {});
-      // MP4 무음 동시 재생
+      setImgAnim(anim);
       if (video) { video.currentTime = 0; video.play().catch(() => {}); }
-      const go = () => {
-        const dur = isFinite(audio.duration) && audio.duration > 0 ? audio.duration : 4;
-        startTyping(scene.text, dur);
-      };
-      if (isFinite(audio.duration) && audio.duration > 0) go();
-      else audio.addEventListener('loadedmetadata', go, { once: true });
       setIsPlaying(true);
+      const text = rawEditText || scene.text;
+      // audio.timeupdate 기반 동기화 — TTS 속도와 정확히 일치
+      const doPlay = () => {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+        syncToAudio(audio, text);
+      };
+      // readyState < 2(HAVE_CURRENT_DATA) 이면 로드 후 재생 — cut=0 race condition 방지
+      if (audio.readyState >= 2) {
+        doPlay();
+      } else {
+        audio.load();
+        audio.addEventListener('canplaythrough', doPlay, { once: true });
+      }
     }
   };
 
@@ -564,7 +599,7 @@ export default function KeyframePage() {
         ? rawVoice
         : ttsGender === 'male' ? 'st:ab7cd18e645b54d7536e0f:neutral' : 'st:195e1922033a6168f0c90f:neutral';
       const fd = new FormData();
-      fd.append('text', scene.text);
+      fd.append('text', rawEditText || scene.text);
       fd.append('voice', voice);
       fd.append('series_id', seriesId);
       fd.append('scene_code', scene.sceneCode);
@@ -579,6 +614,82 @@ export default function KeyframePage() {
   };
 
 
+  // ── 컷 삭제 ─────────────────────────────────────────────────────────────
+  // HOOK 컷(isHook=true 또는 selectedIdx===0의 단독 컬럼)은 버튼 자체를 숨기므로
+  // 여기서는 일반 컷만 처리한다. 백엔드에서도 HOOK 삭제 시 400 반환 (LD-001 이중 보호).
+  const handleDeleteScene = async (targetScene: SceneParsed) => {
+    // HOOK 컷 보호 — 프론트 1차 방어 (LD-001)
+    if (targetScene.isHook || targetScene.sceneIndex === 0) return;
+    if (!seriesId) return;
+    if (!window.confirm('이 컷을 삭제하시겠습니까?')) return;
+
+    setDeletingSceneId(targetScene.id);
+    try {
+      // chapter=1 고정 — 현재 키프레임 페이지는 챕터1만 표시 (local-scenes?chapter=1)
+      const res = await fetch(
+        `${API}/series/${seriesId}/chapters/1/scenes/${targetScene.id}`,
+        { method: 'DELETE' }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert(`삭제 실패: ${err.detail || res.status}`);
+        return;
+      }
+      // 삭제 성공 → 전체 씬 목록 재로드 (scene_code 재번호화 반영)
+      await loadAll(seriesId);
+      // 선택 인덱스 경계 보정 — 마지막 컷이었으면 이전 컷으로 이동
+      setSelectedIdx(prev => {
+        const prevIdx = scenes.findIndex(s => s.id === targetScene.id);
+        if (prevIdx < 0) return 0;
+        // 재로드 후 scenes 길이는 아직 반영 전이므로 Math.max로 안전하게 처리
+        return Math.max(0, prevIdx - (prevIdx >= scenes.length - 1 ? 1 : 0));
+      });
+    } catch (e) {
+      console.error('[delete-scene]', e);
+      alert('삭제 중 오류가 발생했습니다.');
+    } finally {
+      setDeletingSceneId(null);
+    }
+  };
+
+  // ── Ken Burns 단일 컷 재생성 ────────────────────────────────────────────
+  const handleKenBurnsSingle = async () => {
+    const scene = scenes[selectedIdx];
+    if (!seriesId || !scene || kbSingleLoading) return;
+    setKbSingleLoading(true);
+    try {
+      const res = await fetch(`${API}/series/${seriesId}/scenes/${scene.sceneCode}/kenburns`, { method: 'POST' });
+      if (!res.ok) throw new Error(`${res.status}`);
+      const data = await res.json();
+      console.log('[kenburns-single]', data);
+      // 씬 목록 갱신 (새 mp4 반영)
+      await loadAll(seriesId);
+      // 캐시 버스팅: 동일 URL이어도 새 MP4 강제 로드
+      const ts = Date.now();
+      setScenes(prev => prev.map(sc =>
+        sc.sceneCode === scene.sceneCode && sc.lipsyncUrl
+          ? { ...sc, lipsyncUrl: sc.lipsyncUrl.replace(/[?&]t=\d+/, '') + '?t=' + ts }
+          : sc
+      ));
+    } catch (e) { console.error('[kenburns-single]', e); }
+    finally { setKbSingleLoading(false); }
+  };
+
+  // ── 챕터 내보내기 준비 — 전체 SRT 병합 + kr/en/jp 폴더 구성 ──────────────
+  const handlePrepareExport = async () => {
+    if (!seriesId || ttsBatchLoading) return;
+    setTtsBatchLoading(true); setTtsBatchMsg(null);
+    try {
+      const res = await fetch(`${API}/series/${seriesId}/chapters/1/prepare-export`, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) { setTtsBatchMsg(`실패: ${data.detail || res.status}`); return; }
+      router.push(`/series/mp4combine?series_id=${seriesId}`);
+    } catch (e) {
+      setTtsBatchMsg('실패');
+      console.error('[prepare-export]', e);
+    } finally { setTtsBatchLoading(false); }
+  };
+
   // ── Ken Burns 일괄 생성 ──────────────────────────────────────────────────
   const handleKenBurnsBatch = async () => {
     if (!seriesId || kbLoading) return;
@@ -592,6 +703,94 @@ export default function KeyframePage() {
       if (data.processed > 0) await loadAll(seriesId);
     } catch (e) { console.error('[kenburns-batch]', e); }
     finally { setKbLoading(false); }
+  };
+
+  // ── 4컷 그리드 프롬프트 — 세로 열 그룹(4컷) 변경 시 자동 로드 ───────────
+  // 그룹 구조: UI 컷 격자의 열(column) 1개 = 연속 4컷 (index 0-3, 4-7, 8-11, ...)
+  const [gridGroupCuts, setGridGroupCuts] = React.useState<string[]>([]);
+  const [gridApiLoading, setGridApiLoading]       = React.useState(false);
+  const [gridApiResult, setGridApiResult]         = React.useState<string | null>(null);
+  const [gridUploadLoading, setGridUploadLoading] = React.useState(false);
+  const prevGroupIndexRef = React.useRef<number | null>(null);
+  React.useEffect(() => {
+    if (!seriesId || scenes.length === 0) return;
+    // LD-015 (2026-04-18): HOOK(scenes[0])은 단독 — 그룹 대상 아님
+    // 정규 컷(scenes[1~]): 4컷 단위 그룹, HOOK 제외 후 offset +1
+    if (selectedIdx === 0) { prevGroupIndexRef.current = null; return; }
+    const regularIdx  = selectedIdx - 1;          // HOOK 제외 순번 (0-based)
+    const groupIndex  = Math.floor(regularIdx / 4);
+    if (prevGroupIndexRef.current === groupIndex) return;
+    prevGroupIndexRef.current = groupIndex;
+
+    const groupStart = groupIndex * 4 + 1;        // scenes 배열 기준 (scenes[0]=HOOK 건너뜀)
+    const groupCuts = scenes.slice(groupStart, groupStart + 4);
+    const groupCodes = groupCuts.map(c => c.sceneCode);
+    setGridGroupCuts(groupCodes);
+    setGridPromptText('');
+    setGridPromptLoading(true);
+
+    fetch(`${API}/series/${seriesId}/compose-grid-prompt`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scene_codes: groupCodes }),
+    })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.grid_prompt) setGridPromptText(d.grid_prompt); })
+      .catch(() => {})
+      .finally(() => setGridPromptLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedIdx, seriesId, scenes.length]);
+
+  // ── 4컷 API 생성 (NanoBanana Pro → 크롭 → R2 → DB 갱신) ─────────────────
+  const handleGridApiGenerate = async () => {
+    if (!seriesId || gridGroupCuts.length === 0 || gridApiLoading) return;
+    setGridApiLoading(true);
+    setGridApiResult(null);
+    try {
+      const res = await fetch(`${API}/series/${seriesId}/generate-grid-image`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scene_codes: gridGroupCuts }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setGridApiResult(`오류: ${data.detail || res.status}`);
+        return;
+      }
+      setGridApiResult(`✓ ${data.cut_count}컷 생성 완료`);
+      await loadAll(seriesId);  // 씬 목록 갱신 (새 keyframe_url 반영)
+    } catch (e) {
+      setGridApiResult(`오류: ${e}`);
+    } finally {
+      setGridApiLoading(false);
+    }
+  };
+
+  // ── 4컷 그리드 이미지 업로드 ────────────────────────────────────────────
+  const handleGridUpload = async (file: File) => {
+    if (!seriesId || gridGroupCuts.length === 0 || gridUploadLoading) return;
+    setGridUploadLoading(true);
+    setGridApiResult(null);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('scene_codes', JSON.stringify(gridGroupCuts));
+      const res = await fetch(`${API}/series/${seriesId}/upload-grid-image`, {
+        method: 'POST',
+        body: fd,
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setGridApiResult(`오류: ${data.detail || res.status}`);
+        return;
+      }
+      setGridApiResult(`✓ ${data.cut_count}컷 업로드 완료`);
+      await loadAll(seriesId);
+    } catch (e) {
+      setGridApiResult(`오류: ${e}`);
+    } finally {
+      setGridUploadLoading(false);
+    }
   };
 
   // ── 단일 컷 Gemini 재생성 ────────────────────────────────────────────────
@@ -673,11 +872,13 @@ export default function KeyframePage() {
 
   // ── 완료 판정 ──────────────────────────────────────────────────────────────
   // dialogue: lipsyncUrl 있으면 완료
-  // narration: lipsyncUrl(MP삽입) 또는 bgUrl 있으면 완료
+  // narration: lipsyncUrl(MP삽입) 또는 bgUrl 또는 storedTtsUrl(TTS 완료) 있으면 완료
   const isDone = (s: SceneParsed) => {
     if (s.lipsyncUrl) return true;   // MP 삽입된 컷은 타입 무관하게 완료
-    if (s.type === 'dialogue') return false;
-    return !!s.bgUrl;
+    // dialogue / narration 공통: TTS(storedTtsUrl or ttsDoneSet) 있으면 완료
+    if (s.storedTtsUrl || ttsDoneSet.has(s.sceneCode)) return true;
+    if (s.type === 'dialogue') return false;  // dialogue는 TTS 없으면 미완료
+    return !!s.bgUrl;  // narration: 배경 이미지만 있어도 완료
   };
 
   // ── 렌더 계산 ─────────────────────────────────────────────────────────────
@@ -685,42 +886,13 @@ export default function KeyframePage() {
   const world    = seriesInfo?.world_data;
   const hasWorld = !!(world?.charAName || world?.charBName || world?.genre);
 
-  const isConfirmed = confirmedCuts.has(scene?.sceneCode ?? '');
-
-  // 컷별 자막 Y 위치 — localStorage('ld_subtitle_y_map') 기반
-  const getSubtitleYMap = (): Record<string, number> => {
-    try { const s = localStorage.getItem('ld_subtitle_y_map'); return s ? JSON.parse(s) : {}; }
-    catch { return {}; }
-  };
-  const saveSubtitleY = (code: string, y: number) => {
-    try {
-      const map = getSubtitleYMap(); map[code] = y;
-      localStorage.setItem('ld_subtitle_y_map', JSON.stringify(map));
-    } catch {}
-  };
-
-  // 확정된 컷은 ▲▼ 잠금, 위치값 localStorage에 기록
-  const subtitleUp = () => {
-    if (!scene || isConfirmed) return;
-    setSubtitleY(y => { const next = Math.max(0, y - SUBTITLE_STEP); saveSubtitleY(scene.sceneCode, next); return next; });
-  };
-  const subtitleDown = () => {
-    if (!scene || isConfirmed) return;
-    setSubtitleY(y => { const next = Math.min(100, y + SUBTITLE_STEP); saveSubtitleY(scene.sceneCode, next); return next; });
-  };
-
-  const subtitleStyle: React.CSSProperties = {
-    position: 'absolute', left: 0, right: 0,
-    top: `${subtitleY}%`, transform: 'translateY(-50%)',
-    padding: '12px 56px', transition: 'top 0.15s ease',
-  };
-
   const cutType       = scene?.type ?? 'narration';
   const sceneHasChars = scene?.hasChars ?? false;
   const doneCount     = scenes.filter(isDone).length;
 
   return (
-    <div className="relative -mt-[56px]" style={{ background: '#f8f9fb', minHeight: '100vh' }}>
+    <>
+    <div className="kf-page relative -mt-[82px]" style={{ background: '#f8f9fb', minHeight: '100vh' }}>
       <style>{`
         @keyframes kf-zoom      { from{transform:scale(1)} to{transform:scale(1.08)} }
         @keyframes kf-slide     { from{transform:scale(1.05) translateX(-3%)} to{transform:scale(1.05) translateX(3%)} }
@@ -731,7 +903,7 @@ export default function KeyframePage() {
       {/* 세계관 바 */}
       {hasWorld && (
         <div className="sticky z-50 border-b"
-          style={{ top: '56px', background: 'rgba(237,233,254,0.92)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderColor: 'rgba(167,139,250,0.3)' }}>
+          style={{ top: '82px', background: 'rgba(237,233,254,0.92)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderColor: 'rgba(167,139,250,0.3)' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap', padding: '8px 0' }}>
               {seriesInfo?.title && (
@@ -752,7 +924,15 @@ export default function KeyframePage() {
               {/* 성우 성별 토글 — 컷1에서만 표시 */}
               {selectedIdx === 0 && <button
                 type="button"
-                onClick={() => setTtsGender(g => g === 'female' ? 'male' : 'female')}
+                onClick={() => {
+                  const next = ttsGender === 'female' ? 'male' : 'female';
+                  setTtsGender(next);
+                  if (seriesId) fetch(`${API}/series/${seriesId}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ settings: { ...seriesInfo?.settings, ttsGender: next } }),
+                  }).catch(() => {});
+                }}
                 style={{
                   marginLeft: 'auto',
                   display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -788,7 +968,7 @@ export default function KeyframePage() {
       {/* 툴바 */}
       <div className="sticky z-50 border-b"
         style={{
-          top: hasWorld ? '100px' : '56px',
+          top: hasWorld ? '126px' : '82px',
           background: 'rgba(255,255,255,0.95)',
           backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
           borderColor: 'rgba(15,23,42,0.08)',
@@ -813,18 +993,6 @@ export default function KeyframePage() {
               ))}
             </select>
 
-            {/* Provider 선택 */}
-            {(['gemini', 'pillow'] as const).map(p => (
-              <button key={p} onClick={() => setProvider(p)} style={{
-                padding: '3px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, flexShrink: 0,
-                border: `1px solid ${provider === p ? 'rgba(99,102,241,0.5)' : '#e5e7eb'}`,
-                background: provider === p ? 'rgba(99,102,241,0.08)' : 'white',
-                color: provider === p ? '#6366f1' : '#9ca3af',
-                cursor: 'pointer',
-              }}>
-                {p === 'gemini' ? '✨ Gemini' : '🎨 Pillow'}
-              </button>
-            ))}
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 0 }}>
               <span style={{ fontSize: 11, color: '#9ca3af', whiteSpace: 'nowrap' }}>
@@ -849,34 +1017,156 @@ export default function KeyframePage() {
               <span style={{ fontSize: 11, color: '#059669', fontWeight: 700, flexShrink: 0 }}>TTS 생성 중…</span>
             )}
 
-            {/* Ken Burns 일괄 생성 버튼 */}
+            {/* 컷 삭제 모드 토글 */}
             {seriesId && (
-              <button onClick={handleKenBurnsBatch} disabled={kbLoading} style={{
-                padding: '5px 14px', borderRadius: 7, fontSize: 12, fontWeight: 700, flexShrink: 0,
-                border: `1px solid ${kbLoading ? '#e5e7eb' : 'rgba(124,58,237,0.4)'}`,
-                background: kbLoading ? '#f3f4f6' : 'rgba(124,58,237,0.08)',
-                color: kbLoading ? '#9ca3af' : '#7c3aed',
-                cursor: kbLoading ? 'default' : 'pointer',
-              }}>
-                {kbLoading ? '⏳ Ken Burns 생성 중…' : '🎬 Ken Burns 일괄'}
+              <button
+                onClick={() => setDeleteMode(v => !v)}
+                style={{
+                  padding: '5px 14px', borderRadius: 7, fontSize: 12, fontWeight: 700, flexShrink: 0,
+                  border: `1px solid ${deleteMode ? 'rgba(239,68,68,0.7)' : 'rgba(239,68,68,0.25)'}`,
+                  background: deleteMode ? 'rgba(239,68,68,0.18)' : 'rgba(239,68,68,0.06)',
+                  color: deleteMode ? '#ef4444' : '#f87171',
+                  cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                }}>
+                {deleteMode ? '🗑 삭제 중…' : '🗑 컷 삭제'}
               </button>
             )}
-            {kbResult && (
-              <span style={{ fontSize: 11, fontWeight: 700, flexShrink: 0,
-                color: kbResult.errors.length ? '#dc2626' : '#059669' }}>
-                ✓ {kbResult.processed}개 생성 / {kbResult.skipped}개 스킵
-                {kbResult.errors.length > 0 && ` / ⚠️ ${kbResult.errors.length}개 오류`}
-              </span>
+
+
+            {/* MP4 합성 — SRT 생성 후 합성 페이지로 이동 */}
+            {seriesId && scenes.length > 0 && (
+              <button
+                onClick={handlePrepareExport}
+                disabled={ttsBatchLoading}
+                onMouseEnter={() => setMp4BtnHover(true)}
+                onMouseLeave={() => setMp4BtnHover(false)}
+                style={{
+                  padding: '5px 14px', borderRadius: 7, fontSize: 12, fontWeight: 700, flexShrink: 0,
+                  border: `1px solid ${ttsBatchLoading ? 'rgba(63,63,70,0.4)' : mp4BtnHover ? 'rgba(99,102,241,0.9)' : 'rgba(99,102,241,0.5)'}`,
+                  background: ttsBatchLoading ? 'rgba(63,63,70,0.08)' : mp4BtnHover ? 'rgba(99,102,241,0.28)' : 'rgba(99,102,241,0.15)',
+                  color: ttsBatchLoading ? '#52525b' : mp4BtnHover ? '#a5b4fc' : '#818cf8',
+                  cursor: ttsBatchLoading ? 'not-allowed' : 'pointer',
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  transition: 'all 0.15s',
+                  boxShadow: (!ttsBatchLoading && mp4BtnHover) ? '0 4px 14px rgba(99,102,241,0.35)' : '0 1px 3px #333333',
+                }}>
+                {ttsBatchLoading ? '⏳ 내보내기 중…' : '▶ MP4 합성'}
+              </button>
             )}
+
           </div>
         </div>
       </div>
 
-      {/* 본문 */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px 40px', display: 'flex', gap: 24 }}>
+      {/* ── 공통 컨테이너: 컷 그리드 + 본문 ── */}
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '6px 16px 20px' }}>
+
+        {/* 컷 그리드 — LD-015: HOOK 단독 컬럼 | 정규 컷 그리드 */}
+        {scenes.length > 0 && (
+          <div style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 10, padding: '6px', boxShadow: '0 1px 6px rgba(0,0,0,0.04)', marginBottom: 10, width: 'fit-content', margin: '0 auto 10px', display: 'flex', alignItems: 'flex-start', gap: 0 }}>
+
+            {/* HOOK 단독 컬럼 (scenes[0]) */}
+            {scenes[0] && (() => {
+              const s = scenes[0];
+              const isSel = selectedIdx === 0;
+              const hasBg = !!s.bgUrl;
+              const cutDone = isDone(s);
+              const dotColor = cutDone ? '#22c55e' : '#9ca3af';
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 3, paddingRight: 6, marginRight: 6, borderRight: '2px dashed rgba(245,158,11,0.4)' }}>
+                  <button onClick={() => { setIsPlaying(false); setSelectedIdx(0); }}
+                    style={{ width: 110, height: 44, borderRadius: 5, border: isSel ? '2px solid #f59e0b' : '1px solid rgba(245,158,11,0.35)', cursor: 'pointer', position: 'relative', overflow: 'hidden', padding: 0, background: hasBg ? 'transparent' : (isSel ? 'rgba(245,158,11,0.1)' : 'rgba(245,158,11,0.04)'), boxShadow: isSel ? '0 0 0 2px rgba(245,158,11,0.3)' : 'none', zIndex: isSel ? 1 : 0 }}>
+                    {hasBg
+                      // eslint-disable-next-line @next/next/no-img-element
+                      ? <img src={s.bgUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: isSel ? 1 : 0.6, filter: isSel ? 'none' : 'grayscale(100%)' }} />
+                      : null}
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1, background: hasBg ? 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%)' : 'transparent' }}>
+                      <span style={{ fontSize: 8, fontWeight: 900, color: '#f59e0b', fontFamily: "var(--font-en), 'Pretendard', sans-serif", lineHeight: 1 }}>HOOK</span>
+                      <span style={{ fontSize: 10, color: hasBg ? 'rgba(255,255,255,0.85)' : '#b45309', fontFamily: "var(--font-en), 'Pretendard', sans-serif", lineHeight: 1 }}>{sceneCodeSuffix(s.sceneCode)}</span>
+                    </div>
+                    <div style={{ position: 'absolute', top: 2, right: 2 }}>
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', display: 'inline-block', background: dotColor }} />
+                    </div>
+                    <div style={{ position: 'absolute', bottom: 2, left: 2, display: 'flex', flexDirection: 'row', gap: 2 }}>
+                      {s.lipsyncUrl && <span style={{ fontSize: 8, fontWeight: 700, color: '#fbbf24', background: 'rgba(0,0,0,0.72)', padding: '1px 3px', borderRadius: 2, lineHeight: 1.2 }}>{s.kbMode === 'ken_burns' ? 'K' : s.kbMode === 'hybrid' ? 'K+영상' : '영상'}</span>}
+                      {(s.storedTtsUrl || ttsDoneSet.has(s.sceneCode)) && <span style={{ fontSize: 8, fontWeight: 700, color: '#6ee7b7', background: 'rgba(0,0,0,0.72)', padding: '1px 3px', borderRadius: 2, lineHeight: 1.2 }}>더빙</span>}
+                    </div>
+                  </button>
+                  {/* 나머지 3행: 빈 칸 (높이 맞춤) */}
+                  {[0, 1, 2].map(i => (
+                    <div key={`hook-pad-${i}`} style={{ width: 110, height: 44, borderRadius: 5, background: 'rgba(245,158,11,0.03)', border: '1px dashed rgba(245,158,11,0.1)' }} />
+                  ))}
+                </div>
+              );
+            })()}
+
+            {/* 정규 컷 그리드 (scenes[1~]: nc01부터) */}
+            <div style={{ display: 'grid', gridTemplateRows: 'repeat(4, 44px)', gridAutoFlow: 'column', gridAutoColumns: '110px', gap: 3 }}>
+              {scenes.slice(1).map((s, si) => {
+                const actualSi = si + 1;
+                const isSel = actualSi === selectedIdx;
+                const hasBg = !!s.bgUrl;
+                const cutDone = isDone(s);
+                const dotColor = cutDone ? '#22c55e' : s.type === 'dialogue' ? '#3b82f6' : '#9ca3af';
+                const label = sceneCodeSuffix(s.sceneCode);
+                return (
+                  // 컷 카드 — relative 컨테이너로 감싸 삭제 버튼 오버레이
+                  <div key={s.id} style={{ position: 'relative', width: '100%', height: 44 }}>
+                    <button onClick={() => { setIsPlaying(false); setSelectedIdx(actualSi); }}
+                      style={{ width: '100%', height: 44, borderRadius: 5, border: isSel ? '3px solid #f59e0b' : cutDone ? '1px solid #86efac' : '1px solid #e5e7eb', cursor: 'pointer', transition: 'border-color 0.12s, box-shadow 0.12s', position: 'relative', overflow: 'hidden', padding: 0, background: hasBg ? 'transparent' : (isSel ? 'rgba(245,158,11,0.12)' : '#f9fafb'), boxShadow: isSel ? '0 0 0 3px rgba(245,158,11,0.5), inset 0 0 0 1px rgba(245,158,11,0.3)' : 'none', zIndex: isSel ? 1 : 0 }}>
+                      {hasBg
+                        // eslint-disable-next-line @next/next/no-img-element
+                        ? <img src={s.bgUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: isSel ? 1 : 0.6, filter: isSel ? 'none' : 'grayscale(100%)' }} />
+                        : null}
+                      {isSel && <div style={{ position: 'absolute', inset: 0, background: 'rgba(245,158,11,0.18)', pointerEvents: 'none' }} />}
+                      <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: hasBg ? 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)' : 'transparent' }}>
+                        <span style={{ fontSize: 11, fontWeight: isSel ? 700 : 400, color: hasBg ? 'rgba(255,255,255,0.9)' : (isSel ? '#b45309' : '#9ca3af'), fontFamily: "var(--font-en), 'Pretendard', sans-serif", lineHeight: 1 }}>{label}</span>
+                      </div>
+                      <div style={{ position: 'absolute', top: 2, right: 2 }}>
+                        {s.isHook && <span style={{ fontSize: 7, color: '#f59e0b', lineHeight: 1 }}>★</span>}
+                        <span style={{ width: 5, height: 5, borderRadius: '50%', display: 'inline-block', background: dotColor }} />
+                      </div>
+                      <div style={{ position: 'absolute', bottom: 2, left: 2, display: 'flex', flexDirection: 'row', gap: 2 }}>
+                        {s.lipsyncUrl && <span style={{ fontSize: 8, fontWeight: 700, color: '#fbbf24', background: 'rgba(0,0,0,0.72)', padding: '1px 3px', borderRadius: 2, lineHeight: 1.2 }}>{s.kbMode === 'ken_burns' ? 'K' : s.kbMode === 'hybrid' ? 'K+영상' : '영상'}</span>}
+                        {(s.storedTtsUrl || ttsDoneSet.has(s.sceneCode)) && <span style={{ fontSize: 8, fontWeight: 700, color: '#6ee7b7', background: 'rgba(0,0,0,0.72)', padding: '1px 3px', borderRadius: 2, lineHeight: 1.2 }}>더빙</span>}
+                      </div>
+                    </button>
+                    {/* 삭제 버튼 — deleteMode ON + HOOK 아닐 때만 노출 (LD-001 보호) */}
+                    {deleteMode && !s.isHook && (
+                      <button
+                        title="이 컷 삭제"
+                        disabled={deletingSceneId === s.id}
+                        onClick={e => { e.stopPropagation(); handleDeleteScene(s); }}
+                        style={{
+                          position: 'absolute', top: 1, left: 1, zIndex: 10,
+                          width: 14, height: 14, borderRadius: 3,
+                          background: deletingSceneId === s.id ? 'rgba(150,50,50,0.7)' : 'rgba(239,68,68,0.82)',
+                          border: 'none',
+                          color: '#fff', fontSize: 8, fontWeight: 900,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          cursor: deletingSceneId === s.id ? 'default' : 'pointer',
+                          lineHeight: 1, padding: 0,
+                          opacity: isSel ? 1 : 0.7,
+                          transition: 'opacity 0.15s, background 0.15s',
+                        }}
+                      >
+                        {deletingSceneId === s.id ? '…' : '✕'}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
+        )}
+
+        {/* 본문 */}
+        <div style={{ display: 'flex', gap: 14 }}>
 
         {/* ── 왼쪽 60% ── */}
-        <div style={{ flex: '0 0 60%', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ flex: '0 0 60%', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
 
           {/* 이미지/영상 뷰어 */}
           <div style={{ position: 'relative', borderRadius: 14, overflow: 'hidden', background: '#1a1a2e', aspectRatio: '16/9', boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
@@ -886,7 +1176,6 @@ export default function KeyframePage() {
                 ref={videoRef}
                 key={scene.lipsyncUrl}
                 src={scene.lipsyncUrl}
-                loop
                 muted
                 playsInline
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -929,10 +1218,57 @@ export default function KeyframePage() {
               </div>
             )}
 
+            {/* [임시] 폰트 선택 드롭다운 — 테스트 완료 후 삭제 (selectedIdx===0일 때만 표시) */}
+            {selectedIdx === 0 && <div style={{ position: 'absolute', top: 6, left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+              <select
+                value={previewFont}
+                onChange={e => {
+                  setPreviewFont(e.target.value);
+                  try { localStorage.setItem('ld_subtitle_font', e.target.value); } catch {}
+                }}
+                style={{
+                  fontSize: 13, padding: '2px 8px', borderRadius: 5,
+                  background: 'rgba(0,0,0,0.7)', color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer',
+                }}
+              >
+                <option value="NotoSerifKR-Regular">NotoSerifKR Regular</option>
+                <option value="NotoSerifKR-Black">NotoSerifKR Black</option>
+                <option value="Pretendard-Regular">Pretendard Regular</option>
+                <option value="Pretendard-Medium">Pretendard Medium</option>
+                <option value="PretendardJP-Regular">PretendardJP Regular</option>
+                <option value="PretendardJP-SemiBold">PretendardJP SemiBold</option>
+                <option value="Montserrat-Regular">Montserrat Regular</option>
+                <option value="SeoulAlrim-Medium">SeoulAlrim Medium</option>
+              </select>
+            </div>}
+
+            {/* 자막 오버레이 — 16:9 (58번 문서 §12 기준) */}
+            {typingText && (
+              <div style={{
+                position: 'absolute', bottom: `${100 - subtitleY}%`, left: '50%', transform: 'translateX(-50%)',
+                maxWidth: '88%', textAlign: 'center',
+                color: '#ffffff',
+                fontFamily: `"${previewFont}", serif`,
+                fontSize: 'clamp(13px, 1.6vw, 26px)',
+                fontWeight: 400,
+                lineHeight: 1.4,
+                background: subtitleBg ? 'rgba(0,0,0,0.75)' : 'transparent',
+                textShadow: subtitleBg ? 'none' : '0 1px 8px rgba(0,0,0,0.95)',
+                padding: '6px 16px',
+                borderRadius: 4,
+                pointerEvents: 'none',
+              }}>
+                {typingText}
+              </div>
+            )}
+
             {scene && (
               <div style={{ position: 'absolute', top: 10, left: 10 }}>
-                <span style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', color: '#a78bfa', fontSize: 10, fontWeight: 900, padding: '3px 10px', borderRadius: 6, fontFamily: 'monospace', border: '1px solid rgba(124,58,237,0.3)' }}>
-                  {scene.sceneCode || `S${String(selectedIdx + 1).padStart(2, '0')}`}
+                <span style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', color: '#FFFFFF', fontSize: 12, fontWeight: 400, padding: '3px 10px', borderRadius: 6, fontFamily: "var(--font-en), 'Pretendard', sans-serif", border: '1px solid rgba(124,58,237,0.3)' }}>
+                  {seriesInfo?.title
+                    ? `${seriesInfo.title} - ${parseInt(scene.sceneCode.match(/ch(\d+)/i)?.[1] ?? '1')}화`
+                    : scene.sceneCode || `S${String(selectedIdx + 1).padStart(2, '0')}`}
                   {scene.isHook && <span style={{ marginLeft: 6, color: '#f59e0b' }}>HOOK</span>}
                 </span>
               </div>
@@ -946,29 +1282,37 @@ export default function KeyframePage() {
               ) : null}
             </div>
 
-            <div style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <button onClick={subtitleUp}   title="자막 위로"    disabled={subtitleY <= 0 || isConfirmed}   style={ctrlBtn(subtitleY <= 0 || isConfirmed)}>▲</button>
-              <button onClick={subtitleDown} title="자막 아래로"  disabled={subtitleY >= 100 || isConfirmed} style={ctrlBtn(subtitleY >= 100 || isConfirmed)}>▼</button>
-              <button onClick={togglePlay}   title={isPlaying ? '일시정지' : '재생'} disabled={!ttsUrl}
-                style={{ ...ctrlBtn(!ttsUrl), background: isPlaying ? 'rgba(124,58,237,0.55)' : 'rgba(30,20,60,0.75)', borderColor: isPlaying ? '#a78bfa' : 'rgba(124,58,237,0.35)', color: !ttsUrl ? '#4b5563' : '#a78bfa' }}>
-                {isPlaying ? '⏸' : '▶'}
-              </button>
-            </div>
-
-            {/* 자막 overlay — 재생 중에만 표시, 문장 단위로 순차 노출 */}
-            {isTyping && displayText && (
-              <div style={subtitleStyle}>
-                <p style={{
-                  fontSize: 14, color: 'white', fontWeight: 600, lineHeight: 1.75,
-                  margin: 0, textAlign: 'center', fontFamily: '"Noto Serif KR", serif',
-                  textShadow: subtitleBg ? 'none' : '0 1px 6px rgba(0,0,0,0.9)',
-                  whiteSpace: 'pre-wrap',
-                  ...(subtitleBg ? { background: 'rgba(0,0,0,0.82)', borderRadius: 6, padding: '6px 12px' } : {}),
-                }}>
-                  {displayText}
-                </p>
+            {/* ── 자막 위치 ▲▼ — 왼쪽 (cut=0 전용) */}
+            {selectedIdx === 0 && (
+              <div style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <button onClick={() => subtitleUp('')} title="자막 위로"
+                  style={{ ...ctrlBtn(false), fontSize: 14 }}>▲</button>
+                <button onClick={() => subtitleDown('')} title="자막 아래로"
+                  style={{ ...ctrlBtn(false), fontSize: 14 }}>▼</button>
               </div>
             )}
+
+            {/* ── 재생 버튼 그룹 — 프리뷰 중앙 */}
+            <div style={{
+              position: 'absolute', top: '50%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+              display: 'flex', gap: 12, alignItems: 'center',
+            }}>
+              {/* 16:9 재생 */}
+              <button onClick={togglePlay} title={isPlaying ? '일시정지' : '16:9 재생'} disabled={!ttsUrl}
+                style={{ ...ctrlBtn(!ttsUrl), background: isPlaying ? 'rgba(124,58,237,0.55)' : 'rgba(30,20,60,0.75)', borderColor: isPlaying ? '#a78bfa' : 'rgba(124,58,237,0.35)', color: !ttsUrl ? '#4b5563' : '#a78bfa', flexDirection: 'column', width: 48, height: 48, fontSize: 9 }}>
+                {isPlaying ? '⏸' : '▶'}
+                <span style={{ fontSize: 8, marginTop: 2, opacity: 0.8 }}>16:9</span>
+              </button>
+              {/* 9:16 재생 */}
+              {seriesId && scene && (
+                <button onClick={() => setModal9x16Open(true)} title="9:16 미리보기"
+                  style={{ ...ctrlBtn(false), background: 'rgba(30,20,60,0.75)', borderColor: 'rgba(245,158,11,0.5)', color: '#fbbf24', flexDirection: 'column', width: 48, height: 48, fontSize: 9 }}>
+                  ▶
+                  <span style={{ fontSize: 8, marginTop: 2, opacity: 0.8 }}>9:16</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* HINT + 대본 */}
@@ -980,6 +1324,8 @@ export default function KeyframePage() {
                   <span style={{ fontSize: 12, color: '#dc2626', fontWeight: 600, lineHeight: 1.6 }}>{scene.imageHint}</span>
                 </div>
               )}
+
+
               <div style={{ padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, lineHeight: 1.9, color: '#374151', margin: 0, whiteSpace: 'pre-wrap', fontFamily: '"Noto Serif KR", "Gmarket Sans", serif' }}>
                   {scene.text || '(대본 없음)'}
@@ -994,13 +1340,11 @@ export default function KeyframePage() {
             onEnded={() => {
               videoRef.current?.pause();
               if (videoRef.current) videoRef.current.currentTime = 0;
-              setIsPlaying(false); setImgAnim(null);
-              // 자막 타이머는 자연히 완료될 때까지 유지 (stopCharTimer는 타이머 완료 시 자동 호출)
+              setIsPlaying(false); setImgAnim(null); stopTypingEffect();
             }}
             onPause={() => {
               videoRef.current?.pause();
-              setIsPlaying(false); setImgAnim(null);
-              // 명시적 일시정지(togglePlay)에서만 stopCharTimer 호출 — 여기서는 호출 안 함
+              setIsPlaying(false); setImgAnim(null); stopTypingEffect();
             }}
             onPlay={() => setIsPlaying(true)}
             style={{ display: 'none' }}
@@ -1011,144 +1355,8 @@ export default function KeyframePage() {
             onChange={e => { const f = e.target.files?.[0]; if (f) handleBgUpload(f); e.target.value = ''; }} />
           <input ref={lipsyncInputRef} type="file" accept="video/mp4,video/*" style={{ display: 'none' }}
             onChange={e => { const f = e.target.files?.[0]; if (f) handleLipsyncUpload(f); e.target.value = ''; }} />
-
-          {/* 액션 버튼 — 타입별 */}
-          <div style={{ display: 'flex', gap: 8 }}>
-            {(() => {
-              const ttsDone = ttsDoneSet.has(scene?.sceneCode ?? '');
-              const confirmed = confirmedCuts.has(scene?.sceneCode ?? '');
-              const ttsBtn = { label: ttsLoading ? '생성 중…' : ttsDone ? 'TTS 재생성' : 'TTS 생성', icon: ttsLoading ? '⏳' : '🎙️', bg: ttsLoading ? '#f3f4f6' : ttsDone ? '#f0fdf4' : '#eff6ff', border: ttsLoading ? '#e5e7eb' : ttsDone ? '#bbf7d0' : '#bfdbfe', color: ttsLoading ? '#9ca3af' : ttsDone ? '#15803d' : '#1d4ed8', onClick: handleTts, disabled: ttsLoading || !scene?.text, badge: ttsDone };
-              if (cutType === 'dialogue') return [
-                ttsBtn,
-                { label: regenLoading ? '생성 중…' : '이미지 교체', icon: regenLoading ? '⏳' : '🖼️', bg: '#f5f3ff', border: '#ddd6fe', color: '#6d28d9', onClick: handleRegenKeyframe, disabled: regenLoading || !scene || confirmed },
-                { label: lipsyncUploadLoading ? '업로드 중…' : '립씽크 업로드', icon: lipsyncUploadLoading ? '⏳' : '🎬', bg: '#f0fdf4', border: '#bbf7d0', color: '#15803d', onClick: () => lipsyncInputRef.current?.click(), disabled: lipsyncUploadLoading || !scene || confirmed },
-              ];
-              if (sceneHasChars) return [
-                ttsBtn,
-                { label: bgUploadLoading ? '업로드 중…' : (scene?.bgUrl ? '배경 교체' : '배경 업로드'), icon: bgUploadLoading ? '⏳' : '⬆️', bg: scene?.bgUrl ? '#f0fdf4' : '#fff7ed', border: scene?.bgUrl ? '#bbf7d0' : '#fed7aa', color: scene?.bgUrl ? '#15803d' : '#c2410c', onClick: () => bgInputRef.current?.click(), disabled: bgUploadLoading || !scene || confirmed },
-                { label: regenLoading ? '생성 중…' : '이미지 생성', icon: regenLoading ? '⏳' : '✨', bg: '#f5f3ff', border: '#ddd6fe', color: '#6d28d9', onClick: handleRegenKeyframe, disabled: regenLoading || !scene || confirmed },
-              ];
-              return [
-                ttsBtn,
-                { label: bgUploadLoading ? '업로드 중…' : '배경 업로드', icon: bgUploadLoading ? '⏳' : '⬆️', bg: '#fff7ed', border: '#fed7aa', color: '#c2410c', onClick: () => bgInputRef.current?.click(), disabled: bgUploadLoading || !scene || confirmed },
-                { label: '—', icon: '🎞️', bg: '#f9fafb', border: '#e5e7eb', color: '#d1d5db', onClick: () => {}, disabled: true },
-              ];
-            })().map(({ label, icon, bg, border, color, onClick, disabled, badge }: { label: string; icon: string; bg: string; border: string; color: string; onClick: () => void; disabled: boolean; badge?: boolean }) => (
-              <button key={label} onClick={onClick} disabled={disabled} style={{
-                flex: 1, padding: '10px 0', borderRadius: 10,
-                background: bg, border: `1px solid ${border}`,
-                color, fontSize: 12, fontWeight: 700,
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                opacity: disabled ? 0.6 : 1, transition: 'all 0.15s',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                position: 'relative',
-              }}>
-                <span style={{ fontSize: 14 }}>{icon}</span>
-                {label}
-                {badge && <span style={{
-                  position: 'absolute', top: 4, right: 6,
-                  background: '#059669', color: '#fff',
-                  borderRadius: 999, fontSize: 9, fontWeight: 900,
-                  padding: '1px 5px', lineHeight: 1.6,
-                }}>✓</span>}
-              </button>
-            ))}
-          </div>
-
-          {/* 옵션 토글 행: 자막배경 | API사용 | MP삽입 */}
-          <div style={{ display: 'flex', gap: 6 }}>
-            {/* 자막배경 */}
-            <button type="button" onClick={() => setSubtitleBg(v => {
-                const next = !v;
-                // 컷1에서 변경한 설정을 기본값으로 저장 → 이후 컷/세션에서 유지
-                if (selectedIdx === 0) localStorage.setItem('ld_subtitle_bg', next ? '1' : '0');
-                return next;
-              })}
-              style={{
-                flex: 1, padding: '10px 0', borderRadius: 10,
-                background: subtitleBg ? '#1f2937' : '#f3f4f6',
-                border: `1px solid ${subtitleBg ? '#374151' : '#e5e7eb'}`,
-                cursor: 'pointer', transition: 'all 0.2s ease',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-              }}>
-              <span style={{ fontSize: 11 }}>⬛</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: subtitleBg ? '#d1d5db' : '#6b7280' }}>자막배경</span>
-              <span style={{ position: 'relative', width: 22, height: 13, borderRadius: 999, flexShrink: 0, background: subtitleBg ? '#4b5563' : '#d1d5db', transition: 'background 0.2s ease', display: 'inline-block' }}>
-                <span style={{ position: 'absolute', top: 1.5, left: subtitleBg ? 10 : 1.5, width: 10, height: 10, borderRadius: '50%', background: subtitleBg ? '#e5e7eb' : '#fff', boxShadow: '0 1px 2px rgba(0,0,0,0.2)', transition: 'left 0.2s ease', display: 'block' }} />
-              </span>
-            </button>
-
-            {/* API사용 — Gemini 이미지 생성 */}
-            <button
-              disabled={!scene || regenLoading || confirmedCuts.has(scene?.sceneCode ?? '')}
-              onClick={handleRegenKeyframe}
-              title={scene ? `컷 ${selectedIdx + 1} — ${provider} 이미지 생성` : '컷을 선택하세요'}
-              style={{
-                flex: 1, padding: '10px 0', borderRadius: 10,
-                background: regenLoading ? '#f3f4f6' : (scene ? '#eff6ff' : '#f9fafb'),
-                border: `1px solid ${regenLoading ? '#e5e7eb' : (scene ? '#bfdbfe' : '#e5e7eb')}`,
-                color: regenLoading ? '#9ca3af' : (scene ? '#1d4ed8' : '#d1d5db'),
-                fontSize: 11, fontWeight: 700,
-                cursor: (scene && !regenLoading) ? 'pointer' : 'not-allowed',
-                transition: 'all 0.15s',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-              }}>
-              <span style={{ fontSize: 12 }}>{regenLoading ? '⏳' : '🤖'}</span>
-              {regenLoading ? '생성 중...' : 'API사용'}
-            </button>
-
-            {/* MP삽입 — 현재 컷에 MP4 클립 업로드 */}
-            <button
-              disabled={!scene || lipsyncUploadLoading || confirmedCuts.has(scene?.sceneCode ?? '')}
-              onClick={() => lipsyncInputRef.current?.click()}
-              title={scene ? `컷 ${selectedIdx + 1} — MP4 클립 삽입` : '컷을 선택하세요'}
-              style={{
-                flex: 1, padding: '10px 0', borderRadius: 10,
-                background: lipsyncUploadLoading ? '#f3f4f6' : (scene?.lipsyncUrl ? '#f0fdf4' : (scene ? '#fdf4ff' : '#f9fafb')),
-                border: `1px solid ${lipsyncUploadLoading ? '#e5e7eb' : (scene?.lipsyncUrl ? '#bbf7d0' : (scene ? '#e9d5ff' : '#e5e7eb'))}`,
-                color: lipsyncUploadLoading ? '#9ca3af' : (scene?.lipsyncUrl ? '#15803d' : (scene ? '#7c3aed' : '#d1d5db')),
-                fontSize: 11, fontWeight: 700,
-                cursor: (scene && !lipsyncUploadLoading) ? 'pointer' : 'not-allowed',
-                transition: 'all 0.15s',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-              }}>
-              <span style={{ fontSize: 12 }}>{lipsyncUploadLoading ? '⏳' : (scene?.lipsyncUrl ? '✅' : '🎬')}</span>
-              {lipsyncUploadLoading ? '업로드 중...' : (scene?.lipsyncUrl ? 'MP교체' : 'MP삽입')}
-            </button>
-          </div>
-
-          {/* 컷 확정 버튼 — 확정 후 편집 잠금, 재생만 허용 */}
-          {scene && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 6 }}>
-              {confirmedCuts.has(scene.sceneCode) ? (
-                <span style={{
-                  fontSize: 11, fontWeight: 900, color: '#059669',
-                  background: 'rgba(5,150,105,0.09)', border: '1px solid rgba(5,150,105,0.3)',
-                  borderRadius: 8, padding: '7px 16px',
-                  display: 'flex', alignItems: 'center', gap: 6,
-                }}>
-                  ✓ {scene.sceneCode} 확정됨
-                </span>
-              ) : (
-                <button
-                  onClick={() => {
-                    saveSubtitleY(scene.sceneCode, subtitleY); // 현재 자막 위치 고정
-                    const next = new Set([...confirmedCuts, scene.sceneCode]);
-                    setConfirmedCuts(next);
-                    try { localStorage.setItem('ld_confirmed_cuts', JSON.stringify([...next])); } catch {}
-                  }}
-                  style={{
-                    padding: '7px 16px', borderRadius: 8, fontSize: 11, fontWeight: 900,
-                    background: 'rgba(99,102,241,0.07)', border: '1px solid rgba(99,102,241,0.28)',
-                    color: '#4f46e5', cursor: 'pointer', transition: 'all 0.15s',
-                    display: 'flex', alignItems: 'center', gap: 6,
-                  }}
-                >
-                  📌 {scene.sceneCode} 확정
-                </button>
-              )}
-            </div>
-          )}
+          <input ref={gridUploadInputRef} type="file" accept="image/*" style={{ display: 'none' }}
+            onChange={e => { const f = e.target.files?.[0]; if (f) handleGridUpload(f); e.target.value = ''; }} />
 
           {/* ── 전체 대본 뷰 — 현재 컷 영역 하이라이트 ── */}
           {scenes.length > 0 && (
@@ -1159,13 +1367,40 @@ export default function KeyframePage() {
               <div style={{ padding: '8px 14px', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: 9, fontWeight: 900, color: '#9ca3af', letterSpacing: '0.1em' }}>RAW 대본</span>
                 <span style={{ fontSize: 10, color: '#d1d5db' }}>컷 {selectedIdx + 1} / {scenes.length}</span>
+                <button
+                  onClick={async () => {
+                    if (rawEditMode) {
+                      const sc = scenes[selectedIdx];
+                      if (sc && rawEditText !== sc.text) {
+                        await fetch(`${API}/series/${seriesId}/scenes/${sc.sceneCode}`, {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ text: rawEditText }),
+                        });
+                        setScenes(prev => prev.map((s, i) => i === selectedIdx ? { ...s, text: rawEditText } : s));
+                      }
+                      setRawEditMode(false);
+                    } else {
+                      setRawEditText(scenes[selectedIdx]?.text || '');
+                      setRawEditMode(true);
+                    }
+                  }}
+                  style={{
+                    marginLeft: 'auto', padding: '2px 8px', borderRadius: 5, fontSize: 10, fontWeight: 700,
+                    background: rawEditMode ? '#d1fae5' : '#f3f4f6',
+                    border: `1px solid ${rawEditMode ? '#6ee7b7' : '#e5e7eb'}`,
+                    color: rawEditMode ? '#059669' : '#6b7280',
+                    cursor: 'pointer',
+                  }}>
+                  {rawEditMode ? '✓ 완료' : '수정'}
+                </button>
               </div>
               <div style={{ maxHeight: 360, overflowY: 'auto' }}>
                 {scenes.map((s, si) => {
                   const isCurrent = si === selectedIdx;
                   return (
                     <div
-                      key={s.sceneCode}
+                      key={s.id}
                       ref={isCurrent ? scriptRowRef : null}
                       onClick={() => { setIsPlaying(false); setSelectedIdx(si); }}
                       style={{
@@ -1182,7 +1417,7 @@ export default function KeyframePage() {
                         <span style={{
                           fontSize: 9, fontWeight: 900, letterSpacing: '0.06em',
                           color: isCurrent ? '#b45309' : '#d1d5db',
-                          fontFamily: 'monospace',
+                          fontFamily: "var(--font-en), 'Pretendard', sans-serif",
                         }}>
                           {sceneCodeSuffix(s.sceneCode)}
                         </span>
@@ -1197,15 +1432,30 @@ export default function KeyframePage() {
                         </span>
                       </div>
                       {/* 대본 텍스트 */}
-                      <p style={{
-                        fontSize: 12, lineHeight: 1.85, margin: 0,
-                        color: isCurrent ? '#1f2937' : '#9ca3af',
-                        fontWeight: isCurrent ? 500 : 400,
-                        whiteSpace: 'pre-wrap',
-                        fontFamily: '"Noto Serif KR", serif',
-                      }}>
-                        {s.text || '(대본 없음)'}
-                      </p>
+                      {isCurrent && rawEditMode
+                        ? <textarea
+                            value={rawEditText}
+                            onChange={e => setRawEditText(e.target.value)}
+                            onClick={ev => ev.stopPropagation()}
+                            rows={5}
+                            style={{
+                              width: '100%', boxSizing: 'border-box', resize: 'vertical',
+                              fontSize: 12, lineHeight: 1.85, color: '#1f2937',
+                              fontFamily: '"Noto Serif KR", serif',
+                              border: '1px solid #a5b4fc', borderRadius: 6,
+                              padding: '6px 8px', outline: 'none', background: '#fafafa',
+                            }}
+                          />
+                        : <p style={{
+                            fontSize: 12, lineHeight: 1.85, margin: 0,
+                            color: isCurrent ? '#1f2937' : '#9ca3af',
+                            fontWeight: isCurrent ? 500 : 400,
+                            whiteSpace: 'pre-wrap',
+                            fontFamily: '"Noto Serif KR", serif',
+                          }}>
+                            {isCurrent && rawEditText ? rawEditText : (s.text || '(대본 없음)')}
+                          </p>
+                      }
                     </div>
                   );
                 })}
@@ -1214,89 +1464,231 @@ export default function KeyframePage() {
           )}
         </div>
 
-        {/* ── 오른쪽 40%: 컷 그리드 + 프롬프트 ── */}
+        {/* ── 오른쪽 40%: 버튼 + 프롬프트 ── */}
         <div style={{ flex: '0 0 40%', minWidth: 0 }}>
           <div style={{
             background: 'white', border: '1px solid #e5e7eb', borderRadius: 14,
-            padding: '16px 14px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-            position: 'sticky', top: (hasWorld ? 100 : 56) + 48 + 16,
-            maxHeight: `calc(100vh - ${(hasWorld ? 100 : 56) + 48 + 32}px)`,
+            padding: '10px 12px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+            position: 'sticky', top: (hasWorld ? 126 : 82) + 48 + 16,
             display: 'flex', flexDirection: 'column',
           }}>
-            {/* 컷 목록 헤더 */}
-            <div style={{ fontSize: 9, fontWeight: 900, color: '#9ca3af', letterSpacing: '0.1em', marginBottom: 12, paddingLeft: 2, flexShrink: 0 }}>
-              컷 목록 · {scenes.length}개{seriesId ? ' · ch1' : ''}
-            </div>
-
-            {/* 컷 그리드 — 내부 스크롤 */}
-            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
-            {!seriesId ? (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200 }}>
-                <span style={{ fontSize: 12, color: '#d1d5db' }}>시리즈를 선택하세요</span>
-              </div>
-            ) : scenes.length === 0 ? (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200 }}>
-                <span style={{ fontSize: 12, color: '#d1d5db' }}>{loadingResult ? '로딩 중...' : '컷 없음'}</span>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateRows: 'repeat(10, auto)', gridAutoFlow: 'column', gridAutoColumns: '1fr', gap: 5 }}>
-                {scenes.map((s, si) => {
-                  const isSel = si === selectedIdx;
-                  const hasBg = !!s.bgUrl;
-                  const needsChar = s.hasChars && s.type !== 'dialogue';
-                  const cutDone = isDone(s);
-                  // 도트: 초록=완료 / 파란=대사씬 / 회색=미시작
-                  const dotColor = cutDone
-                    ? '#22c55e'
-                    : s.type === 'dialogue'
-                      ? '#3b82f6'
-                      : '#9ca3af';
-                  return (
-                    <button key={si} onClick={() => { setIsPlaying(false); setSelectedIdx(si); }}
+            {/* ── 액션 버튼 그리드 ── */}
+            {scene && (
+              <div style={{ flexShrink: 0 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4 }}>
+                  {/* TTS 생성 */}
+                  <button
+                    onClick={handleTts}
+                    disabled={ttsLoading || !scene?.text}
+                    style={{
+                      padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 400,
+                      background: ttsLoading ? '#f3f4f6' : ttsDoneSet.has(scene.sceneCode) ? '#f0fdf4' : '#eff6ff',
+                      border: `1px solid ${ttsLoading ? '#e5e7eb' : ttsDoneSet.has(scene.sceneCode) ? '#bbf7d0' : '#bfdbfe'}`,
+                      color: ttsLoading ? '#9ca3af' : ttsDoneSet.has(scene.sceneCode) ? '#15803d' : '#1d4ed8',
+                      cursor: (ttsLoading || !scene?.text) ? 'not-allowed' : 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                      transition: 'all 0.15s',
+                    }}>
+                    {ttsLoading ? '⏳ TTS 생성 중…' : '① TTS 생성'}
+                  </button>
+                  {/* 켄번스 재생성 */}
+                  <button
+                    onClick={handleKenBurnsSingle}
+                    disabled={!scene || kbSingleLoading}
+                    style={{
+                      padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 400,
+                      background: kbSingleLoading ? '#f3f4f6' : '#fefce8',
+                      border: `1px solid ${kbSingleLoading ? '#e5e7eb' : '#fde68a'}`,
+                      color: kbSingleLoading ? '#9ca3af' : '#92400e',
+                      cursor: (scene && !kbSingleLoading) ? 'pointer' : 'not-allowed',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                      transition: 'all 0.15s',
+                    }}>
+                    {kbSingleLoading ? '⏳ 켄번스 생성 중…' : '② 켄번스 재생성'}
+                  </button>
+                  {/* MP4 교체 */}
+                  <button
+                    onClick={() => lipsyncInputRef.current?.click()}
+                    disabled={!scene || lipsyncUploadLoading}
+                    style={{
+                      padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 400,
+                      background: lipsyncUploadLoading ? '#6b7280' : '#ede9fe',
+                      border: `1px solid ${lipsyncUploadLoading ? '#555555' : '#c4b5fd'}`,
+                      color: lipsyncUploadLoading ? '#ffffff' : '#6d28d9',
+                      cursor: (scene && !lipsyncUploadLoading) ? 'pointer' : 'not-allowed',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                      transition: 'all 0.15s',
+                    }}>
+                    <span style={{ fontSize: 12 }}>{lipsyncUploadLoading ? '⏳' : scene.lipsyncUrl ? '✅' : '🎬'}</span>
+                    MP4 교체
+                  </button>
+                  {/* 이미지 교체 */}
+                  <button
+                    onClick={() => bgInputRef.current?.click()}
+                    disabled={bgUploadLoading || !scene}
+                    style={{
+                      padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 400,
+                      background: bgUploadLoading ? '#6b7280' : '#999999',
+                      border: '1px solid #555555',
+                      color: '#ffffff',
+                      cursor: bgUploadLoading ? 'not-allowed' : 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                      transition: 'all 0.15s',
+                    }}>
+                    <span style={{ fontSize: 13 }}>{bgUploadLoading ? '⏳' : '🖼️'}</span>
+                    이미지 교체
+                  </button>
+                  {/* API 사용 */}
+                  <button
+                    onClick={handleRegenKeyframe}
+                    disabled={!scene || regenLoading}
+                    style={{
+                      padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 400,
+                      background: regenLoading ? '#6b7280' : '#999999',
+                      border: '1px solid #555555',
+                      color: '#ffffff',
+                      cursor: (scene && !regenLoading) ? 'pointer' : 'not-allowed',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                      transition: 'all 0.15s',
+                    }}>
+                    <span style={{ fontSize: 12 }}>{regenLoading ? '⏳' : '🤖'}</span>
+                    API 사용
+                  </button>
+                  {/* 자막배경 토글 — cut=0에서만 표시 */}
+                  {selectedIdx === 0 && (
+                    <button
+                      onClick={() => setSubtitleBg(!subtitleBg)}
                       style={{
-                        width: '100%', aspectRatio: '16/9', borderRadius: 7,
-                        border: isSel
-                          ? '2px solid #f59e0b'
-                          : cutDone ? '1px solid #86efac' : '1px solid #e5e7eb',
-                        cursor: 'pointer', transition: 'border-color 0.12s, transform 0.1s',
-                        position: 'relative', overflow: 'hidden', padding: 0, background: 'transparent',
-                        transform: isSel ? 'scale(1.03)' : 'scale(1)',
-                        boxShadow: isSel ? '0 0 0 2px rgba(245,158,11,0.4)' : 'none',
-                        zIndex: isSel ? 1 : 0,
+                        padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 700,
+                        background: subtitleBg ? 'rgba(124,58,237,0.18)' : 'rgba(30,20,60,0.06)',
+                        border: `1px solid ${subtitleBg ? 'rgba(124,58,237,0.5)' : 'rgba(124,58,237,0.2)'}`,
+                        color: subtitleBg ? '#a78bfa' : '#6d28d9',
+                        cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                        transition: 'all 0.15s',
                       }}>
-                      {/* 썸네일 — bgUrl 이미지 / MP 삽입 시 🎬 배지 */}
-                      {hasBg ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={s.bgUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                      ) : null}
-                      <div style={{
-                        position: 'absolute', inset: 0,
-                        background: hasBg
-                          ? 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%)'
-                          : 'transparent',
-                        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-                        padding: '0 6px 4px',
-                      }}>
-                        <span style={{ fontSize: 12, fontWeight: 400, lineHeight: 1.3, color: hasBg ? '#fff' : (isSel ? '#b45309' : '#9ca3af') }}>
-                          <span style={{ display: 'block' }}>{si + 1}</span>
-                          <span style={{ display: 'block', opacity: 0.75, fontSize: 11 }}>{sceneCodeSuffix(s.sceneCode)}</span>
-                        </span>
-                      </div>
-                      {/* 우상단: hook 별 + MP배지 + 타입 도트 */}
-                      <div style={{ position: 'absolute', top: 3, right: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
-                        {s.isHook && <span style={{ fontSize: 8, color: '#f59e0b', lineHeight: 1 }}>★</span>}
-                        {s.lipsyncUrl && <span style={{ fontSize: 7, fontWeight: 900, color: '#7c3aed', lineHeight: 1, background: 'rgba(124,58,237,0.15)', padding: '1px 3px', borderRadius: 3 }}>MP</span>}
-                        <span style={{
-                          width: 6, height: 6, borderRadius: '50%', flexShrink: 0, display: 'inline-block',
-                          background: dotColor,
-                        }} />
-                      </div>
+                      자막배경 {subtitleBg ? 'ON' : 'OFF'}
                     </button>
-                  );
-                })}
+                  )}
+                </div>
               </div>
             )}
-            </div>
+
+            {/* ── 4컷 그리드 영역 — HOOK 단독 컬럼은 제외 (LD-015) ── */}
+            {scene && selectedIdx > 0 && (
+              <div style={{ marginTop: 4 }}>
+                {/* 4컷 API 생성 + 새로고침 + 업로드 버튼 */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4 }}>
+                  <button
+                    onClick={handleGridApiGenerate}
+                    disabled={gridApiLoading || gridUploadLoading}
+                    style={{
+                      padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 900,
+                      background: gridApiLoading ? 'rgba(107,114,128,0.05)' : 'rgba(99,102,241,0.07)',
+                      border: `1px solid ${gridApiLoading ? 'rgba(107,114,128,0.18)' : 'rgba(99,102,241,0.28)'}`,
+                      color: gridApiLoading ? '#9ca3af' : '#4f46e5',
+                      cursor: (gridApiLoading || gridUploadLoading) ? 'not-allowed' : 'pointer',
+                      transition: 'all 0.15s',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    }}>
+                    {gridApiLoading
+                      ? <><svg width={11} height={11} viewBox="0 0 24 24" style={{ animation: 'spin 1s linear infinite' }}><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="30 70" strokeLinecap="round"/></svg>생성 중...</>
+                      : '🔲 4컷 API 생성'}
+                  </button>
+                  {/* 새로고침 */}
+                  <button
+                    onClick={() => { window.location.reload(); }}
+                    title="새로고침 (Ctrl+Shift+R)"
+                    style={{
+                      padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 600,
+                      background: '#666666',
+                      border: '1px solid #888888',
+                      color: '#ffffff',
+                      cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                      transition: 'all 0.15s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#777777'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#666666'; }}
+                  >
+                    ↻ 새로고침
+                  </button>
+                  <button
+                    onClick={() => gridUploadInputRef.current?.click()}
+                    disabled={gridUploadLoading || gridApiLoading}
+                    style={{
+                      padding: '5px 0', borderRadius: 7, fontSize: 11, fontWeight: 900,
+                      background: gridUploadLoading ? 'rgba(107,114,128,0.05)' : 'rgba(16,185,129,0.07)',
+                      border: `1px solid ${gridUploadLoading ? 'rgba(107,114,128,0.18)' : 'rgba(16,185,129,0.28)'}`,
+                      color: gridUploadLoading ? '#9ca3af' : '#059669',
+                      cursor: (gridUploadLoading || gridApiLoading) ? 'not-allowed' : 'pointer',
+                      transition: 'all 0.15s',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    }}>
+                    {gridUploadLoading
+                      ? <><svg width={11} height={11} viewBox="0 0 24 24" style={{ animation: 'spin 1s linear infinite' }}><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="30 70" strokeLinecap="round"/></svg>업로드 중...</>
+                      : '📤 4컷 이미지 업로드'}
+                  </button>
+                </div>
+                <div style={{ borderBottom: '1px solid rgba(0,0,0,0.1)', margin: '8px 0 4px' }} />
+                {gridApiResult && (
+                  <div style={{ fontSize: 10, color: gridApiResult.startsWith('✓') ? '#059669' : '#dc2626', marginTop: 4, paddingLeft: 2 }}>
+                    {gridApiResult}
+                  </div>
+                )}
+                {/* 4컷 그리드 프롬프트 — 항상 표시 (컷 선택 시 자동 로드) */}
+                <div style={{ marginTop: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                    <span style={{ fontSize: 9, fontWeight: 900, color: '#9ca3af', letterSpacing: '0.1em', paddingLeft: 2, flex: 1 }}>
+                      4컷 그리드 프롬프트
+                      {gridGroupCuts.length > 0 && (
+                        <span style={{ fontWeight: 600, color: '#6b7280', marginLeft: 4 }}>
+                          ({gridGroupCuts.map(c => c.replace(/^\d{8}_\d{6}_ch\d+/, '')).join(', ')})
+                        </span>
+                      )}
+                    </span>
+                    {gridPromptLoading && (
+                      <svg width={10} height={10} viewBox="0 0 24 24" style={{ animation: 'spin 1s linear infinite', color: '#9ca3af' }}>
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="30 70" strokeLinecap="round"/>
+                      </svg>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (!gridPromptText) return;
+                        try {
+                          navigator.clipboard.writeText(gridPromptText).then(() => {
+                            setGridCopied(true); setTimeout(() => setGridCopied(false), 1500);
+                          });
+                        } catch {
+                          const ta = document.createElement('textarea');
+                          ta.value = gridPromptText; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                          document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+                          document.body.removeChild(ta);
+                          setGridCopied(true); setTimeout(() => setGridCopied(false), 1500);
+                        }
+                      }}
+                      style={{
+                        padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 700,
+                        background: gridCopied ? 'rgba(16,185,129,0.1)' : 'rgba(16,185,129,0.07)',
+                        border: `1px solid ${gridCopied ? 'rgba(16,185,129,0.3)' : 'rgba(16,185,129,0.2)'}`,
+                        color: '#059669', cursor: gridPromptText ? 'pointer' : 'default',
+                        opacity: gridPromptText ? 1 : 0.35, transition: 'all 0.15s',
+                      }}>
+                      {gridCopied ? '복사됨 ✓' : '복사'}
+                    </button>
+                  </div>
+                  <textarea
+                    value={gridPromptLoading ? '' : gridPromptText}
+                    onChange={e => setGridPromptText(e.target.value)}
+                    placeholder={gridPromptLoading ? '⏳ 그리드 프롬프트 생성 중...' : '4컷 그리드 프롬프트'}
+                    rows={6}
+                    style={{ width: '100%', boxSizing: 'border-box', border: '1px solid #d1fae5', borderRadius: 8, padding: '8px 10px', fontSize: 10, lineHeight: 1.7, color: '#374151', background: '#f0fdf4', resize: 'vertical', outline: 'none', fontFamily: 'inherit', opacity: gridPromptLoading ? 0.5 : 1 }}
+                    onFocus={e => { e.currentTarget.style.borderColor = '#6ee7b7'; e.currentTarget.style.background = '#fff'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = '#d1fae5'; e.currentTarget.style.background = '#f0fdf4'; }}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* ── 이미지 프롬프트 창 — 항상 하단 고정 ── */}
             {scene && (
@@ -1304,7 +1696,8 @@ export default function KeyframePage() {
                 {/* 헤더 */}
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10, gap: 6 }}>
                   <span style={{ fontSize: 9, fontWeight: 900, color: '#9ca3af', letterSpacing: '0.1em', paddingLeft: 2, flex: 1 }}>
-                    {cutType === 'dialogue' ? '이미지 프롬프트' : '배경 프롬프트'}
+                    {cutType === 'dialogue' ? '이미지 프롬프트' : '1컷 프롬프트'}
+                    {scene && <span style={{ fontWeight: 600, color: '#6b7280', marginLeft: 6, fontSize: 16 }}>{sceneCodeSuffix(scene.sceneCode)}</span>}
                   </span>
                   <button
                     onClick={() => {
@@ -1363,7 +1756,7 @@ export default function KeyframePage() {
                   </span>
                 </div>
 
-                {/* 프롬프트 — dialogue: OTS 단일 / narration: 배경 프롬프트 */}
+                {/* 프롬프트 — dialogue: OTS 단일 / narration: 1컷 프롬프트 */}
                 {cutType === 'dialogue' ? (
                   <textarea
                     value={promptLoading ? '' : promptText}
@@ -1379,60 +1772,32 @@ export default function KeyframePage() {
                     value={promptLoading ? '' : bgPromptText}
                     onChange={e => setBgPromptText(e.target.value)}
                     placeholder={promptLoading ? '⏳ 프롬프트 생성 중...' : '배경 이미지 프롬프트 — 복사 후 외부 생성 → 업로드'}
-                    rows={10} disabled={promptLoading}
-                    style={{ width: '100%', boxSizing: 'border-box', border: '1px solid #e5e7eb', borderRadius: 8, padding: '8px 10px', fontSize: 11, lineHeight: 1.7, color: '#374151', background: '#f9fafb', resize: 'vertical', outline: 'none', fontFamily: 'inherit', opacity: promptLoading ? 0.5 : 1 }}
-                    onFocus={e => { e.currentTarget.style.borderColor = '#a5b4fc'; e.currentTarget.style.background = '#fff'; }}
-                    onBlur={e => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.background = '#f9fafb'; }}
+                    rows={6} disabled={promptLoading}
+                    style={{ width: '100%', boxSizing: 'border-box', border: '1px solid #333', borderRadius: 8, padding: '8px 10px', fontSize: 11, lineHeight: 1.7, color: '#DDDDDD', background: '#000000', resize: 'vertical', outline: 'none', fontFamily: 'inherit', opacity: promptLoading ? 0.5 : 1 }}
+                    onFocus={e => { e.currentTarget.style.borderColor = '#a5b4fc'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = '#333'; }}
                   />
                 )}
 
-                {/* 생성/업로드 버튼 — 타입별 */}
-                {cutType === 'dialogue' ? (
-                  <button
-                    onClick={handleRegenKeyframe}
-                    disabled={regenLoading || !scene}
-                    style={{
-                      marginTop: 8, width: '100%',
-                      padding: '8px 0', borderRadius: 8,
-                      background: regenLoading ? '#f3f4f6' : 'rgba(249,115,22,0.08)',
-                      border: `1px solid ${regenLoading ? '#e5e7eb' : 'rgba(249,115,22,0.35)'}`,
-                      color: regenLoading ? '#d1d5db' : '#c2410c',
-                      fontSize: 11, fontWeight: 800,
-                      cursor: regenLoading ? 'not-allowed' : 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                      transition: 'all 0.15s',
-                    }}>
-                    {regenLoading
-                      ? <><span style={{ fontSize: 12 }}>⏳</span> 생성 중...</>
-                      : <><span style={{ fontSize: 12 }}>✨</span> 이미지 생성</>
-                    }
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => bgInputRef.current?.click()}
-                    disabled={bgUploadLoading || !scene}
-                    style={{
-                      marginTop: 8, width: '100%',
-                      padding: '8px 0', borderRadius: 8,
-                      background: bgUploadLoading ? '#f3f4f6' : 'rgba(194,65,12,0.07)',
-                      border: `1px solid ${bgUploadLoading ? '#e5e7eb' : 'rgba(194,65,12,0.3)'}`,
-                      color: bgUploadLoading ? '#d1d5db' : '#c2410c',
-                      fontSize: 11, fontWeight: 800,
-                      cursor: (bgUploadLoading || !scene) ? 'not-allowed' : 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                      transition: 'all 0.15s',
-                    }}>
-                    {bgUploadLoading
-                      ? <><span style={{ fontSize: 12 }}>⏳</span> 업로드 중...</>
-                      : <><span style={{ fontSize: 12 }}>⬆️</span> 배경 업로드</>
-                    }
-                  </button>
+                {/* 한국어 번역 (Gemini 자동 번역) */}
+                {(translating || koTranslation) && (
+                  <div style={{
+                    marginTop: 8, padding: '7px 10px',
+                    background: '#f8fafc', border: '1px solid #e2e8f0',
+                    borderRadius: 7,
+                  }}>
+                    <p style={{ fontSize: 11, color: translating ? '#94a3b8' : '#475569', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-wrap' }}>
+                      {translating ? '번역 중...' : koTranslation}
+                    </p>
+                  </div>
                 )}
+
               </div>
             )}
           </div>
         </div>
-      </div>
+        </div>{/* 본문 flex 끝 */}
+      </div>{/* 공통 컨테이너 끝 */}
 
       {/* ── 챗봇 토글 버튼 ── */}
       <button
@@ -1479,7 +1844,7 @@ export default function KeyframePage() {
             </button>
           </div>
           {scene && (
-            <div style={{ marginTop: 4, fontSize: 10, color: '#9ca3af', fontFamily: 'monospace' }}>
+            <div style={{ marginTop: 4, fontSize: 10, color: '#9ca3af', fontFamily: "var(--font-en), 'Pretendard', sans-serif" }}>
               {sceneCodeSuffix(scene.sceneCode)} · {scene.type === 'dialogue' ? `💬 ${scene.speaker || '대사'}` : '나레이션'}
             </div>
           )}
@@ -1581,5 +1946,14 @@ export default function KeyframePage() {
         </div>
       </div>
     </div>
+
+    <Modal9x16
+      isOpen={modal9x16Open}
+      onClose={() => setModal9x16Open(false)}
+      seriesId={seriesId}
+      chapter={parseInt(scene?.sceneCode?.match(/ch(\d+)/i)?.[1] ?? '1', 10)}
+      scene={scene ? { sceneCode: scene.sceneCode, text: scene.text, storedTtsUrl: scene.storedTtsUrl } : null}
+    />
+    </>
   );
 }

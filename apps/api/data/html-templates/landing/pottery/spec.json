@@ -1,0 +1,136 @@
+{
+  "id": "landing",
+  "mode": "skeleton",
+  "label": "랜딩페이지",
+  "description": "Neo-Brutalism + 공예 미학 — 크리에이티브·공방·워크숍·식음료 소상공인 전용 랜딩",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "cream":  "#f5f0e8",
+    "clay":   "#e8613a",
+    "yellow": "#d4a84b",
+    "green":  "#7a9e5e",
+    "pink":   "#b05c52",
+    "ink":    "#1a1a1a",
+    "mud":    "#7a5c44"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["brand", "hero", "ticker_items", "about_heading", "about", "offerings_heading", "offerings", "pricing_heading", "plans", "testimonials_heading", "testimonials", "cta", "footer_info"],
+    "properties": {
+      "brand": {
+        "type": "object",
+        "required": ["name", "badge"],
+        "description": "브랜드 기본 정보",
+        "properties": {
+          "name":     { "type": "string", "description": "브랜드명 (예: CLAY STUDIO)" },
+          "badge":    { "type": "string", "description": "헤더 배지 텍스트 (예: ★ 도예 공방 — Est. 2021)" },
+          "nav_links":{ "type": "array", "items": { "type": "string" }, "description": "네비 링크 텍스트 (2~3개)", "maxItems": 3 }
+        }
+      },
+      "hero": {
+        "type": "object",
+        "required": ["line1", "line2", "line3", "sub", "cta_primary", "cta_secondary"],
+        "description": "히어로 섹션 — 3줄 타이틀 + 서브 + CTA 버튼",
+        "properties": {
+          "line1": { "type": "string", "description": "1줄: 채워진 텍스트 (예: 손으로 만드는)" },
+          "line2": { "type": "string", "description": "2줄: 아웃라인(stroke) 텍스트 (예: 나만의)" },
+          "line3": { "type": "string", "description": "3줄: 점토색 강조 텍스트 (예: 일상.)" },
+          "sub":   { "type": "string", "description": "서브헤딩 2~3문장" },
+          "cta_primary":   { "type": "string", "description": "주 버튼 텍스트" },
+          "cta_secondary": { "type": "string", "description": "보조 버튼 텍스트" }
+        }
+      },
+      "ticker_items": {
+        "type": "array",
+        "minItems": 5,
+        "maxItems": 8,
+        "description": "마키 티커 아이템 (대문자 짧은 단어/문구)",
+        "items": { "type": "string" }
+      },
+      "about_heading": { "type": "string", "description": "소개 섹션 제목 (예: OUR STORY)" },
+      "about_year":    { "type": "string", "description": "연도 또는 숫자 (큰 글씨로 표시, 예: 2021)" },
+      "about": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "description": "브랜드 스토리 단락",
+        "items": { "type": "string" }
+      },
+      "offerings_heading": { "type": "string", "description": "클래스·상품 섹션 제목 (예: CLASSES)" },
+      "offerings": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 5,
+        "description": "클래스 또는 상품 목록",
+        "items": {
+          "type": "object",
+          "required": ["name", "icon", "desc"],
+          "properties": {
+            "name":     { "type": "string", "description": "클래스·상품명" },
+            "icon":     { "type": "string", "description": "이모지" },
+            "duration": { "type": "string", "description": "소요 시간 또는 용량 (선택, 예: 2hr, 200g)" },
+            "price":    { "type": "string", "description": "가격 (선택)" },
+            "desc":     { "type": "string", "description": "설명 1~2문장" },
+            "tag":      { "type": "string", "description": "배지 (선택, 예: BESTSELLER, NEW, LIMITED)" }
+          }
+        }
+      },
+      "pricing_heading": { "type": "string", "description": "가격 플랜 섹션 제목 (예: PLANS)" },
+      "plans": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "description": "구독·가격 플랜",
+        "items": {
+          "type": "object",
+          "required": ["name", "price", "features", "cta"],
+          "properties": {
+            "name":     { "type": "string", "description": "플랜명 (예: STARTER, PRO, STUDIO)" },
+            "price":    { "type": "string", "description": "가격 (예: ₩89,000)" },
+            "period":   { "type": "string", "description": "기간 (예: / 월, / 회, / 년)" },
+            "features": { "type": "array", "items": { "type": "string" }, "minItems": 3, "maxItems": 5 },
+            "cta":      { "type": "string", "description": "버튼 텍스트" },
+            "featured": { "type": "boolean", "description": "추천 플랜 강조 여부" }
+          }
+        }
+      },
+      "testimonials_heading": { "type": "string", "description": "후기 섹션 제목 (예: WHAT THEY SAY)" },
+      "testimonials": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "required": ["quote", "name"],
+          "properties": {
+            "quote":  { "type": "string", "description": "후기 내용 2~3문장" },
+            "name":   { "type": "string" },
+            "detail": { "type": "string", "description": "설명 (예: 3개월 수강생, 2년 멤버십)" }
+          }
+        }
+      },
+      "cta": {
+        "type": "object",
+        "required": ["heading", "body", "label"],
+        "description": "최종 CTA 섹션",
+        "properties": {
+          "heading":   { "type": "string", "description": "CTA 헤딩 (예: JOIN THE CLUB)" },
+          "body":      { "type": "string", "description": "CTA 본문 1~2문장" },
+          "label":     { "type": "string", "description": "주 CTA 버튼 텍스트" },
+          "sub_label": { "type": "string", "description": "보조 링크 텍스트 (선택)" }
+        }
+      },
+      "footer_info": {
+        "type": "object",
+        "description": "하단 연락처 정보",
+        "properties": {
+          "address":   { "type": "string" },
+          "hours":     { "type": "string", "description": "영업 시간" },
+          "email":     { "type": "string" },
+          "instagram": { "type": "string", "description": "인스타그램 계정 (예: @brand)" }
+        }
+      }
+    }
+  }
+}

@@ -1,10 +1,13 @@
-"""세계관 생성 서비스 — Gemini 1회 호출"""
+"""세계관 생성 서비스 — Gemini 1회 호출 (extract 모드는 call_free_llm)"""
 import asyncio
 import json
+import logging
 import pathlib
 from core.database import get_supabase
 from services.gemini_helper import call_gemini, extract_json
 from services.wiki_service import ingest_chunk, upsert_wiki_page, search_chunks
+
+logger = logging.getLogger(__name__)
 
 # world_options.json 경로 (파일은 요청마다 새로 읽어 서버 재시작 없이 반영)
 _OPTIONS_PATH = pathlib.Path(__file__).parent.parent / "data" / "world_options.json"
@@ -42,40 +45,66 @@ def _build_selected_options_block(selected: dict) -> str:
     lines.append("## ★ 사용자 확정 세계관 설정 (반드시 그대로 반영)")
     lines.append("아래 설정은 사용자가 직접 선택한 것입니다. 변경하거나 무시하지 마십시오.\n")
 
-    if bg_id and (opt := _find_option("backgrounds", bg_id)):
+    opt = _find_option("backgrounds", bg_id) if bg_id else None
+    if bg_id and opt:
         lines.append(f"### 배경/장소: {opt['label']}")
         lines.append(f"- 핵심 긴장: {opt['tension']}")
         if opt.get("scene"):
             lines.append(f"- 시작 장면 앵커: {opt['scene']}")
         lines.append("  → socialBackground는 이 배경 위에서 설계할 것\n")
+    elif bg_id:
+        # ID가 world_options.json에 없는 경우 → 자유 텍스트 직접 주입
+        freeform_text = selected.get("background", "")
+        if freeform_text:
+            lines.append(f"### 배경/장소: {freeform_text}")
+            lines.append("  → socialBackground는 이 배경 위에서 설계할 것\n")
 
-    if rel_id and (opt := _find_option("relationships", rel_id)):
+    opt = _find_option("relationships", rel_id) if rel_id else None
+    if rel_id and opt:
         lines.append(f"### 두 주인공의 관계: {opt['label']}")
         lines.append(f"- 핵심 긴장: {opt['tension']}")
         if opt.get("scene"):
             lines.append(f"- 첫 만남 장면 앵커: {opt['scene']}")
         lines.append("  → relationship 필드는 이 관계 구조를 그대로 사용할 것\n")
+    elif rel_id:
+        freeform_text = selected.get("relationship", "")
+        if freeform_text:
+            lines.append(f"### 두 주인공의 관계: {freeform_text}")
+            lines.append("  → relationship 필드는 이 관계 구조를 그대로 사용할 것\n")
 
-    if soc_id and (opt := _find_option("social_fractures", soc_id)):
+    opt = _find_option("social_fractures", soc_id) if soc_id else None
+    if soc_id and opt:
         lines.append(f"### 사회적 균열: {opt['label']}")
         lines.append(f"- 드라마 뿌리: {opt['tension']}")
         if opt.get("scene"):
             lines.append(f"- 현장 장면 앵커: {opt['scene']}")
         lines.append("  → coreTheme/coreWound에 이 사회적 균열을 반드시 녹일 것\n")
+    elif soc_id:
+        freeform_text = selected.get("social_fracture", "")
+        if freeform_text:
+            lines.append(f"### 사회적 균열: {freeform_text}")
+            lines.append("  → coreTheme/coreWound에 이 사회적 균열을 반드시 녹일 것\n")
 
-    if conf_id and (opt := _find_option("conflict_structures", conf_id)):
+    opt = _find_option("conflict_structures", conf_id) if conf_id else None
+    if conf_id and opt:
         lines.append(f"### 갈등 구조: {opt['label']}")
         lines.append(f"- 갈등의 본질: {opt['tension']}")
         if opt.get("scene"):
             lines.append(f"- 갈등 장면 앵커: {opt['scene']}")
         lines.append("  → storyArc 전체가 이 갈등 구조 위에서 전개될 것\n")
+    elif conf_id:
+        freeform_text = selected.get("conflict_structure", "")
+        if freeform_text:
+            lines.append(f"### 갈등 구조: {freeform_text}")
+            lines.append("  → storyArc 전체가 이 갈등 구조 위에서 전개될 것\n")
 
     pov_id = selected.get("narrative_pov")
-    if pov_id and (opt := _find_option("narrative_povs", pov_id)):
-        lines.append(f"### 서술 시점: {opt['label']}")
-        lines.append(f"- 서술 효과: {opt['tension']}")
-        if opt.get("scene"):
-            lines.append(f"- 시점 장면 앵커: {opt['scene']}")
+    pov_opt = _find_option("narrative_povs", pov_id) if pov_id else None
+    if pov_id and pov_opt:
+        lines.append(f"### 서술 시점: {pov_opt['label']}")
+        lines.append(f"- 서술 효과: {pov_opt['tension']}")
+        if pov_opt.get("scene"):
+            lines.append(f"- 시점 장면 앵커: {pov_opt['scene']}")
         if pov_id == "pov_01":
             lines.append("  → 모든 챕터를 주인공의 1인칭 독백으로 서술. 주인공의 내면·판단·감정이 직접 드러날 것\n")
         elif pov_id == "pov_02":
@@ -84,19 +113,29 @@ def _build_selected_options_block(selected: dict) -> str:
             lines.append("  → 빌런의 1인칭 독백. 빌런은 자신의 행동을 정당화하는 방식으로 서술. 독자가 빌런의 논리에 설득당하도록 설계할 것\n")
         elif pov_id == "pov_04":
             lines.append("  → 3인칭 전지적 시점. 여러 인물의 내면을 자유롭게 오가며 서술. 독자가 인물들보다 더 많이 알도록 설계할 것\n")
+    elif pov_id:
+        freeform_text = selected.get("narrative_pov", "")
+        if freeform_text and freeform_text != pov_id:
+            lines.append(f"### 서술 시점: {freeform_text}\n")
 
     res_id = selected.get("resolution_method")
-    if res_id and (opt := _find_option("resolution_methods", res_id)):
-        category = opt.get("category", "")
-        lines.append(f"### 갈등 해소 방식: {opt['label']} ({category})")
-        lines.append(f"- 해소의 본질: {opt['tension']}")
-        if opt.get("scene"):
-            lines.append(f"- 결말 장면 앵커: {opt['scene']}")
+    res_opt = _find_option("resolution_methods", res_id) if res_id else None
+    if res_id and res_opt:
+        category = res_opt.get("category", "")
+        lines.append(f"### 갈등 해소 방식: {res_opt['label']} ({category})")
+        lines.append(f"- 해소의 본질: {res_opt['tension']}")
+        if res_opt.get("scene"):
+            lines.append(f"- 결말 장면 앵커: {res_opt['scene']}")
         lines.append("  → storyArc ch06과 seriesDirection은 반드시 이 방식으로 귀결될 것")
         if category == "비현실적":
             lines.append("  → 초자연·판타지 요소를 결말에 자연스럽게 녹일 것 (갑작스러운 삽입 금지)\n")
         else:
             lines.append("  → 기억상실·타임슬립·초자연 요소로 마무리 금지 — 현실 안에서 해소할 것\n")
+    elif res_id:
+        freeform_text = selected.get("resolution_method", "")
+        if freeform_text and freeform_text != res_id:
+            lines.append(f"### 갈등 해소 방식: {freeform_text}")
+            lines.append("  → storyArc ch06과 seriesDirection은 반드시 이 방식으로 귀결될 것\n")
 
     lines.append("---")
     return "\n".join(lines)
@@ -118,7 +157,7 @@ def _classify_sources(chunks: list[dict]) -> tuple[list[str], list[str]]:
 
     for c in chunks:
         content = c.get("content", "")
-        ref = c.get("source_ref", "").lower()
+        ref = (c.get("source_ref") or "").lower()
 
         # 파일명·내용 기반 판단
         is_fact = any(kw in ref or kw in content[:200] for kw in FACT_KEYWORDS)
@@ -184,6 +223,79 @@ def _build_source_block(fact_chunks: list[str], fiction_chunks: list[str]) -> st
     return "## 참고 소스\n\n" + "\n\n---\n\n".join(parts) + "\n\n---\n"
 
 
+async def _extract_world_from_source(series_id: str, source_summary: dict, topic: str) -> dict:
+    """sourceMode='extract': 소스 원문에서 세계관을 보존 추출 (시대·이름·장르 변형 금지)"""
+    from services.gemini_helper import call_free_llm
+    from core.config import settings
+
+    filename = source_summary.get("filename", "")
+    src_text = ""
+
+    if filename:
+        src_path = settings.SOURCE_DIR / series_id / filename
+        try:
+            src_text = src_path.read_text(encoding="utf-8")[:6000]
+        except Exception as e:
+            logger.warning(f"소스 파일 읽기 실패 ({src_path}): {e}")
+
+    if not src_text:
+        key_sentences = source_summary.get("key_sentences", [])
+        summary = source_summary.get("summary", "")
+        src_text = (summary + "\n" + "\n".join(key_sentences)).strip()
+
+    if not src_text:
+        raise ValueError("소스 원문이 없어 extract 세계관 추출 불가")
+
+    prompt = f"""당신은 한국 웹소설 분석 전문가입니다.
+
+## 소스 원문
+{src_text}
+
+## 작가 주제
+{topic}
+
+소스 원문에서 세계관 정보를 정확히 추출하세요.
+
+⚠️ 절대 규칙:
+- 소스의 시대·배경·인물 이름·장르를 그대로 보존 (현대 한국 변환 금지)
+- 소스에 없는 내용 창작 금지
+- openingHook은 소스의 실제 첫 장면 또는 가장 강렬한 장면으로
+- storyArc는 소스의 실제 서사 흐름을 따를 것
+- charARole / charBRole에 소스의 실제 인물 이름 포함 가능
+
+아래 JSON 형식만 출력하세요. 설명·마크다운·코드블록 없이 순수 JSON만 출력합니다.
+
+{{
+  "title": "소스 기반 시리즈 제목",
+  "genre": "소스의 실제 장르",
+  "style": "소스의 실제 문체",
+  "relationship": "소스의 두 주인공 관계",
+  "conflictTypes": ["소스의 실제 갈등 키워드"],
+  "socialBackground": "소스의 시대적·사회적 배경 (현대 변환 절대 금지)",
+  "coreTheme": "소스의 핵심 주제의식",
+  "coreWound": "소스의 두 주인공이 공명하는 감정",
+  "openingHook": "소스의 실제 첫 장면 또는 가장 강렬한 장면",
+  "seriesDirection": "소스의 서사가 나아가는 방향",
+  "charARole": "소스의 주인공 A 역할 (소스 원문 이름 그대로)",
+  "charBRole": "소스의 주인공 B 역할 (소스 원문 이름 그대로)",
+  "storyArc": {{
+    "ch01": "소스 기반 도입부",
+    "ch02": "소스 기반 전개 1",
+    "ch03": "소스 기반 전개 2",
+    "ch04": "소스 기반 클라이맥스 1",
+    "ch05": "소스 기반 클라이맥스 2",
+    "ch06": "소스 기반 잠정 결말"
+  }}
+}}"""
+
+    raw = await call_free_llm(prompt, max_tokens=2000, temperature=0.3)
+    world = extract_json(raw)
+    if not world or not world.get("title"):
+        raise ValueError(f"소스 원문 세계관 추출 실패 — raw: {raw[:200]}")
+    logger.info(f"[{series_id}] extract_world 완료: {world.get('title')}")
+    return world
+
+
 async def run_world(series_id: str) -> dict:
     """
     1. 업로드 소스 → 팩트/소설 분류 → 차별화된 프롬프트 구성
@@ -200,39 +312,47 @@ async def run_world(series_id: str) -> dict:
     series = res.data
     topic: str = series.get("topic", "")
     world_data: dict = series.get("world_data") or {}
+    source_mode: str = world_data.get("sourceMode", "design")
 
-    # source_summary가 있으면 Python 분석 결과 사용 (Gemini 임베딩 스킵)
-    source_summary: dict = world_data.get("source_summary") or {}
-    if source_summary:
-        source_block = _build_summary_block(source_summary)
-        world_direction = "업로드된 소스의 핵심어·핵심문장을 세계관의 뿌리로 활용하세요."
-        fact_chunks: list[str] = []
-        fiction_chunks: list[str] = []
+    fact_chunks: list[str] = []
+    fiction_chunks: list[str] = []
+
+    # ── extract 경로: 소스 원문 보존 (call_free_llm) ───────────────────────────
+    if source_mode == "extract":
+        source_summary: dict = world_data.get("source_summary") or {}
+        world = await _extract_world_from_source(series_id, source_summary, topic)
+
+    # ── design 경로: 기존 Gemini 각색 흐름 ────────────────────────────────────
     else:
-        # RAG fallback (source_summary 없는 경우)
-        chunks = await search_chunks(series_id, topic, top_k=10)
-        fact_chunks, fiction_chunks = _classify_sources(chunks)
-        source_block = _build_source_block(fact_chunks, fiction_chunks)
-
-        if fact_chunks and not fiction_chunks:
-            world_direction = "팩트 소스에 나온 실제 사회·경제 현상을 세계관의 핵심 배경으로 삼으세요."
-        elif fiction_chunks and not fact_chunks:
-            world_direction = "소설 소스의 인물·갈등 구조를 현대 한국으로 완전히 각색하세요."
-        elif fact_chunks and fiction_chunks:
-            world_direction = "팩트 소스의 현실 배경 위에 소설 소스의 각색된 인물·갈등을 얹으세요."
+        source_summary = world_data.get("source_summary") or {}
+        if source_summary:
+            source_block = _build_summary_block(source_summary)
+            world_direction = "업로드된 소스의 핵심어·핵심문장을 세계관의 뿌리로 활용하세요."
         else:
-            world_direction = "주제에서 자연스럽게 세계관을 도출하세요."
+            # RAG fallback (source_summary 없는 경우)
+            chunks = await search_chunks(series_id, topic, top_k=10)
+            fact_chunks, fiction_chunks = _classify_sources(chunks)
+            source_block = _build_source_block(fact_chunks, fiction_chunks)
 
-    # 사용자가 미리 선택한 옵션 읽기 (없으면 빈 dict)
-    selected_options: dict = world_data.get("selectedOptions") or {}
-    options_block = _build_selected_options_block(selected_options)
+            if fact_chunks and not fiction_chunks:
+                world_direction = "팩트 소스에 나온 실제 사회·경제 현상을 세계관의 핵심 배경으로 삼으세요."
+            elif fiction_chunks and not fact_chunks:
+                world_direction = "소설 소스의 인물·갈등 구조를 현대 한국으로 완전히 각색하세요."
+            elif fact_chunks and fiction_chunks:
+                world_direction = "팩트 소스의 현실 배경 위에 소설 소스의 각색된 인물·갈등을 얹으세요."
+            else:
+                world_direction = "주제에서 자연스럽게 세계관을 도출하세요."
 
-    forbidden_words: list[str] = _load_options().get("_meta", {}).get("forbidden_words", [])
-    forbidden_block = ""
-    if forbidden_words:
-        forbidden_block = "## 절대 금지 표현\n" + "\n".join(f"- {w}" for w in forbidden_words)
+        # 사용자가 미리 선택한 옵션 읽기 (없으면 빈 dict)
+        selected_options: dict = world_data.get("selectedOptions") or {}
+        options_block = _build_selected_options_block(selected_options)
 
-    prompt = f"""당신은 한국 웹소설 기획 전문가입니다.
+        forbidden_words: list[str] = _load_options().get("_meta", {}).get("forbidden_words", [])
+        forbidden_block = ""
+        if forbidden_words:
+            forbidden_block = "## 절대 금지 표현\n" + "\n".join(f"- {w}" for w in forbidden_words)
+
+        prompt = f"""당신은 한국 웹소설 기획 전문가입니다.
 
 {source_block}
 작가 주제: "{topic}"
@@ -280,8 +400,8 @@ async def run_world(series_id: str) -> dict:
 {forbidden_block}
 """
 
-    raw = await call_gemini(prompt, max_tokens=3000, temperature=0.9)
-    world = extract_json(raw)
+        raw = await call_gemini(prompt, max_tokens=3000, temperature=0.9)
+        world = extract_json(raw)
 
     # conflictTypes: Gemini가 자유 생성한 키워드 그대로 보존 (더 이상 28개 카탈로그로 강제 환원하지 않음)
     # selectedOptions는 world_data에 그대로 유지

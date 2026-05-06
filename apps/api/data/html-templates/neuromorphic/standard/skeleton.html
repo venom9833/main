@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.identity.handle }} — {{ content.identity.role }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="nr-page">
+
+  <!-- ─── Identity ─── -->
+  <header class="nr-header">
+    <div class="nr-header-top">
+      <div class="nr-sys-info">
+        {% if content.identity.system_id %}<span class="nr-sys-id">{{ content.identity.system_id }}</span>{% endif %}
+        <span class="nr-status nr-status--{{ content.identity.status | lower | default('online') }}">
+          <span class="nr-status-dot"></span>{{ content.identity.status | default('ONLINE') }}
+        </span>
+      </div>
+      {% if content.identity.location %}<span class="nr-location">📍 {{ content.identity.location }}</span>{% endif %}
+    </div>
+    <div class="nr-identity-main">
+      <p class="nr-handle">{{ content.identity.handle }}</p>
+      <h1 class="nr-name">{{ content.identity.name }}</h1>
+      <p class="nr-role">{{ content.identity.role }}</p>
+      <p class="nr-tagline">{{ content.identity.tagline }}</p>
+    </div>
+  </header>
+
+  <!-- ─── Metrics ─── -->
+  <section class="nr-section">
+    <h2 class="nr-section-label">{{ content.metrics_heading }}</h2>
+    <div class="nr-metrics">
+      {% for m in content.metrics %}
+      <div class="nr-metric">
+        <span class="nr-metric-value">{{ m.value }}</span>
+        <span class="nr-metric-label">{{ m.label }}</span>
+        {% if m.unit %}<span class="nr-metric-unit">{{ m.unit }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ─── Modules (Tech Stack) ─── -->
+  <section class="nr-section">
+    <h2 class="nr-section-label">{{ content.modules_heading }}</h2>
+    <div class="nr-modules">
+      {% for mod in content.modules %}
+      <div class="nr-module-group">
+        <span class="nr-mod-category">{{ mod.category }}</span>
+        <div class="nr-mod-tags">
+          {% for item in mod.items %}<span class="nr-mod-tag">{{ item }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ─── Projects ─── -->
+  <section class="nr-section">
+    <h2 class="nr-section-label">{{ content.projects_heading }}</h2>
+    <div class="nr-projects">
+      {% for proj in content.projects %}
+      <div class="nr-project">
+        <div class="nr-proj-header">
+          <div class="nr-proj-title-row">
+            {% if proj.status %}
+            <span class="nr-proc-status nr-proc-status--{{ proj.status | lower }}">{{ proj.status }}</span>
+            {% endif %}
+            <h3 class="nr-proj-name">
+              {% if proj.url %}<a href="{{ proj.url }}" target="_blank">{{ proj.name }}</a>{% else %}{{ proj.name }}{% endif %}
+            </h3>
+          </div>
+          {% if proj.metric %}<span class="nr-proj-metric">{{ proj.metric }}</span>{% endif %}
+        </div>
+        <p class="nr-proj-desc">{{ proj.desc }}</p>
+        <div class="nr-proj-tags">
+          {% for tag in proj.tags %}<span class="nr-tag">{{ tag }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ─── Connect ─── -->
+  <section class="nr-section">
+    <h2 class="nr-section-label">{{ content.connect_heading }}</h2>
+    <div class="nr-connect">
+      {% for item in content.connect_items %}
+      <a class="nr-connect-item" {% if item.url %}href="{{ item.url }}" target="_blank"{% else %}href="#"{% endif %}>
+        <span class="nr-connect-protocol">{{ item.protocol }}</span>
+        <span class="nr-connect-icon">{{ item.icon }}</span>
+        <span class="nr-connect-value">{{ item.value }}</span>
+        <span class="nr-connect-arrow">→</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

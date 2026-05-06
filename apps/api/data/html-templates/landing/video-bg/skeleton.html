@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.brand }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SITE HEADER (fixed, 스크롤 시 .is-scrolled 클래스 추가됨)
+     ============================================================ -->
+<header class="site-header" id="site-header">
+
+  <!-- 로고 -->
+  <a href="/" class="header-logo">{{ content.brand }}</a>
+
+  <!-- 데스크톱 네비게이션 -->
+  {% if content.nav_links %}
+  <nav class="header-nav" aria-label="주 네비게이션">
+    {% for link in content.nav_links %}
+    <a href="{{ link.href }}">{{ link.label }}</a>
+    {% endfor %}
+  </nav>
+  {% endif %}
+
+  <!-- 헤더 CTA (데스크톱) -->
+  {% if content.header_cta %}
+  <a href="#contact" class="btn-glass header-cta">{{ content.header_cta }}</a>
+  {% endif %}
+
+  <!-- 햄버거 버튼 (모바일 ≤ 768px 에서만 표시) -->
+  <button class="btn-menu" id="menuToggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileMenu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+</header>
+
+
+<!-- ============================================================
+     모바일 메뉴 오버레이
+     .is-open 클래스로 translateX(0) 전환
+     ============================================================ -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="모바일 메뉴">
+
+  <button class="mobile-menu-close" id="menuClose" aria-label="메뉴 닫기">✕</button>
+
+  <nav class="mobile-nav" aria-label="모바일 네비게이션">
+    {% if content.nav_links %}
+    {% for link in content.nav_links %}
+    <a href="{{ link.href }}">{{ link.label }}</a>
+    {% endfor %}
+    {% endif %}
+    {% if content.header_cta %}
+    <a href="#contact" class="mobile-cta">{{ content.header_cta }}</a>
+    {% endif %}
+  </nav>
+
+</div>
+
+
+<!-- ============================================================
+     SCROLL CONTAINER — scroll-snap-type: y mandatory
+     각 .scroll-section이 100vh 단위로 스냅됨
+     ============================================================ -->
+<div class="scroll-container" id="scrollContainer">
+
+  {% for section in content.sections %}
+  <!-- ── 섹션 {{ loop.index }}: {{ section.type or 'project' }} ── -->
+  <section
+    class="scroll-section scroll-section--{{ section.type or 'project' }}"
+    id="section-{{ loop.index }}"
+    aria-label="{{ section.headline }}"
+  >
+
+    <!-- 배경: video_url이 있으면 <video>, 없으면 CSS 그라디언트 -->
+    <div
+      class="section-bg {% if not section.video_url %}section-bg--gradient{% endif %}"
+      {% if not section.video_url %}style="background: {{ section.bg_gradient }};"{% endif %}
+      aria-hidden="true"
+    >
+      {% if section.video_url %}
+      <video autoplay muted loop playsinline>
+        <source src="{{ section.video_url }}" type="video/mp4">
+      </video>
+      {% endif %}
+    </div>
+
+    <!-- 비네트 오버레이 -->
+    <div class="vignette" aria-hidden="true"></div>
+
+    <!-- 섹션 콘텐츠 -->
+    <article class="section-content">
+
+      <!-- 소형 태그 레이블 (선택) -->
+      {% if section.tag %}
+      <span class="type-tag">{{ section.tag }}</span>
+      {% endif %}
+
+      <!-- 헤딩: hero/final_cta → h1(lg), project → h2(xl) -->
+      {% if section.type == 'hero' or section.type == 'final_cta' %}
+      <h1 class="type-heading-lg">{{ section.headline }}</h1>
+      {% else %}
+      <h2 class="type-heading-xl">{{ section.headline }}</h2>
+      {% endif %}
+
+      <!-- 부제 (선택) -->
+      {% if section.body %}
+      <p class="section-desc">{{ section.body }}</p>
+      {% endif %}
+
+      <!-- CTA 버튼 행 -->
+      <div class="btn-row">
+
+        <!-- Primary CTA (Glass 버튼) -->
+        <a href="#contact" class="btn-glass">
+          <span class="btn-label">{{ section.cta_primary }}</span>
+          <span class="btn-icon" aria-hidden="true">▶</span>
+        </a>
+
+        <!-- Secondary CTA (텍스트 링크, 선택) -->
+        {% if section.cta_secondary %}
+        <a href="#work" class="btn-text">
+          {{ section.cta_secondary }}
+          <span class="btn-icon-sm" aria-hidden="true">▶</span>
+        </a>
+        {% endif %}
+
+      </div><!-- /.btn-row -->
+
+    </article><!-- /.section-content -->
+
+    <!-- 첫 번째 섹션(히어로)에만 스크롤 힌트 표시 -->
+    {% if loop.first %}
+    <div class="scroll-hint" aria-hidden="true">
+      <span></span>
+    </div>
+    {% endif %}
+
+  </section><!-- /.scroll-section -->
+  {% endfor %}
+
+</div><!-- /#scrollContainer -->
+
+
+<!-- ============================================================
+     인라인 스크립트 — 외부 JS 의존성 없음
+     1) Header scroll state (.is-scrolled)
+     2) Mobile menu toggle (.is-open)
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── 1. Header scroll state ── */
+  var hdr = document.getElementById('site-header');
+  var sc  = document.getElementById('scrollContainer');
+
+  if (hdr && sc) {
+    sc.addEventListener('scroll', function () {
+      var isScrolled = sc.scrollTop > 20;
+      hdr.classList.toggle('is-scrolled', isScrolled);
+    }, { passive: true });
+  }
+
+  /* ── 2. Mobile menu toggle ── */
+  var menuToggle  = document.getElementById('menuToggle');
+  var menuClose   = document.getElementById('menuClose');
+  var mobileMenu  = document.getElementById('mobileMenu');
+
+  function openMenu() {
+    if (!mobileMenu) return;
+    mobileMenu.classList.add('is-open');
+    if (menuToggle) menuToggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    if (!mobileMenu) return;
+    mobileMenu.classList.remove('is-open');
+    if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  if (menuToggle) menuToggle.addEventListener('click', openMenu);
+  if (menuClose)  menuClose.addEventListener('click', closeMenu);
+
+  /* 모바일 메뉴 내 링크 클릭 시 메뉴 닫기 */
+  if (mobileMenu) {
+    mobileMenu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', closeMenu);
+    });
+  }
+
+  /* ESC 키로 메뉴 닫기 */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+})();
+</script>
+
+</body>
+</html>

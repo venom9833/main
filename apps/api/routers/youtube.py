@@ -16,11 +16,20 @@ class MetadataRequest(BaseModel):
     privacy: Optional[str] = "public"
 
 
+class CaptionRequest(BaseModel):
+    chapter: int
+    langs: list[str] = ["ko", "en", "ja"]
+    mp4_path: Optional[str] = None  # KR burn-in 대상 MP4. 미입력 시 로컬 output 폴더 자동 탐색
+
+
 @router.get("/auth")
 def youtube_auth():
     """Google OAuth2 인증 시작 — 사용자를 Google 동의 화면으로 리다이렉트"""
     from core.config import settings
-    scope = "https://www.googleapis.com/auth/youtube.upload"
+    scope = (
+        "https://www.googleapis.com/auth/youtube.upload"
+        " https://www.googleapis.com/auth/youtube.force-ssl"
+    )
     redirect = "http://localhost:8100/api/v1/youtube/callback"
     url = (
         "https://accounts.google.com/o/oauth2/v2/auth"
@@ -76,6 +85,18 @@ async def get_upload_status(series_id: str):
     )
     uploads = res.data or []
     return uploads[0] if uploads else {"status": "not_uploaded"}
+
+
+@router.post("/{series_id}/captions")
+async def upload_captions(series_id: str, req: CaptionRequest, background_tasks: BackgroundTasks):
+    """챕터 SRT 병합 → 번역 → YouTube 자막 업로드.
+
+    chapter: 챕터 번호 (예: 1)
+    langs: ["ko", "en", "ja"] — 원하는 언어만 선택 가능
+    """
+    from services.youtube_service import upload_captions as _upload
+    background_tasks.add_task(_upload, series_id, req.chapter, req.langs, req.mp4_path or "")
+    return {"ok": True, "status": "uploading_captions", "langs": req.langs}
 
 
 @router.patch("/{series_id}/metadata")

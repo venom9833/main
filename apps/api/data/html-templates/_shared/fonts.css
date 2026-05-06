@@ -1,0 +1,5 @@
+/* Google Fonts — Pretendard를 로컬 CDN 대신 시스템 폰트로 사용 */
+/* Pretendard는 Google Fonts에 없으므로 CDN 링크 사용 */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+/* JetBrains Mono for code blocks */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');

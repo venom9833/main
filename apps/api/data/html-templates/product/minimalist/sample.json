@@ -1,0 +1,81 @@
+{
+  "product_name": "Syncly",
+  "tagline": "팀 노트를 실시간으로 동기화",
+  "description": "Syncly는 분산된 팀의 회의록, 아이디어, 프로젝트 노트를 하나의 공간에서 실시간으로 공유하는 협업 노트 앱입니다. Notion보다 가볍고, Confluence보다 빠르며, 구글 독스보다 팀워크에 최적화되어 있습니다.",
+  "cta_label": "무료로 시작하기",
+  "cta_url": "https://app.syncly.io/signup",
+  "badge": "베타 무료 · 신용카드 불필요",
+  "features": [
+    {
+      "icon": "⚡",
+      "title": "실시간 동시 편집",
+      "description": "최대 50명이 동시에 같은 문서를 편집할 수 있습니다. 각 팀원의 커서가 실시간으로 표시되며, 충돌 없이 완벽하게 병합됩니다."
+    },
+    {
+      "icon": "🔍",
+      "title": "스마트 검색",
+      "description": "팀 전체 노트를 0.1초 만에 검색합니다. 파일 이름뿐 아니라 내용 전체를 인덱싱하며, AI 의미 검색으로 비슷한 맥락의 문서도 찾아냅니다."
+    },
+    {
+      "icon": "🔗",
+      "title": "Slack / Jira 연동",
+      "description": "Slack에서 노트를 직접 공유하고, Jira 이슈와 노트를 연결합니다. 회의가 끝나면 자동으로 Slack 채널에 요약이 발송됩니다."
+    }
+  ],
+  "stats": [
+    { "value": "12만+", "label": "활성 팀" },
+    { "value": "0.1초", "label": "검색 응답" },
+    { "value": "99.9%", "label": "가동률" }
+  ],
+  "pricing": [
+    {
+      "name": "Free",
+      "price": "무료",
+      "period": "",
+      "features": [
+        "팀원 5명",
+        "문서 50개",
+        "검색 전체 지원",
+        "7일 버전 히스토리"
+      ],
+      "cta": "무료로 시작",
+      "highlighted": false
+    },
+    {
+      "name": "Pro",
+      "price": "₩12,000",
+      "period": "/인/월",
+      "features": [
+        "팀원 무제한",
+        "문서 무제한",
+        "AI 스마트 검색",
+        "180일 버전 히스토리",
+        "Slack / Jira 연동",
+        "커스텀 도메인"
+      ],
+      "cta": "Pro 시작하기",
+      "highlighted": true
+    },
+    {
+      "name": "Enterprise",
+      "price": "문의",
+      "period": "",
+      "features": [
+        "Pro 전체 포함",
+        "SSO / SAML",
+        "무제한 버전 히스토리",
+        "관리자 권한 세분화",
+        "전담 지원 매니저",
+        "SLA 99.95%"
+      ],
+      "cta": "영업팀 문의",
+      "highlighted": false
+    }
+  ],
+  "testimonial": {
+    "quote": "Syncly로 전환한 뒤 회의록 공유에 쓰던 시간이 70% 줄었습니다. 실시간 동시 편집이 되니 회의 중에 바로 정리가 되고, 회의가 끝나면 이미 공유 완료입니다.",
+    "author": "이민수",
+    "role": "Product Manager, 스타트업 Gridly"
+  },
+  "footer_text": "© 2026 Syncly Inc. · 이용약관 · 개인정보처리방침"
+}

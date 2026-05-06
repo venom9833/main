@@ -1,0 +1,308 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap');
+
+:root {
+  --font-base: 'DM Sans', 'Pretendard', sans-serif;
+  --font-display: 'Bebas Neue', cursive;
+}
+
+/* Landing StackingCards — 6카드 랜딩페이지 전용 스타일 */
+
+body { font-family: var(--font-base); }
+
+/* ════════════════════════════════════════
+   카드별 배경 · 전경색
+   1 Hero    : 다크 슬레이트 (극적)
+   2 Features: 흰색 (깔끔)
+   3 Steps   : 연 슬레이트 (차분)
+   4 Proof   : 인디고 (신뢰/임팩트)
+   5 Pricing : 흰색 (집중)
+   6 CTA     : 딥 인디고 (클로징)
+════════════════════════════════════════ */
+
+.sc-card--hero     { background: #0f172a; color: var(--c-text-on-dark); }
+.sc-card--features { background: #ffffff; color: var(--c-text-on-light); }
+.sc-card--steps    { background: #f1f5f9; color: var(--c-text-on-light); }
+.sc-card--proof    { background: #4338ca; color: #fff; }
+.sc-card--pricing  { background: #ffffff; color: var(--c-text-on-light); }
+.sc-card--cta      { background: #1e1b4b; color: #fff; }
+
+/* ─── Card 1: Hero ─── */
+.sc-eyebrow {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: var(--c-accent);
+  margin-bottom: 1.5rem;
+}
+
+.sc-headline {
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.04;
+  margin: 0 0 1.25rem;
+  max-width: 14ch;
+  font-family: var(--font-display);
+}
+
+.sc-tagline {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--c-text-muted-dark);
+  margin: 0 0 2.5rem;
+  max-width: 42ch;
+  line-height: 1.65;
+}
+
+.sc-btn {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  padding: 0.8rem 2rem;
+  border-radius: 0;
+  transition: opacity 0.18s, transform 0.15s;
+}
+.sc-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.sc-btn--hero {
+  background: var(--c-accent);
+  color: #0f172a;
+}
+
+.sc-scroll-hint {
+  margin-top: 3rem;
+  font-size: 1.25rem;
+  opacity: 0.35;
+  animation: sc-bounce 2s infinite;
+}
+@keyframes sc-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ─── Card 2: Features ─── */
+.sc-card--features .sc-section-title { color: var(--c-text-muted-light); }
+.sc-card--steps .sc-section-title    { color: var(--c-text-muted-light); }
+.sc-card--pricing .sc-section-title  { color: var(--c-text-muted-light); }
+.sc-card--proof .sc-section-title    { color: rgba(255,255,255,0.55); }
+.sc-card--cta .sc-section-title      { color: rgba(255,255,255,0.45); }
+.sc-card--hero .sc-section-title     { color: var(--c-text-muted-dark); }
+
+.sc-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem 2.5rem;
+}
+
+.sc-feature-icon {
+  display: block;
+  font-size: 1.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.sc-feature-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.02em;
+}
+
+.sc-feature-desc {
+  font-size: 0.85rem;
+  color: var(--c-text-muted-light);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ─── Card 3: Steps ─── */
+.sc-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sc-step {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.sc-step-num {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  background: var(--c-accent-dark);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  margin-top: 0.1rem;
+}
+
+.sc-step-body h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+  letter-spacing: -0.02em;
+}
+
+.sc-step-body p {
+  font-size: 0.85rem;
+  color: var(--c-text-muted-light);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ─── Card 4: Social Proof ─── */
+.sc-quote {
+  margin: 0 0 2rem;
+  padding: 0;
+  max-width: 52ch;
+}
+
+.sc-quote > p {
+  font-size: clamp(1.05rem, 2.5vw, 1.4rem);
+  font-weight: 500;
+  line-height: 1.55;
+  margin: 0 0 1.25rem;
+  font-style: italic;
+  opacity: 0.95;
+}
+
+.sc-quote footer {
+  font-size: 0.82rem;
+  opacity: 0.75;
+}
+.sc-quote footer strong { font-weight: 700; }
+
+.sc-proof-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.sc-stat-value {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: rgba(255,255,255,0.95);
+}
+
+.sc-stat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  opacity: 0.6;
+}
+
+/* ─── Card 5: Pricing ─── */
+.sc-pricing-box {
+  border: 1.5px solid #e5e7eb;
+  padding: 2rem 2.25rem;
+  max-width: 360px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sc-pricing-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--c-text-muted-light);
+  margin-bottom: 0.75rem;
+}
+
+.sc-pricing-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sc-price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: var(--c-text-on-light);
+}
+
+.sc-period {
+  font-size: 0.875rem;
+  color: var(--c-text-muted-light);
+}
+
+.sc-pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sc-pricing-features li {
+  font-size: 0.825rem;
+  padding-left: 1.2rem;
+  position: relative;
+  color: var(--c-text-muted-light);
+}
+.sc-pricing-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--c-accent-dark);
+  font-weight: 700;
+}
+
+.sc-btn--pricing {
+  display: block;
+  text-align: center;
+  background: var(--c-accent-dark);
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Card 6: Final CTA ─── */
+.sc-headline--cta {
+  color: #fff;
+  max-width: 16ch;
+}
+
+.sc-tagline--cta {
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 2.5rem;
+  max-width: 38ch;
+}
+
+.sc-btn--cta {
+  background: var(--c-accent);
+  color: #1e1b4b;
+}
+
+.sc-sub-text {
+  margin-top: 1rem;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 600px) {
+  .sc-feature-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .sc-headline { max-width: 100%; }
+  .sc-headline--cta { max-width: 100%; }
+  .sc-quote > p { font-size: 1rem; }
+  .sc-stat-value { font-size: 2.25rem; }
+}

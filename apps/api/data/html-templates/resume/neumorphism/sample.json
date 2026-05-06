@@ -1,0 +1,83 @@
+{
+  "person": {
+    "name": "이서준",
+    "title": "시니어 백엔드 엔지니어",
+    "email": "seojun.lee@example.com",
+    "phone": "010-9876-5432",
+    "location": "서울시 마포구",
+    "github": "github.com/seojun-lee",
+    "linkedin": "linkedin.com/in/seojunlee"
+  },
+  "summary_heading": "자기소개",
+  "summary": "Java와 Kotlin을 주력으로 6년간 핀테크와 커머스 도메인에서 대규모 분산 시스템을 설계·운영했습니다. MSA 아키텍처 전환 경험이 풍부하며, 초당 5만 트랜잭션을 안정적으로 처리하는 결제 시스템을 구축했습니다. 기술 부채 해소와 코드 품질 향상에 높은 관심을 가지고 있습니다.",
+  "experience_heading": "경력 사항",
+  "experiences": [
+    {
+      "role": "시니어 백엔드 엔지니어",
+      "company": "핀테크 기업 K페이",
+      "period": "2021.09 — 현재",
+      "location": "서울",
+      "bullets": [
+        "Spring Boot + Kafka 기반 이벤트 드리븐 결제 시스템 설계, TPS 50,000 처리 달성",
+        "모놀리식 서비스를 12개 마이크로서비스로 분리, 배포 주기 2주 → 2일로 단축",
+        "Redis 분산 락을 활용한 중복 결제 방지 로직 구현, 오류율 99.9% 감소",
+        "신규 입사자 온보딩 프로그램 기획 및 멘토링 (연간 4명)"
+      ]
+    },
+    {
+      "role": "백엔드 개발자",
+      "company": "이커머스 플랫폼 쇼핑",
+      "period": "2019.03 — 2021.08",
+      "location": "경기 성남",
+      "bullets": [
+        "상품 검색 엔진 Elasticsearch 도입, 검색 응답속도 80% 개선",
+        "주문/재고 서비스 DB 쿼리 최적화 (슬로우 쿼리 87% 제거)",
+        "배치 정산 시스템 재설계로 처리 시간 6시간 → 45분으로 단축"
+      ]
+    },
+    {
+      "role": "서버 개발자 (주니어)",
+      "company": "스타트업 로컬잇",
+      "period": "2018.07 — 2019.02",
+      "location": "서울",
+      "bullets": [
+        "Node.js + MongoDB 기반 지역 기반 소셜 서비스 백엔드 전담 개발",
+        "FCM 푸시 알림 시스템 구축 및 A/B 테스트 프레임워크 도입"
+      ]
+    }
+  ],
+  "education_heading": "학력",
+  "education": [
+    {
+      "school": "연세대학교",
+      "degree": "컴퓨터과학 학사",
+      "period": "2014.03 — 2018.02",
+      "note": "우등 졸업, 학점 4.1/4.5"
+    }
+  ],
+  "skills_heading": "기술 스택",
+  "skill_groups": [
+    {
+      "group": "언어 / 프레임워크",
+      "skills": ["Java", "Kotlin", "Spring Boot", "Spring Batch", "JPA / Hibernate"]
+    },
+    {
+      "group": "데이터 / 인프라",
+      "skills": ["PostgreSQL", "MySQL", "Redis", "Kafka", "Elasticsearch"]
+    },
+    {
+      "group": "DevOps / 클라우드",
+      "skills": ["AWS EKS", "Docker", "Terraform", "GitHub Actions", "Datadog"]
+    },
+    {
+      "group": "아키텍처 / 방법론",
+      "skills": ["MSA", "Event-Driven", "DDD", "TDD", "애자일 스크럼"]
+    }
+  ],
+  "certifications_heading": "자격증",
+  "certifications": [
+    { "name": "AWS Certified Developer – Associate", "issuer": "Amazon Web Services", "year": "2022" },
+    { "name": "정보처리기사", "issuer": "한국산업인력공단", "year": "2018" },
+    { "name": "SQLD", "issuer": "한국데이터산업진흥원", "year": "2019" }
+  ]
+}

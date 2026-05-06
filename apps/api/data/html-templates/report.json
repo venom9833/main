@@ -1,0 +1,152 @@
+{
+  "id": "report",
+  "label": "보고서",
+  "version": "1.0.0",
+  "description": "챕터 번호·데이터 시각화 자리표시자·요약 박스가 포함된 공식 분석 보고서.",
+
+  "layout": {
+    "type": "two-column",
+    "sidebar": {
+      "position": "left",
+      "width": "220px",
+      "behavior": "sticky",
+      "top": "2rem"
+    },
+    "main": {
+      "type": "single-column",
+      "padding": "0 2.5rem",
+      "maxWidth": "760px"
+    }
+  },
+
+  "chapter": {
+    "numbering": {
+      "format": "N. 챕터명",
+      "digits": 1,
+      "zeroPad": false,
+      "examples": ["1. 개요", "2. 현황 분석", "3. 결론 및 제언"]
+    }
+  },
+
+  "sections": {
+    "order": ["cover", "executive_summary", "toc", "background", "methodology", "findings", "analysis", "conclusion", "appendix"]
+  },
+
+  "palette": {
+    "background":        "#ffffff",
+    "surface":           "#f8fafc",
+    "text_primary":      "#0f172a",
+    "text_secondary":    "#64748b",
+    "accent":            "#0284c7",
+    "accent_light":      "#f0f9ff",
+    "accent_border":     "#0ea5e9",
+    "cover_bg":          "#0c4a6e",
+    "cover_text":        "#ffffff",
+    "cover_accent":      "#38bdf8",
+    "chart_placeholder": "#e0f2fe",
+    "table_header_bg":   "#e0f2fe",
+    "table_row_alt":     "#f0f9ff",
+    "summary_bg":        "#fef9c3",
+    "summary_border":    "#fbbf24",
+    "divider":           "#e2e8f0",
+    "sidebar_bg":        "#f8fafc",
+    "sidebar_active":    "#0284c7"
+  },
+
+  "typography": {
+    "font_primary": "'Pretendard', -apple-system, sans-serif",
+    "base_size":    "1rem",
+    "line_height":  1.85
+  },
+
+  "blocks": {
+    "cover": {
+      "background": "cover_bg",
+      "elements": ["report_type_label", "title_h1", "subtitle", "organization", "author", "date", "confidential_optional"],
+      "title": { "size": "2.4rem", "weight": 800, "color": "#ffffff" },
+      "report_type_label": { "case": "uppercase", "size": "0.72rem", "color": "cover_accent", "letter_spacing": "0.15em" },
+      "padding": "5rem 4rem",
+      "min_height": "35vh"
+    },
+    "executive_summary": {
+      "title": "Executive Summary / 핵심 요약",
+      "background": "summary_bg",
+      "border_left": "4px solid summary_border",
+      "padding": "1.5rem 2rem",
+      "border_radius": "0 10px 10px 0",
+      "max_bullets": 5
+    },
+    "chart_placeholder": {
+      "label": "[ 차트 / 그래프 자리 ]",
+      "background": "chart_placeholder",
+      "border": "2px dashed accent_border",
+      "border_radius": "10px",
+      "min_height": "200px",
+      "text_align": "center",
+      "caption_below": true
+    },
+    "data_table": {
+      "columns": "상황에 따라 3~6열",
+      "header_bg": "table_header_bg",
+      "row_alt_bg": "table_row_alt",
+      "border": "1px solid divider",
+      "number_align": "right",
+      "total_row": { "weight": 700 }
+    },
+    "finding_card": {
+      "structure": ["number_badge", "title", "description", "evidence"],
+      "number_badge": { "background": "accent", "color": "#ffffff", "shape": "circle" },
+      "border": "1px solid divider",
+      "border_radius": "10px",
+      "padding": "1.25rem"
+    },
+    "callout": {
+      "variants": {
+        "insight":    { "icon": "💡", "border_color": "#0284c7", "bg": "#f0f9ff" },
+        "warning":    { "icon": "⚠️", "border_color": "#d97706", "bg": "#fffbeb" },
+        "conclusion": { "icon": "✅", "border_color": "#059669", "bg": "#ecfdf5" }
+      },
+      "border_style": "left 4px solid"
+    },
+    "methodology_step": {
+      "label_format": "단계 N",
+      "structure": ["label", "title", "description"],
+      "connector": "vertical dashed line"
+    }
+  },
+
+  "navigation": {
+    "title": "목차",
+    "behavior": "anchor_scroll",
+    "show_chapter_number": true
+  },
+
+  "inline_emphasis": {
+    "bold":        "핵심 수치, 결론 키워드",
+    "accent_text": "지표명, 비교 대상명",
+    "footnote":    "출처 표기 — 각주 번호 사용"
+  },
+
+  "divider": {
+    "style": "solid 1px",
+    "color": "divider",
+    "margin": "2rem 0"
+  },
+
+  "tone": {
+    "voice": "3인칭 객관적 서술, 수동태 허용",
+    "number_emphasis": "모든 수치에 단위 명시, 비교 기준 항상 표기",
+    "citation": "출처 있는 데이터는 반드시 각주 또는 괄호 표기"
+  },
+
+  "chapter_internal_flow": [
+    "챕터 번호 + 제목",
+    "소제목 (선택)",
+    "구분선",
+    "개요 단락",
+    "데이터/차트 블록",
+    "분석 내용",
+    "인사이트 callout",
+    "소결론"
+  ]
+}

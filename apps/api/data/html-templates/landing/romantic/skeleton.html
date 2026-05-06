@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.brand }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+</head>
+<body>
+
+  <!-- ======================================================
+       네비게이션
+  ====================================================== -->
+  <nav class="nav" role="navigation" aria-label="주 메뉴">
+    <span class="nav__brand">{{ content.brand }}</span>
+    <a href="#contact" class="nav__cta">{{ content.contact.cta_label }}</a>
+  </nav>
+
+  <!-- ======================================================
+       HERO — 풀스크린 드라마틱 레이어
+  ====================================================== -->
+  <section class="hero" aria-label="히어로">
+
+    {% if content.hero.hero_img_bottom %}
+    <div class="hero__img-layer hero__img-layer--bottom" aria-hidden="true">
+      <img
+        src="{{ content.hero.hero_img_bottom }}"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+      >
+    </div>
+    {% endif %}
+
+    {% if content.hero.hero_img_top %}
+    <div class="hero__img-layer hero__img-layer--top" aria-hidden="true">
+      <img
+        src="{{ content.hero.hero_img_top }}"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+      >
+    </div>
+    {% endif %}
+
+    <div class="hero__content">
+      {% if content.hero.eyebrow %}
+      <span class="hero__eyebrow">{{ content.hero.eyebrow }}</span>
+      {% endif %}
+
+      <h1 class="hero__title">
+        <span class="hero__title-line">{{ content.hero.title_line1 }}</span>
+        <span class="hero__title-line hero__title-line--italic">{{ content.hero.title_line2 }}</span>
+      </h1>
+
+      <p class="hero__tagline">{{ content.hero.tagline }}</p>
+
+      <a href="#works" class="btn">{{ content.hero.cta_label }}</a>
+    </div>
+
+  </section>
+
+  <!-- ======================================================
+       ABOUT — 2컬럼 (이미지 + 텍스트)
+  ====================================================== -->
+  <section class="about" id="about" aria-label="소개">
+    <div class="about__inner">
+
+      {% if content.about.img_url %}
+      <div class="about__image">
+        <img
+          src="{{ content.about.img_url }}"
+          alt="{{ content.about.heading }}"
+          loading="lazy"
+        >
+      </div>
+      {% endif %}
+
+      <div class="about__content">
+        <h2 class="about__heading">{{ content.about.heading }}</h2>
+        <p class="about__body">{{ content.about.body }}</p>
+        {% if content.about.cta_label %}
+        <a href="#contact" class="btn btn--ghost">{{ content.about.cta_label }}</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================
+       TICKER — 무한 가로 스크롤 텍스트 밴드
+  ====================================================== -->
+  {% if content.ticker_items %}
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__inner">
+      {% for item in content.ticker_items %}
+      <span class="ticker__item">{{ item }}</span>
+      <span class="ticker__sep">×</span>
+      {% endfor %}
+      {# 복사본 — marquee 끊김 없이 루프 #}
+      {% for item in content.ticker_items %}
+      <span class="ticker__item">{{ item }}</span>
+      <span class="ticker__sep">×</span>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ======================================================
+       WORKS — 수평 스크롤 갤러리
+  ====================================================== -->
+  <section class="works" id="works" aria-label="작품 목록">
+    <h2 class="works__heading">{{ content.works.heading }}</h2>
+
+    <div class="works__gallery" role="list">
+      {% for work in content.works.items %}
+      <article class="work-card" role="listitem">
+
+        {% if work.img_url %}
+        <img
+          src="{{ work.img_url }}"
+          alt="{{ work.title }}"
+          loading="lazy"
+          class="work-card__img"
+        >
+        {% else %}
+        <div class="work-card__placeholder" aria-hidden="true"></div>
+        {% endif %}
+
+        <div class="work-card__info">
+          <span class="work-card__category">{{ work.category }}</span>
+          <h3 class="work-card__title">{{ work.title }}</h3>
+        </div>
+
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ======================================================
+       CONTACT — 중앙 정렬 최종 CTA
+  ====================================================== -->
+  <section class="contact" id="contact" aria-label="문의">
+    <h2 class="contact__heading">{{ content.contact.heading }}</h2>
+
+    {% if content.contact.body %}
+    <p class="contact__body">{{ content.contact.body }}</p>
+    {% endif %}
+
+    <a href="#" class="btn btn--gold">{{ content.contact.cta_label }}</a>
+  </section>
+
+  <!-- ======================================================
+       FOOTER
+  ====================================================== -->
+  <footer class="footer" role="contentinfo">
+    <span class="footer__brand">{{ content.brand }}</span>
+    <span class="footer__copy">&copy; 2025 {{ content.brand }}. All rights reserved.</span>
+  </footer>
+
+</body>
+</html>

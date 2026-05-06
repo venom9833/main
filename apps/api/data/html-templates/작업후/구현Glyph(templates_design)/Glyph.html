@@ -1,0 +1,718 @@
+<nav class="nav" id="site-nav" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <div class="nav__inner">
+
+      <a class="nav__logo" href="#hero" aria-label="Glyph — Home">
+        <span class="nav__logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" fill="#0A0A0F" stroke="#0A0A0F" stroke-width="1" />
+            <path d="M9 5L13 7.5V12.5L9 15L5 12.5V7.5L9 5Z" fill="#CAFF00" />
+          </svg>
+        </span>
+        glyph
+      </a>
+
+      <!-- Desktop links with Smooth Scroll anchors -->
+      <ul class="nav__links" role="list">
+        <li>
+          <a class="nav__link nav__link--active" href="#hero" aria-current="page" data-nav-link>Features</a>
+        </li>
+        <li>
+          <a class="nav__link" href="#discover" data-nav-link>Discover</a>
+        </li>
+        <li>
+          <a class="nav__link" href="#tokens" data-nav-link>Markets</a>
+        </li>
+        <li>
+          <a class="nav__link" href="#cta-heading" data-nav-link>Get Started</a>
+        </li>
+      </ul>
+
+      <div class="nav__cta">
+        <button class="btn btn--ghost btn--sm" class="u-hidden" id="connect-btn">
+          Connect Wallet
+        </button>
+        <button class="btn btn--primary btn--sm" id="launch-btn">
+          Launch App
+        </button>
+        <!-- Burger (Mobile) -->
+        <button class="nav__burger" id="nav-burger" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu (Overlay) -->
+<div class="nav__mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu" aria-hidden="true">
+  <ul role="list">
+    <li><a class="nav__mobile-link nav__mobile-link--active" href="#hero" data-mobile-link>Features</a></li>
+    <li><a class="nav__mobile-link" href="#discover" data-mobile-link>Discover</a></li>
+    <li><a class="nav__mobile-link" href="#tokens" data-mobile-link>Markets</a></li>
+    <li><a class="nav__mobile-link" href="#cta-heading" data-mobile-link>Get Started</a></li>
+  </ul>
+  <div class="nav__mobile-actions">
+    <button class="btn btn--primary btn--lg">Launch App →</button>
+    <button class="btn btn--ghost btn--lg">Connect Wallet</button>
+  </div>
+</div>
+
+<main id="main-content" tabindex="-1">
+
+  <!-- HERO ================================================================ -->
+  <section class="hero stacking-root" id="hero" aria-labelledby="hero-title">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__grid" aria-hidden="true"></div>
+    <div class="glow-orb glow-orb--purple glow-orb--hero-purple" aria-hidden="true"></div>
+    <div class="glow-orb glow-orb--acid glow-orb--hero-acid" aria-hidden="true"></div>
+
+    <div class="container">
+
+      <div class="hero__inner">
+
+        <div class="hero__content">
+          <div class="hero__badge" aria-label="Now live">
+            <span class="hero__badge-dot" aria-hidden="true"></span>
+            Mainnet Live — v2.4
+          </div>
+
+          <h1 class="hero__title" id="hero-title">
+            <span class="hero__title-line--acid">Keyless.</span><br>
+            <span>No risk of</span><br>
+            <span class="hero__title-line--muted">leakage.</span>
+          </h1>
+
+          <p class="hero__subtitle">
+            Glyph is your next-generation smart wallet — secure, keyless, and built for the
+            multichain future. DeFi, NFTs, and GameFi in one frictionless interface.
+          </p>
+
+          <div class="hero__actions">
+            <button class="btn btn--primary btn--lg" id="get-started-btn">
+              Get Started Free
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <button class="btn btn--ghost btn--lg">
+              Watch Demo
+            </button>
+          </div>
+        </div>
+
+        <!-- Phone Mockups -->
+        <div class="hero__phones float-anim" aria-hidden="true">
+
+          <!-- Left phone: Onboarding -->
+          <div class="phone phone--left">
+            <div class="phone__screen">
+              <div class="phone__notch"></div>
+              <div class="phone-screen phone-screen--onboard">
+                <div class="phone-screen__logo">
+                  <div class="phone-screen__logo-mark">
+                    <svg width="8" height="8" viewBox="0 0 18 18" fill="none">
+                      <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" fill="#CAFF00" />
+                    </svg>
+                  </div>
+                  glyph
+                </div>
+                <div class="phone-illus">
+                  <div class="phone-illus__card"></div>
+                  <div class="phone-illus__cube"></div>
+                </div>
+                <div class="phone-screen__title">Keyless<br>No risk of leakage</div>
+                <div class="phone-screen__btn-stack">
+                  <div class="phone-screen__btn">
+                    <div class="phone-screen__btn-icon">+</div>
+                    Create New Account
+                  </div>
+                  <div class="phone-screen__btn phone-screen__btn--outline">
+                    ↺ Restore Existing
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center phone: Wallet (main) -->
+          <div class="phone phone--main">
+            <div class="phone__screen">
+              <div class="phone__notch"></div>
+              <div class="phone-screen phone-screen--wallet">
+                <div class="wallet-header">
+                  <div class="phone-screen__logo phone-screen__logo--light">
+                    <div class="phone-screen__logo-mark phone-screen__logo-mark--light">
+                      <svg width="8" height="8" viewBox="0 0 18 18" fill="none">
+                        <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" fill="#7B4DFF" />
+                      </svg>
+                    </div>
+                    glyph
+                  </div>
+                  <div class="phone-screen__status">◎ ⊡</div>
+                </div>
+                <div class="phone-screen__greeting">Hey, Samuel Hawking</div>
+                <div class="wallet-card">
+                  <div class="wallet-card__dot"></div>
+                  <div class="wallet-card__label">Total Assets</div>
+                  <div class="wallet-card__amount">$3,187.99</div>
+                  <div class="wallet-card__currency">USD ◎</div>
+                </div>
+                <div class="wallet-assets">
+                  <div class="wallet-asset">
+                    <div class="wallet-asset__icon wallet-asset__icon--add">+</div>
+                    <div class="wallet-asset__label">Add</div>
+                  </div>
+                  <div class="wallet-asset">
+                    <div class="wallet-asset__icon wallet-asset__icon--eth">Ξ</div>
+                    <div class="wallet-asset__label">ETH</div>
+                  </div>
+                  <div class="wallet-asset">
+                    <div class="wallet-asset__icon wallet-asset__icon--bnb">B</div>
+                    <div class="wallet-asset__label">BNB</div>
+                  </div>
+                  <div class="wallet-asset">
+                    <div class="wallet-asset__icon wallet-asset__icon--usdt">T</div>
+                    <div class="wallet-asset__label">USDT</div>
+                  </div>
+                </div>
+                <div class="wallet-network-label">Ethereum Mainnet</div>
+                <div class="wallet-row">
+                  <div class="wallet-row__info">
+                    <div class="wallet-row__avatar wallet-row__avatar--square"></div>
+                    <div>
+                      <div class="wallet-row__name">Keyless Secure Wallet</div>
+                      <div class="wallet-row__addr">0xc213...34dr</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="wallet-row">
+                  <div class="wallet-row__info">
+                    <div class="wallet-row__avatar wallet-row__avatar--eth"></div>
+                    <div class="wallet-row__name">ETH</div>
+                  </div>
+                  <div class="wallet-row__val">0.54</div>
+                </div>
+                <div class="wallet-row">
+                  <div class="wallet-row__info">
+                    <div class="wallet-row__avatar wallet-row__avatar--dai"></div>
+                    <div class="wallet-row__name">DAI</div>
+                  </div>
+                  <div class="wallet-row__val">594.23</div>
+                </div>
+                <div class="phone-nav">
+                  <div class="phone-nav__item phone-nav__item--active">⊞</div>
+                  <div class="phone-nav__item phone-nav__item--dim">◎</div>
+                  <div class="phone-nav__item phone-nav__item--dim">⇄</div>
+                  <div class="phone-nav__item phone-nav__item--dim">◉</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right phone: Discover -->
+          <div class="phone phone--right">
+            <div class="phone__screen">
+              <div class="phone__notch"></div>
+              <div class="phone-screen phone-screen--discover">
+                <div class="discover__title">Discover</div>
+                <div class="discover__banner">
+                  <div class="discover__banner-eyebrow">NEXT-GEN</div>
+                  <div class="discover__banner-title">YOUR SMART<br>WALLET</div>
+                </div>
+                <div class="discover__caps">
+                  <div class="discover__cap-card">
+                    <div class="discover__cap-label">Market Cap</div>
+                    <div class="discover__cap-value">$1.3T</div>
+                    <div class="discover__cap-change--up">▲ 9.3%</div>
+                  </div>
+                  <div class="discover__cap-card">
+                    <div class="discover__cap-label">NFT Cap</div>
+                    <div class="discover__cap-value">$2.1B</div>
+                    <div class="discover__cap-change--down">▼ 2.9%</div>
+                  </div>
+                </div>
+                <div class="discover__cats">
+                  <div class="discover__cat">
+                    <div class="discover__cat-icon">🎮</div>Games
+                  </div>
+                  <div class="discover__cat">
+                    <div class="discover__cat-icon">🏪</div>Market
+                  </div>
+                  <div class="discover__cat">
+                    <div class="discover__cat-icon">💰</div>DeFi
+                  </div>
+                </div>
+                <div class="discover__nft-grid">
+                  <div class="discover__nft-thumb discover__nft-thumb--pink"></div>
+                  <div class="discover__nft-thumb discover__nft-thumb--acid"></div>
+                </div>
+                <div class="phone-nav phone-nav--purple">
+                  <div class="phone-nav__item">⊞</div>
+                  <div class="phone-nav__item phone-nav__item--active">◎</div>
+                  <div class="phone-nav__item">⇄</div>
+                  <div class="phone-nav__item">◉</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.hero__phones -->
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER BAR =========================================================== -->
+  <div class="stats-bar" role="marquee" aria-label="Live market data" aria-live="off">
+    <div class="stats-bar__track" aria-hidden="true">
+      <!-- Duplicated for seamless loop -->
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">BTC</span>
+        <span class="stats-bar__value">$67,234.50</span>
+        <span class="stats-bar__change--up">▲ 3.24%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">ETH</span>
+        <span class="stats-bar__value">$2,321.79</span>
+        <span class="stats-bar__change--down">▼ 1.18%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">BNB</span>
+        <span class="stats-bar__value">$416.32</span>
+        <span class="stats-bar__change--up">▲ 5.67%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">SOL</span>
+        <span class="stats-bar__value">$183.44</span>
+        <span class="stats-bar__change--up">▲ 8.91%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">MATIC</span>
+        <span class="stats-bar__value">$0.987</span>
+        <span class="stats-bar__change--down">▼ 2.33%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">AVAX</span>
+        <span class="stats-bar__value">$38.12</span>
+        <span class="stats-bar__change--up">▲ 4.55%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">NFT Cap</span>
+        <span class="stats-bar__value">$2.16B</span>
+        <span class="stats-bar__change--up">▲ 2.91%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <!-- Duplicate for seamless -->
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">BTC</span>
+        <span class="stats-bar__value">$67,234.50</span>
+        <span class="stats-bar__change--up">▲ 3.24%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">ETH</span>
+        <span class="stats-bar__value">$2,321.79</span>
+        <span class="stats-bar__change--down">▼ 1.18%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">BNB</span>
+        <span class="stats-bar__value">$416.32</span>
+        <span class="stats-bar__change--down">▼ 0.45%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">SOL</span>
+        <span class="stats-bar__value">$183.44</span>
+        <span class="stats-bar__change--up">▲ 8.91%</span>
+      </div>
+      <div class="stats-bar__dot"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__label">NFT Cap</span>
+        <span class="stats-bar__value">$2.16B</span>
+        <span class="stats-bar__change--up">▲ 2.91%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES ============================================================= -->
+  <section class="section" id="discover" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__eyebrow" aria-hidden="true">// Core Features</span>
+        <!-- h2 — second level heading hierarchy -->
+        <h2 class="section__title" id="features-heading">
+          Built for the<br>onchain world
+        </h2>
+        <p class="section__desc">
+          Everything you need to navigate Web3 — from DeFi to NFTs — with
+          military-grade keyless security and zero seed phrase exposure.
+        </p>
+      </div>
+
+      <div class="features-grid">
+
+        <article class="feature-card feature-card--highlight" tabindex="0">
+          <div class="feature-card__icon feature-card__icon--acid" role="img" aria-label="Shield icon">
+            🛡
+          </div>
+          <!-- h3 — card level -->
+          <h3 class="feature-card__title">Keyless Security</h3>
+          <p class="feature-card__desc">
+            MPC-powered wallet architecture eliminates seed phrase risk entirely.
+            Your keys never exist on a single device.
+          </p>
+          <span class="feature-card__tag">↑ Zero Leakage</span>
+        </article>
+
+        <article class="feature-card" tabindex="0">
+          <div class="feature-card__icon feature-card__icon--purple" role="img" aria-label="Chain links">
+            ⛓
+          </div>
+          <h3 class="feature-card__title">Multichain Native</h3>
+          <p class="feature-card__desc">
+            Ethereum, BNB Chain, Polygon, Solana and 40+ networks in a single
+            unified interface with instant bridging.
+          </p>
+          <span class="feature-card__tag">40+ Networks</span>
+        </article>
+
+        <article class="feature-card" tabindex="0">
+          <div class="feature-card__icon feature-card__icon--pink" role="img" aria-label="Diamond">
+            💎
+          </div>
+          <h3 class="feature-card__title">NFT Gallery</h3>
+          <p class="feature-card__desc">
+            Full NFT collection management with rarity rankings, floor price
+            tracking, and one-tap listing on all major marketplaces.
+          </p>
+          <span class="feature-card__tag">Marketplace Ready</span>
+        </article>
+
+        <article class="feature-card" tabindex="0">
+          <div class="feature-card__icon feature-card__icon--teal" role="img" aria-label="Chart">
+            📈
+          </div>
+          <h3 class="feature-card__title">DeFi Dashboard</h3>
+          <p class="feature-card__desc">
+            Monitor yields, manage liquidity positions, and execute swaps across
+            DEXs — all with real-time price impact calculations.
+          </p>
+          <span class="feature-card__tag">Real-time</span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS ================================================================ -->
+  <section class="section section--alt" aria-labelledby="stats-heading">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__eyebrow" aria-hidden="true">// By the Numbers</span>
+        <h2 class="section__title" id="stats-heading">Trusted at scale</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-item__number" aria-label="2.4 million wallets created">2.4M</div>
+          <div class="stat-item__label">Wallets Created</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__number" aria-label="47 billion dollars in total volume">$47B</div>
+          <div class="stat-item__label">Total Volume</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__number" aria-label="40 plus supported chains">40+</div>
+          <div class="stat-item__label">Chains Supported</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__number" aria-label="zero key incidents">0</div>
+          <div class="stat-item__label">Key Incidents</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOKENS / MARKETS ===================================================== -->
+  <section class="section tokens-section" id="tokens" aria-labelledby="tokens-heading">
+    <div class="glow-orb glow-orb--purple glow-orb--tokens-center" aria-hidden="true"></div>
+    <div class="container">
+      <div class="section__header">
+        <span class="section__eyebrow" aria-hidden="true">// Live Markets</span>
+        <h2 class="section__title" id="tokens-heading">Top assets<br>right now</h2>
+      </div>
+    </div>
+    <div class="container container--bleed">
+      <!-- Horizontal scroll — touch-friendly -->
+      <div class="token-scroll-container" role="region" aria-label="Token cards, scroll horizontally">
+        <div class="token-scroll-track">
+
+          <article class="token-card" tabindex="0">
+            <div class="token-card__header">
+              <div>
+                <div class="token-card__name">Bitcoin</div>
+                <div class="token-card__ticker">BTC</div>
+              </div>
+              <div class="token-card__icon token-icon--btc">₿</div>
+            </div>
+            <div class="token-card__price">$67,234</div>
+            <span class="token-card__change token-card__change--up">▲ 3.24%</span>
+            <div class="sparkline" aria-hidden="true">
+              <svg viewBox="0 0 180 40" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#CAFF00" stop-opacity="0.4" />
+                    <stop offset="100%" stop-color="#CAFF00" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M0,30 L20,25 L40,28 L60,18 L80,22 L100,12 L120,15 L140,8 L160,5 L180,2" fill="none" stroke="#CAFF00" stroke-width="1.5" />
+                <path d="M0,30 L20,25 L40,28 L60,18 L80,22 L100,12 L120,15 L140,8 L160,5 L180,2 V40 H0Z" fill="url(#g1)" />
+              </svg>
+            </div>
+          </article>
+
+          <article class="token-card" tabindex="0">
+            <div class="token-card__header">
+              <div>
+                <div class="token-card__name">Ethereum</div>
+                <div class="token-card__ticker">ETH</div>
+              </div>
+              <div class="token-card__icon token-icon--eth">Ξ</div>
+            </div>
+            <div class="token-card__price">$2,321</div>
+            <span class="token-card__change token-card__change--down">▼ 1.18%</span>
+            <div class="sparkline" aria-hidden="true">
+              <svg viewBox="0 0 180 40" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FF2D78" stop-opacity="0.4" />
+                    <stop offset="100%" stop-color="#FF2D78" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M0,5 L20,8 L40,6 L60,12 L80,9 L100,18 L120,15 L140,22 L160,25 L180,30" fill="none" stroke="#FF2D78" stroke-width="1.5" />
+                <path d="M0,5 L20,8 L40,6 L60,12 L80,9 L100,18 L120,15 L140,22 L160,25 L180,30 V40 H0Z" fill="url(#g2)" />
+              </svg>
+            </div>
+          </article>
+
+          <article class="token-card" tabindex="0">
+            <div class="token-card__header">
+              <div>
+                <div class="token-card__name">Solana</div>
+                <div class="token-card__ticker">SOL</div>
+              </div>
+              <div class="token-card__icon token-icon--sol">◎</div>
+            </div>
+            <div class="token-card__price">$183.44</div>
+            <span class="token-card__change token-card__change--up">▲ 8.91%</span>
+            <div class="sparkline" aria-hidden="true">
+              <svg viewBox="0 0 180 40" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#CAFF00" stop-opacity="0.4" />
+                    <stop offset="100%" stop-color="#CAFF00" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M0,35 L20,28 L40,30 L60,20 L80,15 L100,18 L120,10 L140,6 L160,4 L180,2" fill="none" stroke="#CAFF00" stroke-width="1.5" />
+                <path d="M0,35 L20,28 L40,30 L60,20 L80,15 L100,18 L120,10 L140,6 L160,4 L180,2 V40 H0Z" fill="url(#g3)" />
+              </svg>
+            </div>
+          </article>
+
+          <article class="token-card" tabindex="0">
+            <div class="token-card__header">
+              <div>
+                <div class="token-card__name">BNB Chain</div>
+                <div class="token-card__ticker">BNB</div>
+              </div>
+              <div class="token-card__icon token-icon--bnb">B</div>
+            </div>
+            <div class="token-card__price">$416.32</div>
+            <span class="token-card__change token-card__change--up">▲ 5.67%</span>
+            <div class="sparkline" aria-hidden="true">
+              <svg viewBox="0 0 180 40" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#F3BA2F" stop-opacity="0.4" />
+                    <stop offset="100%" stop-color="#F3BA2F" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M0,28 L20,22 L40,26 L60,20 L80,16 L100,12 L120,14 L140,8 L160,6 L180,3" fill="none" stroke="#F3BA2F" stroke-width="1.5" />
+                <path d="M0,28 L20,22 L40,26 L60,20 L80,16 L100,12 L120,14 L140,8 L160,6 L180,3 V40 H0Z" fill="url(#g4)" />
+              </svg>
+            </div>
+          </article>
+
+          <article class="token-card" tabindex="0">
+            <div class="token-card__header">
+              <div>
+                <div class="token-card__name">Avalanche</div>
+                <div class="token-card__ticker">AVAX</div>
+              </div>
+              <div class="token-card__icon token-icon--avax">A</div>
+            </div>
+            <div class="token-card__price">$38.12</div>
+            <span class="token-card__change token-card__change--up">▲ 4.55%</span>
+            <div class="sparkline" aria-hidden="true">
+              <svg viewBox="0 0 180 40" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g5" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#CAFF00" stop-opacity="0.3" />
+                    <stop offset="100%" stop-color="#CAFF00" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M0,32 L30,26 L60,28 L90,16 L120,10 L150,7 L180,3" fill="none" stroke="#CAFF00" stroke-width="1.5" />
+                <path d="M0,32 L30,26 L60,28 L90,16 L120,10 L150,7 L180,3 V40 H0Z" fill="url(#g5)" />
+              </svg>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA ================================================================== -->
+  <section class="cta-section" aria-labelledby="cta-heading">
+    <div class="cta-section__bg" aria-hidden="true"></div>
+    <div class="container">
+      <div class="cta-section__inner">
+        <h2 class="cta-section__title" id="cta-heading">
+          Ready to go keyless?
+        </h2>
+        <p class="cta-section__subtitle">
+          Join 2.4 million users who've ditched seed phrases forever.
+          Available on iOS, Android, and the web.
+        </p>
+        <div class="cta-section__actions">
+          <button class="btn btn--primary btn--lg" id="cta-primary-btn">
+            Create Free Wallet
+          </button>
+        </div>
+        <div class="download-badges">
+          <a class="download-badge" href="#" aria-label="Download on the App Store">
+            <span class="download-badge__icon" aria-hidden="true">🍎</span>
+            <div class="download-badge__text">
+              <div class="download-badge__sub">Download on the</div>
+              <div class="download-badge__name">App Store</div>
+            </div>
+          </a>
+          <a class="download-badge" href="#" aria-label="Get it on Google Play">
+            <span class="download-badge__icon" aria-hidden="true">▶</span>
+            <div class="download-badge__text">
+              <div class="download-badge__sub">Get it on</div>
+              <div class="download-badge__name">Google Play</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+<footer class="footer" role="contentinfo" aria-label="Site footer">
+  <div class="container">
+    <div class="footer__inner">
+
+      <div class="footer__brand">
+        <a class="nav__logo" href="#hero" aria-label="Glyph — Home">
+          <span class="nav__logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" fill="#0A0A0F" stroke="#0A0A0F" stroke-width="1" />
+              <path d="M9 5L13 7.5V12.5L9 15L5 12.5V7.5L9 5Z" fill="#CAFF00" />
+            </svg>
+          </span>
+          glyph
+        </a>
+        <p>Your next-gen keyless smart wallet. Zero seed phrase. Zero risk.</p>
+      </div>
+
+      <nav aria-label="Product links">
+        <div class="footer__links-title">Product</div>
+        <ul class="footer__links-list" role="list">
+          <li><a class="footer__link" href="#discover">Features</a></li>
+          <li><a class="footer__link" href="#tokens">Markets</a></li>
+          <li><a class="footer__link" href="#">Security</a></li>
+          <li><a class="footer__link" href="#">Roadmap</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Developer links">
+        <div class="footer__links-title">Developers</div>
+        <ul class="footer__links-list" role="list">
+          <li><a class="footer__link" href="#">API Docs</a></li>
+          <li><a class="footer__link" href="#">SDK</a></li>
+          <li><a class="footer__link" href="#">GitHub</a></li>
+          <li><a class="footer__link" href="#">Changelog</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Company links">
+        <div class="footer__links-title">Company</div>
+        <ul class="footer__links-list" role="list">
+          <li><a class="footer__link" href="#">About</a></li>
+          <li><a class="footer__link" href="#">Blog</a></li>
+          <li><a class="footer__link" href="#">Careers</a></li>
+          <li><a class="footer__link" href="#">Contact</a></li>
+        </ul>
+      </nav>
+
+    </div>
+
+    <!-- Portfolio + Subscribe strip -->
+    <div class="footer__subscribe">
+
+      <a class="footer__portfolio-link" href="https://codepen.io/Margarita-the-solid" target="_blank" rel="noopener noreferrer" aria-label="Margarita's CodePen portfolio, opens in new tab">
+        <span class="footer__portfolio-link-inner">
+          <svg class="footer__codepen-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2L22 8.5V15.5L12 22L2 15.5V8.5L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+            <path d="M12 2V22M2 8.5L12 15L22 8.5M2 15.5L12 9L22 15.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+          </svg>
+          <span>
+            <span class="footer__portfolio-sub">Designed &amp; built by</span>
+            <span class="footer__portfolio-name">Margarita on CodePen</span>
+          </span>
+        </span>
+        <svg class="footer__external-icon" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+
+    </div>
+
+    <div class="footer__bottom">
+      <span>© 2024 Glyph. All rights reserved.</span>
+      <span>Built with ♥ on Ethereum</span>
+      <nav aria-label="Legal">
+        <a class="footer__link footer__link--inline" href="#">Privacy</a>
+        &nbsp;·&nbsp;
+        <a class="footer__link footer__link--inline" href="#">Terms</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top-btn" aria-label="Scroll back to top">
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+    <path d="M9 14V4M4 9L9 4L14 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</button>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+  <span class="toast__dot" aria-hidden="true"></span>
+  <span id="toast-msg">Wallet created successfully!</span>
+</div>

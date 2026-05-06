@@ -1,0 +1,37 @@
+{
+  "id": "park_sw",
+  "style": "polystyle",
+  "name": "박시우",
+  "gender": "male",
+  "age": 17,
+  "appearance_en": {
+    "fal_identity_prompt": "17-year-old Korean male, soft teenage jaw with emerging angularity mid-transition between boyhood and adulthood, dark brown slightly wide chronically low-key alert eyes, small soft slightly upturned nose, dark brown straight hair slightly past the ear overdue for a cut, full habitually closed lips, studied blankness expression carefully unreadable, medium frame 173cm unremarkable build, small stress acne cluster at left temple",
+    "face_shape": "soft teenage jaw with emerging angularity — mid-transition between boyhood and adulthood",
+    "eyes": "dark brown, slightly wide, chronically low-key alert — reads the room before entering it",
+    "nose": "small, soft bridge, slightly upturned",
+    "mouth": "full lips, habitually closed; speaks in short sentences if at all",
+    "skin": "generally clear, small cluster of stress acne at left temple",
+    "hair": "dark brown, straight, slightly past the ear — overdue for a cut nobody scheduled",
+    "emotion_baseline": "studied blankness — not bored, not upset, just carefully unreadable",
+    "body": {
+      "body_prompt": "173cm medium-frame Korean teenage boy, slightly compressed posture at home, more upright walking outside — body language shifts by context",
+      "height_cm": 173,
+      "posture": "slightly compressed when sitting at home, more upright walking outside — body language shifts by context"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "school uniform navy jacket with collar loose, earphones around neck at all times — during the day. Shapeless comfortable clothes at home: grey joggers, plain dark hoodie, white tee",
+        "wardrobe_prompt": "school uniform navy jacket with loose collar, dark straight-leg school trousers, worn clean sneakers, earphones around neck, no style investment"
+      }
+    }
+  },
+  "image_prompt": {
+    "positive": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette, 17-year-old Korean male, soft teenage jaw, dark brown wide observant eyes, small upturned nose, dark straight slightly overgrown hair, full closed lips, carefully neutral expression, school uniform navy jacket collar loose, earphones around neck, deep black of rooms monitored without being caught, warm amber as the only warm light in the frame, steel blue of careful neutrality as default face, painterly figurative realism, Korean drama cinematic composition",
+    "negative": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, cheerful grin, adult body, airbrushed, bright colors",
+    "model": "fal-ai/flux-pulid",
+    "pulid_weight": 0.85,
+    "width": 512,
+    "height": 768
+  },
+  "reference_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/v3/characters/portraits/park_sw_polystyle.png"
+}

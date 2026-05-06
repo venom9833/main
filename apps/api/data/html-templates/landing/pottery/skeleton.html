@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.brand.name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="pt-nav">
+  <div class="pt-nav-logo">{{ content.brand.name }}</div>
+  {% if content.brand.nav_links %}
+  <div class="pt-nav-links">
+    {% for link in content.brand.nav_links %}<a href="#">{{ link }}</a>{% endfor %}
+  </div>
+  {% endif %}
+  <a href="#cta" class="pt-nav-cta">✦ {{ content.hero.cta_primary }}</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="pt-hero pt-grainy" id="home">
+  <!-- 장식 컬러 컬럼 블록 (이미지 대체) -->
+  <div class="pt-hero-bg" aria-hidden="true">
+    <div class="pt-bg-col pt-bg-col--1"></div>
+    <div class="pt-bg-col pt-bg-col--2"></div>
+    <div class="pt-bg-col pt-bg-col--3"></div>
+    <div class="pt-bg-col pt-bg-col--4"></div>
+    <div class="pt-bg-col pt-bg-col--5"></div>
+    <div class="pt-bg-col pt-bg-col--6"></div>
+  </div>
+  <div class="pt-hero-overlay" aria-hidden="true"></div>
+  <div class="pt-ghost-bg" aria-hidden="true">{{ content.brand.name | truncate(8, True, '') }}</div>
+
+  <div class="pt-hero-content">
+    <div class="pt-hero-chip">{{ content.brand.badge }}</div>
+    <h1 class="pt-hero-title">
+      <span class="pt-fill">{{ content.hero.line1 }}</span>
+      <span class="pt-stroke">{{ content.hero.line2 }}</span>
+      <span class="pt-clay">{{ content.hero.line3 }}</span>
+    </h1>
+    <p class="pt-hero-sub">{{ content.hero.sub }}</p>
+    <div class="pt-hero-actions">
+      <a href="#cta" class="pt-btn-primary">{{ content.hero.cta_primary }} ↓</a>
+      <a href="#offerings" class="pt-btn-ghost">{{ content.hero.cta_secondary }} →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TICKER ─── -->
+<div class="pt-ticker" aria-hidden="true">
+  <div class="pt-ticker-inner">
+    {% for item in content.ticker_items %}
+    <span class="pt-ticker-item">{{ item }}</span><span class="pt-ticker-sep">◆</span>
+    {% endfor %}
+    {% for item in content.ticker_items %}
+    <span class="pt-ticker-item">{{ item }}</span><span class="pt-ticker-sep">◆</span>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ─── ABOUT ─── -->
+<section class="pt-about pt-section" id="about">
+  <div class="pt-about-inner">
+    <div class="pt-about-year">{{ content.about_year }}</div>
+    <div class="pt-about-text">
+      <h2 class="pt-section-heading">{{ content.about_heading }}</h2>
+      {% for para in content.about %}
+      <p class="pt-body">{{ para }}</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ─── OFFERINGS ─── -->
+<section class="pt-section pt-grainy" id="offerings">
+  <h2 class="pt-section-heading pt-section-heading--center">{{ content.offerings_heading }}</h2>
+  <div class="pt-offerings">
+    {% for item in content.offerings %}
+    <div class="pt-offering-card">
+      {% if item.tag %}<span class="pt-offering-tag">{{ item.tag }}</span>{% endif %}
+      <span class="pt-offering-icon">{{ item.icon }}</span>
+      <h3 class="pt-offering-name">{{ item.name }}</h3>
+      {% if item.duration or item.price %}
+      <div class="pt-offering-meta">
+        {% if item.duration %}<span>⏱ {{ item.duration }}</span>{% endif %}
+        {% if item.price %}<span class="pt-offering-price">{{ item.price }}</span>{% endif %}
+      </div>
+      {% endif %}
+      <p class="pt-offering-desc">{{ item.desc }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ─── PRICING ─── -->
+<section class="pt-section" id="pricing">
+  <h2 class="pt-section-heading pt-section-heading--center">{{ content.pricing_heading }}</h2>
+  <div class="pt-plans">
+    {% for plan in content.plans %}
+    <div class="pt-plan {% if plan.featured %}pt-plan--featured{% endif %}">
+      <div class="pt-plan-name">{{ plan.name }}</div>
+      <div class="pt-plan-price-row">
+        <span class="pt-plan-price">{{ plan.price }}</span>
+        {% if plan.period %}<span class="pt-plan-period">{{ plan.period }}</span>{% endif %}
+      </div>
+      <ul class="pt-plan-features">
+        {% for f in plan.features %}<li>✦ {{ f }}</li>{% endfor %}
+      </ul>
+      <a href="#cta" class="{% if plan.featured %}pt-btn-primary{% else %}pt-btn-ghost{% endif %} pt-plan-cta">{{ plan.cta }}</a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section class="pt-section pt-grainy" id="testimonials">
+  <h2 class="pt-section-heading pt-section-heading--center">{{ content.testimonials_heading }}</h2>
+  <div class="pt-testimonials">
+    {% for t in content.testimonials %}
+    <blockquote class="pt-testimonial">
+      <p class="pt-testimonial-quote">"{{ t.quote }}"</p>
+      <footer class="pt-testimonial-footer">
+        <strong>— {{ t.name }}</strong>
+        {% if t.detail %}<span>{{ t.detail }}</span>{% endif %}
+      </footer>
+    </blockquote>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section class="pt-cta-section pt-grainy" id="cta">
+  <div class="pt-cta-inner">
+    <h2 class="pt-cta-heading">{{ content.cta.heading }}</h2>
+    <p class="pt-cta-body">{{ content.cta.body }}</p>
+    <div class="pt-cta-actions">
+      <a href="#" class="pt-btn-primary pt-btn--large">{{ content.cta.label }}</a>
+      {% if content.cta.sub_label %}
+      <a href="#offerings" class="pt-btn-ghost">{{ content.cta.sub_label }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="pt-footer">
+  <div class="pt-footer-brand">{{ content.brand.name }}</div>
+  <div class="pt-footer-info">
+    {% if content.footer_info.address %}<span>📍 {{ content.footer_info.address }}</span>{% endif %}
+    {% if content.footer_info.hours %}<span>🕐 {{ content.footer_info.hours }}</span>{% endif %}
+    {% if content.footer_info.email %}<span>✉ {{ content.footer_info.email }}</span>{% endif %}
+    {% if content.footer_info.instagram %}<span>📷 {{ content.footer_info.instagram }}</span>{% endif %}
+  </div>
+</footer>
+
+</body>
+</html>

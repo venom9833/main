@@ -1,0 +1,492 @@
+<!-- Header -->
+<header class="max-w-6xl mx-auto mb-12">
+  <nav class="neu-flat rounded-2xl p-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-10 h-10 neu-convex rounded-xl flex items-center justify-center">
+        <span class="text-indigo-500 font-semibold tracking-tighter">N</span>
+      </div>
+      <span class="font-semibold tracking-tight text-lg text-gray-700">Neumorphism</span>
+    </div>
+    <div class="hidden md:flex items-center gap-2">
+      <button class="neu-btn neu-flat px-4 py-2 rounded-xl text-sm font-medium text-gray-600 transition-all">Components</button>
+      <button class="neu-btn neu-flat px-4 py-2 rounded-xl text-sm font-medium text-gray-600 transition-all">Documentation</button>
+      <button class="neu-btn neu-convex px-4 py-2 rounded-xl text-sm font-medium text-indigo-500 transition-all">Download</button>
+    </div>
+    <button class="md:hidden neu-flat p-2 rounded-xl">
+      <span class="iconify" data-icon="lucide:menu" data-width="20" style="stroke-width: 1.5"></span>
+    </button>
+  </nav>
+</header>
+
+<main class="max-w-6xl mx-auto space-y-12">
+  <!-- Page Title -->
+  <section class="text-center">
+    <h1 class="text-3xl md:text-4xl font-semibold tracking-tight text-gray-700 mb-3">UI Components</h1>
+    <p class="text-gray-500 max-w-xl mx-auto">A complete collection of neumorphic components for modern interfaces</p>
+  </section>
+
+  <!-- Buttons Section -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Buttons</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <button class="neu-btn neu-flat px-6 py-3 rounded-xl text-sm font-medium text-gray-600 transition-all">Default</button>
+      <button class="neu-btn neu-convex px-6 py-3 rounded-xl text-sm font-medium text-indigo-500 transition-all">Primary</button>
+      <button class="neu-pressed px-6 py-3 rounded-xl text-sm font-medium text-gray-500">Pressed</button>
+      <button class="neu-btn neu-flat px-6 py-3 rounded-xl text-sm font-medium text-green-500 transition-all">Success</button>
+      <button class="neu-btn neu-flat px-6 py-3 rounded-xl text-sm font-medium text-red-500 transition-all">Danger</button>
+      <button class="neu-btn neu-flat px-6 py-3 rounded-xl text-sm font-medium text-yellow-500 transition-all">Warning</button>
+      <button class="neu-btn neu-flat px-6 py-3 rounded-full text-sm font-medium text-gray-600 transition-all">Rounded</button>
+      <button class="neu-btn neu-flat p-3 rounded-xl transition-all flex items-center justify-center">
+        <span class="iconify text-indigo-500" data-icon="lucide:plus" data-width="20" style="stroke-width: 1.5"></span>
+      </button>
+    </div>
+
+    <!-- Icon Buttons -->
+    <h3 class="text-base font-medium text-gray-600 mt-8 mb-4">Icon Buttons</h3>
+    <div class="flex flex-wrap gap-4">
+      <button class="neu-btn neu-flat p-4 rounded-xl transition-all">
+        <span class="iconify text-gray-500" data-icon="lucide:heart" data-width="20" style="stroke-width: 1.5"></span>
+      </button>
+      <button class="neu-btn neu-flat p-4 rounded-xl transition-all">
+        <span class="iconify text-gray-500" data-icon="lucide:share-2" data-width="20" style="stroke-width: 1.5"></span>
+      </button>
+      <button class="neu-btn neu-flat p-4 rounded-xl transition-all">
+        <span class="iconify text-gray-500" data-icon="lucide:bookmark" data-width="20" style="stroke-width: 1.5"></span>
+      </button>
+      <button class="neu-btn neu-flat p-4 rounded-full transition-all">
+        <span class="iconify text-indigo-500" data-icon="lucide:play" data-width="20" style="stroke-width: 1.5"></span>
+      </button>
+      <button class="neu-pressed p-4 rounded-full">
+        <span class="iconify text-red-400" data-icon="lucide:heart" data-width="20" style="stroke-width: 1.5"></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Form Elements -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Form Elements</h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Text Inputs -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2">Text Input</label>
+          <input type="text" placeholder="Enter your name" class="w-full neu-pressed rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-indigo-300 transition-all">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2">Email Input</label>
+          <div class="relative">
+            <span class="iconify absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" data-icon="lucide:mail" data-width="18" style="stroke-width: 1.5"></span>
+            <input type="email" placeholder="email@example.com" class="w-full neu-pressed rounded-xl pl-11 pr-4 py-3 text-sm text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-indigo-300 transition-all">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2">Password</label>
+          <div class="relative">
+            <input type="password" placeholder="••••••••" id="password-input" class="w-full neu-pressed rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-indigo-300 transition-all">
+            <button onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+              <span class="iconify" data-icon="lucide:eye" data-width="18" id="eye-icon" style="stroke-width: 1.5"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Textarea & Select -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2">Textarea</label>
+          <textarea placeholder="Write your message..." rows="3" class="w-full neu-pressed rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-indigo-300 transition-all resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2">Select</label>
+          <div class="relative">
+            <select class="w-full neu-pressed rounded-xl px-4 py-3 text-sm text-gray-700 outline-none appearance-none cursor-pointer focus:ring-2 focus:ring-indigo-300 transition-all">
+              <option>Choose an option</option>
+              <option>Option 1</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+            </select>
+            <span class="iconify absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" data-icon="lucide:chevron-down" data-width="18" style="stroke-width: 1.5"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkboxes & Radio -->
+    <div class="grid md:grid-cols-2 gap-6 mt-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-3">Checkboxes</label>
+        <div class="space-y-3">
+          <label class="flex items-center gap-3 cursor-pointer" onclick="toggleCheckbox(this)">
+            <div class="w-6 h-6 neu-pressed rounded-lg flex items-center justify-center checkbox-box">
+              <span class="iconify text-indigo-500 hidden check-icon" data-icon="lucide:check" data-width="14" style="stroke-width: 2"></span>
+            </div>
+            <span class="text-sm text-gray-600">Default checkbox</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer" onclick="toggleCheckbox(this)">
+            <div class="w-6 h-6 neu-pressed rounded-lg flex items-center justify-center checkbox-box checked">
+              <span class="iconify text-indigo-500 check-icon" data-icon="lucide:check" data-width="14" style="stroke-width: 2"></span>
+            </div>
+            <span class="text-sm text-gray-600">Checked checkbox</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer" onclick="toggleCheckbox(this)">
+            <div class="w-6 h-6 neu-pressed rounded-lg flex items-center justify-center checkbox-box">
+              <span class="iconify text-indigo-500 hidden check-icon" data-icon="lucide:check" data-width="14" style="stroke-width: 2"></span>
+            </div>
+            <span class="text-sm text-gray-600">Another option</span>
+          </label>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-3">Radio Buttons</label>
+        <div class="space-y-3">
+          <label class="flex items-center gap-3 cursor-pointer" onclick="selectRadio(this, 'radio-group-1')">
+            <div class="w-6 h-6 neu-pressed rounded-full flex items-center justify-center radio-box" data-group="radio-group-1">
+              <div class="w-3 h-3 rounded-full bg-indigo-500 hidden radio-dot"></div>
+            </div>
+            <span class="text-sm text-gray-600">Option A</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer" onclick="selectRadio(this, 'radio-group-1')">
+            <div class="w-6 h-6 neu-pressed rounded-full flex items-center justify-center radio-box selected" data-group="radio-group-1">
+              <div class="w-3 h-3 rounded-full bg-indigo-500 radio-dot"></div>
+            </div>
+            <span class="text-sm text-gray-600">Option B</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer" onclick="selectRadio(this, 'radio-group-1')">
+            <div class="w-6 h-6 neu-pressed rounded-full flex items-center justify-center radio-box" data-group="radio-group-1">
+              <div class="w-3 h-3 rounded-full bg-indigo-500 hidden radio-dot"></div>
+            </div>
+            <span class="text-sm text-gray-600">Option C</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toggle Switches -->
+    <div class="mt-6">
+      <label class="block text-sm font-medium text-gray-600 mb-3">Toggle Switches</label>
+      <div class="flex flex-wrap gap-6">
+        <label class="flex items-center gap-3 cursor-pointer" onclick="toggleSwitch(this)">
+          <div class="w-14 h-8 neu-pressed rounded-full relative toggle-track">
+            <div class="absolute top-1 left-1 w-6 h-6 neu-convex rounded-full transition-all toggle-thumb"></div>
+          </div>
+          <span class="text-sm text-gray-600">Off</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer" onclick="toggleSwitch(this)">
+          <div class="w-14 h-8 neu-pressed rounded-full relative toggle-track active" style="background: linear-gradient(145deg, #818cf8, #6366f1);">
+            <div class="absolute top-1 right-1 w-6 h-6 neu-convex rounded-full transition-all toggle-thumb"></div>
+          </div>
+          <span class="text-sm text-gray-600">On</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Range Slider -->
+    <div class="mt-6">
+      <label class="block text-sm font-medium text-gray-600 mb-3">Range Slider</label>
+      <input type="range" min="0" max="100" value="50" class="w-full neu-range" oninput="updateRangeValue(this)">
+      <div class="text-center mt-2 text-sm text-gray-500">Value: <span id="range-value">50</span></div>
+    </div>
+  </section>
+
+  <!-- Cards Section -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Cards</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Simple Card -->
+      <div class="neu-flat rounded-2xl p-6">
+        <div class="w-12 h-12 neu-convex rounded-xl flex items-center justify-center mb-4">
+          <span class="iconify text-indigo-500" data-icon="lucide:zap" data-width="24" style="stroke-width: 1.5"></span>
+        </div>
+        <h3 class="font-semibold text-gray-700 mb-2">Fast Performance</h3>
+        <p class="text-sm text-gray-500">Optimized for speed and efficiency across all devices.</p>
+      </div>
+
+      <!-- Card with Image -->
+      <div class="neu-flat rounded-2xl overflow-hidden">
+        <div class="h-32 neu-pressed m-3 rounded-xl flex items-center justify-center">
+          <span class="iconify text-gray-400" data-icon="lucide:image" data-width="40" style="stroke-width: 1.5"></span>
+        </div>
+        <div class="p-4 pt-0">
+          <h3 class="font-semibold text-gray-700 mb-2">Card Title</h3>
+          <p class="text-sm text-gray-500 mb-4">Some quick example text for the card.</p>
+          <button class="neu-btn neu-convex px-4 py-2 rounded-lg text-sm font-medium text-indigo-500 transition-all">Learn More</button>
+        </div>
+      </div>
+
+      <!-- Profile Card -->
+      <div class="neu-flat rounded-2xl p-6 text-center">
+        <div class="w-20 h-20 neu-convex rounded-full mx-auto mb-4 flex items-center justify-center">
+          <span class="iconify text-gray-400" data-icon="lucide:user" data-width="32" style="stroke-width: 1.5"></span>
+        </div>
+        <h3 class="font-semibold text-gray-700">John Doe</h3>
+        <p class="text-sm text-gray-500 mb-4">Product Designer</p>
+        <div class="flex justify-center gap-3">
+          <button class="neu-btn neu-flat p-2 rounded-lg transition-all">
+            <span class="iconify text-gray-500" data-icon="lucide:twitter" data-width="16" style="stroke-width: 1.5"></span>
+          </button>
+          <button class="neu-btn neu-flat p-2 rounded-lg transition-all">
+            <span class="iconify text-gray-500" data-icon="lucide:github" data-width="16" style="stroke-width: 1.5"></span>
+          </button>
+          <button class="neu-btn neu-flat p-2 rounded-lg transition-all">
+            <span class="iconify text-gray-500" data-icon="lucide:linkedin" data-width="16" style="stroke-width: 1.5"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress & Badges -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Progress &amp; Badges</h2>
+
+    <!-- Progress Bars -->
+    <div class="space-y-4 mb-8">
+      <div>
+        <div class="flex justify-between text-sm text-gray-600 mb-2">
+          <span>Progress</span>
+          <span>75%</span>
+        </div>
+        <div class="h-3 neu-pressed rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-indigo-400 to-indigo-500 rounded-full animate-progress"></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between text-sm text-gray-600 mb-2">
+          <span>Success</span>
+          <span>90%</span>
+        </div>
+        <div class="h-3 neu-pressed rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full" style="width: 90%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between text-sm text-gray-600 mb-2">
+          <span>Warning</span>
+          <span>45%</span>
+        </div>
+        <div class="h-3 neu-pressed rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full" style="width: 45%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <h3 class="text-base font-medium text-gray-600 mb-4">Badges</h3>
+    <div class="flex flex-wrap gap-3">
+      <span class="neu-flat px-3 py-1 rounded-full text-xs font-medium text-gray-600">Default</span>
+      <span class="neu-convex px-3 py-1 rounded-full text-xs font-medium text-indigo-500">Primary</span>
+      <span class="neu-flat px-3 py-1 rounded-full text-xs font-medium text-green-500">Success</span>
+      <span class="neu-flat px-3 py-1 rounded-full text-xs font-medium text-red-500">Danger</span>
+      <span class="neu-flat px-3 py-1 rounded-full text-xs font-medium text-yellow-500">Warning</span>
+      <span class="neu-pressed px-3 py-1 rounded-full text-xs font-medium text-gray-500">Pressed</span>
+    </div>
+  </section>
+
+  <!-- Alerts Section -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Alerts</h2>
+    <div class="space-y-4">
+      <div class="neu-flat rounded-xl p-4 flex items-start gap-3 border-l-4 border-indigo-500">
+        <span class="iconify text-indigo-500 mt-0.5" data-icon="lucide:info" data-width="20" style="stroke-width: 1.5"></span>
+        <div>
+          <h4 class="font-medium text-gray-700 text-sm">Information</h4>
+          <p class="text-sm text-gray-500">This is an informational alert message.</p>
+        </div>
+      </div>
+      <div class="neu-flat rounded-xl p-4 flex items-start gap-3 border-l-4 border-green-500">
+        <span class="iconify text-green-500 mt-0.5" data-icon="lucide:check-circle" data-width="20" style="stroke-width: 1.5"></span>
+        <div>
+          <h4 class="font-medium text-gray-700 text-sm">Success</h4>
+          <p class="text-sm text-gray-500">Your action has been completed successfully.</p>
+        </div>
+      </div>
+      <div class="neu-flat rounded-xl p-4 flex items-start gap-3 border-l-4 border-yellow-500">
+        <span class="iconify text-yellow-500 mt-0.5" data-icon="lucide:alert-triangle" data-width="20" style="stroke-width: 1.5"></span>
+        <div>
+          <h4 class="font-medium text-gray-700 text-sm">Warning</h4>
+          <p class="text-sm text-gray-500">Please review before proceeding further.</p>
+        </div>
+      </div>
+      <div class="neu-flat rounded-xl p-4 flex items-start gap-3 border-l-4 border-red-500">
+        <span class="iconify text-red-500 mt-0.5" data-icon="lucide:x-circle" data-width="20" style="stroke-width: 1.5"></span>
+        <div>
+          <h4 class="font-medium text-gray-700 text-sm">Error</h4>
+          <p class="text-sm text-gray-500">Something went wrong. Please try again.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navigation Components -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Navigation</h2>
+
+    <!-- Tabs -->
+    <h3 class="text-base font-medium text-gray-600 mb-4">Tabs</h3>
+    <div class="neu-pressed rounded-xl p-1.5 inline-flex gap-1 mb-8">
+      <button class="neu-convex px-4 py-2 rounded-lg text-sm font-medium text-indigo-500 transition-all">Tab 1</button>
+      <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all">Tab 2</button>
+      <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all">Tab 3</button>
+    </div>
+
+    <!-- Pagination -->
+    <h3 class="text-base font-medium text-gray-600 mb-4">Pagination</h3>
+    <div class="flex flex-wrap gap-2 mb-8">
+      <button class="neu-btn neu-flat w-10 h-10 rounded-xl flex items-center justify-center transition-all">
+        <span class="iconify text-gray-500" data-icon="lucide:chevron-left" data-width="18" style="stroke-width: 1.5"></span>
+      </button>
+      <button class="neu-convex w-10 h-10 rounded-xl text-sm font-medium text-indigo-500">1</button>
+      <button class="neu-btn neu-flat w-10 h-10 rounded-xl text-sm font-medium text-gray-500 transition-all">2</button>
+      <button class="neu-btn neu-flat w-10 h-10 rounded-xl text-sm font-medium text-gray-500 transition-all">3</button>
+      <button class="neu-btn neu-flat w-10 h-10 rounded-xl text-sm font-medium text-gray-500 transition-all">4</button>
+      <button class="neu-btn neu-flat w-10 h-10 rounded-xl flex items-center justify-center transition-all">
+        <span class="iconify text-gray-500" data-icon="lucide:chevron-right" data-width="18" style="stroke-width: 1.5"></span>
+      </button>
+    </div>
+
+    <!-- Breadcrumb -->
+    <h3 class="text-base font-medium text-gray-600 mb-4">Breadcrumb</h3>
+    <div class="neu-flat rounded-xl px-4 py-3 inline-flex items-center gap-2 text-sm">
+      <a href="#" class="text-indigo-500 hover:text-indigo-600">Home</a>
+      <span class="iconify text-gray-400" data-icon="lucide:chevron-right" data-width="14" style="stroke-width: 1.5"></span>
+      <a href="#" class="text-indigo-500 hover:text-indigo-600">Products</a>
+      <span class="iconify text-gray-400" data-icon="lucide:chevron-right" data-width="14" style="stroke-width: 1.5"></span>
+      <span class="text-gray-500">Details</span>
+    </div>
+  </section>
+
+  <!-- Modal & Tooltip Demo -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Modal &amp; Tooltips</h2>
+    <div class="flex flex-wrap gap-4">
+      <button onclick="openModal()" class="neu-btn neu-convex px-6 py-3 rounded-xl text-sm font-medium text-indigo-500 transition-all">
+        Open Modal
+      </button>
+      <div class="relative group">
+        <button class="neu-btn neu-flat px-6 py-3 rounded-xl text-sm font-medium text-gray-600 transition-all">
+          Hover for Tooltip
+        </button>
+        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          <div class="neu-flat px-3 py-2 rounded-lg text-xs text-gray-600 whitespace-nowrap">
+            This is a tooltip!
+          </div>
+          <div class="w-3 h-3 neu-flat rotate-45 absolute -bottom-1.5 left-1/2 -translate-x-1/2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Avatars & List -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Avatars &amp; Lists</h2>
+
+    <!-- Avatars -->
+    <h3 class="text-base font-medium text-gray-600 mb-4">Avatars</h3>
+    <div class="flex flex-wrap items-end gap-4 mb-8">
+      <div class="w-8 h-8 neu-convex rounded-full flex items-center justify-center">
+        <span class="text-xs font-medium text-gray-500">XS</span>
+      </div>
+      <div class="w-10 h-10 neu-convex rounded-full flex items-center justify-center">
+        <span class="text-sm font-medium text-gray-500">SM</span>
+      </div>
+      <div class="w-12 h-12 neu-convex rounded-full flex items-center justify-center">
+        <span class="text-sm font-medium text-gray-500">MD</span>
+      </div>
+      <div class="w-16 h-16 neu-convex rounded-full flex items-center justify-center">
+        <span class="font-medium text-gray-500">LG</span>
+      </div>
+      <div class="w-20 h-20 neu-convex rounded-full flex items-center justify-center">
+        <span class="font-medium text-gray-500">XL</span>
+      </div>
+      <!-- Avatar with status -->
+      <div class="relative">
+        <div class="w-12 h-12 neu-convex rounded-full flex items-center justify-center">
+          <span class="iconify text-gray-400" data-icon="lucide:user" data-width="20" style="stroke-width: 1.5"></span>
+        </div>
+        <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-gray-200"></div>
+      </div>
+    </div>
+
+    <!-- List -->
+    <h3 class="text-base font-medium text-gray-600 mb-4">List Items</h3>
+    <div class="neu-pressed rounded-xl overflow-hidden divide-y divide-gray-200/50">
+      <div class="p-4 flex items-center gap-4 hover:bg-white/20 transition-colors cursor-pointer">
+        <div class="w-10 h-10 neu-convex rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="iconify text-indigo-500" data-icon="lucide:inbox" data-width="18" style="stroke-width: 1.5"></span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="text-sm font-medium text-gray-700 truncate">Inbox Messages</h4>
+          <p class="text-xs text-gray-500">You have 12 new messages</p>
+        </div>
+        <span class="neu-convex px-2 py-1 rounded-lg text-xs font-medium text-indigo-500">12</span>
+      </div>
+      <div class="p-4 flex items-center gap-4 hover:bg-white/20 transition-colors cursor-pointer">
+        <div class="w-10 h-10 neu-convex rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="iconify text-green-500" data-icon="lucide:check-circle" data-width="18" style="stroke-width: 1.5"></span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="text-sm font-medium text-gray-700 truncate">Tasks Completed</h4>
+          <p class="text-xs text-gray-500">Great job! All tasks done</p>
+        </div>
+        <span class="iconify text-gray-400" data-icon="lucide:chevron-right" data-width="18" style="stroke-width: 1.5"></span>
+      </div>
+      <div class="p-4 flex items-center gap-4 hover:bg-white/20 transition-colors cursor-pointer">
+        <div class="w-10 h-10 neu-convex rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="iconify text-yellow-500" data-icon="lucide:bell" data-width="18" style="stroke-width: 1.5"></span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="text-sm font-medium text-gray-700 truncate">Notifications</h4>
+          <p class="text-xs text-gray-500">3 pending notifications</p>
+        </div>
+        <span class="neu-flat px-2 py-1 rounded-lg text-xs font-medium text-yellow-500">3</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Circular Progress -->
+  <section class="neu-flat rounded-3xl p-6 md:p-8">
+    <h2 class="text-xl font-semibold tracking-tight text-gray-700 mb-6">Circular Progress</h2>
+    <div class="flex flex-wrap justify-center gap-8">
+      <div class="neu-flat w-32 h-32 rounded-full flex items-center justify-center">
+        <div class="neu-pressed w-24 h-24 rounded-full flex items-center justify-center">
+          <span class="text-xl font-semibold text-indigo-500">75%</span>
+        </div>
+      </div>
+      <div class="neu-flat w-32 h-32 rounded-full flex items-center justify-center">
+        <div class="neu-pressed w-24 h-24 rounded-full flex items-center justify-center">
+          <span class="text-xl font-semibold text-green-500">90%</span>
+        </div>
+      </div>
+      <div class="neu-flat w-32 h-32 rounded-full flex items-center justify-center">
+        <div class="neu-pressed w-24 h-24 rounded-full flex items-center justify-center">
+          <span class="text-xl font-semibold text-yellow-500">45%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 bg-black/20 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+  <div class="neu-flat rounded-2xl p-6 max-w-md w-full">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-700">Modal Title</h3>
+      <button onclick="closeModal()" class="neu-btn neu-flat p-2 rounded-lg transition-all">
+        <span class="iconify text-gray-500" data-icon="lucide:x" data-width="18" style="stroke-width: 1.5"></span>
+      </button>
+    </div>
+    <p class="text-sm text-gray-500 mb-6">This is a neumorphic modal dialog. You can add any content here.</p>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal()" class="neu-btn neu-flat px-4 py-2 rounded-xl text-sm font-medium text-gray-500 transition-all">Cancel</button>
+      <button onclick="closeModal()" class="neu-btn neu-convex px-4 py-2 rounded-xl text-sm font-medium text-indigo-500 transition-all">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="max-w-6xl mx-auto mt-12 mb-6">
+  <div class="neu-flat rounded-2xl p-6 text-center">
+    <p class="text-sm text-gray-500">Neumorphism UI Components © 2025</p>
+  </div>
+</footer>

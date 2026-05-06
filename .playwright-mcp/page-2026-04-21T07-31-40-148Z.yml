@@ -1,0 +1,42 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "LinkDrop V3" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e6]:
+        - generic [ref=e7]: 웹소설+영상
+    - generic [ref=e8]:
+      - link "내 시리즈" [ref=e9] [cursor=pointer]:
+        - /url: /
+      - link "새 시리즈" [ref=e10] [cursor=pointer]:
+        - /url: /create
+      - link "캐릭터" [ref=e11] [cursor=pointer]:
+        - /url: /characters
+      - link "감정선" [ref=e12] [cursor=pointer]:
+        - /url: /characters/emoline
+      - link "키프레임" [ref=e13] [cursor=pointer]:
+        - /url: /series/keyframe
+      - link "MP4합성" [ref=e14] [cursor=pointer]:
+        - /url: /series/mp4combine
+  - generic [ref=e15]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: AI
+        - generic [ref=e21]: 키프레임
+      - combobox [ref=e23] [cursor=pointer]:
+        - option "— 시리즈 선택 —" [selected]
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: 🎞️
+        - generic [ref=e30]: 시리즈를 선택하세요
+      - button "번인 미리보기" [ref=e32] [cursor=pointer]
+      - button "▶" [disabled] [ref=e34]
+    - button "💬" [ref=e37] [cursor=pointer]
+    - generic [ref=e38]:
+      - generic [ref=e40]:
+        - generic [ref=e41]: ✨
+        - generic [ref=e42]: Gemini 어시스턴트
+        - button "재분석" [ref=e43] [cursor=pointer]
+      - generic [ref=e46]:
+        - textbox "질문 입력… (Enter 전송 / Shift+Enter 줄바꿈)" [ref=e47]
+        - button "↑" [disabled] [ref=e48]

@@ -21,10 +21,10 @@ def get_art_styles() -> dict:
     return _ART_STYLES
 
 
-def get_art_style_config(art_style: str = "masako") -> dict:
-    """화풍 설정 반환 — 없으면 masako 기본"""
+def get_art_style_config(art_style: str = "polystyle") -> dict:
+    """화풍 설정 반환 — 없으면 polystyle 기본"""
     styles = get_art_styles()
-    return styles.get(art_style, styles.get("masako", {}))
+    return styles.get(art_style, styles.get("polystyle", {}))
 
 
 def get_image_backend():

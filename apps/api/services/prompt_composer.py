@@ -1,3 +1,9 @@
+# ============================================================
+# WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+# 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+# V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+# 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+# ============================================================
 """
 prompt_composer.py — 씬 이미지 프롬프트 조합 서비스 (Gemini 0회)
 
@@ -12,7 +18,40 @@ prompt_composer.py — 씬 이미지 프롬프트 조합 서비스 (Gemini 0회)
 """
 
 import json
+import re
 from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# 시간대 한→영 결정론적 매핑 (Gemini 호출 없이 항상 일관된 영어 토큰 생성)
+# ---------------------------------------------------------------------------
+_KO_TIME_MAP: list[tuple[str, str]] = [
+    ("새벽 [0-9]시",  "late night / early dawn"),
+    ("깊은 밤",       "deep night"),
+    ("자정",          "midnight"),
+    ("새벽",          "dawn"),
+    ("이른 아침",     "early morning"),
+    ("오전",          "morning"),
+    ("점심시간",      "noon"),
+    ("낮",            "daytime"),
+    ("오후",          "afternoon"),
+    ("저녁",          "evening / dusk"),
+    ("밤",            "night"),
+    ("다음날",        "the next day"),
+    ("며칠 후",       "a few days later"),
+    ("다음 날",       "the next day"),
+    ("일주일 후",     "a week later"),
+    ("한 달 후",      "a month later"),
+]
+
+def _translate_time_of_day(ko: str) -> str:
+    """한국어 시간대 → 영어. 매핑 없으면 원문 그대로 반환."""
+    s = ko.strip()
+    if not s:
+        return ""
+    for pattern, en in _KO_TIME_MAP:
+        if re.search(pattern, s):
+            return en
+    return s
 
 # ---------------------------------------------------------------------------
 # 모듈 레벨 캐시 — import 시 1회만 로드
@@ -59,25 +98,7 @@ def _load_char_appearance(char_id: str, art_style: str) -> dict | None:
 
 
 def _pick_wardrobe(scene_meta: dict) -> str:
-    """씬 메타 → 의상 키 (default / casual / stressed).
-
-    조건:
-      - 밤/새벽 + 집/거실/침실/서재 → casual
-      - atmosphere에 긴장/대립/의심/차가운/스트레스 포함 → stressed
-      - 나머지 → default
-    """
-    time_of_day = scene_meta.get("time_of_day", "")
-    location    = scene_meta.get("location", "")
-    atmosphere  = scene_meta.get("atmosphere", "")
-
-    night_home = (
-        any(k in time_of_day for k in ["밤", "새벽"]) and
-        any(k in location    for k in ["집", "거실", "침실", "서재"])
-    )
-    stressed = any(k in atmosphere for k in ["긴장", "대립", "의심", "차가운", "스트레스"])
-
-    if night_home:  return "casual"
-    if stressed:    return "stressed"
+    # 🔒 LD-016: 사용자 명시 요청 없으면 항상 default 의상 유지
     return "default"
 
 
@@ -98,17 +119,29 @@ def _get_char_parts(
             char_data = _load_char_appearance(char_id, art_style)
             if not char_data:
                 continue
-            appearance      = char_data.get("appearance_en") or {}
-            identity        = (appearance.get("fal_identity_prompt") or "").strip()
-            body_prompt     = ((appearance.get("body") or {}).get("body_prompt") or "").strip()
+            appearance = char_data.get("appearance_en") or {}
             wardrobe_prompt = (
                 (appearance.get("wardrobe") or {})
                 .get(wardrobe_key, {})
                 .get("wardrobe_prompt") or ""
             ).strip()
-            for part in (identity, body_prompt, wardrobe_prompt):
-                if part:
-                    char_parts.append(part)
+
+            # polystyle + reference_url 있음 → fal_identity_prompt + 의상 포함
+            # portrait 이미지 레퍼런스가 있어도 Gemini가 캐릭터 일관성을 보장하지 못하므로
+            # 텍스트 묘사(fal_identity_prompt)를 함께 주입
+            if art_style == "polystyle" and char_data.get("reference_url"):
+                identity    = (appearance.get("fal_identity_prompt") or "").strip()
+                body_prompt = ((appearance.get("body") or {}).get("body_prompt") or "").strip()
+                for part in (identity, body_prompt, wardrobe_prompt):
+                    if part:
+                        char_parts.append(part)
+            else:
+                # 기존 verbose 경로 (polystyle / polystyle / reference 없음)
+                identity    = (appearance.get("fal_identity_prompt") or "").strip()
+                body_prompt = ((appearance.get("body") or {}).get("body_prompt") or "").strip()
+                for part in (identity, body_prompt, wardrobe_prompt):
+                    if part:
+                        char_parts.append(part)
         else:
             gc              = (guest_cast or {}).get(name) or {}
             identity        = (gc.get("fal_identity_prompt") or "").strip()
@@ -148,25 +181,38 @@ def _build_ots_char_parts(
 
         if is_speaker:
             # 화자 — 중경(약간 뒤), 2/3 측면, 얼굴 보임 → 립씽크 대상
-            # 청자의 어깨 너머로 보이는 구도
             if char_id:
                 char_data  = _load_char_appearance(char_id, art_style)
                 appearance = (char_data or {}).get("appearance_en") or {}
-                identity   = (appearance.get("fal_identity_prompt") or "").strip()
                 wardrobe   = (
                     (appearance.get("wardrobe") or {})
                     .get(wardrobe_key, {})
                     .get("wardrobe_prompt") or ""
                 ).strip()
-                if identity:
-                    parts.append(
-                        f"{identity}, standing slightly behind in midground, "
-                        "two-thirds side profile, face clearly visible, "
-                        "gaze directed toward the listener in front, "
-                        "NOT looking at camera"
-                    )
-                if wardrobe:
-                    parts.append(wardrobe)
+
+                # polystyle + reference_url → fal_identity_prompt + 의상 포함 (portrait만으론 Gemini 일관성 불충분)
+                if art_style == "polystyle" and (char_data or {}).get("reference_url"):
+                    identity = (appearance.get("fal_identity_prompt") or "").strip()
+                    if identity:
+                        parts.append(
+                            f"{identity}, standing slightly behind in midground, "
+                            "two-thirds side profile, face clearly visible, "
+                            "gaze directed toward the listener in front, "
+                            "NOT looking at camera"
+                        )
+                    if wardrobe:
+                        parts.append(wardrobe)
+                else:
+                    identity = (appearance.get("fal_identity_prompt") or "").strip()
+                    if identity:
+                        parts.append(
+                            f"{identity}, standing slightly behind in midground, "
+                            "two-thirds side profile, face clearly visible, "
+                            "gaze directed toward the listener in front, "
+                            "NOT looking at camera"
+                        )
+                    if wardrobe:
+                        parts.append(wardrobe)
             else:
                 gc       = (guest_cast or {}).get(name) or {}
                 identity = (gc.get("fal_identity_prompt") or name).strip()
@@ -177,8 +223,7 @@ def _build_ots_char_parts(
                     "NOT looking at camera"
                 )
         else:
-            # 청자 — 전경(앞), 완전 후면, 얼굴 완전히 숨김 → 프레임 역할
-            # 카메라와 화자 사이에서 어깨/뒤통수로 화면 앞쪽을 채움
+            # 청자 — 전경(앞), 완전 후면, 얼굴 숨김 → 프레임 역할
             if char_id:
                 char_data  = _load_char_appearance(char_id, art_style)
                 appearance = (char_data or {}).get("appearance_en") or {}
@@ -222,14 +267,29 @@ def build_cut_image_prompt(
     """
     _ensure_loaded()
 
-    style_cfg    = _ART_STYLES.get(art_style) or _ART_STYLES.get("masako") or {}
+    style_cfg    = _ART_STYLES.get(art_style) or _ART_STYLES.get("polystyle") or {}
     scene_meta   = scene.get("scene_meta") or {}
     char_names: list[str] = scene_meta.get("characters") or []
     wardrobe_key = _pick_wardrobe(scene_meta)
     cut_type     = (scene.get("type") or "narration").lower()
     speaker      = (scene.get("speaker") or "").strip()
 
-    scene_desc: str = (scene.get("image_hint") or "").strip()
+    scene_desc: str = (scene.get("image_hint_en") or scene.get("image_hint") or "").strip()
+
+    # 시간대 — 결정론적 한→영 변환 (Gemini 없이 항상 명시적 토큰 주입)
+    time_part = _translate_time_of_day(scene_meta.get("time_of_day") or "")
+
+    # scene_meta 배경 컨텍스트 (location / atmosphere / scene_hint — time_of_day는 별도 주입)
+    # bg_context_en이 있으면 우선 사용 (chapters.py에서 번역 주입)
+    if scene.get("bg_context_en"):
+        bg_context = scene["bg_context_en"]
+    else:
+        bg_ctx_parts = [p for p in [
+            scene_meta.get("scene_hint") or "",
+            scene_meta.get("location") or "",
+            scene_meta.get("atmosphere") or "",
+        ] if p]
+        bg_context = ", ".join(bg_ctx_parts)
 
     # ── dialogue 컷 ────────────────────────────────────────────────────────
     if cut_type == "dialogue" and char_names:
@@ -240,20 +300,30 @@ def build_cut_image_prompt(
             ots_parts = _build_ots_char_parts(
                 char_names, speaker, art_style, wardrobe_key, guest_cast
             )
-            all_parts = ["over-the-shoulder shot", scene_desc] + ots_parts + [style_part]
+            # polystyle: scene_desc 우선, time_part, bg_context 후
+            if art_style == "polystyle":
+                all_parts = [scene_desc, time_part, "over-the-shoulder shot", bg_context] + ots_parts + [style_part]
+            else:
+                all_parts = ["over-the-shoulder shot", time_part, bg_context, scene_desc] + ots_parts + [style_part]
         else:
             # 1인 — 2/3 측면 뷰, 시선은 씬 내부 방향 (카메라 직시 금지)
-            # 예외: 결심/선언 씬은 image_hint에 "정면" 명시 시 허용
             char_parts = _get_char_parts(char_names, art_style, wardrobe_key, guest_cast)
-            all_parts  = [
-                scene_desc,
-                "medium close-up, two-thirds profile view, "
-                "gaze directed into the scene not at lens, natural candid framing"
-            ] + char_parts + [style_part]
+            if art_style == "polystyle":
+                all_parts = [
+                    scene_desc, time_part, bg_context,
+                    "medium close-up, two-thirds profile view, "
+                    "gaze directed into the scene not at lens, natural candid framing"
+                ] + char_parts + [style_part]
+            else:
+                all_parts = [
+                    time_part, bg_context, scene_desc,
+                    "medium close-up, two-thirds profile view, "
+                    "gaze directed into the scene not at lens, natural candid framing"
+                ] + char_parts + [style_part]
 
         return ", ".join(p for p in all_parts if p)
 
-    # ── narration 컷 (기존 로직) ───────────────────────────────────────────
+    # ── narration 컷 ──────────────────────────────────────────────────────
     char_parts = _get_char_parts(char_names, art_style, wardrobe_key, guest_cast)
 
     if char_parts:
@@ -265,7 +335,11 @@ def build_cut_image_prompt(
             or ""
         ).strip()
 
-    all_parts = [scene_desc] + char_parts + [style_part]
+    # polystyle: image_hint(scene_desc) 우선 → time_part → bg_context → 캐릭터 → 화풍
+    if art_style == "polystyle":
+        all_parts = [scene_desc, time_part, bg_context] + char_parts + [style_part]
+    else:
+        all_parts = [time_part, bg_context, scene_desc] + char_parts + [style_part]
     return ", ".join(p for p in all_parts if p)
 
 
@@ -280,8 +354,8 @@ def build_bg_prompt(
     """
     _ensure_loaded()
 
-    style_cfg  = _ART_STYLES.get(art_style) or _ART_STYLES.get("masako") or {}
-    scene_desc = (scene.get("image_hint") or "").strip()
+    style_cfg  = _ART_STYLES.get(art_style) or _ART_STYLES.get("polystyle") or {}
+    scene_desc = (scene.get("image_hint_en") or scene.get("image_hint") or "").strip()
     style_part = (
         style_cfg.get("bg_prompt_suffix")
         or style_cfg.get("base_style_prompt")
@@ -305,7 +379,7 @@ def build_char_prompt(
     """
     _ensure_loaded()
 
-    style_cfg    = _ART_STYLES.get(art_style) or _ART_STYLES.get("masako") or {}
+    style_cfg    = _ART_STYLES.get(art_style) or _ART_STYLES.get("polystyle") or {}
     scene_meta   = scene.get("scene_meta") or {}
     char_names: list[str] = scene_meta.get("characters") or []
 
@@ -319,10 +393,22 @@ def build_char_prompt(
     if not char_parts:
         return ""
 
-    style_part     = (style_cfg.get("base_style_prompt") or "").strip()
-    cutout_suffix  = "on plain white background, isolated character, full body, no background elements"
+    style_part = (style_cfg.get("base_style_prompt") or "").strip()
 
-    all_parts = char_parts + [style_part, cutout_suffix]
+    if art_style == "polystyle":
+        proportion_prefix = (
+            "3-head proportion body STRICTLY, oversized head on small body, "
+            "stylized character mascot ratio NOT realistic human ratio"
+        )
+        cutout_suffix = (
+            "solid flat chroma key green #00B140 background only, "
+            "no background elements, no shadows on background, full body visible"
+        )
+        all_parts = [proportion_prefix] + char_parts + [style_part, cutout_suffix]
+    else:
+        cutout_suffix = "on plain white background, isolated character, full body, no background elements"
+        all_parts = char_parts + [style_part, cutout_suffix]
+
     return ", ".join(p for p in all_parts if p)
 
 
@@ -338,7 +424,7 @@ def build_cut_negative_prompt(
     """
     _ensure_loaded()
 
-    style_cfg  = _ART_STYLES.get(art_style) or _ART_STYLES.get("masako") or {}
+    style_cfg  = _ART_STYLES.get(art_style) or _ART_STYLES.get("polystyle") or {}
     cut_type   = (scene.get("type") or "narration").lower()
     char_names: list[str] = (scene.get("scene_meta") or {}).get("characters") or []
 

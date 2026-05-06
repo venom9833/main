@@ -11,7 +11,7 @@ class PillowBackend(ImageBackend):
         height: int = 1080,
         **kwargs,
     ) -> bytes:
-        art_style = kwargs.get("art_style", "masako")
+        art_style = kwargs.get("art_style", "polystyle")
         is_hook = kwargs.get("is_hook", False)
 
         from image_backends.registry import get_art_style_config

@@ -1,3 +1,9 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -147,7 +153,7 @@ export default function WikiPage() {
             <textarea value={draft} onChange={e => setDraft(e.target.value)} style={{
               width: '100%', minHeight: '400px', background: 'rgba(255,255,255,0.05)',
               border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px',
-              color: '#fff', padding: '1rem', fontSize: '0.95rem', resize: 'vertical', outline: 'none', fontFamily: 'monospace',
+              color: '#fff', padding: '1rem', fontSize: '0.95rem', resize: 'vertical', outline: 'none', fontFamily: "var(--font-en), 'Pretendard', sans-serif",
             }} />
           ) : (
             <pre style={{ whiteSpace: 'pre-wrap', color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem', lineHeight: 1.7, margin: 0 }}>

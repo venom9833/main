@@ -1,0 +1,178 @@
+{
+  "product": {
+    "name": "Formflow",
+    "tagline": "설문과 폼을 대화처럼 만드세요",
+    "category": "SaaS",
+    "version": "v2.1 — 2026년 4월 출시"
+  },
+  "stats": [
+    { "value": "340%", "label": "평균 완료율 향상", "unit": "기존 폼 대비" },
+    { "value": "2분", "label": "폼 제작 시간", "unit": "평균 설정 소요" },
+    { "value": "22K+", "label": "활성 팀", "unit": "월간 사용" },
+    { "value": "99.9%", "label": "가동률", "unit": "최근 12개월" }
+  ],
+  "overview_heading": "Formflow란",
+  "overview": [
+    "Formflow는 기존 폼 도구의 낮은 완료율 문제를 해결하기 위해 만들어졌습니다. 긴 설문지를 한 번에 보여주는 대신, 한 번에 하나의 질문을 대화 형식으로 보여줍니다. 사용자는 부담 없이 다음 질문으로 넘어가게 되어, 평균 완료율이 340% 향상됩니다.",
+    "코드 없이 드래그&드롭 빌더로 폼을 제작하고, 조건 분기 로직으로 맞춤형 경험을 제공합니다. 수집된 데이터는 실시간 대시보드에서 분석하거나 Notion, Airtable, Google Sheets로 즉시 연동됩니다.",
+    "스타트업부터 대기업까지 다양한 규모의 팀이 채용 신청서, 고객 온보딩, 사용자 인터뷰, 리드 수집에 Formflow를 활용하고 있습니다."
+  ],
+  "features_heading": "핵심 기능",
+  "features": [
+    {
+      "id": "feat-conversation",
+      "icon": "💬",
+      "title": "대화형 폼 빌더",
+      "desc": "30가지 이상의 질문 유형(텍스트, 선택, 슬라이더, 파일 업로드, 서명 등)을 드래그&드롭으로 배치합니다. 실시간 미리보기로 응답자 화면을 그대로 확인하며 편집이 가능합니다.",
+      "highlight": "CORE"
+    },
+    {
+      "id": "feat-logic",
+      "icon": "🔀",
+      "title": "조건 분기 로직",
+      "desc": "응답에 따라 다음 질문을 다르게 보여주는 조건 분기를 설정합니다. 복잡한 코딩 없이 'A라고 답하면 B로, 아니면 C로' 같은 로직을 시각적으로 구성할 수 있습니다.",
+      "highlight": null
+    },
+    {
+      "id": "feat-analytics",
+      "icon": "📊",
+      "title": "실시간 응답 분석",
+      "desc": "응답이 쌓이는 즉시 대시보드에 통계가 업데이트됩니다. 문항별 응답 분포, 이탈 지점 히트맵, 완료율 추이 차트로 폼의 약점을 빠르게 파악하고 개선합니다.",
+      "highlight": "NEW"
+    },
+    {
+      "id": "feat-integration",
+      "icon": "🔗",
+      "title": "80+ 앱 연동",
+      "desc": "Notion, Airtable, Google Sheets, Slack, HubSpot, Zapier 등 80개 이상의 서비스와 연동됩니다. 폼 응답이 도착하는 즉시 CRM에 자동 등록되고 Slack으로 알림이 발송됩니다.",
+      "highlight": null
+    },
+    {
+      "id": "feat-branding",
+      "icon": "🎨",
+      "title": "완전한 브랜드 커스터마이징",
+      "desc": "로고, 컬러, 폰트, 배경을 브랜드에 맞게 설정합니다. 커스텀 도메인 연결로 form.yourcompany.com 주소를 사용할 수 있습니다.",
+      "highlight": null
+    },
+    {
+      "id": "feat-compliance",
+      "icon": "🔒",
+      "title": "보안 & 컴플라이언스",
+      "desc": "GDPR, 개인정보보호법 준수. 응답 데이터 암호화 저장, 보존 기간 자동 삭제, 데이터 처리 동의 관리가 모두 내장되어 있습니다.",
+      "highlight": null
+    }
+  ],
+  "specs_heading": "기술 사양",
+  "spec_groups": [
+    {
+      "group": "폼 설정",
+      "items": [
+        { "label": "질문 유형", "value": "30가지 이상" },
+        { "label": "폼당 최대 질문 수", "value": "무제한 (Pro+)" },
+        { "label": "조건 분기 규칙", "value": "무제한" },
+        { "label": "파일 업로드", "value": "최대 100MB / 건" }
+      ]
+    },
+    {
+      "group": "데이터 & 보안",
+      "items": [
+        { "label": "응답 데이터 암호화", "value": "AES-256" },
+        { "label": "SSL", "value": "전구간 TLS 1.3" },
+        { "label": "데이터 센터", "value": "AWS ap-northeast-1 (도쿄)" },
+        { "label": "컴플라이언스", "value": "GDPR, 개인정보보호법" }
+      ]
+    },
+    {
+      "group": "API & 연동",
+      "items": [
+        { "label": "REST API", "value": "전 기능 지원" },
+        { "label": "Webhook", "value": "실시간 응답 전송" },
+        { "label": "연동 앱", "value": "80개 이상" },
+        { "label": "API 요청 한도", "value": "분당 1,000건 (Pro)" }
+      ]
+    },
+    {
+      "group": "가동률 & 지원",
+      "items": [
+        { "label": "SLA 가동률", "value": "99.9%" },
+        { "label": "고객 지원", "value": "이메일, 채팅, 전화 (플랜별)" },
+        { "label": "문서화", "value": "영문/한국어 풀 문서" }
+      ]
+    }
+  ],
+  "use_cases_heading": "활용 사례",
+  "use_cases": [
+    {
+      "id": "case-hr",
+      "title": "채용 지원서 & HR",
+      "scenario": "기존 구글폼 지원서 완료율이 42%에 불과해 지원자 풀이 좁았습니다. 지원 과정이 길고 지루하다는 피드백이 반복됐습니다.",
+      "outcome": "Formflow 전환 후 지원서 완료율 89%로 상승, 지원자 수 2.1배 증가. 조건 분기로 직군별 다른 질문 세트를 보여줘 지원자 경험도 개선됐습니다."
+    },
+    {
+      "id": "case-onboarding",
+      "title": "고객 온보딩",
+      "scenario": "SaaS 신규 가입자가 온보딩 설문을 건너뛰어 사용자 맞춤 경험을 제공하지 못했습니다. 온보딩 완료율이 31%에 그쳤습니다.",
+      "outcome": "대화형 폼으로 교체 후 온보딩 완료율 78%로 3배 향상. 수집된 데이터로 사용자별 맞춤 추천을 제공해 D+30 리텐션 24% 상승."
+    },
+    {
+      "id": "case-research",
+      "title": "사용자 리서치",
+      "scenario": "설문 링크를 발송하면 응답률 8~12% 수준에 머물렀습니다. 긴 설문에 중간 이탈이 잦아 통계가 편향될 우려가 있었습니다.",
+      "outcome": "Formflow 대화형 설문 전환 후 완료율 67%로 상승. 이탈 지점 히트맵으로 문제 질문을 개선해 데이터 품질도 크게 향상됐습니다."
+    },
+    {
+      "id": "case-lead",
+      "title": "리드 수집 & 마케팅",
+      "scenario": "랜딩 페이지 상단 폼에서 이메일만 수집했으나, CRM에서 리드 세분화가 불가능해 영업팀 효율이 낮았습니다.",
+      "outcome": "다단계 대화형 리드 수집 폼으로 예산, 관심사, 타임라인까지 수집. HubSpot 자동 연동으로 MQL 자동 분류, 영업 전환율 38% 향상."
+    }
+  ],
+  "pricing_heading": "요금제",
+  "plans": [
+    {
+      "name": "Free",
+      "price": "무료",
+      "period": "영구",
+      "featured": false,
+      "features": [
+        "폼 3개",
+        "월 100 응답",
+        "기본 질문 유형 10가지",
+        "CSV 내보내기",
+        "Formflow 브랜딩 포함"
+      ]
+    },
+    {
+      "name": "Pro",
+      "price": "₩39,000",
+      "period": "/월",
+      "featured": true,
+      "features": [
+        "폼 무제한",
+        "월 5,000 응답",
+        "30가지 이상 질문 유형",
+        "조건 분기 로직",
+        "80+ 앱 연동",
+        "커스텀 도메인",
+        "브랜딩 제거"
+      ]
+    },
+    {
+      "name": "Business",
+      "price": "₩129,000",
+      "period": "/월",
+      "featured": false,
+      "features": [
+        "팀원 10명",
+        "응답 무제한",
+        "고급 분석 대시보드",
+        "GDPR 컴플라이언스 도구",
+        "API 전체 접근",
+        "우선 고객 지원"
+      ]
+    }
+  ],
+  "cta_heading": "완료율을 3배로 높여보세요",
+  "cta_body": "지금 무료로 시작하고, 첫 폼을 2분 안에 만들어보세요. 신용카드가 필요하지 않습니다.",
+  "cta_label": "무료로 시작하기"
+}

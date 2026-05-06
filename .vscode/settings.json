@@ -3,5 +3,12 @@
         "apps"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "chat.tools.terminal.autoApprove": {
+        "/^node --version$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "ffmpeg": true
+    }
 }

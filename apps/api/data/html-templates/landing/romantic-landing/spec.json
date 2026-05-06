@@ -1,0 +1,36 @@
+{
+  "id": "landing/romantic-landing",
+  "label": "Romantic Landing",
+  "description": "Dark romantic landing page — fullscreen hover-reveal hero + about + services gallery + infinite scroll + CTA",
+  "mode": "skeleton",
+  "type": "landing",
+  "variant": "romantic-landing",
+  "content_schema": {
+    "brand": "string",
+    "hero": {
+      "label_top": "string",
+      "name_line1": "string",
+      "name_line2": "string",
+      "keywords": "array[string] (3개)",
+      "image_bottom": "string (url)",
+      "image_top": "string (url)"
+    },
+    "about": {
+      "image": "string (url)",
+      "heading": "string",
+      "body1": "string",
+      "body2": "string",
+      "cta_label": "string"
+    },
+    "services": {
+      "heading": "string",
+      "items": "array[{title, desc}] (5개)"
+    },
+    "gallery_images": "array[string url] (30개)",
+    "cta": {
+      "heading": "string",
+      "body": "string",
+      "cta_label": "string"
+    }
+  }
+}

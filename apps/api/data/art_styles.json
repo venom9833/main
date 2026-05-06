@@ -1,24 +1,14 @@
 {
-  "_note": "V3 고정 화풍 2종. 캐릭터 image_prompt에 {style_prompt}로 주입됨.",
+  "_note": "V3 고정 화풍 1종. 캐릭터 image_prompt에 {style_prompt}로 주입됨.",
 
-  "masako": {
-    "label": "마사코 스타일",
-    "description": "지브리풍 70% + 실사풍 30% — 손그림 수채화 질감, 따뜻한 자연광, 반사실적 인물 비례",
-    "base_style_prompt": "Studio Ghibli inspired painterly illustration, soft hand-painted brushwork, warm natural color palette, gentle diffused natural lighting, atmospheric depth with soft bokeh, semi-realistic human proportions and facial expressions, watercolor-textured shadows, lush detailed background elements, emotional warmth and nostalgic cinematic quality, Korean drama cinematic framing, subtle realistic skin and fabric texture",
-    "negative_prompt": "flat anime, hard manga ink lines, screen tone, chibi, full photorealistic, 3d render, harsh high contrast, cold desaturated, western comic, heavy black outlines, digital flat cel shading, neon colors, ugly, deformed, extra limbs",
-    "bg_prompt_suffix": "no people, empty scene, Studio Ghibli inspired painterly background, soft atmospheric depth, warm natural lighting, hand-painted landscape textures, cinematic Korean drama setting",
-    "pillow_palette": [[30, 25, 18], [80, 65, 45]],
-    "pillow_accent": [200, 160, 100]
-  },
-
-  "noir_oil": {
-    "label": "누아르 유화",
-    "description": "4색 팔레트 누아르 유화 — deep black / warm amber / steel blue / dark crimson 포인트 (씬별 오브젝트 1개)",
-    "base_style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black shadow and darkness, warm amber primary light source, steel blue secondary shadow and city cold, painterly figurative realism, Korean drama cinematic composition",
-    "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark",
-    "bg_prompt_suffix": "no people, empty scene, oil painting thick impasto, noir chiaroscuro, four-color palette: deep black deep black shadow, warm amber light source, steel blue city cold, Korean drama cinematic setting",
-    "crimson_rule": "single dark crimson accent on ONE emotional object per scene only — do not spread across the image",
-    "pillow_palette": [[10, 8, 6], [80, 55, 20]],
-    "pillow_accent": [120, 20, 30]
+  "polystyle": {
+    "label": "폴리 스타일",
+    "description": "로우폴리 하드 폴리곤 메시 — 평탄한 면, 그라데이션 없음, 6색 고정 팔레트, 3등신 캐릭터",
+    "base_style_prompt": "low-poly hard polygon mesh illustration, all surfaces flat facets no gradients no blending, six-color palette only deep black #111118 dark navy #1A2840 bright blue #4A90D9 white #F5F5F5 natural skin #D4BEA0 crimson red #C0392B accent only, hard geometric shadow edges, 3-head proportion chibi-style characters, Korean drama cinematic framing, no text no written words no letters no labels no signs no captions",
+    "negative_prompt": "photorealistic, smooth shading, gradients, blending, soft shadows, oil painting, watercolor, anime, extra colors outside palette, realistic body proportions, 7-head proportion, 8-head proportion, long neck, elongated body, deformed, extra limbs, text, watermark",
+    "bg_prompt_suffix": "no people no characters, empty architectural scene, low-poly geometric interior or urban exterior, flat facet surfaces, seven-color background palette only near-black #180A20 dark purple #462374 deep mauve #7D2E67 medium purple #B752B8 orchid pink #D67DD1 lavender #AC8AE1 silver-white #DDDDDD, hard geometric shadow edges, cinematic Korean drama setting",
+    "crimson_rule": "crimson red #C0392B on ONE emotional object per scene only — single accent, never on characters",
+    "pillow_palette": [[17, 17, 24], [26, 40, 64]],
+    "pillow_accent": [192, 57, 43]
   }
 }

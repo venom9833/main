@@ -1,0 +1,120 @@
+{
+  "artist": {
+    "name": "정하은",
+    "medium": "도예 작가 · Ceramics Artist",
+    "tagline": "흙의 온도와 손의 기억으로 빚는 일상의 오브제",
+    "badge": "★ 도예 작가 — Seoul / Gyeonggi",
+    "location": "경기도 광주"
+  },
+  "hero": {
+    "line1": "손으로 빚는",
+    "line2": "나만의",
+    "line3": "일상."
+  },
+  "ticker_items": [
+    "HANDMADE CERAMICS",
+    "WHEEL THROWING",
+    "GLAZE WORK",
+    "WOOD FIRING",
+    "COMMISSION OPEN",
+    "WORKSHOP",
+    "SEOUL / GYEONGGI"
+  ],
+  "about_heading": "ABOUT THE ARTIST",
+  "about": [
+    "도예를 시작한 지 8년이 지났습니다. 경기도 광주의 작은 작업실에서 매일 흙을 빚고, 유약을 개발하고, 가마를 지킵니다. 제가 만드는 그릇들은 완벽하지 않습니다. 손자국이 남고, 유약이 흘러내리고, 때로는 가마 안에서 예상치 못한 색이 피어납니다. 그 불완전함이 오히려 사용하는 사람과 그릇 사이에 이야기를 만든다고 믿습니다.",
+    "홍익대학교 도예과를 졸업한 뒤 일본 시가라키에서 2년간 수업했습니다. 귀국 후 개인 작업실을 열고 전시와 공방 클래스를 병행하고 있습니다. 2021년 인사아트센터 개인전, 2023년 공예트렌드페어 선정 작가로 활동했습니다.",
+    "현재는 일상에서 쓰는 식기 시리즈와 조형적인 오브제 작업을 함께 진행하고 있으며, 매달 2회 클래스를 운영합니다."
+  ],
+  "works_heading": "SELECTED WORKS",
+  "works": [
+    {
+      "title": "달항아리 시리즈 No.7",
+      "medium": "백자, 환원염 소성",
+      "year": "2024",
+      "desc": "조선 달항아리의 넉넉한 형태에서 영감을 받아 현대적으로 재해석한 작품. 환원염 소성으로 깊은 청백색을 구현했습니다.",
+      "color": "#e8f4f8",
+      "tag": "SOLD"
+    },
+    {
+      "title": "일상 식기 컬렉션 — 봄",
+      "medium": "적토, 마그네슘 유약",
+      "year": "2024",
+      "desc": "봄의 새싹 색에서 추출한 4가지 색조 유약을 개발해 적용한 식기 세트. 밥그릇, 국그릇, 접시 12피스 구성.",
+      "color": "#d4e6c3",
+      "tag": "AVAILABLE"
+    },
+    {
+      "title": "불규칙 화병 연작",
+      "medium": "물레 성형 + 조각",
+      "year": "2023",
+      "desc": "물레로 기본 형태를 만든 뒤 날카로운 도구로 불규칙하게 절개하는 기법을 사용. 각기 다른 형태의 화병 30점 제작.",
+      "color": "#c4a882",
+      "tag": "AVAILABLE"
+    },
+    {
+      "title": "나무 소성 그릇",
+      "medium": "도자토, 장작 가마 소성",
+      "year": "2023",
+      "desc": "72시간 장작 가마 소성으로 얻은 자연스러운 불꽃 자국과 재 유약. 같은 작품은 세상에 하나뿐입니다.",
+      "color": "#7a5c44",
+      "tag": "COMMISSION"
+    },
+    {
+      "title": "일월오봉 소반",
+      "medium": "옹기토, 진사 유약",
+      "year": "2022",
+      "desc": "한국 전통 일월오봉도 패턴을 현대적 미감으로 재해석한 소반 위의 작은 오브제 세트.",
+      "color": "#8b2c2c",
+      "tag": "SOLD"
+    }
+  ],
+  "process_heading": "MY PROCESS",
+  "process": [
+    {
+      "step": "01",
+      "title": "흙 선택과 wedging",
+      "desc": "작품의 용도와 소성 방식에 따라 흙을 선택합니다. 충분한 wedging으로 기포를 제거하고 균일한 질감을 만듭니다."
+    },
+    {
+      "step": "02",
+      "title": "성형 (물레 / 핸드빌딩)",
+      "desc": "물레를 돌리거나 손으로 직접 빚어 형태를 만듭니다. 이 단계에서 작품의 전체적인 느낌이 결정됩니다."
+    },
+    {
+      "step": "03",
+      "title": "건조와 유약",
+      "desc": "천천히 건조시킨 뒤 초벌 소성 후 유약을 입힙니다. 유약 조합과 두께에 따라 전혀 다른 색과 질감이 완성됩니다."
+    },
+    {
+      "step": "04",
+      "title": "본소성과 완성",
+      "desc": "1,280도 이상의 고온에서 12시간 이상 소성합니다. 가마 문을 여는 순간이 가장 설레고 두렵습니다."
+    }
+  ],
+  "contact_heading": "LET'S WORK TOGETHER",
+  "contact": {
+    "body": "작품 구매, 커미션 의뢰, 공방 클래스 예약은 언제든지 연락주세요. 함께 만들어 가는 작품은 더 오래 기억됩니다.",
+    "cta_label": "작업 문의하기",
+    "items": [
+      {
+        "icon": "📧",
+        "label": "이메일",
+        "value": "haeun.ceramics@example.com",
+        "url": "mailto:haeun.ceramics@example.com"
+      },
+      {
+        "icon": "📸",
+        "label": "인스타그램",
+        "value": "@haeun.ceramics",
+        "url": "https://instagram.com/haeun.ceramics"
+      },
+      {
+        "icon": "📍",
+        "label": "작업실",
+        "value": "경기도 광주시 초월읍 (사전 예약 필수)",
+        "url": ""
+      }
+    ]
+  }
+}

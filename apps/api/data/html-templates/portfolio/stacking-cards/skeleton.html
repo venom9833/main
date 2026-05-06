@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.profile.name }} — {{ content.profile.role }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  {% if shared_sc_css %}<style>{{ shared_sc_css }}</style>{% endif %}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="sc-stack">
+
+  <!-- Card 1: Identity -->
+  <section class="sc-card sc-card--pf-identity">
+    <div class="sc-inner pf-identity-inner">
+      <div class="pf-identity-top">
+        <span class="pf-avatar">{{ content.profile.avatar_emoji }}</span>
+        <h1 class="pf-name">{{ content.profile.name }}</h1>
+        <p class="pf-role">{{ content.profile.role }}</p>
+        {% if content.profile.location %}
+        <p class="pf-location">{{ content.profile.location }}</p>
+        {% endif %}
+        <p class="pf-tagline">{{ content.profile.tagline }}</p>
+      </div>
+      <div class="pf-facts">
+        {% for fact in content.facts %}
+        <div class="pf-fact">
+          <span class="pf-fact-value">{{ fact.value }}</span>
+          <span class="pf-fact-label">{{ fact.label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 2: Selected Work -->
+  <section class="sc-card sc-card--pf-work">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.work_heading }}</p>
+      <div class="pf-projects">
+        {% for proj in content.projects %}
+        <div class="pf-project">
+          <span class="pf-proj-cat">{{ proj.category }}</span>
+          <h2 class="pf-proj-title">{{ proj.title }}</h2>
+          <p class="pf-proj-desc">{{ proj.desc }}</p>
+          <div class="pf-proj-tags">
+            {% for tag in proj.tags %}<span class="pf-tag">{{ tag }}</span>{% endfor %}
+          </div>
+          {% if proj.result %}<p class="pf-proj-result">→ {{ proj.result }}</p>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 3: Skills -->
+  <section class="sc-card sc-card--pf-skills">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.skills_heading }}</p>
+      <div class="pf-skill-groups">
+        {% for sg in content.skill_groups %}
+        <div class="pf-skill-group">
+          <span class="pf-skill-label">{{ sg.group }}</span>
+          <div class="pf-skill-tags">
+            {% for skill in sg.items %}
+            <span class="pf-skill-tag">{{ skill }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 4: Process -->
+  <section class="sc-card sc-card--pf-process">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.process_heading }}</p>
+      <div class="pf-process">
+        {% for step in content.process %}
+        <div class="pf-proc-step">
+          <div class="pf-proc-num">{{ loop.index }}</div>
+          <span class="pf-proc-icon">{{ step.icon }}</span>
+          <h2>{{ step.title }}</h2>
+          <p>{{ step.desc }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 5: Testimonials -->
+  <section class="sc-card sc-card--pf-testimonials">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.testimonials_heading }}</p>
+      <div class="pf-testimonials">
+        {% for t in content.testimonials %}
+        <blockquote class="pf-testimonial">
+          <p>"{{ t.quote }}"</p>
+          <footer>
+            <strong>{{ t.name }}</strong>
+            <span>{{ t.role }}</span>
+          </footer>
+        </blockquote>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 6: Contact -->
+  <section class="sc-card sc-card--pf-contact">
+    <div class="sc-inner pf-contact-inner">
+      <div class="pf-contact-top">
+        <h2 class="pf-contact-heading">{{ content.contact_heading }}</h2>
+        <p class="pf-contact-body">{{ content.contact_body }}</p>
+        <a class="sc-btn pf-btn--contact" href="#">{{ content.contact_label }}</a>
+      </div>
+      <div class="pf-contact-items">
+        {% for item in content.contact_items %}
+        <div class="pf-contact-item">
+          <span>{{ item.icon }}</span>
+          <div>
+            <span class="pf-contact-label">{{ item.label }}</span>
+            <span class="pf-contact-value">{{ item.value }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

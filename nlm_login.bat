@@ -44,13 +44,12 @@ if errorlevel 1 (
 
 :: [2/4] 로그인 (자동 → 수동 fallback)
 echo [2/4] Extracting session (auto mode)...
-cd /d "C:\LinkDropV2\packages\tools\notebooklm-cli"
-uv run nlm login
+nlm login
 if errorlevel 1 (
     echo.
     echo Auto login failed. Switching to manual mode...
     echo.
-    uv run nlm login --manual
+    nlm login --manual
     if errorlevel 1 (
         echo ERROR: Login failed.
         pause
@@ -61,7 +60,7 @@ echo.
 
 :: [3/4] 세션 검증
 echo [3/4] Validating session...
-uv run nlm login --check
+nlm login --check
 if errorlevel 1 (
     echo ERROR: Session validation failed.
     pause

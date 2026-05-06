@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title | default('HTML Attributes') }}</title>
+
+    <link rel="preload"
+      href="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80"
+      as="image" fetchpriority="high" />
+    <link rel="preload"
+      href="https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_KU7NSg.woff2"
+      as="font" type="font/woff2" fetchpriority="low" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+
+    <style>
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      :root{
+        --bg:#f5f4f0;--surface:#ffffff;--border:#e4e2dc;--border-dark:#c8c5bc;
+        --ink-1:#18171a;--ink-2:#48464f;--ink-3:#8a8794;
+        --code-bg:#1c1b20;--code-text:#c9c6d0;--code-tag:#e8877a;
+        --code-attr:#82bfdb;--code-val:#7dc89a;--code-cmt:#585560;
+        --font-sans:"Plus Jakarta Sans",system-ui,sans-serif;
+        --font-mono:"Fira Code","Courier New",monospace;
+        --r-sm:4px;--r-md:8px;--r-lg:12px;
+        --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+        --shadow-md:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04)
+      }
+      html{font-size:16px;scroll-behavior:smooth}
+      body{font-family:var(--font-sans);background:var(--bg);color:var(--ink-1);line-height:1.6;-webkit-font-smoothing:antialiased}
+      .nav{position:sticky;top:0;z-index:100;background:rgba(245,244,240,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+      .nav-inner{max-width:900px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+      .nav-brand{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-1);white-space:nowrap}
+      .nav-links{display:flex;align-items:center;gap:4px;list-style:none}
+      .nav-links a{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:var(--r-sm);font-size:.78rem;font-family:var(--font-mono);color:var(--ink-3);text-decoration:none;transition:background .15s,color .15s}
+      .nav-links a:hover{background:var(--border);color:var(--ink-1)}
+      .nav-links a.active{background:var(--ink-1);color:#fff}
+      .page{max-width:900px;margin:0 auto;padding:0 24px 80px}
+      .hero{padding:64px 0 48px;border-bottom:1px solid var(--border)}
+      .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:20px}
+      .hero-eyebrow::before{content:"";width:24px;height:1px;background:var(--border-dark)}
+      .hero h1{font-size:clamp(2rem,4.5vw,3rem);font-weight:300;line-height:1.18;letter-spacing:-.02em;color:var(--ink-1);margin-bottom:16px}
+      .hero h1 strong{font-weight:600}
+      .hero-sub{font-size:1.05rem;color:var(--ink-2);max-width:520px;font-weight:300;line-height:1.65;margin-bottom:36px}
+      .pill-row{display:flex;flex-wrap:wrap;gap:8px}
+      .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--surface);border:1px solid var(--border);border-radius:999px;font-family:var(--font-mono);font-size:.75rem;color:var(--ink-2);box-shadow:var(--shadow-sm)}
+      .pill-dot{width:6px;height:6px;border-radius:50%;background:var(--ink-1);flex-shrink:0}
+      .hero-img-wrap{margin-top:40px;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-md);position:relative}
+      .hero-img-wrap img{width:100%;height:340px;object-fit:cover;display:block;filter:grayscale(10%) brightness(.97)}
+      .hero-img-badge{position:absolute;bottom:14px;left:14px;padding:5px 10px;background:rgba(24,23,26,.78);backdrop-filter:blur(6px);border-radius:var(--r-sm);font-family:var(--font-mono);font-size:.65rem;color:rgba(255,255,255,.75);letter-spacing:.06em}
+      .section{padding:56px 0 0}
+      .section-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:28px}
+      .section-num{flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-dark);border-radius:var(--r-sm);font-family:var(--font-mono);font-size:.72rem;color:var(--ink-3);margin-top:4px}
+      .section-tag{display:inline-block;padding:2px 8px;background:var(--code-bg);color:var(--code-attr);border-radius:var(--r-sm);font-family:var(--font-mono);font-size:.75rem;margin-bottom:6px}
+      .section h2{font-size:1.5rem;font-weight:500;letter-spacing:-.02em;color:var(--ink-1);line-height:1.25}
+      .section-body{font-size:.95rem;color:var(--ink-2);line-height:1.7;margin-bottom:20px;max-width:640px}
+      code.inline{font-family:var(--font-mono);font-size:.84em;background:rgba(24,23,26,.07);padding:1px 5px;border-radius:3px;color:var(--ink-1)}
+      .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:16px}
+      .card-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+      .card-head-title{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+      .card-head-badge{font-family:var(--font-mono);font-size:.68rem;color:var(--ink-3);padding:2px 7px;border:1px solid var(--border);border-radius:999px}
+      .card-body{padding:20px}
+      .img-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0}
+      .img-compare figure{margin:0}
+      .img-compare img{width:100%;height:180px;object-fit:cover;display:block;border-radius:var(--r-md);filter:grayscale(18%)}
+      .img-compare figcaption{margin-top:8px;font-family:var(--font-mono);font-size:.68rem;color:var(--ink-3);display:flex;align-items:center;gap:6px}
+      .badge-dark{padding:1px 6px;background:var(--ink-1);color:#fff;border-radius:3px;font-size:.62rem;font-family:var(--font-mono)}
+      .badge-light{padding:1px 6px;background:var(--border);color:var(--ink-2);border-radius:3px;font-size:.62rem;font-family:var(--font-mono)}
+      .map-card{border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border)}
+      .map-card iframe{display:block;width:100%;height:240px;border:0;filter:grayscale(35%)}
+      .code-wrap{background:var(--code-bg);border-radius:var(--r-md);margin-bottom:16px;overflow:hidden}
+      .code-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+      .code-bar-label{font-family:var(--font-mono);font-size:.68rem;color:rgba(255,255,255,.3);letter-spacing:.06em}
+      .code-dots{display:flex;gap:5px}
+      .code-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.12)}
+      .code-wrap pre{padding:16px 20px 20px;font-family:var(--font-mono);font-size:.8rem;line-height:1.8;color:var(--code-text);overflow-x:auto;white-space:pre}
+      .ct{color:var(--code-tag)}.ca{color:var(--code-attr)}.cv{color:var(--code-val)}.cc{color:var(--code-cmt);font-style:italic}
+      .callout{display:flex;gap:12px;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:16px}
+      .callout-icon{flex-shrink:0;width:18px;margin-top:1px;font-size:.85rem}
+      .callout p{font-size:.875rem;color:var(--ink-2);line-height:1.6}
+      .priority-bars{display:flex;flex-direction:column;gap:10px;padding:20px}
+      .pbar-row{display:flex;align-items:center;gap:12px}
+      .pbar-label{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-3);width:140px;flex-shrink:0}
+      .pbar-track{flex:1;height:8px;background:var(--bg);border:1px solid var(--border);border-radius:999px;overflow:hidden}
+      .pbar-fill{height:100%;border-radius:999px;background:var(--ink-1);width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+      .pbar-badge{font-family:var(--font-mono);font-size:.65rem;color:var(--ink-3);white-space:nowrap}
+      .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+      .form-grid.cols-1{grid-template-columns:1fr}
+      .form-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+      .field{display:flex;flex-direction:column;gap:5px}
+      .field label{font-size:.7rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+      .field input{width:100%;padding:9px 12px;font-family:var(--font-sans);font-size:.9rem;color:var(--ink-1);background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);outline:none;transition:border-color .15s,background .15s}
+      .field input:focus{border-color:var(--ink-1);background:var(--surface)}
+      .field input::placeholder{color:var(--ink-3)}
+      .form-rule{height:1px;background:var(--border);margin:16px 0}
+      .im-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+      .im-item{display:flex;flex-direction:column;gap:6px}
+      .im-badge{display:inline-block;padding:1px 6px;background:var(--border);color:var(--ink-2);border-radius:3px;font-size:.65rem;font-family:var(--font-mono);width:fit-content}
+      .section-divider{height:1px;background:var(--border);margin-top:56px}
+      footer{margin-top:64px;padding-top:28px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+      footer p{font-size:.78rem;color:var(--ink-3);font-family:var(--font-mono)}
+      .footer-tags{display:flex;gap:6px;flex-wrap:wrap}
+      .footer-tag{padding:3px 8px;border:1px solid var(--border);border-radius:999px;font-family:var(--font-mono);font-size:.65rem;color:var(--ink-3)}
+      .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+      .reveal.visible{opacity:1;transform:none}
+      @media(max-width:640px){
+        .form-grid,.form-grid.cols-3,.img-compare,.im-grid{grid-template-columns:1fr}
+        .nav-links{display:none}
+        .pbar-label{width:90px;font-size:.65rem}
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-inner">
+        <span class="nav-brand">{{ brand | default('HTML Attributes') }}</span>
+        <ul class="nav-links">
+          <li><a href="#loading" class="active">loading</a></li>
+          <li><a href="#fetchpriority">fetchpriority</a></li>
+          <li><a href="#autocomplete">autocomplete</a></li>
+          <li><a href="#inputmode">inputmode</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="page">
+      <header class="hero">
+        <div class="hero-eyebrow">Reference Boilerplate</div>
+        <h1>{{ hero_title | default('Four attributes.<br /><strong>Real impact.</strong>') | safe }}</h1>
+        <p class="hero-sub">{{ hero_sub | default('No JavaScript. No visual change. These attributes give the browser the context it needs to load faster, prioritise smarter, and serve the right keyboard.') }}</p>
+        <div class="pill-row">
+          <span class="pill"><span class="pill-dot"></span>loading</span>
+          <span class="pill"><span class="pill-dot"></span>fetchpriority</span>
+          <span class="pill"><span class="pill-dot"></span>autocomplete</span>
+          <span class="pill"><span class="pill-dot"></span>inputmode</span>
+        </div>
+        <div class="hero-img-wrap">
+          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80"
+            alt="Developer working at a laptop"
+            loading="eager" fetchpriority="high" width="1200" height="600" />
+          <div class="hero-img-badge">loading="eager" · fetchpriority="high" · width + height set</div>
+        </div>
+      </header>
+
+      <!-- 01 · loading -->
+      <section class="section reveal" id="loading">
+        <div class="section-header">
+          <div class="section-num">01</div>
+          <div class="section-meta">
+            <div class="section-tag">loading</div>
+            <h2>Defer what the user can't see yet</h2>
+          </div>
+        </div>
+        <p class="section-body">By default the browser fetches every image immediately — even ones three screens below the fold. <code class="inline">loading="lazy"</code> defers the request until the user scrolls near it. If they never scroll there, the request never happens.</p>
+        <p class="section-body">Always include explicit <code class="inline">width</code> and <code class="inline">height</code> on lazy images. Without them the layout shifts when the image arrives, hurting your CLS score.</p>
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Image loading comparison</span>
+            <span class="card-head-badge">DevTools → Network to verify</span>
+          </div>
+          <div class="card-body">
+            <div class="img-compare">
+              <figure>
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=70"
+                  alt="Code on a screen — loaded eagerly" loading="eager" fetchpriority="high" width="800" height="500" />
+                <figcaption><span class="badge-dark">eager</span> Loads immediately</figcaption>
+              </figure>
+              <figure>
+                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=70"
+                  alt="Programming on a monitor — deferred" loading="lazy" width="800" height="500" />
+                <figcaption><span class="badge-light">lazy</span> Deferred until near-viewport</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Lazy-loaded iframe</span>
+            <span class="card-head-badge">loading="lazy"</span>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div class="map-card">
+              <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-0.12,51.49,-0.09,51.51&layer=mapnik"
+                title="OpenStreetMap — lazy-loaded iframe example" loading="lazy"></iframe>
+            </div>
+            <p style="padding:12px 16px 16px;font-size:.8rem;color:var(--ink-3);font-family:var(--font-mono)">
+              loading="lazy" also works on &lt;iframe&gt; — the browser won't fetch it until the user scrolls near.
+            </p>
+          </div>
+        </div>
+        <div class="code-wrap reveal">
+          <div class="code-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-bar-label">HTML</span>
+          </div>
+          <pre><span class="cc">&lt;!-- Above the fold — load right away --&gt;</span>
+<span class="ct">&lt;img</span>
+  <span class="ca">src</span>=<span class="cv">"hero.jpg"</span>
+  <span class="ca">alt</span>=<span class="cv">"Hero"</span>
+  <span class="ca">loading</span>=<span class="cv">"eager"</span>
+  <span class="ca">fetchpriority</span>=<span class="cv">"high"</span>
+  <span class="ca">width</span>=<span class="cv">"1200"</span>
+  <span class="ca">height</span>=<span class="cv">"600"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Below the fold — defer until user scrolls near --&gt;</span>
+<span class="ct">&lt;img</span>
+  <span class="ca">src</span>=<span class="cv">"section-photo.jpg"</span>
+  <span class="ca">alt</span>=<span class="cv">"Article photo"</span>
+  <span class="ca">loading</span>=<span class="cv">"lazy"</span>
+  <span class="ca">width</span>=<span class="cv">"800"</span>
+  <span class="ca">height</span>=<span class="cv">"500"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Works on iframes too --&gt;</span>
+<span class="ct">&lt;iframe</span> <span class="ca">src</span>=<span class="cv">"map.html"</span> <span class="ca">title</span>=<span class="cv">"Map"</span> <span class="ca">loading</span>=<span class="cv">"lazy"</span><span class="ct">&gt;&lt;/iframe&gt;</span></pre>
+        </div>
+        <div class="callout reveal">
+          <span class="callout-icon">&#x26A0;</span>
+          <p>Never use <code class="inline">loading="lazy"</code> on images visible when the page first opens. Deferring them increases your Largest Contentful Paint time, hurting both UX and search rankings.</p>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+
+      <!-- 02 · fetchpriority -->
+      <section class="section reveal" id="fetchpriority">
+        <div class="section-header">
+          <div class="section-num">02</div>
+          <div class="section-meta">
+            <div class="section-tag">fetchpriority</div>
+            <h2>Tell the browser what matters first</h2>
+          </div>
+        </div>
+        <p class="section-body">Images are low priority by default — even your hero. <code class="inline">fetchpriority="high"</code> moves it to the front of the loading queue from the very start, instead of waiting behind fonts and scripts.</p>
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Loading queue — bandwidth allocation</span>
+          </div>
+          <div class="priority-bars">
+            <div class="pbar-row">
+              <span class="pbar-label">hero.jpg</span>
+              <div class="pbar-track"><div class="pbar-fill" data-w="88"></div></div>
+              <span class="pbar-badge">fetchpriority="high"</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">main.css</span>
+              <div class="pbar-track"><div class="pbar-fill" data-w="72"></div></div>
+              <span class="pbar-badge">render-blocking</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">section-img.jpg</span>
+              <div class="pbar-track"><div class="pbar-fill" data-w="38"></div></div>
+              <span class="pbar-badge">default (low)</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">analytics.js</span>
+              <div class="pbar-track"><div class="pbar-fill" data-w="12"></div></div>
+              <span class="pbar-badge">fetchpriority="low"</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">secondary-font</span>
+              <div class="pbar-track"><div class="pbar-fill" data-w="8"></div></div>
+              <span class="pbar-badge">fetchpriority="low"</span>
+            </div>
+          </div>
+        </div>
+        <div class="code-wrap reveal">
+          <div class="code-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-bar-label">HTML — &lt;head&gt;</span>
+          </div>
+          <pre><span class="cc">&lt;!-- Preload hero with high priority --&gt;</span>
+<span class="ct">&lt;link</span> <span class="ca">rel</span>=<span class="cv">"preload"</span> <span class="ca">href</span>=<span class="cv">"hero.jpg"</span>
+  <span class="ca">as</span>=<span class="cv">"image"</span> <span class="ca">fetchpriority</span>=<span class="cv">"high"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Secondary font — low priority, doesn't block rendering --&gt;</span>
+<span class="ct">&lt;link</span> <span class="ca">rel</span>=<span class="cv">"preload"</span> <span class="ca">href</span>=<span class="cv">"secondary.woff2"</span>
+  <span class="ca">as</span>=<span class="cv">"font"</span> <span class="ca">fetchpriority</span>=<span class="cv">"low"</span> <span class="ca">crossorigin</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- LCP image: eager prevents deferral, high wins the queue --&gt;</span>
+<span class="ct">&lt;img</span>
+  <span class="ca">src</span>=<span class="cv">"hero.jpg"</span>
+  <span class="ca">loading</span>=<span class="cv">"eager"</span>
+  <span class="ca">fetchpriority</span>=<span class="cv">"high"</span>
+  <span class="ca">width</span>=<span class="cv">"1200"</span> <span class="ca">height</span>=<span class="cv">"600"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Analytics: deprioritise entirely --&gt;</span>
+<span class="ct">&lt;script</span> <span class="ca">src</span>=<span class="cv">"analytics.js"</span>
+  <span class="ca">fetchpriority</span>=<span class="cv">"low"</span> <span class="ca">defer</span><span class="ct">&gt;&lt;/script&gt;</span></pre>
+        </div>
+        <div class="callout reveal">
+          <span class="callout-icon">&#x2139;</span>
+          <p><code class="inline">loading="eager"</code> prevents deferral. <code class="inline">fetchpriority="high"</code> wins the bandwidth race. They do different things — both belong on your hero image. Fully supported across all major browsers since October 2024.</p>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+
+      <!-- 03 · autocomplete -->
+      <section class="section reveal" id="autocomplete">
+        <div class="section-header">
+          <div class="section-num">03</div>
+          <div class="section-meta">
+            <div class="section-tag">autocomplete</div>
+            <h2>Tell the browser what each field holds</h2>
+          </div>
+        </div>
+        <p class="section-body">Beyond <code class="inline">on</code> and <code class="inline">off</code>, the spec defines over 50 token values. When the browser knows what a field expects, it offers the right saved value instantly — or generates one, in the case of <code class="inline">new-password</code>.</p>
+        <div class="card reveal">
+          <div class="card-head"><span class="card-head-title">Personal details &amp; login</span></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field"><label for="given-name">First name</label><input id="given-name" type="text" autocomplete="given-name" placeholder="Ada" /></div>
+              <div class="field"><label for="family-name">Last name</label><input id="family-name" type="text" autocomplete="family-name" placeholder="Lovelace" /></div>
+            </div>
+            <div class="form-grid">
+              <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="email" inputmode="email" placeholder="ada@example.com" /></div>
+              <div class="field"><label for="tel">Phone</label><input id="tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="+1 555 000 0000" /></div>
+            </div>
+            <div class="form-rule"></div>
+            <div class="form-grid">
+              <div class="field"><label for="username">Username</label><input id="username" type="text" autocomplete="username" placeholder="ada_lovelace" /></div>
+              <div class="field"><label for="current-pass">Current password</label><input id="current-pass" type="password" autocomplete="current-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" /></div>
+            </div>
+            <div class="form-grid cols-1">
+              <div class="field"><label for="new-pass">New password</label><input id="new-pass" type="password" autocomplete="new-password" placeholder="Browser will offer to generate one" /></div>
+            </div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="card-head"><span class="card-head-title">Shipping address</span></div>
+          <div class="card-body">
+            <div class="form-grid cols-1">
+              <div class="field"><label for="street">Street address</label><input id="street" type="text" autocomplete="street-address" placeholder="123 Main St" /></div>
+            </div>
+            <div class="form-grid cols-3">
+              <div class="field"><label for="postal">Postal code</label><input id="postal" type="text" autocomplete="postal-code" inputmode="numeric" placeholder="10001" /></div>
+              <div class="field"><label for="city">City</label><input id="city" type="text" autocomplete="address-level2" placeholder="New York" /></div>
+              <div class="field"><label for="country">Country</label><input id="country" type="text" autocomplete="country" placeholder="US" /></div>
+            </div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Payment</span>
+            <span class="card-head-badge">cc-name · cc-number · cc-exp · cc-csc</span>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field"><label for="cc-name">Name on card</label><input id="cc-name" type="text" autocomplete="cc-name" placeholder="Ada Lovelace" /></div>
+              <div class="field"><label for="cc-number">Card number</label><input id="cc-number" type="text" autocomplete="cc-number" inputmode="numeric" pattern="[0-9\s]{13,19}" placeholder="1234 5678 9012 3456" /></div>
+            </div>
+            <div class="form-grid">
+              <div class="field"><label for="cc-exp">Expiry</label><input id="cc-exp" type="text" autocomplete="cc-exp" inputmode="numeric" placeholder="MM / YY" /></div>
+              <div class="field"><label for="cc-csc">CVV</label><input id="cc-csc" type="text" autocomplete="cc-csc" inputmode="numeric" maxlength="4" placeholder="123" /></div>
+            </div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">One-time verification code</span>
+            <span class="card-head-badge">one-time-code</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size:.875rem;color:var(--ink-2);margin-bottom:14px;line-height:1.6">On iOS, <code class="inline">autocomplete="one-time-code"</code> + <code class="inline">inputmode="numeric"</code> triggers automatic SMS code detection. The entire copy-paste flow becomes a single tap.</p>
+            <div class="form-grid cols-1">
+              <div class="field"><label for="otp">6-digit code</label><input id="otp" type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="6" pattern="\d{6}" placeholder="000000" /></div>
+            </div>
+          </div>
+        </div>
+        <div class="code-wrap reveal">
+          <div class="code-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-bar-label">HTML — notable tokens</span>
+          </div>
+          <pre><span class="cc">&lt;!-- current-password: offers saved credentials --&gt;</span>
+<span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cv">"password"</span> <span class="ca">autocomplete</span>=<span class="cv">"current-password"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- new-password: offers to generate a strong password --&gt;</span>
+<span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cv">"password"</span> <span class="ca">autocomplete</span>=<span class="cv">"new-password"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- OTP: triggers SMS autofill on iOS --&gt;</span>
+<span class="ct">&lt;input</span>
+  <span class="ca">type</span>=<span class="cv">"text"</span>
+  <span class="ca">autocomplete</span>=<span class="cv">"one-time-code"</span>
+  <span class="ca">inputmode</span>=<span class="cv">"numeric"</span>
+  <span class="ca">maxlength</span>=<span class="cv">"6"</span>
+  <span class="ca">pattern</span>=<span class="cv">"\d{6}"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Credit card: three attributes, three jobs --&gt;</span>
+<span class="ct">&lt;input</span>
+  <span class="ca">type</span>=<span class="cv">"text"</span>
+  <span class="ca">autocomplete</span>=<span class="cv">"cc-number"</span>
+  <span class="ca">inputmode</span>=<span class="cv">"numeric"</span>
+  <span class="ca">pattern</span>=<span class="cv">"[0-9\s]{13,19}"</span>
+  <span class="ca">placeholder</span>=<span class="cv">"1234 5678 9012 3456"</span><span class="ct">&gt;</span></pre>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+
+      <!-- 04 · inputmode -->
+      <section class="section reveal" id="inputmode">
+        <div class="section-header">
+          <div class="section-num">04</div>
+          <div class="section-meta">
+            <div class="section-tag">inputmode</div>
+            <h2>Show the right keyboard on mobile</h2>
+          </div>
+        </div>
+        <p class="section-body"><code class="inline">inputmode</code> controls only which virtual keyboard appears — not validation or field behaviour. More flexible than changing <code class="inline">type</code>, which affects both. <code class="inline">numeric</code> and <code class="inline">decimal</code> look the same on desktop but are different keyboards on iOS and Android.</p>
+        <div class="card reveal">
+          <div class="card-head"><span class="card-head-title">All inputmode values — tap each on mobile</span></div>
+          <div class="card-body">
+            <div class="im-grid">
+              <div class="im-item"><span class="im-badge">numeric</span><div class="field"><label for="im-numeric">PIN / postal / OTP</label><input id="im-numeric" type="text" inputmode="numeric" placeholder="0&#x2013;9 only" /></div></div>
+              <div class="im-item"><span class="im-badge">decimal</span><div class="field"><label for="im-decimal">Price / measurement</label><input id="im-decimal" type="text" inputmode="decimal" placeholder="0.00" /></div></div>
+              <div class="im-item"><span class="im-badge">tel</span><div class="field"><label for="im-tel">Telephone keypad</label><input id="im-tel" type="text" inputmode="tel" placeholder="+1 555 000 0000" /></div></div>
+              <div class="im-item"><span class="im-badge">email</span><div class="field"><label for="im-email">@ shortcut key</label><input id="im-email" type="email" inputmode="email" placeholder="you@example.com" /></div></div>
+              <div class="im-item"><span class="im-badge">url</span><div class="field"><label for="im-url">/ and .com keys</label><input id="im-url" type="text" inputmode="url" placeholder="https://&#x2026;" /></div></div>
+              <div class="im-item"><span class="im-badge">search</span><div class="field"><label for="im-search">Enter &#x2192; Search</label><input id="im-search" type="search" inputmode="search" placeholder="Search&#x2026;" /></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="code-wrap reveal">
+          <div class="code-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-bar-label">HTML</span>
+          </div>
+          <pre><span class="cc">&lt;!-- Digits 0&#x2013;9 only. PINs, postal codes, verification codes --&gt;</span>
+<span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cv">"text"</span> <span class="ca">inputmode</span>=<span class="cv">"numeric"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Digits + decimal separator. Prices, measurements --&gt;</span>
+<span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cv">"text"</span> <span class="ca">inputmode</span>=<span class="cv">"decimal"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- OTP field: autocomplete + inputmode working together --&gt;</span>
+<span class="ct">&lt;input</span>
+  <span class="ca">type</span>=<span class="cv">"text"</span>
+  <span class="ca">autocomplete</span>=<span class="cv">"one-time-code"</span>
+  <span class="ca">inputmode</span>=<span class="cv">"numeric"</span>
+  <span class="ca">maxlength</span>=<span class="cv">"6"</span>
+  <span class="ca">pattern</span>=<span class="cv">"\d{6}"</span><span class="ct">&gt;</span></pre>
+        </div>
+        <div class="callout reveal">
+          <span class="callout-icon">&#x2139;</span>
+          <p>On a desktop browser all six inputmode values look like a regular text field. Open this page on iOS or Android and tap each field to see the different keyboards.</p>
+        </div>
+      </section>
+
+      <footer class="reveal">
+        <p>No JavaScript · No visual change · Four attributes · Real impact.</p>
+        <div class="footer-tags">
+          <span class="footer-tag">loading</span>
+          <span class="footer-tag">fetchpriority</span>
+          <span class="footer-tag">autocomplete</span>
+          <span class="footer-tag">inputmode</span>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              e.target.querySelectorAll(".pbar-fill[data-w]").forEach((bar) => {
+                bar.style.width = bar.dataset.w + "%";
+              });
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.08 }
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+      const sections = document.querySelectorAll("section[id]");
+      const links = document.querySelectorAll(".nav-links a");
+      const navIo = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              links.forEach((a) => a.classList.remove("active"));
+              const l = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+              if (l) l.classList.add("active");
+            }
+          });
+        },
+        { rootMargin: "-40% 0px -55% 0px" }
+      );
+      sections.forEach((s) => navIo.observe(s));
+    </script>
+  </body>
+</html>

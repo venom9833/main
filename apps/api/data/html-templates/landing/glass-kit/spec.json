@@ -1,0 +1,48 @@
+{
+  "id": "landing/glass-kit",
+  "mode": "skeleton",
+  "label": "Liquid Glass UI Kit 랜딩",
+  "description": "다크 배경 + 컬러 블롭 + backdrop-filter 글라스 효과. 15+ 컴포넌트(카드·버튼·폼·테이블·모달·칩·아바타) 시연 + 12 CSS 애니메이션. 기술 제품·플랫폼 소개에 최적.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "background": "#07080f",
+    "surface": "rgba(255,255,255,0.08)",
+    "accent_cyan": "#5ee7df",
+    "accent_violet": "#b490f5",
+    "accent_rose": "#f87171",
+    "text_primary": "rgba(255,255,255,0.92)",
+    "text_muted": "rgba(255,255,255,0.55)"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["brand", "hero", "stats"],
+    "properties": {
+      "brand": {"type": "string", "description": "브랜드/제품명"},
+      "hero": {
+        "type": "object",
+        "required": ["eyebrow", "headline", "tagline", "cta_primary"],
+        "properties": {
+          "eyebrow": {"type": "string", "description": "상단 소형 레이블"},
+          "headline": {"type": "string", "description": "메인 헤드라인"},
+          "tagline": {"type": "string", "description": "서브 설명 (1~2문장)"},
+          "cta_primary": {"type": "string", "description": "주요 CTA 버튼 텍스트"},
+          "cta_secondary": {"type": "string", "description": "보조 CTA 버튼 텍스트"}
+        }
+      },
+      "stats": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "required": ["num", "desc"],
+          "properties": {
+            "num": {"type": "string", "description": "숫자 수치 (예: 15+)"},
+            "desc": {"type": "string", "description": "수치 설명 레이블"}
+          }
+        }
+      }
+    }
+  }
+}

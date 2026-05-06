@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.product.name }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  {% if shared_cm_css %}<style>{{ shared_cm_css }}</style>{% endif %}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="cm-layout">
+
+  <table-of-contents></table-of-contents>
+
+  <!-- 제품 헤더 -->
+  <header class="cm-header" id="pre">
+    <div class="pd-category">
+      <span class="pd-cat-badge">{{ content.product.category }}</span>
+      {% if content.product.version %}<span class="pd-version">{{ content.product.version }}</span>{% endif %}
+    </div>
+    <h1 class="pd-name">{{ content.product.name }}</h1>
+    <p class="pd-tagline">{{ content.product.tagline }}</p>
+
+    <!-- 핵심 수치 -->
+    <div class="pd-stats">
+      {% for stat in content.stats %}
+      <div class="pd-stat">
+        <span class="pd-stat-value">{{ stat.value }}</span>
+        <span class="pd-stat-label">{{ stat.label }}</span>
+        {% if stat.unit %}<span class="pd-stat-unit">{{ stat.unit }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </header>
+
+  <main class="cm-main">
+    <article>
+
+      <!-- 개요 -->
+      <section id="overview">
+        <h2>{{ content.overview_heading }}</h2>
+        {% for para in content.overview %}<p>{{ para }}</p>{% endfor %}
+      </section>
+
+      <!-- 핵심 기능 -->
+      <section id="features">
+        <h2>{{ content.features_heading }}</h2>
+        <div class="pd-feature-list">
+          {% for f in content.features %}
+          <div class="pd-feature-item" id="{{ f.id }}">
+            <div class="pd-feature-icon">{{ f.icon }}</div>
+            <div class="pd-feature-body">
+              <div class="pd-feature-title-row">
+                <h3>{{ f.title }}</h3>
+                {% if f.highlight %}<span class="pd-feature-tag">{{ f.highlight }}</span>{% endif %}
+              </div>
+              <p>{{ f.desc }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- 제품 사양 -->
+      <section id="specs">
+        <h2>{{ content.specs_heading }}</h2>
+        {% for group in content.spec_groups %}
+        <div class="pd-spec-group">
+          <h3 class="pd-spec-group-label">{{ group.group }}</h3>
+          <table class="pd-spec-table">
+            {% for item in group.items %}
+            <tr>
+              <td class="pd-spec-key">{{ item.label }}</td>
+              <td class="pd-spec-val">{{ item.value }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        {% endfor %}
+      </section>
+
+      <!-- 활용 사례 -->
+      <section id="use-cases">
+        <h2>{{ content.use_cases_heading }}</h2>
+        {% for uc in content.use_cases %}
+        <div class="pd-use-case" id="{{ uc.id }}">
+          <h3>{{ uc.title }}</h3>
+          <div class="pd-use-case-body">
+            <div class="pd-use-case-col">
+              <span class="pd-use-case-label">상황</span>
+              <p>{{ uc.scenario }}</p>
+            </div>
+            <div class="pd-use-case-col pd-use-case-outcome">
+              <span class="pd-use-case-label">성과</span>
+              <p>{{ uc.outcome }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+
+      <!-- 가격 플랜 -->
+      <section id="pricing">
+        <h2>{{ content.pricing_heading }}</h2>
+        <div class="pd-plans">
+          {% for plan in content.plans %}
+          <div class="pd-plan{% if plan.featured %} pd-plan--featured{% endif %}">
+            {% if plan.featured %}<span class="pd-plan-badge">추천</span>{% endif %}
+            <div class="pd-plan-name">{{ plan.name }}</div>
+            <div class="pd-plan-price">
+              <span class="pd-plan-amount">{{ plan.price }}</span>
+              <span class="pd-plan-period">{{ plan.period }}</span>
+            </div>
+            <ul class="pd-plan-features">
+              {% for feat in plan.features %}
+              <li>{{ feat }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- 마지막 CTA -->
+  <div class="pd-final-cta">
+    <h2>{{ content.cta_heading }}</h2>
+    <p>{{ content.cta_body }}</p>
+    <a class="pd-cta-btn" href="#">{{ content.cta_label }}</a>
+  </div>
+
+  <hr/>
+
+  <footer class="cm-footer">
+    <p>{{ content.product.name }} — {{ content.product.category }}</p>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  var tocEl = document.querySelector('table-of-contents');
+  if (!tocEl) return;
+  var article = document.querySelector('article');
+  if (!article) return;
+  var headings = Array.from(article.querySelectorAll('h2'));
+  if (!headings.length) return;
+
+  var nav = document.createElement('nav');
+  nav.setAttribute('aria-label', 'Table of Contents');
+
+  var label = document.createElement('h2');
+  label.textContent = '목차';
+  nav.appendChild(label);
+
+  var ol = document.createElement('ol');
+  headings.forEach(function(h) {
+    var id = h.id || h.closest('section[id]')?.id;
+    if (!id) {
+      id = h.textContent.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+      h.id = id;
+    }
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + id;
+    a.textContent = h.textContent.trim();
+    li.appendChild(a);
+    ol.appendChild(li);
+  });
+  nav.appendChild(ol);
+
+  var hr = document.createElement('hr');
+  hr.className = 'split';
+  nav.appendChild(hr);
+
+  var back = document.createElement('div');
+  back.className = 'cm-back-to-top';
+  back.innerHTML = '<a href="#pre">↑ 처음으로</a>';
+  nav.appendChild(back);
+
+  tocEl.appendChild(nav);
+})();
+</script>
+</body>
+</html>

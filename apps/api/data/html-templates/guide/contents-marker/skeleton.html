@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.title }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  {% if shared_cm_css %}<style>{{ shared_cm_css }}</style>{% endif %}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="cm-layout">
+
+  <table-of-contents></table-of-contents>
+
+  <header class="cm-header" id="pre">
+    <p class="cm-eyebrow">GUIDE</p>
+    <h1 class="cm-title">{{ content.title }}</h1>
+    {% if content.subtitle %}<p class="cm-subtitle">{{ content.subtitle }}</p>{% endif %}
+    <div class="cm-meta">
+      {% if content.author %}<span class="cm-author">{{ content.author }}</span>{% endif %}
+      {% if content.date %}<span class="cm-date">{{ content.date }}</span>{% endif %}
+    </div>
+  </header>
+
+  <main class="cm-main">
+    <article>
+      {% if content.intro %}<p class="cm-intro">{{ content.intro }}</p>{% endif %}
+
+      {% for section in content.sections %}
+      <section id="{{ section.id }}">
+        <h2>{{ section.heading }}</h2>
+        {% for para in section.paragraphs %}<p>{{ para }}</p>{% endfor %}
+
+        {% if section.subsections %}
+        {% for sub in section.subsections %}
+        <section id="{{ sub.id }}">
+          <h3>{{ sub.heading }}</h3>
+          {% for para in sub.paragraphs %}<p>{{ para }}</p>{% endfor %}
+        </section>
+        {% endfor %}
+        {% endif %}
+      </section>
+      {% endfor %}
+
+      {% if content.conclusion %}
+      <section class="cm-conclusion">
+        <p>{{ content.conclusion }}</p>
+      </section>
+      {% endif %}
+    </article>
+  </main>
+
+  <hr/>
+
+  <footer class="cm-footer">
+    <p>{{ content.title }}{% if content.author %} — {{ content.author }}{% endif %}</p>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  var tocEl = document.querySelector('table-of-contents');
+  if (!tocEl) return;
+  var article = document.querySelector('article');
+  if (!article) return;
+  var headings = Array.from(article.querySelectorAll('h2, h3'));
+  if (!headings.length) return;
+
+  function buildList(items, startIdx, minLevel) {
+    var ol = document.createElement('ol');
+    var i = startIdx;
+    while (i < items.length) {
+      var level = parseInt(items[i].tagName[1]);
+      if (level < minLevel) break;
+      if (level === minLevel) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        var id = items[i].id || items[i].textContent.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+        if (!items[i].id) items[i].id = id;
+        a.href = '#' + id;
+        a.textContent = items[i].textContent.trim();
+        li.appendChild(a);
+        i++;
+        if (i < items.length && parseInt(items[i].tagName[1]) > minLevel) {
+          var res = buildList(items, i, minLevel + 1);
+          li.appendChild(res.ol);
+          i = res.next;
+        }
+        ol.appendChild(li);
+      } else { break; }
+    }
+    return { ol: ol, next: i };
+  }
+
+  var nav = document.createElement('nav');
+  nav.setAttribute('aria-label', 'Table of Contents');
+
+  var h = document.createElement('h2');
+  h.textContent = '목차';
+  nav.appendChild(h);
+
+  var res = buildList(headings, 0, 2);
+  nav.appendChild(res.ol);
+
+  var hr = document.createElement('hr');
+  hr.className = 'split';
+  nav.appendChild(hr);
+
+  var back = document.createElement('div');
+  back.className = 'cm-back-to-top';
+  back.innerHTML = '<a href="#pre">↑ 처음으로</a>';
+  nav.appendChild(back);
+
+  tocEl.appendChild(nav);
+})();
+</script>
+</body>
+</html>

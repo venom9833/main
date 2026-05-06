@@ -1,0 +1,67 @@
+{
+  "id": "letter",
+  "mode": "skeleton",
+  "label": "공개서한",
+  "description": "공개서한·브랜드 선언문·창업자 편지 — 양피지 감성 Formal Document 레이아웃",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "paper":      "#fcf7ec",
+    "ink":        "#2b241e",
+    "burgundy":   "#8b2c2c",
+    "gold":       "#c49b48",
+    "border":     "#d6cdbe",
+    "bg-subtle":  "#f5efe6"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["header", "sections", "signature"],
+    "properties": {
+      "header": {
+        "type": "object",
+        "required": ["title", "author", "date"],
+        "description": "서한 헤더",
+        "properties": {
+          "eyebrow":      { "type": "string", "description": "상단 분류 텍스트 (예: Open Letter, 공개서한, 성명서, 선언문)" },
+          "title":        { "type": "string", "description": "서한 제목" },
+          "author":       { "type": "string", "description": "작성자 이름" },
+          "author_title": { "type": "string", "description": "작성자 직함·소속 (선택)" },
+          "date":         { "type": "string", "description": "날짜 (예: 2025년 1월 1일, January 1, 2025)" }
+        }
+      },
+      "salutation": { "type": "string", "description": "서두 인사말 (예: 고객 여러분께, To Whom It May Concern)" },
+      "sections": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 7,
+        "description": "본문 섹션 목록",
+        "items": {
+          "type": "object",
+          "required": ["paragraphs"],
+          "properties": {
+            "label": { "type": "string", "description": "섹션 레이블 (선택, 예: 배경, 우리의 결정, WAR DEPARTMENT)" },
+            "paragraphs": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 5,
+              "items": { "type": "string" }
+            }
+          }
+        }
+      },
+      "closing": { "type": "string", "description": "맺음말 (예: 감사합니다, Sincerely, With respect)" },
+      "signature": {
+        "type": "object",
+        "required": ["name"],
+        "description": "서명 블록",
+        "properties": {
+          "name":         { "type": "string", "description": "서명자 이름" },
+          "title":        { "type": "string", "description": "직함 (선택)" },
+          "organization": { "type": "string", "description": "소속 조직 (선택)" }
+        }
+      },
+      "footer_badge": { "type": "string", "description": "하단 배지 텍스트 (선택, 예: Official Statement, 공식 성명)" },
+      "footer_note":  { "type": "string", "description": "하단 각주 메모 (선택)" }
+    }
+  }
+}

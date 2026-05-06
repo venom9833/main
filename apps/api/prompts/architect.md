@@ -8,6 +8,14 @@
 4. 감정 아크: 설렘/호기심(1화) → 긴장/불안(2~3화) → 충격/절정(4~5화) → 여운(6화)
 5. 사회적 배경 팩트는 갈등의 직접 원인으로 활용 (배경 설명 금지)
 6. 두 인물(A·B)이 각자의 비밀을 가진 채 충돌하는 구조를 유지한다
+7. 두 주인공의 ch01 시작 시점 관계 상태를 `relationship_state`에 반드시 명시한다
+
+## 관계 상태 설계 지침 (LD-017)
+- 입력 섹션의 "charA/charB 가족·관계 구조"와 "family_group 동일 여부"를 반드시 확인할 것
+- family_group이 다르면 두 사람은 ch01에서 모르는 사이("strangers")가 기본값이다
+- `relationship_state.ch01_start`는 아래 열거값 중 하나: strangers / acquaintances / colleagues / rivals / married / romantic / family / other
+- `relationship_state.ch01_start`가 "strangers"이면 ch01 설계에서 두 사람은 같은 집에 거주하거나 부부·동거인으로 묘사되어선 안 된다
+- charA의 relationships에 명시된 배우자(남편·아내)가 있을 경우, charB가 그 역할을 대신하는 설계는 절대 금지
 
 ## 출력 형식
 마크다운 코드블록 없이 순수 JSON만 출력:
@@ -21,6 +29,13 @@
     "ch04": "4화 핵심 방향 — 한 문장 (반전 시작)",
     "ch05": "5화 핵심 방향 — 한 문장 (절정)",
     "ch06": "6화 핵심 방향 — 한 문장 (결말)"
+  },
+  "ch01_cliffhanger": "1화 마지막 컷의 클리프행어 사건 — 독자가 다음 화를 클릭할 수밖에 없는 반전·위기·발견 한 문장 (예: 현관문을 열자 언니가 피투성이로 쓰러져 있었다)",
+  "relationship_state": {
+    "ch01_start": "strangers",
+    "ch01_start_description": "두 주인공이 ch01 시점에 어떤 관계인지 한 줄로 설명 (예: 양서연은 ch01 동안 김태호의 존재를 모름)",
+    "transition_chapter": 2,
+    "transition_event": "두 사람이 처음 실질적으로 만나거나 인지하는 사건 (예: 옥패 환영을 통한 첫 인지)"
   }
 }
 

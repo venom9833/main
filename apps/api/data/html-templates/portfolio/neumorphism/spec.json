@@ -1,0 +1,129 @@
+{
+  "id": "portfolio",
+  "mode": "skeleton",
+  "label": "포트폴리오",
+  "description": "소프트 그림자로 입체감을 주는 뉴모피즘 개인 포트폴리오",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "bg":           "#e4e9f0",
+    "shadow_dark":  "#bcc3cc",
+    "shadow_light": "#ffffff",
+    "text_primary": "#2d3142",
+    "text_secondary":"#6b7280",
+    "accent":       "#5c6bc0",
+    "accent_light": "#e8eaf6"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["profile", "facts", "work_heading", "projects", "skills_heading", "skill_groups", "process_heading", "process", "testimonials_heading", "testimonials", "contact_heading", "contact_items"],
+    "properties": {
+      "profile": {
+        "type": "object",
+        "required": ["avatar_emoji", "name", "role", "tagline"],
+        "description": "인물 정보",
+        "properties": {
+          "avatar_emoji": { "type": "string", "description": "프로필 이모지 (1자)" },
+          "name":         { "type": "string", "description": "이름" },
+          "role":         { "type": "string", "description": "직함 (예: UX 디자이너, 풀스택 개발자)" },
+          "tagline":      { "type": "string", "description": "한 줄 자기소개" },
+          "location":     { "type": "string", "description": "활동 지역 (선택)" }
+        }
+      },
+      "facts": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "description": "핵심 수치 3개",
+        "items": {
+          "type": "object",
+          "required": ["value", "label"],
+          "properties": {
+            "value": { "type": "string", "description": "수치 또는 키워드 (예: 7년, 50+)" },
+            "label": { "type": "string", "description": "설명 레이블" }
+          }
+        }
+      },
+      "work_heading": { "type": "string", "description": "프로젝트 섹션 레이블 (6자 이하)" },
+      "projects": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 4,
+        "description": "대표 프로젝트",
+        "items": {
+          "type": "object",
+          "required": ["title", "category", "desc", "tags"],
+          "properties": {
+            "title":    { "type": "string" },
+            "category": { "type": "string", "description": "카테고리 (예: 웹앱, 브랜딩, UI/UX)" },
+            "desc":     { "type": "string", "description": "프로젝트 설명 2문장" },
+            "tags":     { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 4 },
+            "result":   { "type": "string", "description": "성과 (선택)" }
+          }
+        }
+      },
+      "skills_heading": { "type": "string", "description": "기술 섹션 레이블" },
+      "skill_groups": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 4,
+        "items": {
+          "type": "object",
+          "required": ["group", "items"],
+          "properties": {
+            "group": { "type": "string" },
+            "items": { "type": "array", "items": { "type": "string" }, "minItems": 3, "maxItems": 6 }
+          }
+        }
+      },
+      "process_heading": { "type": "string", "description": "작업 방식 섹션 레이블" },
+      "process": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 4,
+        "description": "작업 프로세스 단계",
+        "items": {
+          "type": "object",
+          "required": ["icon", "title", "desc"],
+          "properties": {
+            "icon":  { "type": "string" },
+            "title": { "type": "string" },
+            "desc":  { "type": "string", "description": "단계 설명 1~2문장" }
+          }
+        }
+      },
+      "testimonials_heading": { "type": "string", "description": "후기 섹션 레이블" },
+      "testimonials": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "description": "클라이언트 후기",
+        "items": {
+          "type": "object",
+          "required": ["quote", "name", "role"],
+          "properties": {
+            "quote": { "type": "string", "description": "후기 내용 2~3문장" },
+            "name":  { "type": "string" },
+            "role":  { "type": "string", "description": "직함 또는 회사" }
+          }
+        }
+      },
+      "contact_heading": { "type": "string" },
+      "contact_items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "required": ["icon", "label", "value"],
+          "properties": {
+            "icon":  { "type": "string" },
+            "label": { "type": "string" },
+            "value": { "type": "string" },
+            "url":   { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

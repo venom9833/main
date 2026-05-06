@@ -1,0 +1,371 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-base: 'Inter', 'Pretendard', sans-serif;
+}
+
+/* Neuromorphic Standard — 다크 시스템 인터페이스 프로필 */
+
+body {
+  font-family: var(--font-base);
+  background: var(--c-bg);
+  background-image:
+    radial-gradient(ellipse 55% 35% at 15% 15%, rgba(34, 211, 238, 0.05) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 35% at 85% 75%, rgba(167, 139, 250, 0.07) 0%, transparent 60%);
+  color: var(--c-text-primary);
+  min-height: 100vh;
+}
+
+/* ─── 페이지 ─── */
+.nr-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── 섹션 공통 ─── */
+.nr-section {
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--c-border);
+}
+.nr-section:last-child { border-bottom: none; }
+
+.nr-section-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-accent-cyan);
+  margin: 0 0 1.25rem;
+  font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+}
+
+/* ─── 헤더 ─── */
+.nr-header {
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--c-border);
+  margin-bottom: 0;
+}
+
+.nr-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.nr-sys-info { display: flex; align-items: center; gap: 0.75rem; }
+
+.nr-sys-id {
+  font-size: 0.6rem;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  color: var(--c-text-muted);
+  letter-spacing: 0.12em;
+  border: 1px solid var(--c-border);
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+}
+
+/* 상태 표시 */
+.nr-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: ui-monospace, monospace;
+}
+
+.nr-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nr-status--online  { color: var(--c-status-green); }
+.nr-status--online  .nr-status-dot {
+  background: var(--c-status-green);
+  box-shadow: 0 0 6px var(--c-status-green);
+}
+.nr-status--building,
+.nr-status--focus   { color: var(--c-status-amber); }
+.nr-status--building .nr-status-dot,
+.nr-status--focus    .nr-status-dot {
+  background: var(--c-status-amber);
+  box-shadow: 0 0 6px var(--c-status-amber);
+}
+
+.nr-location {
+  font-size: 0.68rem;
+  color: var(--c-text-muted);
+}
+
+/* 이름·역할 */
+.nr-handle {
+  font-size: 0.78rem;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  color: var(--c-accent-cyan);
+  margin: 0 0 0.5rem;
+  letter-spacing: 0.04em;
+}
+
+.nr-name {
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.0;
+  margin: 0 0 0.5rem;
+  text-shadow: 0 0 40px rgba(34, 211, 238, 0.15);
+}
+
+.nr-role {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--c-accent-violet);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  margin: 0 0 0.75rem;
+}
+
+.nr-tagline {
+  font-size: 0.9rem;
+  color: var(--c-text-muted);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 44ch;
+}
+
+/* ─── 지표 ─── */
+.nr-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+}
+
+.nr-metric {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.nr-metric-value {
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--c-accent-cyan);
+  text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+  line-height: 1.0;
+  font-family: ui-monospace, monospace;
+}
+
+.nr-metric-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--c-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.nr-metric-unit {
+  font-size: 0.6rem;
+  color: var(--c-text-muted);
+  font-family: ui-monospace, monospace;
+}
+
+/* ─── 모듈 ─── */
+.nr-modules {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.nr-module-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.nr-mod-category {
+  flex-shrink: 0;
+  width: 80px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-accent-violet);
+  font-family: ui-monospace, monospace;
+  padding-top: 0.3rem;
+}
+
+.nr-mod-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.nr-mod-tag {
+  font-size: 0.72rem;
+  padding: 0.22rem 0.6rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  color: var(--c-text-primary);
+  border-radius: 4px;
+  font-weight: 500;
+  transition: border-color 0.15s, color 0.15s;
+}
+.nr-mod-tag:hover {
+  border-color: var(--c-accent-cyan);
+  color: var(--c-accent-cyan);
+}
+
+/* ─── 프로젝트 ─── */
+.nr-projects { display: flex; flex-direction: column; gap: 1rem; }
+
+.nr-project {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+  transition: border-color 0.2s ease;
+}
+.nr-project:hover { border-color: rgba(34, 211, 238, 0.3); }
+
+.nr-proj-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.nr-proj-title-row { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+
+/* 프로세스 상태 배지 */
+.nr-proc-status {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  font-family: ui-monospace, monospace;
+  flex-shrink: 0;
+}
+.nr-proc-status--active   { background: rgba(74, 222, 128, 0.12); color: var(--c-status-green); border: 1px solid rgba(74,222,128,0.25); }
+.nr-proc-status--deployed { background: rgba(34, 211, 238, 0.1);  color: var(--c-accent-cyan);  border: 1px solid rgba(34,211,238,0.2); }
+.nr-proc-status--archived { background: rgba(100,116,139,0.15);   color: var(--c-text-muted);   border: 1px solid rgba(100,116,139,0.25); }
+
+.nr-proj-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.nr-proj-name a { color: var(--c-text-primary); text-decoration: none; }
+.nr-proj-name a:hover { color: var(--c-accent-cyan); }
+
+.nr-proj-metric {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--c-accent-violet);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: ui-monospace, monospace;
+}
+
+.nr-proj-desc {
+  font-size: 0.8rem;
+  color: var(--c-text-muted);
+  line-height: 1.65;
+  margin: 0 0 0.65rem;
+}
+
+.nr-proj-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+.nr-tag {
+  font-size: 0.62rem;
+  padding: 0.15rem 0.45rem;
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  color: var(--c-accent-violet);
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+/* ─── 연결 ─── */
+.nr-connect { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.nr-connect-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 1rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+.nr-connect-item:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+  background: rgba(34, 211, 238, 0.04);
+}
+
+.nr-connect-protocol {
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-accent-cyan);
+  font-family: ui-monospace, monospace;
+  flex-shrink: 0;
+  width: 60px;
+}
+
+.nr-connect-icon { font-size: 1rem; flex-shrink: 0; }
+
+.nr-connect-value {
+  font-size: 0.82rem;
+  color: var(--c-text-primary);
+  font-weight: 500;
+  flex: 1;
+}
+
+.nr-connect-arrow {
+  font-size: 0.8rem;
+  color: var(--c-text-muted);
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.15s;
+}
+.nr-connect-item:hover .nr-connect-arrow {
+  color: var(--c-accent-cyan);
+  transform: translateX(3px);
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 768px) {
+  .nr-page { max-width: 100%; padding: 2rem 1.25rem 4rem; }
+  .nr-metrics { grid-template-columns: repeat(2, 1fr); }
+  .nr-module-group { flex-direction: column; gap: 0.4rem; }
+  .nr-mod-category { width: auto; padding-top: 0; }
+  .nr-proj-header { flex-direction: column; gap: 0.35rem; }
+  .nr-proj-metric { white-space: normal; }
+}
+
+@media (max-width: 480px) {
+  .nr-page { padding: 1.5rem 1rem 3.5rem; }
+  .nr-header-top { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .nr-metrics { grid-template-columns: repeat(2, 1fr); }
+  .nr-module-group { flex-direction: column; gap: 0.4rem; }
+  .nr-mod-category { width: auto; padding-top: 0; }
+  .nr-connect-item { padding: 0.7rem 0.85rem; }
+  .nr-connect-protocol { width: 48px; font-size: 0.52rem; }
+  .nr-connect-value { font-size: 0.76rem; }
+}

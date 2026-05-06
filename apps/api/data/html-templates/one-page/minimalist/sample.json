@@ -1,0 +1,58 @@
+{
+  "name": "이나현",
+  "role": "콘텐츠 크리에이터 · 마케터",
+  "avatar_emoji": "✨",
+  "tagline": "콘텐츠로 세상과 연결합니다",
+  "about": "유튜브 구독자 12만, 뉴스레터 구독자 8,000명. 마케팅과 크리에이터 이코노미를 주제로 콘텐츠를 만들고 있습니다. 스타트업 마케터 5년 경험을 바탕으로 실전 인사이트를 전달합니다.",
+  "links": [
+    {
+      "icon": "▶️",
+      "label": "유튜브 채널",
+      "url": "https://youtube.com/@nahyun_marketing",
+      "desc": "마케팅·크리에이터 이코노미 주간 영상"
+    },
+    {
+      "icon": "📝",
+      "label": "뉴스레터 구독",
+      "url": "https://newsletter.nahyun.kr",
+      "desc": "매주 월요일, 마케팅 인사이트 무료 발송"
+    },
+    {
+      "icon": "📸",
+      "label": "인스타그램",
+      "url": "https://instagram.com/nahyun.creates",
+      "desc": "@nahyun.creates — 일상과 크리에이터 팁"
+    },
+    {
+      "icon": "🎙️",
+      "label": "팟캐스트",
+      "url": "https://podcast.nahyun.kr",
+      "desc": "크리에이터의 솔직한 이야기 — 스팟파이 매주 화"
+    },
+    {
+      "icon": "📚",
+      "label": "전자책: 구독자 1만 모으기",
+      "url": "https://store.nahyun.kr/ebook",
+      "desc": "채널 0에서 1만까지의 실전 기록 — ₩19,900"
+    },
+    {
+      "icon": "🎓",
+      "label": "온라인 강의",
+      "url": "https://class.nahyun.kr",
+      "desc": "쇼트폼 마케팅 마스터클래스 — 현재 수강생 340명"
+    },
+    {
+      "icon": "💼",
+      "label": "협업 문의",
+      "url": "mailto:hello@nahyun.kr",
+      "desc": "브랜드 협찬·강연·자문 — 이메일로 연락주세요"
+    },
+    {
+      "icon": "🔗",
+      "label": "LinkedIn",
+      "url": "https://linkedin.com/in/nahyun-lee",
+      "desc": "커리어 이야기와 마케팅 인사이트"
+    }
+  ],
+  "footer_text": "© 2026 이나현 · hello@nahyun.kr"
+}

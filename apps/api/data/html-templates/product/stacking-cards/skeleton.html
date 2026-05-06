@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.product.name }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  {% if shared_sc_css %}<style>{{ shared_sc_css }}</style>{% endif %}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="sc-stack">
+
+  <!-- Card 1: 제품 히어로 -->
+  <section class="sc-card sc-card--pd-hero">
+    <div class="sc-inner pd-hero-inner">
+      <div class="pd-hero-top">
+        <div class="pd-badges">
+          <span class="pd-cat-badge">{{ content.product.category }}</span>
+          {% if content.product.version %}<span class="pd-ver-badge">{{ content.product.version }}</span>{% endif %}
+        </div>
+        <h1 class="pd-name">{{ content.product.name }}</h1>
+        <p class="pd-tagline">{{ content.product.tagline }}</p>
+      </div>
+      <div class="pd-stats-row">
+        {% for stat in content.stats %}
+        <div class="pd-stat">
+          <span class="pd-stat-value">{{ stat.value }}</span>
+          <span class="pd-stat-label">{{ stat.label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 2: 핵심 기능 -->
+  <section class="sc-card sc-card--pd-features">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.features_heading }}</p>
+      <div class="pd-feature-grid">
+        {% for f in content.features %}
+        <div class="pd-feature">
+          <span class="pd-feature-icon">{{ f.icon }}</span>
+          <h2 class="pd-feature-title">{{ f.title }}</h2>
+          <p class="pd-feature-desc">{{ f.desc }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 3: 동작 흐름 -->
+  <section class="sc-card sc-card--pd-workflow">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.workflow_heading }}</p>
+      <div class="pd-workflow">
+        {% for step in content.workflow %}
+        <div class="pd-wf-step">
+          <div class="pd-wf-icon">{{ step.icon }}</div>
+          <div class="pd-wf-body">
+            <h2>{{ step.title }}</h2>
+            <p>{{ step.desc }}</p>
+          </div>
+        </div>
+        {% if not loop.last %}<div class="pd-wf-arrow">→</div>{% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 4: 활용 사례 -->
+  <section class="sc-card sc-card--pd-cases">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.use_cases_heading }}</p>
+      <div class="pd-cases-grid">
+        {% for uc in content.use_cases %}
+        <div class="pd-case">
+          <span class="pd-case-icon">{{ uc.icon }}</span>
+          <h2 class="pd-case-role">{{ uc.role }}</h2>
+          <p class="pd-case-benefit">{{ uc.benefit }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 5: 가격 플랜 -->
+  <section class="sc-card sc-card--pd-pricing">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.pricing_heading }}</p>
+      <div class="pd-plans">
+        {% for plan in content.plans %}
+        <div class="pd-plan{% if plan.featured %} pd-plan--featured{% endif %}">
+          {% if plan.featured %}<span class="pd-plan-badge">추천</span>{% endif %}
+          <div class="pd-plan-name">{{ plan.name }}</div>
+          <div class="pd-plan-price">
+            <span class="pd-plan-amount">{{ plan.price }}</span>
+            <span class="pd-plan-period">{{ plan.period }}</span>
+          </div>
+          <ul class="pd-plan-features">
+            {% for feat in plan.features %}
+            <li>{{ feat }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 6: 마지막 CTA -->
+  <section class="sc-card sc-card--pd-cta">
+    <div class="sc-inner sc-inner--center">
+      <h2 class="pd-cta-heading">{{ content.cta_heading }}</h2>
+      <p class="pd-cta-body">{{ content.cta_body }}</p>
+      <div class="pd-cta-actions">
+        <a class="sc-btn pd-btn--primary" href="#">{{ content.cta_primary }}</a>
+        {% if content.cta_secondary %}
+        <a class="sc-btn pd-btn--secondary" href="#">{{ content.cta_secondary }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

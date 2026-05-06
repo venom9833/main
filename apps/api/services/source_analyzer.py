@@ -150,3 +150,73 @@ def analyze(text: str, filename: str = "") -> dict:
         "char_count": len(normalized),
         "filename": filename,
     }
+
+
+def classify(analysis: dict) -> dict:
+    """
+    analyze() 결과를 받아 소스 유형을 분류한다. Gemini 호출 없음.
+
+    Returns:
+        {
+            "type": "novel" | "keyword" | "news" | "ambiguous",
+            "confidence": 0.0~1.0,
+            "signals": { ... },   # 판별에 사용된 신호
+        }
+    """
+    char_count = analysis.get("char_count", 0)
+    entities: list[str] = analysis.get("entities", [])
+    key_sentences: list[str] = analysis.get("key_sentences", [])
+
+    # 신호 계산용 전체 텍스트 (key_sentences + entities 합산)
+    combined_text = " ".join(key_sentences) + " " + " ".join(entities)
+
+    # 대화 문장 수: 따옴표(" " ' ') 포함 문장
+    dialogue_count = sum(
+        1 for s in key_sentences
+        if re.search(r'[“”‘’"\']', s)
+    )
+
+    # 시대 키워드 존재 여부
+    has_era_keyword = bool(re.search(
+        r'(조선|고려|삼국|신라|고구려|백제|임진|병자|[0-9]{2,4}년\s*전|고대|중세|미래|우주)',
+        combined_text
+    ))
+
+    # 뉴스 패턴 존재 여부
+    has_news_pattern = bool(re.search(
+        r'(기자|보도|발표|밝혔다|전했다|뉴스|속보)',
+        combined_text
+    ))
+
+    # 2~3글자 순수 한글 단어 수 (숫자/조사 제외)
+    korean_names_count = sum(
+        1 for e in entities
+        if re.fullmatch(r'[가-힣]{2,3}', e)
+    )
+
+    signals = {
+        "char_count": char_count,
+        "dialogue_count": dialogue_count,
+        "korean_names_count": korean_names_count,
+        "has_era_keyword": has_era_keyword,
+        "has_news_pattern": has_news_pattern,
+    }
+
+    # 확정 분류 (순서 중요)
+    if char_count < 50:
+        return {"type": "keyword", "confidence": 1.0, "signals": signals}
+
+    if char_count < 200 and korean_names_count < 3:
+        return {"type": "keyword", "confidence": 0.95, "signals": signals}
+
+    if has_news_pattern and not has_era_keyword:
+        return {"type": "news", "confidence": 0.88, "signals": signals}
+
+    if dialogue_count >= 3 and korean_names_count >= 3 and char_count > 800:
+        return {"type": "novel", "confidence": 0.92, "signals": signals}
+
+    if char_count > 1500 and korean_names_count >= 5:
+        return {"type": "novel", "confidence": 0.85, "signals": signals}
+
+    # 애매한 경우
+    return {"type": "ambiguous", "confidence": 0.5, "signals": signals}

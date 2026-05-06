@@ -1,15 +1,14 @@
 """supabase MCP 서버 — V3용 커스텀 Supabase MCP
 
-도구:
-  execute_sql   — 모든 SQL 실행 (SELECT · INSERT · UPDATE · DELETE · DDL)
-  list_tables   — 테이블 목록 + 컬럼 요약
-  describe_table — 특정 테이블 상세 스키마
-  apply_migration — SQL 파일 또는 SQL 문자열로 마이그레이션 적용
+연결 방식: Supabase Management API (HTTP) — psycopg2 직접 TCP 불필요
+  이유: DB 호스트가 IPv6 전용, 현재 네트워크 IPv6 불통 (2026-04-16 확인)
 
-DDL 처리 방식:
-  1. psycopg2 → Supabase pooler 직접 연결 (DDL 지원)
-  2. 연결 실패 시 → supabase-py rpc fallback 시도
-  3. 둘 다 실패 시 → SQL 반환 + 수동 실행 안내
+도구:
+  execute_sql    — 모든 SQL 실행 (SELECT · INSERT · UPDATE · DELETE · DDL)
+  list_tables    — 테이블 목록 + RLS 상태 + 대략적인 행 수
+  describe_table — 특정 테이블 상세 스키마
+  apply_migration — SQL 마이그레이션 적용
+  get_series_cost — V3 시리즈 API 비용 합계
 """
 
 import os
@@ -38,110 +37,62 @@ mcp = FastMCP(
 # 연결 설정
 # ─────────────────────────────────────────────────────────────
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-SERVICE_KEY = (
+SUPABASE_URL  = os.environ.get("SUPABASE_URL", "")
+SERVICE_KEY   = (
     os.environ.get("SUPABASE_SERVICE_KEY", "")
     or os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 )
-PROJECT_REF = SUPABASE_URL.replace("https://", "").split(".")[0] if SUPABASE_URL else ""
+ACCESS_TOKEN  = os.environ.get("SUPABASE_ACCESS_TOKEN", "")
+PROJECT_REF   = SUPABASE_URL.replace("https://", "").split(".")[0] if SUPABASE_URL else ""
 
-# Supabase pooler 연결 후보 (region 순서 — 한국 프로젝트 기준)
-_POOLER_REGIONS = [
-    "aws-0-ap-northeast-2",  # 서울
-    "aws-0-ap-northeast-1",  # 도쿄
-    "aws-0-ap-southeast-1",  # 싱가포르
-    "aws-0-us-east-1",       # 버지니아
-    "aws-0-us-west-1",       # 캘리포니아
-    "aws-0-eu-central-1",    # 프랑크푸르트
-]
-
-_psycopg2_dsn: str | None = None  # 캐시된 성공 연결 DSN
+_MGMT_URL = f"https://api.supabase.com/v1/projects/{PROJECT_REF}/database/query"
 
 
-def _get_psycopg2_conn():
-    """psycopg2 연결 — 성공한 region DSN을 캐시."""
-    global _psycopg2_dsn
-    import psycopg2
+def _run_sql_http(sql: str) -> dict:
+    """Supabase Management API로 SQL 실행 (HTTP POST)."""
+    import requests
 
-    if _psycopg2_dsn:
-        return psycopg2.connect(_psycopg2_dsn)
+    if not ACCESS_TOKEN:
+        return {
+            "ok": False,
+            "error": "SUPABASE_ACCESS_TOKEN 미설정 — .env에 추가하세요.",
+            "sql": sql,
+        }
 
-    for region in _POOLER_REGIONS:
-        dsn = (
-            f"postgresql://postgres.{PROJECT_REF}:{SERVICE_KEY}"
-            f"@{region}.pooler.supabase.com:5432/postgres"
-            f"?connect_timeout=5&sslmode=require"
-        )
+    headers = {
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Content-Type": "application/json",
+    }
+
+    # 세미콜론으로 분리된 여러 문 처리
+    statements = [s.strip() for s in sql.split(";") if s.strip()]
+    all_results = []
+
+    for stmt in statements:
         try:
-            conn = psycopg2.connect(dsn)
-            _psycopg2_dsn = dsn
-            return conn
-        except Exception:
-            continue
-
-    # 직접 DB 호스트 시도 (구형 방식)
-    dsn = (
-        f"postgresql://postgres:{SERVICE_KEY}"
-        f"@db.{PROJECT_REF}.supabase.co:5432/postgres"
-        f"?connect_timeout=5&sslmode=require"
-    )
-    try:
-        conn = psycopg2.connect(dsn)
-        _psycopg2_dsn = dsn
-        return conn
-    except Exception as e:
-        raise RuntimeError(f"Supabase DB 직접 연결 실패 (모든 region 시도). 마지막 오류: {e}")
-
-
-def _is_ddl(sql: str) -> bool:
-    """DDL 문 여부 판별."""
-    first = sql.strip().upper().split()[0] if sql.strip() else ""
-    return first in {"ALTER", "CREATE", "DROP", "TRUNCATE", "GRANT", "REVOKE", "COMMENT"}
-
-
-def _run_sql_psycopg2(sql: str) -> dict:
-    """psycopg2로 SQL 실행 — DDL + DML 모두 지원."""
-    conn = _get_psycopg2_conn()
-    try:
-        conn.autocommit = False
-        cur = conn.cursor()
-
-        # 세미콜론으로 분리된 여러 문 처리
-        statements = [s.strip() for s in sql.split(";") if s.strip()]
-        results = []
-        for stmt in statements:
-            cur.execute(stmt)
-            if cur.description:  # SELECT
-                cols = [d[0] for d in cur.description]
-                rows = cur.fetchall()
-                results.append({
+            resp = requests.post(
+                _MGMT_URL,
+                headers=headers,
+                json={"query": stmt},
+                timeout=30,
+            )
+            if resp.status_code in (200, 201):
+                data = resp.json()
+                all_results.append({
                     "statement": stmt[:80] + "..." if len(stmt) > 80 else stmt,
-                    "rows": [dict(zip(cols, r)) for r in rows],
-                    "count": len(rows),
+                    "rows": data if isinstance(data, list) else [],
+                    "count": len(data) if isinstance(data, list) else 0,
                 })
             else:
-                results.append({
-                    "statement": stmt[:80] + "..." if len(stmt) > 80 else stmt,
-                    "rowcount": cur.rowcount,
-                })
+                return {
+                    "ok": False,
+                    "error": f"HTTP {resp.status_code}: {resp.text[:300]}",
+                    "sql": stmt,
+                }
+        except Exception as e:
+            return {"ok": False, "error": str(e), "sql": stmt}
 
-        conn.commit()
-        return {"ok": True, "results": results}
-    except Exception as e:
-        conn.rollback()
-        raise
-    finally:
-        conn.close()
-
-
-def _run_sql_supabase_py(sql: str) -> dict:
-    """supabase-py로 SELECT 실행 (DDL 불가 — fallback용)."""
-    from supabase import create_client
-    client = create_client(SUPABASE_URL, SERVICE_KEY)
-
-    # SELECT만 처리
-    result = client.rpc("exec_sql_select", {"query": sql}).execute()
-    return {"ok": True, "data": result.data}
+    return {"ok": True, "results": all_results}
 
 
 # ─────────────────────────────────────────────────────────────
@@ -160,16 +111,7 @@ def execute_sql(sql: str) -> dict:
     """
     if not sql.strip():
         return {"ok": False, "error": "SQL이 비어있습니다."}
-
-    try:
-        return _run_sql_psycopg2(sql)
-    except Exception as e:
-        return {
-            "ok": False,
-            "error": str(e),
-            "hint": "Supabase SQL Editor에서 직접 실행하세요.",
-            "sql": sql,
-        }
+    return _run_sql_http(sql)
 
 
 @mcp.tool()
@@ -191,7 +133,7 @@ def apply_migration(sql: str, migration_name: str = "migration") -> dict:
 
 @mcp.tool()
 def list_tables(schema: str = "public") -> dict:
-    """테이블 목록 조회 — 컬럼 수와 대략적인 행 수 포함.
+    """테이블 목록 조회 — RLS 상태 + 대략적인 행 수 포함.
 
     Args:
         schema: 조회할 스키마 (기본: public)
@@ -199,17 +141,16 @@ def list_tables(schema: str = "public") -> dict:
     sql = f"""
 SELECT
     t.table_name,
-    COUNT(c.column_name) AS column_count,
-    pg_stat_user_tables.n_live_tup AS approx_rows
+    p.rowsecurity AS rls_enabled,
+    COALESCE(s.n_live_tup, 0) AS approx_rows
 FROM information_schema.tables t
-LEFT JOIN information_schema.columns c
-    ON c.table_schema = t.table_schema AND c.table_name = t.table_name
-LEFT JOIN pg_stat_user_tables
-    ON pg_stat_user_tables.relname = t.table_name
+JOIN pg_tables p
+    ON p.schemaname = t.table_schema AND p.tablename = t.table_name
+LEFT JOIN pg_stat_user_tables s
+    ON s.relname = t.table_name
 WHERE t.table_schema = '{schema}'
   AND t.table_type = 'BASE TABLE'
-GROUP BY t.table_name, pg_stat_user_tables.n_live_tup
-ORDER BY t.table_name;
+ORDER BY t.table_name
 """
     result = execute_sql(sql)
     if result.get("ok"):
@@ -246,7 +187,7 @@ LEFT JOIN (
 ) pk ON pk.column_name = c.column_name
 WHERE c.table_name = '{table_name}'
   AND c.table_schema = '{schema}'
-ORDER BY c.ordinal_position;
+ORDER BY c.ordinal_position
 """
     result = execute_sql(sql)
     if result.get("ok"):
@@ -268,12 +209,12 @@ SELECT
     SUM(COALESCE(cost_usd, 0)) AS total_cost_usd,
     SUM(CASE WHEN kling_clip_url IS NOT NULL THEN 1 ELSE 0 END) AS kling_generated
 FROM v3_scenes
-WHERE series_id = '{series_id}';
+WHERE series_id = '{series_id}'
 """
     result = execute_sql(sql)
     if result.get("ok"):
         rows = result["results"][0].get("rows", []) if result.get("results") else []
-        return {"ok": True, "series_id": series_id, **rows[0]} if rows else {"ok": True}
+        return {"ok": True, "series_id": series_id, **(rows[0] if rows else {})}
     return result
 
 

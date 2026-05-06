@@ -1,0 +1,28 @@
+{
+  "id": "landing/glassmorphism-light",
+  "label": "Glassmorphism Light",
+  "description": "Light theme glassmorphism landing page — frosted glass nav + hero + feature cards + CTA",
+  "mode": "skeleton",
+  "type": "landing",
+  "variant": "glassmorphism-light",
+  "content_schema": {
+    "brand": "string",
+    "nav_links": "array[{label, href}]",
+    "header_cta": "string",
+    "hero": {
+      "eyebrow": "string",
+      "headline": "string",
+      "tagline": "string",
+      "cta_primary": "string",
+      "cta_secondary": "string"
+    },
+    "stats": "array[{num, desc}] (3개)",
+    "features_heading": "string",
+    "features": "array[{icon, title, desc}] (6개)",
+    "cta": {
+      "headline": "string",
+      "body": "string",
+      "label": "string"
+    }
+  }
+}

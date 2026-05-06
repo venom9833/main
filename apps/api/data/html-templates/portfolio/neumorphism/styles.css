@@ -1,0 +1,355 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-base: 'Nunito', 'Pretendard', sans-serif;
+}
+
+/* Portfolio Neumorphism — 소프트 그림자 포트폴리오 */
+
+body { font-family: var(--font-base); background: var(--c-bg); color: var(--c-text-primary); }
+
+:root {
+  --nm-shadow:         8px 8px 18px var(--c-shadow-dark),  -8px -8px 18px var(--c-shadow-light);
+  --nm-shadow-sm:      4px 4px 10px var(--c-shadow-dark),  -4px -4px 10px var(--c-shadow-light);
+  --nm-shadow-inset:   inset 3px 3px 8px var(--c-shadow-dark), inset -3px -3px 8px var(--c-shadow-light);
+  --nm-shadow-pressed: inset 5px 5px 12px var(--c-shadow-dark), inset -5px -5px 12px var(--c-shadow-light);
+}
+
+/* ─── 페이지 ─── */
+.pnm-page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* ─── 히어로 ─── */
+.pnm-hero {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  background: var(--c-bg);
+  border-radius: 20px;
+  padding: 2.25rem 2.25rem;
+  box-shadow: var(--nm-shadow);
+}
+
+.pnm-avatar {
+  flex-shrink: 0;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--c-bg);
+  box-shadow: var(--nm-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.pnm-name {
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 0 0 0.25rem;
+}
+
+.pnm-role {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--c-accent);
+  margin: 0 0 0.2rem;
+}
+
+.pnm-location {
+  font-size: 0.7rem;
+  color: var(--c-text-secondary);
+  margin: 0 0 0.5rem;
+}
+
+.pnm-tagline {
+  font-size: 0.875rem;
+  color: var(--c-text-secondary);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 40ch;
+}
+
+/* ─── Stats ─── */
+.pnm-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.pnm-fact {
+  background: var(--c-bg);
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem 1.1rem;
+  box-shadow: var(--nm-shadow-sm);
+  text-align: center;
+}
+
+.pnm-fact-value {
+  display: block;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--c-accent);
+  line-height: 1.1;
+}
+
+.pnm-fact-label {
+  display: block;
+  font-size: 0.62rem;
+  color: var(--c-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.25rem;
+}
+
+/* ─── 카드 ─── */
+.pnm-card {
+  background: var(--c-bg);
+  border-radius: 18px;
+  padding: 1.75rem 1.75rem;
+  box-shadow: var(--nm-shadow);
+}
+
+.pnm-section-title {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--c-accent);
+  margin: 0 0 1.4rem;
+}
+
+/* ─── 프로젝트 ─── */
+.pnm-projects {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.pnm-project {
+  background: var(--c-bg);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--nm-shadow-sm);
+  transition: box-shadow 0.2s ease;
+}
+.pnm-project:hover { box-shadow: var(--nm-shadow-pressed); }
+
+.pnm-proj-cat {
+  display: inline-block;
+  font-size: 0.56rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--c-accent);
+  background: var(--c-accent-light);
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  margin-bottom: 0.5rem;
+}
+
+.pnm-proj-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.4rem;
+  line-height: 1.25;
+}
+
+.pnm-proj-desc {
+  font-size: 0.78rem;
+  color: var(--c-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 0.6rem;
+}
+
+.pnm-proj-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem; }
+
+.pnm-pill {
+  font-size: 0.62rem;
+  padding: 0.18rem 0.48rem;
+  border-radius: 20px;
+  background: var(--c-bg);
+  box-shadow: var(--nm-shadow-inset);
+  color: var(--c-text-secondary);
+  font-weight: 500;
+}
+
+.pnm-proj-result {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--c-accent);
+  margin: 0;
+}
+
+/* ─── 기술 ─── */
+.pnm-skill-groups { display: flex; flex-direction: column; gap: 0.9rem; }
+.pnm-skill-group { display: flex; gap: 0.75rem; align-items: flex-start; }
+
+.pnm-skill-label {
+  flex-shrink: 0;
+  width: 72px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-text-secondary);
+  padding-top: 0.32rem;
+}
+
+.pnm-skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.pnm-skill-tag {
+  font-size: 0.73rem;
+  padding: 0.26rem 0.68rem;
+  border-radius: 20px;
+  background: var(--c-bg);
+  box-shadow: var(--nm-shadow-inset);
+  color: var(--c-text-primary);
+  font-weight: 500;
+}
+
+/* ─── 프로세스 ─── */
+.pnm-process {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.pnm-proc-step {
+  background: var(--c-bg);
+  border-radius: 12px;
+  padding: 1.1rem 1.1rem 1rem;
+  box-shadow: var(--nm-shadow-sm);
+  position: relative;
+}
+
+.pnm-proc-num {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.8rem;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--c-accent);
+  opacity: 0.35;
+}
+
+.pnm-proc-icon {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 0.55rem;
+}
+
+.pnm-proc-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+  letter-spacing: -0.02em;
+}
+
+.pnm-proc-desc {
+  font-size: 0.76rem;
+  color: var(--c-text-secondary);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ─── 후기 ─── */
+.pnm-testimonials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.pnm-testimonial {
+  background: var(--c-bg);
+  border-radius: 12px;
+  padding: 1.25rem 1.25rem;
+  box-shadow: var(--nm-shadow-inset);
+  margin: 0;
+}
+
+.pnm-quote {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--c-text-secondary);
+  font-style: italic;
+  margin: 0 0 1rem;
+}
+
+.pnm-quote-author {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.pnm-quote-author strong { font-size: 0.8rem; font-weight: 700; color: var(--c-text-primary); }
+.pnm-quote-author span { font-size: 0.68rem; color: var(--c-text-secondary); }
+
+/* ─── 연락처 ─── */
+.pnm-contact-list { display: flex; flex-direction: column; gap: 0.7rem; }
+
+.pnm-contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 12px;
+  background: var(--c-bg);
+  box-shadow: var(--nm-shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s ease;
+}
+.pnm-contact-btn:hover { box-shadow: var(--nm-shadow-pressed); }
+
+.pnm-contact-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+.pnm-contact-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-secondary);
+  flex-shrink: 0;
+  width: 52px;
+}
+
+.pnm-contact-value {
+  font-size: 0.82rem;
+  color: var(--c-accent);
+  font-weight: 500;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 768px) {
+  .pnm-page { padding: 2rem 1.25rem 3.5rem; }
+  .pnm-hero { flex-direction: column; text-align: center; gap: 1.25rem; padding: 1.75rem 1.5rem; }
+  .pnm-tagline { max-width: none; }
+  .pnm-facts { grid-template-columns: repeat(3, 1fr); }
+  .pnm-projects { grid-template-columns: 1fr; }
+  .pnm-process { grid-template-columns: 1fr 1fr; }
+  .pnm-testimonials { grid-template-columns: 1fr; }
+  .pnm-skill-group { flex-direction: column; gap: 0.4rem; }
+  .pnm-skill-label { width: auto; }
+  .pnm-card { padding: 1.5rem; border-radius: 14px; }
+}
+
+@media (max-width: 480px) {
+  .pnm-page { padding: 1.25rem 0.875rem 3rem; gap: 1.25rem; }
+  .pnm-hero { padding: 1.5rem 1.25rem; border-radius: 14px; }
+  .pnm-facts { grid-template-columns: repeat(2, 1fr); }
+  .pnm-process { grid-template-columns: 1fr; }
+  .pnm-card { padding: 1.25rem 1.1rem; border-radius: 12px; }
+  .pnm-contact-btn { padding: 0.75rem 0.9rem; }
+}

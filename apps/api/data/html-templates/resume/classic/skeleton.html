@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ content.name }} — {{ content.job_title }}</title>
+<style>
+{{ shared_base_css }}
+{{ shared_fonts_css }}
+{{ template_css }}
+{{ shared_print_css }}
+</style>
+{{ palette_vars }}
+</head>
+<body>
+<div class="resume-wrapper">
+
+  <!-- 헤더 -->
+  <header class="resume-header">
+    <div class="resume-header__name">{{ content.name }}</div>
+    <div class="resume-header__title">{{ content.job_title }}</div>
+    {% if content.tagline %}
+    <div class="resume-header__tagline">{{ content.tagline }}</div>
+    {% endif %}
+  </header>
+
+  <div class="resume-body">
+
+    <!-- 사이드바 -->
+    <aside class="resume-sidebar">
+
+      <!-- 연락처 -->
+      <div class="sidebar-section">
+        <div class="sidebar-section__label">Contact</div>
+        {% if content.contact.email %}
+        <div class="contact-item">
+          <span class="contact-item__icon">✉</span>
+          <span>{{ content.contact.email }}</span>
+        </div>
+        {% endif %}
+        {% if content.contact.phone %}
+        <div class="contact-item">
+          <span class="contact-item__icon">📞</span>
+          <span>{{ content.contact.phone }}</span>
+        </div>
+        {% endif %}
+        {% if content.contact.location %}
+        <div class="contact-item">
+          <span class="contact-item__icon">📍</span>
+          <span>{{ content.contact.location }}</span>
+        </div>
+        {% endif %}
+        {% if content.contact.linkedin %}
+        <div class="contact-item">
+          <span class="contact-item__icon">in</span>
+          <span>{{ content.contact.linkedin }}</span>
+        </div>
+        {% endif %}
+        {% if content.contact.github %}
+        <div class="contact-item">
+          <span class="contact-item__icon">⌥</span>
+          <span>{{ content.contact.github }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- 기술 스택 -->
+      {% if content.skills %}
+      <div class="sidebar-section">
+        <div class="sidebar-section__label">Skills</div>
+        {% for skill_group in content.skills %}
+        <div class="skill-category">
+          <div class="skill-category__name">{{ skill_group.category }}</div>
+          <div class="skill-tags">
+            {% for item in skill_group.items %}
+            <span class="skill-tag">{{ item }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- 언어 -->
+      {% if content.languages %}
+      <div class="sidebar-section">
+        <div class="sidebar-section__label">Languages</div>
+        {% for lang in content.languages %}
+        <div class="lang-item">
+          <span>{{ lang.lang }}</span>
+          <span class="lang-item__level">{{ lang.level }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- 자격증 -->
+      {% if content.certifications %}
+      <div class="sidebar-section">
+        <div class="sidebar-section__label">Certifications</div>
+        {% for cert in content.certifications %}
+        <div class="cert-item">
+          <div class="cert-item__name">{{ cert.name }}</div>
+          <div class="cert-item__meta">{{ cert.issuer }} · {{ cert.year }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+    </aside>
+
+    <!-- 메인 -->
+    <main class="resume-main">
+
+      <!-- 요약 -->
+      {% if content.summary %}
+      <section class="main-section">
+        <div class="main-section__title">Summary</div>
+        <p class="summary-text">{{ content.summary }}</p>
+      </section>
+      <hr class="resume-divider">
+      {% endif %}
+
+      <!-- 경력 -->
+      {% if content.experience %}
+      <section class="main-section">
+        <div class="main-section__title">Experience</div>
+        {% for exp in content.experience %}
+        <div class="exp-item">
+          <div class="exp-item__header">
+            <span class="exp-item__company">{{ exp.company }}</span>
+            <span class="exp-item__period">{{ exp.period }}</span>
+          </div>
+          <div class="exp-item__role">{{ exp.role }}{% if exp.location %} · {{ exp.location }}{% endif %}</div>
+          <ul class="exp-item__bullets">
+            {% for bullet in exp.bullets %}
+            <li>{{ bullet }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% if not loop.last %}<hr class="resume-divider">{% endif %}
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <!-- 학력 -->
+      {% if content.education %}
+      <hr class="resume-divider">
+      <section class="main-section">
+        <div class="main-section__title">Education</div>
+        {% for edu in content.education %}
+        <div class="edu-item">
+          <div class="edu-item__header">
+            <span class="edu-item__school">{{ edu.school }}</span>
+            <span class="edu-item__period">{{ edu.period }}</span>
+          </div>
+          <div class="edu-item__degree">{{ edu.degree }}</div>
+          {% if edu.note %}<div class="edu-item__note">{{ edu.note }}</div>{% endif %}
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <!-- 프로젝트 -->
+      {% if content.projects %}
+      <hr class="resume-divider">
+      <section class="main-section">
+        <div class="main-section__title">Projects</div>
+        {% for proj in content.projects %}
+        <div class="proj-item">
+          <div class="proj-item__name">
+            {{ proj.name }}
+            {% if proj.link %}<a href="{{ proj.link }}" style="font-size:0.75rem;color:var(--c-accent);margin-left:0.4rem;">↗</a>{% endif %}
+          </div>
+          <div class="proj-item__desc">{{ proj.description }}</div>
+          <div class="proj-item__tech">
+            {% for t in proj.tech %}
+            <span class="proj-item__tag">{{ t }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+    </main>
+  </div>
+</div>
+</body>
+</html>

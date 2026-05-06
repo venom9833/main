@@ -1,0 +1,125 @@
+{
+  "id": "proposal",
+  "label": "제안서",
+  "version": "1.0.0",
+  "description": "표지·목차·본문·예산표로 구성된 비즈니스 제안서. 단일 컬럼 기반, 섹션별 카드 분리 구조.",
+
+  "layout": {
+    "type": "single-column",
+    "maxWidth": "800px",
+    "margin": "0 auto",
+    "padding": "3rem 2rem",
+    "sidebar": false
+  },
+
+  "sections": {
+    "order": ["cover", "toc", "overview", "background", "solution", "scope", "timeline", "budget", "team", "closing"]
+  },
+
+  "palette": {
+    "background":       "#ffffff",
+    "surface":          "#f8fafc",
+    "text_primary":     "#0f172a",
+    "text_secondary":   "#475569",
+    "accent":           "#7c3aed",
+    "accent_light":     "#f5f3ff",
+    "accent_border":    "#8b5cf6",
+    "cover_bg":         "#1e1b4b",
+    "cover_text":       "#ffffff",
+    "cover_accent":     "#a78bfa",
+    "table_header_bg":  "#ede9fe",
+    "table_row_alt":    "#faf5ff",
+    "tag_bg":           "#f5f3ff",
+    "tag_text":         "#6d28d9",
+    "divider":          "#e2e8f0"
+  },
+
+  "typography": {
+    "font_primary": "'Pretendard', -apple-system, sans-serif",
+    "base_size":    "1rem",
+    "line_height":  1.8
+  },
+
+  "blocks": {
+    "cover": {
+      "background": "cover_bg",
+      "elements": ["category_label", "title_h1", "subtitle", "client_name", "author", "date"],
+      "title": { "size": "2.8rem", "weight": 800, "color": "#ffffff" },
+      "category_label": { "case": "uppercase", "size": "0.75rem", "color": "cover_accent", "letter_spacing": "0.15em" },
+      "padding": "5rem 4rem",
+      "min_height": "40vh"
+    },
+    "toc": {
+      "title": "목차 / Contents",
+      "style": "numbered list with dot leaders",
+      "item_format": "NN. 섹션명 ········ 페이지",
+      "border": "1px solid accent_border",
+      "background": "accent_light",
+      "border_radius": "12px",
+      "padding": "2rem"
+    },
+    "section_header": {
+      "number_style": "accent 색상 원형 배지",
+      "title_size": "1.5rem",
+      "weight": 700,
+      "divider_below": true
+    },
+    "highlight_box": {
+      "label": "핵심 포인트 / Key Point",
+      "background": "accent_light",
+      "border_left": "4px solid accent",
+      "padding": "1.25rem 1.5rem",
+      "border_radius": "0 8px 8px 0"
+    },
+    "budget_table": {
+      "columns": ["항목", "단가", "수량", "합계"],
+      "header_bg": "table_header_bg",
+      "row_alt_bg": "table_row_alt",
+      "total_row": { "weight": 700, "background": "accent_light" },
+      "border": "1px solid divider"
+    },
+    "timeline": {
+      "style": "horizontal milestone 또는 vertical steps",
+      "item_format": "단계명 + 기간 + 산출물",
+      "milestone_color": "accent"
+    },
+    "team_card": {
+      "structure": ["avatar_placeholder", "name", "role", "description"],
+      "layout": "grid 3-column",
+      "border": "1px solid divider",
+      "border_radius": "12px",
+      "padding": "1.25rem"
+    }
+  },
+
+  "inline_emphasis": {
+    "bold":        "핵심 제안 내용, 금액, 기간",
+    "accent_text": "클라이언트명, 솔루션명",
+    "label_tag":   "소형 배지 — 필수 / 선택 / 신규"
+  },
+
+  "divider": {
+    "style": "solid 1px",
+    "color": "divider",
+    "margin": "2.5rem 0"
+  },
+
+  "tone": {
+    "voice": "존댓말, 정중하고 자신감 있는 어조",
+    "perspective": "클라이언트 문제 → 우리의 해결책 순서",
+    "number_emphasis": "ROI·절감액·기간 수치를 굵게 강조"
+  },
+
+  "chapter_internal_flow": [
+    "표지 (cover)",
+    "목차 (toc)",
+    "개요 — 제안 배경과 목적",
+    "현황 분석 — 클라이언트 과제",
+    "솔루션 — 제안 내용 상세",
+    "범위 — 포함/미포함 명시",
+    "일정 — 타임라인",
+    "예산 — 항목별 표",
+    "팀 소개",
+    "마무리 — CTA + 연락처"
+  ]
+}

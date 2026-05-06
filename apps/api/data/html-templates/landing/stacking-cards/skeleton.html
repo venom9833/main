@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.hero.headline }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  {% if shared_sc_css %}<style>{{ shared_sc_css }}</style>{% endif %}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="sc-stack">
+
+  <!-- Card 1: Hero -->
+  <section class="sc-card sc-card--hero">
+    <div class="sc-inner sc-inner--center">
+      <span class="sc-eyebrow">{{ content.hero.eyebrow }}</span>
+      <h1 class="sc-headline">{{ content.hero.headline }}</h1>
+      <p class="sc-tagline">{{ content.hero.tagline }}</p>
+      <a class="sc-btn sc-btn--hero" href="#">{{ content.hero.cta_label }}</a>
+      <div class="sc-scroll-hint" aria-hidden="true">↓</div>
+    </div>
+  </section>
+
+  <!-- Card 2: Features -->
+  <section class="sc-card sc-card--features">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.features.heading }}</p>
+      <div class="sc-feature-grid">
+        {% for f in content.features.items %}
+        <div class="sc-feature">
+          <span class="sc-feature-icon">{{ f.icon }}</span>
+          <h2 class="sc-feature-title">{{ f.title }}</h2>
+          <p class="sc-feature-desc">{{ f.desc }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 3: Steps -->
+  <section class="sc-card sc-card--steps">
+    <div class="sc-inner">
+      <p class="sc-section-title">{{ content.steps.heading }}</p>
+      <div class="sc-steps">
+        {% for step in content.steps.items %}
+        <div class="sc-step">
+          <span class="sc-step-num">{{ loop.index }}</span>
+          <div class="sc-step-body">
+            <h2>{{ step.title }}</h2>
+            <p>{{ step.desc }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 4: Social Proof -->
+  <section class="sc-card sc-card--proof">
+    <div class="sc-inner sc-inner--center">
+      <p class="sc-section-title">{{ content.social_proof.heading }}</p>
+      <blockquote class="sc-quote">
+        <p>"{{ content.social_proof.quote }}"</p>
+        <footer>
+          <strong>{{ content.social_proof.author }}</strong>
+          {% if content.social_proof.role %}<span> — {{ content.social_proof.role }}</span>{% endif %}
+        </footer>
+      </blockquote>
+      {% if content.social_proof.stat_value %}
+      <div class="sc-proof-stat">
+        <span class="sc-stat-value">{{ content.social_proof.stat_value }}</span>
+        <span class="sc-stat-label">{{ content.social_proof.stat_label }}</span>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Card 5: Pricing -->
+  <section class="sc-card sc-card--pricing">
+    <div class="sc-inner sc-inner--center">
+      <p class="sc-section-title">{{ content.pricing.heading }}</p>
+      <div class="sc-pricing-box">
+        <span class="sc-pricing-label">{{ content.pricing.label }}</span>
+        <div class="sc-pricing-amount">
+          <span class="sc-price">{{ content.pricing.price }}</span>
+          <span class="sc-period">{{ content.pricing.period }}</span>
+        </div>
+        <ul class="sc-pricing-features">
+          {% for feat in content.pricing.features %}
+          <li>{{ feat }}</li>
+          {% endfor %}
+        </ul>
+        <a class="sc-btn sc-btn--pricing" href="#">{{ content.pricing.cta_label }}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 6: Final CTA -->
+  <section class="sc-card sc-card--cta">
+    <div class="sc-inner sc-inner--center">
+      <h2 class="sc-headline sc-headline--cta">{{ content.final_cta.heading }}</h2>
+      <p class="sc-tagline sc-tagline--cta">{{ content.final_cta.body }}</p>
+      <a class="sc-btn sc-btn--cta" href="#">{{ content.final_cta.cta_label }}</a>
+      {% if content.final_cta.sub_text %}
+      <p class="sc-sub-text">{{ content.final_cta.sub_text }}</p>
+      {% endif %}
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "@linkdrop/remotion",
+  "version": "0.1.0",
+  "description": "LinkDrop V3 — Remotion 패럴랙스 렌더러",
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs",
+    "preview": "npx remotion preview src/index.tsx"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.290",
+    "@remotion/media-utils": "^4.0.290",
+    "@remotion/renderer": "4.0.290",
+    "pixi.js": "^8.18.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.290"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.4.5"
+  }
+}

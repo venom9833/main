@@ -1,0 +1,23 @@
+{
+  "fontName": "Noto Serif KR",
+  "fontFamilyWeb": "\"Noto Serif KR\", serif",
+  "fontSize1080": 38,
+  "fontSize1080ByRatio": {
+    "16:9": 39,
+    "9:16": 37
+  },
+  "primaryColourASS": "&H00FFFFFF",
+  "outlineColourASS": "&H00000000",
+  "backColourASS": "&H80000000",
+  "borderStyle": 3,
+  "outline": 2,
+  "shadow": 1,
+  "alignment": 2,
+  "bold": 0,
+  "marginVPercent": 13,
+  "wrapMaxChars": {
+    "16:9": 45,
+    "9:16": 25
+  },
+  "msPerChar": 60
+}

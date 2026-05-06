@@ -1,0 +1,91 @@
+{
+  "name": "김지수",
+  "job_title": "시니어 풀스택 개발자",
+  "tagline": "사용자 중심의 제품을 만드는 개발자입니다",
+  "contact": {
+    "email": "jisu.kim@example.com",
+    "phone": "010-1234-5678",
+    "location": "서울시 강남구",
+    "linkedin": "linkedin.com/in/jisukim",
+    "github": "github.com/jisukim-dev"
+  },
+  "summary": "React와 Node.js를 주력으로 5년간 스타트업과 중견기업에서 서비스를 개발했습니다. 사용자 경험 개선과 성능 최적화에 관심이 많으며, 팀과 함께 빠르게 성장하는 환경을 즐깁니다. 최근에는 AI 기반 기능 통합과 대규모 트래픽 처리 경험을 쌓았습니다.",
+  "skills": [
+    { "category": "프론트엔드", "items": ["React", "TypeScript", "Next.js", "Vue.js", "Tailwind CSS"] },
+    { "category": "백엔드", "items": ["Node.js", "Express", "FastAPI", "PostgreSQL", "Redis"] },
+    { "category": "DevOps", "items": ["Docker", "GitHub Actions", "Vercel", "AWS EC2", "Nginx"] },
+    { "category": "협업 도구", "items": ["Git", "Figma", "Notion", "Jira", "Slack"] }
+  ],
+  "experience": [
+    {
+      "company": "테크스타트업 A",
+      "role": "시니어 풀스택 개발자",
+      "period": "2022.03 – 현재",
+      "location": "서울",
+      "bullets": [
+        "React + TypeScript 기반 대시보드 리팩토링으로 초기 로딩 속도 40% 개선",
+        "Node.js REST API 설계 및 PostgreSQL 쿼리 최적화 (응답 속도 65% 향상)",
+        "팀 내 코드 리뷰 문화 도입, PR 머지 시간 평균 2일 → 6시간으로 단축",
+        "신규 회원 온보딩 플로우 재설계로 D+7 리텐션 22% 상승"
+      ]
+    },
+    {
+      "company": "IT기업 B",
+      "role": "프론트엔드 개발자",
+      "period": "2021.01 – 2022.02",
+      "location": "서울",
+      "bullets": [
+        "Vue.js 기반 어드민 패널 전체 개발 (기획부터 배포까지 단독 담당)",
+        "반응형 UI 컴포넌트 라이브러리 구축, 개발 속도 30% 향상",
+        "크로스브라우저 이슈 해결 및 웹 접근성 AA 등급 달성"
+      ]
+    },
+    {
+      "company": "에이전시 C",
+      "role": "UI 개발자 (인턴)",
+      "period": "2020.06 – 2020.12",
+      "location": "부산",
+      "bullets": [
+        "HTML/CSS/JavaScript 기반 랜딩페이지 5개 납품",
+        "디자이너와 협업하여 픽셀 퍼펙트 구현",
+        "Git 기반 협업 프로세스 도입 및 코드 리뷰 참여"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "한국대학교",
+      "degree": "컴퓨터공학과 학사",
+      "period": "2016.03 – 2020.02",
+      "note": "학점 3.9/4.5, 졸업논문 우수상"
+    }
+  ],
+  "projects": [
+    {
+      "name": "LinkDrop — 콘텐츠 자동화 플랫폼",
+      "description": "시나리오 생성부터 영상 렌더까지 AI 기반 파이프라인을 구축한 SaaS 사이드 프로젝트. MAU 2,000명 달성.",
+      "tech": ["Next.js", "FastAPI", "Supabase", "Remotion"],
+      "link": "https://github.com/jisukim-dev/linkdrop"
+    },
+    {
+      "name": "오픈소스 기여: TanStack Query",
+      "description": "캐시 무효화 버그 수정 PR 머지 (GitHub star 35k+ 레포). 타입 안전성 개선 패치 추가 기여.",
+      "tech": ["React", "TypeScript"],
+      "link": "https://github.com/TanStack/query"
+    },
+    {
+      "name": "실시간 협업 화이트보드",
+      "description": "WebSocket 기반 다중 사용자 실시간 드로잉 앱. 동시 접속 100명 처리 최적화 및 오프라인 동기화 구현.",
+      "tech": ["React", "Socket.io", "Canvas API", "Redis"],
+      "link": "https://github.com/jisukim-dev/collab-board"
+    }
+  ],
+  "certifications": [
+    { "name": "AWS Solutions Architect Associate", "issuer": "Amazon Web Services", "year": "2023" },
+    { "name": "정보처리기사", "issuer": "한국산업인력공단", "year": "2020" }
+  ],
+  "languages": [
+    { "lang": "한국어", "level": "원어민" },
+    { "lang": "영어", "level": "비즈니스 커뮤니케이션 가능 (TOEIC 880)" }
+  ]
+}

@@ -1,3 +1,9 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 import { useState } from 'react';
 
@@ -69,8 +75,10 @@ export default function KeyframeSetupEditor({ seriesId, currentProvider, onConfi
   return (
     <div style={{
       marginTop: '1.5rem',
-      background: 'rgba(255,255,255,0.025)',
-      border: '1px solid rgba(255,255,255,0.1)',
+      background: 'rgba(8,10,22,0.82)',
+      backdropFilter: 'blur(18px)',
+      WebkitBackdropFilter: 'blur(18px)',
+      border: '1px solid rgba(255,255,255,0.14)',
       borderRadius: '16px',
       overflow: 'hidden',
     }}>

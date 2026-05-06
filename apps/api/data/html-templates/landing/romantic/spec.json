@@ -1,0 +1,80 @@
+{
+  "id": "landing/romantic",
+  "mode": "skeleton",
+  "label": "로맨틱 감성 랜딩페이지",
+  "description": "드라마틱 풀스크린 히어로 + 감성 스토리텔링 + 갤러리 + 무한 ticker. 영화·드라마·크리에이티브 스튜디오에 적합.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "background": "#0a0a0a",
+    "text_primary": "#f5f0e8",
+    "text_muted": "rgba(245,240,232,0.55)",
+    "accent_gold": "#c9a96e",
+    "accent_rose": "#e87c8d"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["brand", "hero", "about", "works", "contact"],
+    "properties": {
+      "brand": {"type": "string"},
+      "hero": {
+        "type": "object",
+        "required": ["title_line1", "title_line2", "tagline", "cta_label"],
+        "properties": {
+          "eyebrow": {"type": "string", "description": "상단 작은 레이블"},
+          "title_line1": {"type": "string", "description": "제목 1번째 줄"},
+          "title_line2": {"type": "string", "description": "제목 2번째 줄 (이탤릭)"},
+          "tagline": {"type": "string", "description": "감성적 서브타이틀"},
+          "cta_label": {"type": "string"},
+          "hero_img_top": {"type": "string", "description": "히어로 상단 이미지 URL (선택)"},
+          "hero_img_bottom": {"type": "string", "description": "히어로 하단 이미지 URL (선택)"}
+        }
+      },
+      "about": {
+        "type": "object",
+        "required": ["heading", "body"],
+        "properties": {
+          "heading": {"type": "string"},
+          "body": {"type": "string"},
+          "cta_label": {"type": "string"},
+          "img_url": {"type": "string"}
+        }
+      },
+      "ticker_items": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "무한 스크롤 텍스트 밴드 아이템들"
+      },
+      "works": {
+        "type": "object",
+        "required": ["heading", "items"],
+        "properties": {
+          "heading": {"type": "string"},
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 6,
+            "items": {
+              "type": "object",
+              "required": ["title", "category"],
+              "properties": {
+                "title": {"type": "string"},
+                "category": {"type": "string"},
+                "img_url": {"type": "string"}
+              }
+            }
+          }
+        }
+      },
+      "contact": {
+        "type": "object",
+        "required": ["heading", "cta_label"],
+        "properties": {
+          "heading": {"type": "string"},
+          "body": {"type": "string"},
+          "cta_label": {"type": "string"}
+        }
+      }
+    }
+  }
+}

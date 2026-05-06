@@ -468,7 +468,7 @@ export default function KeyframeNlmPage() {
             {/* 씬 코드 배지 */}
             {scene && (
               <div style={{ position: 'absolute', top: 10, left: 10 }}>
-                <span style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', color: '#a78bfa', fontSize: 10, fontWeight: 900, padding: '3px 10px', borderRadius: 6, fontFamily: 'monospace', border: '1px solid rgba(124,58,237,0.3)' }}>
+                <span style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', color: '#a78bfa', fontSize: 10, fontWeight: 900, padding: '3px 10px', borderRadius: 6, fontFamily: "var(--font-en), 'Pretendard', sans-serif", border: '1px solid rgba(124,58,237,0.3)' }}>
                   {scene.sceneCode}
                   {scene.isHook && <span style={{ marginLeft: 6, color: '#f59e0b' }}>HOOK</span>}
                 </span>

@@ -1,0 +1,109 @@
+{
+  "id": "resume",
+  "mode": "skeleton",
+  "label": "이력서",
+  "description": "소프트 그림자로 입체감을 주는 뉴모피즘 이력서",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "bg":           "#eaeef3",
+    "shadow_dark":  "#c2c8d1",
+    "shadow_light": "#ffffff",
+    "text_primary": "#1f2937",
+    "text_secondary":"#6b7280",
+    "accent":       "#2563eb",
+    "accent_light": "#eff6ff"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["person", "summary_heading", "summary", "experience_heading", "experiences", "education_heading", "education", "skills_heading", "skill_groups"],
+    "properties": {
+      "person": {
+        "type": "object",
+        "required": ["name", "title", "email"],
+        "description": "인적 사항",
+        "properties": {
+          "name":     { "type": "string", "description": "이름" },
+          "title":    { "type": "string", "description": "직함·포지션 (예: 시니어 프론트엔드 엔지니어)" },
+          "email":    { "type": "string", "description": "이메일" },
+          "phone":    { "type": "string", "description": "연락처 (선택)" },
+          "location": { "type": "string", "description": "거주 지역 (선택)" },
+          "github":   { "type": "string", "description": "GitHub URL 또는 ID (선택)" },
+          "linkedin": { "type": "string", "description": "LinkedIn URL 또는 ID (선택)" }
+        }
+      },
+      "summary_heading": { "type": "string", "description": "요약 섹션 제목 (예: 자기소개, 요약)" },
+      "summary": { "type": "string", "description": "직무 요약 3~4문장" },
+      "experience_heading": { "type": "string", "description": "경력 섹션 제목" },
+      "experiences": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 4,
+        "description": "경력 사항",
+        "items": {
+          "type": "object",
+          "required": ["role", "company", "period", "bullets"],
+          "properties": {
+            "role":    { "type": "string", "description": "직책" },
+            "company": { "type": "string", "description": "회사명" },
+            "period":  { "type": "string", "description": "재직 기간 (예: 2021.03 — 2023.08)" },
+            "location":{ "type": "string", "description": "근무지 (선택)" },
+            "bullets": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 5,
+              "items": { "type": "string", "description": "주요 업무·성과" }
+            }
+          }
+        }
+      },
+      "education_heading": { "type": "string", "description": "학력 섹션 제목" },
+      "education": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 2,
+        "description": "학력 사항",
+        "items": {
+          "type": "object",
+          "required": ["school", "degree", "period"],
+          "properties": {
+            "school": { "type": "string" },
+            "degree": { "type": "string", "description": "전공·학위 (예: 컴퓨터공학 학사)" },
+            "period": { "type": "string", "description": "재학 기간" },
+            "note":   { "type": "string", "description": "비고 (선택, 예: 수석 졸업, GPA 4.2)" }
+          }
+        }
+      },
+      "skills_heading": { "type": "string", "description": "기술 섹션 제목" },
+      "skill_groups": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 4,
+        "description": "기술 그룹",
+        "items": {
+          "type": "object",
+          "required": ["group", "skills"],
+          "properties": {
+            "group":  { "type": "string" },
+            "skills": { "type": "array", "items": { "type": "string" }, "minItems": 3, "maxItems": 7 }
+          }
+        }
+      },
+      "certifications": {
+        "type": "array",
+        "maxItems": 4,
+        "description": "자격증·수료 (선택)",
+        "items": {
+          "type": "object",
+          "required": ["name", "issuer"],
+          "properties": {
+            "name":   { "type": "string" },
+            "issuer": { "type": "string" },
+            "year":   { "type": "string" }
+          }
+        }
+      },
+      "certifications_heading": { "type": "string", "description": "자격증 섹션 제목 (선택)" }
+    }
+  }
+}

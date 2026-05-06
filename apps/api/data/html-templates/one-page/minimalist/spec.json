@@ -1,0 +1,46 @@
+{
+  "id": "one-page",
+  "label": "원페이지",
+  "version": "2.0.0",
+  "mode": "skeleton",
+  "description": "이름·소개·링크를 담은 미니멀 원페이지. 개인 소개·링크 허브·포트폴리오 진입점으로 사용.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "background":    "#ffffff",
+    "text_primary":  "#111827",
+    "text_secondary":"#6b7280",
+    "accent":        "#6366f1",
+    "accent_light":  "#eef2ff",
+    "divider":       "#f3f4f6",
+    "link_bg":       "#f9fafb",
+    "link_border":   "#e5e7eb",
+    "link_hover_border": "#6366f1"
+  },
+  "content_schema": {
+    "type": "object",
+    "properties": {
+      "name":         { "type": "string", "description": "이름 또는 브랜드명" },
+      "role":         { "type": "string", "description": "직함·역할 (예: UX Designer · Creator)" },
+      "avatar_emoji": { "type": "string", "description": "대표 이모지 1개 (예: 🎨, 💻, 🌿)" },
+      "tagline":      { "type": "string", "description": "핵심 문구 1줄 (25자 내외)" },
+      "about":        { "type": "string", "description": "자기소개 2~3문장" },
+      "links": {
+        "type": "array",
+        "description": "4~8개 링크",
+        "items": {
+          "type": "object",
+          "properties": {
+            "icon":  { "type": "string", "description": "이모지" },
+            "label": { "type": "string", "description": "링크 이름" },
+            "url":   { "type": "string", "description": "URL (없으면 #)" },
+            "desc":  { "type": "string", "description": "한 줄 설명 (선택)" }
+          },
+          "required": ["icon", "label", "url"]
+        }
+      },
+      "footer_text": { "type": "string", "description": "푸터 한 줄 (예: © 2025 이름 · 서울)" }
+    },
+    "required": ["name", "role", "avatar_emoji", "tagline", "about", "links"]
+  }
+}

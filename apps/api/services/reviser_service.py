@@ -165,7 +165,7 @@ async def _restructure_scenes(db, series_id: str, chapter: int) -> None:
             .execute()
         )
         _series_code = s_res.data.get("series_code", "")
-        _art_style = (s_res.data.get("settings") or {}).get("artStyle", "masako")
+        _art_style = (s_res.data.get("settings") or {}).get("artStyle", "polystyle")
         _guest_cast = world.get("guest_cast") or {}
         await _save_scenes(db, series_id, chapter, scenes, _series_code,
                            art_style=_art_style, guest_cast=_guest_cast)

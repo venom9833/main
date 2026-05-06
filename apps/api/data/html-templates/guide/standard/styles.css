@@ -1,0 +1,262 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
+
+:root {
+  --font-base: 'Noto Sans KR', sans-serif;
+}
+
+/* ========================================
+   Guide Template — Fixed Stylesheet
+   ======================================== */
+
+body {
+  background: var(--c-background);
+  color: var(--c-text-primary);
+}
+
+/* --- 레이아웃: 2단 (사이드바 + 메인) --- */
+.guide-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: auto 1fr;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* --- 헤더 배너 --- */
+.guide-header {
+  grid-column: 1 / -1;
+  background: var(--c-accent);
+  color: #fff;
+  padding: 3.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.guide-header::after {
+  content: '';
+  position: absolute;
+  bottom: -30px; right: -30px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.guide-header__meta {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.75;
+}
+.guide-header__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+}
+.guide-header__subtitle {
+  font-size: 1rem;
+  opacity: 0.85;
+  line-height: 1.6;
+  max-width: 560px;
+}
+.guide-header__author {
+  margin-top: 1.5rem;
+  font-size: 0.82rem;
+  opacity: 0.7;
+}
+
+/* --- 사이드바 목차 --- */
+.guide-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  background: var(--c-sidebar-bg, #f3ede0);
+  border-right: 1px solid var(--c-sidebar-border, #e2d5c3);
+}
+.guide-sidebar__title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-secondary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--c-card-border);
+}
+.guide-toc { list-style: none; padding: 0; }
+.guide-toc__item { margin-bottom: 0.1rem; }
+.guide-toc__link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--c-text-secondary);
+  transition: all 0.15s;
+}
+.guide-toc__link:hover {
+  background: rgba(180,83,9,0.08);
+  color: var(--c-accent);
+}
+.guide-toc__num {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--c-accent);
+  opacity: 0.7;
+  min-width: 20px;
+}
+
+/* --- 메인 콘텐츠 --- */
+.guide-main {
+  padding: 3rem 4rem;
+}
+
+/* --- 챕터 --- */
+.guide-chapter { margin-bottom: 4rem; }
+.guide-chapter__label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--c-accent);
+  margin-bottom: 0.4rem;
+}
+.guide-chapter__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+.guide-chapter__subtitle {
+  font-size: 0.95rem;
+  color: var(--c-text-secondary);
+  margin-bottom: 1.25rem;
+}
+.guide-divider {
+  border: none;
+  border-bottom: 1.5px dashed var(--c-accent-border);
+  opacity: 0.35;
+  margin: 1.25rem 0 1.75rem;
+}
+.guide-overview {
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--c-text-primary);
+  margin-bottom: 2rem;
+}
+
+/* --- STEP 블록 --- */
+.guide-step {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: var(--c-card-background);
+  border-radius: 12px;
+  border: 1px solid var(--c-card-border);
+}
+.guide-step__num {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.guide-step__content {}
+.guide-step__label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-accent);
+  margin-bottom: 0.25rem;
+}
+.guide-step__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.guide-step__body {
+  font-size: 0.9rem;
+  color: var(--c-text-secondary);
+  line-height: 1.8;
+}
+
+/* --- CALLOUT 블록 (METAPHOR/ANALOGY/SECURITY) --- */
+.guide-callout {
+  padding: 1.25rem 1.5rem;
+  background: var(--c-special-box-bg);
+  border: 1.5px dashed var(--c-special-box-border);
+  border-radius: 10px;
+  margin: 1.5rem 0;
+}
+.guide-callout__type {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-accent);
+  margin-bottom: 0.5rem;
+}
+.guide-callout__body {
+  font-size: 0.9rem;
+  color: var(--c-text-primary);
+  line-height: 1.8;
+  font-style: italic;
+}
+
+/* --- TIP 블록 --- */
+.guide-tip {
+  padding: 0.875rem 1.25rem;
+  background: var(--c-accent-light);
+  border-left: 3px solid var(--c-accent-border);
+  border-radius: 0 8px 8px 0;
+  margin: 1.25rem 0;
+}
+.guide-tip__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--c-accent);
+  margin-bottom: 0.3rem;
+}
+.guide-tip__body {
+  font-size: 0.88rem;
+  color: var(--c-text-primary);
+  line-height: 1.7;
+}
+
+/* --- 반응형 --- */
+@media (max-width: 860px) {
+  .guide-layout { grid-template-columns: 1fr; }
+  .guide-sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--c-card-border);
+  }
+  .guide-main { padding: 2rem 1.5rem; }
+  .guide-header { padding: 2rem 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .guide-header { padding: 1.5rem 1.25rem; }
+  .guide-header__meta { flex-direction: column; gap: 0.4rem; }
+  .guide-sidebar { padding: 1.25rem 1rem; }
+  .guide-main { padding: 1.5rem 1rem; }
+  .guide-step { flex-direction: column; gap: 0.75rem; padding: 1.25rem; }
+  .guide-step__num { width: 28px; height: 28px; font-size: 0.72rem; }
+  .guide-callout { padding: 1rem 1.1rem; }
+  .guide-chapter { margin-bottom: 2.5rem; }
+}

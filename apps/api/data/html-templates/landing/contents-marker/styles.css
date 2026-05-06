@@ -1,0 +1,350 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Noto+Sans+KR:wght@400&display=swap');
+
+:root {
+  --font-base: 'Noto Sans KR', sans-serif;
+  --font-serif: 'Merriweather', serif;
+}
+
+/* Landing ContentsMarker — 랜딩페이지 전용 스타일 */
+
+body {
+  background: var(--c-background);
+  color: var(--c-text-primary);
+  font-family: var(--font-base);
+  line-height: 1.7;
+}
+
+/* ─── 히어로 ─── */
+.ld-eyebrow {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--c-accent);
+  background: var(--c-surface-alt);
+  padding: 0.25rem 0.65rem;
+  margin-bottom: 1.25rem;
+}
+
+.ld-headline {
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  margin: 0 0 1rem;
+}
+
+.ld-tagline {
+  font-size: 1rem;
+  color: var(--c-text-secondary);
+  margin: 0 0 1.75rem;
+  max-width: 52ch;
+  line-height: 1.65;
+}
+
+.ld-hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--c-divider);
+  margin-bottom: 2rem;
+}
+
+/* ─── CTA 버튼 ─── */
+.ld-cta-btn {
+  display: inline-block;
+  background: var(--c-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.7rem 1.5rem;
+  text-decoration: none;
+  border-radius: 0;
+  transition: background 0.18s ease;
+}
+.ld-cta-btn:hover { background: var(--c-accent-dark); }
+
+.ld-cta-sub {
+  font-size: 0.72rem;
+  color: var(--c-text-secondary);
+  margin: 0;
+}
+
+/* ─── 섹션 공통 ─── */
+article section {
+  margin-bottom: 3rem;
+}
+
+article h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0 0 1.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--c-divider);
+}
+article section:first-of-type h2 { border-top: none; padding-top: 0; }
+
+/* ─── 기능 그리드 ─── */
+.ld-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--c-divider);
+  border: 1px solid var(--c-divider);
+}
+
+.ld-feature-card {
+  background: var(--c-background);
+  padding: 1.25rem;
+}
+
+.ld-feature-icon {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.ld-feature-card h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.45rem;
+}
+
+.ld-feature-card p {
+  font-size: 0.825rem;
+  color: var(--c-text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ─── 이용 단계 ─── */
+.ld-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ld-step {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--c-divider);
+}
+.ld-step:first-child { padding-top: 0; }
+.ld-step:last-child { border-bottom: none; }
+
+.ld-step-num {
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: var(--c-accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  margin-top: 0.05rem;
+}
+
+.ld-step-body h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+}
+.ld-step-body p {
+  font-size: 0.825rem;
+  color: var(--c-text-secondary);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ─── 후기 ─── */
+.ld-testimonial-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ld-testimonial {
+  background: var(--c-surface);
+  border-left: 3px solid var(--c-accent);
+  margin: 0;
+  padding: 1.1rem 1.25rem;
+}
+.ld-testimonial > p {
+  font-size: 0.875rem;
+  color: var(--c-text-primary);
+  margin: 0 0 0.75rem;
+  font-style: italic;
+  line-height: 1.65;
+}
+.ld-testimonial footer {
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.ld-testimonial footer strong { color: var(--c-text-primary); }
+.ld-testimonial-role { color: var(--c-text-secondary); }
+
+/* ─── 가격 ─── */
+.ld-pricing-card {
+  border: 1px solid var(--c-divider);
+  padding: 1.5rem;
+  max-width: 380px;
+}
+
+.ld-pricing-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.ld-pricing-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--c-text-secondary);
+}
+
+.ld-pricing-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--c-accent);
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+}
+
+.ld-pricing-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--c-divider);
+}
+
+.ld-price {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.ld-period {
+  font-size: 0.825rem;
+  color: var(--c-text-secondary);
+}
+
+.ld-pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ld-pricing-features li {
+  font-size: 0.825rem;
+  padding-left: 1.2rem;
+  position: relative;
+  color: var(--c-text-secondary);
+}
+.ld-pricing-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--c-accent);
+  font-weight: 700;
+}
+
+.ld-pricing-note {
+  font-size: 0.7rem;
+  color: var(--c-text-secondary);
+  margin: 0;
+}
+
+/* ─── FAQ ─── */
+.ld-faq-item {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--c-divider);
+}
+.ld-faq-item:last-child { border-bottom: none; }
+
+.ld-faq-item h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+.ld-faq-item p {
+  font-size: 0.825rem;
+  color: var(--c-text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ─── 마지막 CTA ─── */
+.ld-final-cta {
+  grid-column: 2;
+  background: var(--c-surface-alt);
+  padding: 2.5rem 2rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+.ld-final-cta h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.75rem;
+}
+.ld-final-cta p {
+  font-size: 0.9rem;
+  color: var(--c-text-secondary);
+  margin: 0 0 1.5rem;
+  max-width: 44ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ─── 푸터 ─── */
+.cm-footer {
+  grid-column: 2;
+  padding: 1.5rem 0;
+  font-size: 0.72rem;
+  color: var(--c-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 768px) {
+  .ld-final-cta { grid-column: 1; }
+  .cm-footer { grid-column: 1; }
+  .ld-feature-grid { grid-template-columns: 1fr; }
+  .ld-pricing-card { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .ld-headline { font-size: clamp(1.6rem, 7vw, 2.25rem); }
+  .ld-tagline { font-size: 0.9rem; }
+  .ld-cta-btn { display: block; text-align: center; }
+  .ld-final-cta { padding: 2rem 1.25rem; }
+  .ld-final-cta h2 { font-size: 1.25rem; }
+}
+
+/* ─── 인쇄 ─── */
+@media print {
+  table-of-contents { display: none; }
+  .cm-layout { grid-template-columns: 1fr; }
+  .cm-header, .cm-main, .ld-final-cta, .cm-footer { grid-column: 1; }
+}

@@ -1,4 +1,52 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(grep -n \"wav\\\\|tts_url\\\\|srt_url\\\\|audio\" c:/LinkDropV3/supabase/migrations/*.sql)",
+      "mcp__claude_ai_Supabase__apply_migration",
+      "Bash(.venv/Scripts/python.exe -c \"import requests; print\\('requests OK'\\)\")",
+      "Bash(.venv/Scripts/python.exe -c \"import dotenv; print\\('dotenv OK'\\)\")",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "Bash(/c/LinkDropV3/apps/api/.venv/Scripts/python.exe -X utf8 -c ':*)",
+      "mcp__linkdrop-api__get_series",
+      "Bash(mkdir -p ~/.claude/skills/spec)",
+      "Bash(mkdir -p ~/.claude/skills/plan)",
+      "Bash(mkdir -p ~/.claude/skills/test)",
+      "Bash(mkdir -p ~/.claude/skills/build)",
+      "Bash(mkdir -p ~/.claude/skills/code-simplify)",
+      "Bash(mkdir -p ~/.claude/commands)",
+      "Bash(cp /tmp/agent-skills/.claude/commands/spec.md ~/.claude/commands/spec.md)",
+      "Bash(cp /tmp/agent-skills/.claude/commands/plan.md ~/.claude/commands/plan.md)",
+      "Bash(cp /tmp/agent-skills/.claude/commands/test.md ~/.claude/commands/test.md)",
+      "Bash(cp /tmp/agent-skills/.claude/commands/build.md ~/.claude/commands/build.md)",
+      "Bash(apps/api/.venv/Scripts/python.exe -c \"import edge_tts; print\\('edge-tts OK'\\)\")",
+      "Bash(apps/api/.venv/Scripts/python.exe /c/tmp/tts_samples/gen.py)",
+      "Bash(apps/api/.venv/Scripts/edge-tts.exe --voice ko-KR-InJoonNeural --text \"안녕하세요 테스트입니다\" --write-media /c/tmp/tts_samples/test.mp3)",
+      "Bash(apps/api/.venv/Scripts/edge-tts.exe --list-voices)",
+      "Bash(apps/api/.venv/Scripts/edge-tts.exe --voice ko-KR-InJoonNeural --text '저는 오늘 이곳에 처음 왔습니다. 이 사건이 단순한 사고가 아닐 수 있다는 생각이 들었습니다.' --write-media /c/tmp/tts_samples/남성01_InJoon_나레이터.mp3)",
+      "Bash(apps/api/.venv/Scripts/edge-tts.exe --voice ko-KR-HyunsuMultilingualNeural --text '저는 오늘 이곳에 처음 왔습니다. 이 사건이 단순한 사고가 아닐 수 있다는 생각이 들었습니다.' --write-media /c/tmp/tts_samples/남성02_Hyunsu_강한남성.mp3)",
+      "Bash(apps/api/.venv/Scripts/edge-tts.exe --voice ko-KR-SunHiNeural --text '저는 오늘 이곳에 처음 왔습니다. 이 사건이 단순한 사고가 아닐 수 있다는 생각이 들었습니다.' --write-media /c/tmp/tts_samples/여성01_SunHi_표준여성.mp3)",
+      "Bash(apps/api/.venv/Scripts/python.exe -c ':*)",
+      "Bash(.venv/Scripts/python -X utf8 -m py_compile services/script_service.py services/casting_service.py services/wiki_service.py)",
+      "Bash(.venv/Scripts/python -X utf8 -m py_compile services/script_service.py)",
+      "Bash(C:/LinkDropV3/apps/api/.venv/Scripts/python.exe -c \"import psycopg2; print\\('psycopg2 OK:', psycopg2.__version__\\)\")",
+      "Bash(C:/LinkDropV3/apps/api/.venv/Scripts/python.exe -c ' *)",
+      "Bash(C:/LinkDropV3/apps/api/.venv/Scripts/python.exe -X utf8 -c ' *)",
+      "Bash(nslookup db.fmjuhbcxkfuilvvdwvix.supabase.co)",
+      "Bash(nslookup supabase.co)",
+      "Bash(uipro init *)",
+      "Bash(uipro --help)",
+      "WebFetch(domain:www.muapi.ai)",
+      "WebFetch(domain:muapi.ai)",
+      "Bash(C:/LinkDropV3/apps/api/.venv/Scripts/python.exe -c \"import huggingface_hub; print\\('설치됨:', huggingface_hub.__version__\\)\")",
+      "Bash(C:/LinkDropV3/apps/api/.venv/Scripts/pip install *)",
+      "Bash(apps/.venv/Scripts/python.exe -X utf8 -c ' *)",
+      "Bash(apps/api/.venv/Scripts/python.exe -X utf8 -c ' *)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  },
+  "model": "claude-sonnet-4-6",
   "hooks": {
     "PreToolUse": [
       {
@@ -9,8 +57,7 @@
             "command": "npx --yes block-no-verify@1.1.2",
             "timeout": 30
           }
-        ],
-        "description": "--no-verify 플래그 차단 (CLAUDE.md 규칙 강제)"
+        ]
       },
       {
         "matcher": "Bash",
@@ -20,8 +67,7 @@
             "command": "node .claude/hooks/pre-commit-quality.js",
             "timeout": 30
           }
-        ],
-        "description": "git commit 전 secrets/console.log/커밋 메시지 검사"
+        ]
       },
       {
         "matcher": "Bash|Write|Edit",
@@ -29,11 +75,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/suggest-compact.js",
-            "async": true,
-            "timeout": 5
+            "timeout": 5,
+            "async": true
           }
-        ],
-        "description": "도구 호출 횟수 카운팅 — 임계값 도달 시 /compact 제안"
+        ]
       }
     ],
     "PostToolUse": [
@@ -48,7 +93,6 @@
       }
     ]
   },
-  "model": "claude-sonnet-4-6",
   "smallModel": "claude-haiku-4-5-20251001",
   "modelAliases": {
     "haiku": {

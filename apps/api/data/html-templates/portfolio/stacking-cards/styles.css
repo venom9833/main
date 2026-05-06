@@ -1,0 +1,375 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-base: 'DM Sans', 'Pretendard', sans-serif;
+}
+
+/* Portfolio StackingCards — 개인 포트폴리오 전용 스타일 */
+
+body { font-family: var(--font-base); }
+
+/* ════════════════════════════════════════
+   카드별 배경
+   1 Identity    : 딥 퍼플 (강렬·기억에 남는)
+   2 Work        : 흰색
+   3 Skills      : 연 바이올렛
+   4 Process     : 흰색
+   5 Testimonials: 바이올렛 (임팩트)
+   6 Contact     : 딥 퍼플 (대칭 클로징)
+════════════════════════════════════════ */
+
+.sc-card--pf-identity     { background: #1e1033; color: var(--c-text-on-dark); }
+.sc-card--pf-work         { background: #ffffff; color: var(--c-text-on-light); }
+.sc-card--pf-skills       { background: #faf5ff; color: var(--c-text-on-light); }
+.sc-card--pf-process      { background: #ffffff; color: var(--c-text-on-light); }
+.sc-card--pf-testimonials { background: #5b21b6; color: #fff; }
+.sc-card--pf-contact      { background: #1e1033; color: var(--c-text-on-dark); }
+
+/* ─── Card 1: Identity ─── */
+.pf-identity-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding-top: 4rem;
+  padding-bottom: 3rem;
+}
+
+.pf-identity-top { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+.pf-avatar {
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.pf-name {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.0;
+  margin: 0 0 0.4rem;
+}
+
+.pf-role {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--c-accent);
+  margin: 0 0 0.3rem;
+}
+
+.pf-location {
+  font-size: 0.72rem;
+  color: var(--c-text-muted-dark);
+  margin: 0 0 1rem;
+}
+
+.pf-tagline {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--c-text-muted-dark);
+  margin: 0;
+  max-width: 44ch;
+  line-height: 1.6;
+}
+
+/* 팩트 행 */
+.pf-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 1.5rem;
+}
+
+.pf-fact {
+  padding-right: 1.5rem;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+.pf-fact:last-child { border-right: none; padding-right: 0; }
+
+.pf-fact-value {
+  display: block;
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--c-accent);
+  line-height: 1.1;
+}
+
+.pf-fact-label {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--c-text-muted-dark);
+  margin-top: 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ─── 섹션 레이블 ─── */
+.sc-card--pf-work .sc-section-title         { color: var(--c-text-muted-light); }
+.sc-card--pf-skills .sc-section-title       { color: var(--c-text-muted-light); }
+.sc-card--pf-process .sc-section-title      { color: var(--c-text-muted-light); }
+.sc-card--pf-testimonials .sc-section-title { color: rgba(255,255,255,0.45); }
+.sc-card--pf-contact .sc-section-title      { color: var(--c-text-muted-dark); }
+
+/* ─── Card 2: 프로젝트 ─── */
+.pf-projects {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid #e5e7eb;
+}
+
+.pf-project {
+  padding: 1.4rem;
+  border-right: 1px solid #e5e7eb;
+}
+.pf-project:last-child { border-right: none; }
+
+.pf-proj-cat {
+  display: inline-block;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--c-accent-dark);
+  background: #f5f3ff;
+  padding: 0.15rem 0.42rem;
+  margin-bottom: 0.6rem;
+}
+
+.pf-proj-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+.pf-proj-desc {
+  font-size: 0.78rem;
+  color: var(--c-text-muted-light);
+  margin: 0 0 0.7rem;
+  line-height: 1.55;
+}
+
+.pf-proj-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.pf-tag {
+  font-size: 0.6rem;
+  padding: 0.15rem 0.4rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  color: var(--c-text-muted-light);
+}
+
+.pf-proj-result {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--c-accent-dark);
+  margin: 0;
+}
+
+/* ─── Card 3: 기술 ─── */
+.pf-skill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pf-skill-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.pf-skill-label {
+  flex-shrink: 0;
+  width: 80px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-muted-light);
+  padding-top: 0.3rem;
+}
+
+.pf-skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pf-skill-tag {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.6rem;
+  background: #fff;
+  border: 1px solid #e9d5ff;
+  color: var(--c-accent-dark);
+  font-weight: 500;
+}
+
+/* ─── Card 4: 프로세스 ─── */
+.pf-process {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.pf-proc-step {
+  padding: 1.4rem;
+  background: #fafafa;
+  border-top: 2px solid var(--c-accent-dark);
+  position: relative;
+}
+
+.pf-proc-num {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--c-accent-dark);
+  opacity: 0.4;
+}
+
+.pf-proc-icon {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.pf-proc-step h2 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.pf-proc-step p {
+  font-size: 0.775rem;
+  color: var(--c-text-muted-light);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ─── Card 5: 후기 ─── */
+.pf-testimonials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.pf-testimonial {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 1.4rem 1.5rem;
+  margin: 0;
+}
+
+.pf-testimonial > p {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin: 0 0 1.1rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.92);
+}
+
+.pf-testimonial footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.pf-testimonial footer strong {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.pf-testimonial footer span {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+/* ─── Card 6: Contact ─── */
+.pf-contact-inner {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+}
+
+.pf-contact-top { flex: 1; }
+
+.pf-contact-heading {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin: 0 0 0.9rem;
+}
+
+.pf-contact-body {
+  font-size: 0.95rem;
+  color: var(--c-text-muted-dark);
+  margin: 0 0 2rem;
+  line-height: 1.65;
+  max-width: 38ch;
+}
+
+.pf-btn--contact {
+  background: var(--c-accent);
+  color: #1e1033;
+  font-weight: 700;
+}
+
+.pf-contact-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.pf-contact-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.825rem;
+}
+
+.pf-contact-item > span:first-child { font-size: 1rem; flex-shrink: 0; }
+
+.pf-contact-label {
+  display: block;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-muted-dark);
+  margin-bottom: 0.1rem;
+}
+
+.pf-contact-value {
+  color: var(--c-text-on-dark);
+  font-size: 0.82rem;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 640px) {
+  .pf-projects { grid-template-columns: 1fr; }
+  .pf-project { border-right: none; border-bottom: 1px solid #e5e7eb; }
+  .pf-project:last-child { border-bottom: none; }
+
+  .pf-process { grid-template-columns: 1fr 1fr; }
+  .pf-testimonials { grid-template-columns: 1fr; }
+
+  .pf-contact-inner { flex-direction: column; gap: 2rem; align-items: flex-start; }
+  .pf-facts { grid-template-columns: 1fr; gap: 1rem; }
+  .pf-fact { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0 0 1rem; }
+  .pf-fact:last-child { border-bottom: none; }
+}

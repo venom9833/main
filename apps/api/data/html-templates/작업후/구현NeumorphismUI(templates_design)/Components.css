@@ -1,0 +1,75 @@
+* {
+  font-family: "Inter", sans-serif;
+}
+:root {
+  --bg-color: #e0e5ec;
+  --shadow-light: #ffffff;
+  --shadow-dark: #a3b1c6;
+  --primary: #6366f1;
+  --text-dark: #374151;
+  --text-muted: #6b7280;
+}
+body {
+  background-color: var(--bg-color);
+}
+
+/* Neumorphic Effects */
+.neu-flat {
+  background: #e0e5ec;
+  box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+}
+.neu-pressed {
+  background: #e0e5ec;
+  box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+}
+.neu-convex {
+  background: linear-gradient(145deg, #f0f5fc, #cacfd6);
+  box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+}
+.neu-concave {
+  background: linear-gradient(145deg, #cacfd6, #f0f5fc);
+  box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+}
+
+/* Button Hover States */
+.neu-btn:hover {
+  box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
+}
+.neu-btn:active {
+  box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+}
+
+/* Custom Range Slider */
+.neu-range {
+  -webkit-appearance: none;
+  background: transparent;
+}
+.neu-range::-webkit-slider-track {
+  height: 8px;
+  background: #e0e5ec;
+  border-radius: 4px;
+  box-shadow: inset 2px 2px 4px #a3b1c6, inset -2px -2px 4px #ffffff;
+}
+.neu-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(145deg, #f0f5fc, #cacfd6);
+  border-radius: 50%;
+  box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
+  cursor: pointer;
+  margin-top: -8px;
+}
+
+/* Progress Animation */
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 75%;
+  }
+}
+.animate-progress {
+  animation: progress 2s ease-out forwards;
+}

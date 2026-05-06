@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.title }} — {{ content.publication }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+
+<!-- ─── MASTHEAD ─── -->
+<header class="le-masthead">
+  <div class="le-masthead-inner">
+    <div class="le-publication">{{ content.publication }}</div>
+    <div class="le-masthead-meta">
+      {% if content.issue %}<span>{{ content.issue }}</span>{% endif %}
+      {% if content.date %}<span>{{ content.date }}</span>{% endif %}
+    </div>
+  </div>
+</header>
+
+<!-- ─── ARTICLE ─── -->
+<main class="le-article">
+
+  <!-- ARTICLE HEADER -->
+  <div class="le-article-header">
+    {% if content.category %}
+    <span class="le-category">{{ content.category }}</span>
+    {% endif %}
+    <h1 class="le-title">{{ content.title }}</h1>
+    {% if content.subtitle %}
+    <p class="le-subtitle">{{ content.subtitle }}</p>
+    {% endif %}
+    <div class="le-byline">
+      <span class="le-author-name">{{ content.author.name }}</span>
+      {% if content.date %}<span class="le-byline-date">{{ content.date }}</span>{% endif %}
+    </div>
+    {% if content.author.bio %}
+    <p class="le-author-bio">{{ content.author.bio }}</p>
+    {% endif %}
+  </div>
+
+  <!-- ARTICLE BODY -->
+  <div class="le-body">
+    {% set midpoint = (content.body | length) // 2 %}
+    {% for para in content.body %}
+      {% if loop.first %}
+        <p class="le-first-p">{{ para }}</p>
+      {% else %}
+        <p>{{ para }}</p>
+      {% endif %}
+      {% if content.pull_quote and loop.index == midpoint %}
+      <blockquote class="le-pull-quote">{{ content.pull_quote }}</blockquote>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- TAGS -->
+  {% if content.tags %}
+  <div class="le-tags">
+    {% for tag in content.tags %}
+    <span class="le-tag">{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer class="le-footer">
+  <span class="le-footer-pub">{{ content.publication }}</span>
+  {% if content.date %}<span>{{ content.date }}</span>{% endif %}
+</footer>
+
+</body>
+</html>

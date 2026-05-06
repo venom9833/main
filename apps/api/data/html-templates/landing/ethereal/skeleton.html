@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ content.name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+</head>
+<body class="is-preload">
+
+<div id="page-wrapper">
+  <div id="wrapper">
+
+    <!-- ── HERO BANNER ─────────────────────────────────────────────── -->
+    <section class="panel banner right">
+      <div class="content color0 span-3-75">
+        <h1 class="major">{{ content.name }}</h1>
+        <p style="font-size:1.05rem; font-weight:400; margin-bottom:0.5rem; opacity:0.85;">{{ content.role }}</p>
+        <p style="white-space:pre-line; margin-bottom:0;">{{ content.intro }}</p>
+        <ul class="actions">
+          <li>
+            <a href="#about" class="button primary color1 circle icon solid fa-angle-right" style="margin-right:0.75rem;"></a>
+            <a href="#contact" class="button">{{ content.cta_text }}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="image filtered span-1-75" data-position="25% 25%">
+        {% if content.hero_image %}
+        <img src="{{ content.hero_image }}" alt="{{ content.name }}" />
+        {% else %}
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#353865 0%,#726193 50%,#e37b7c 100%);"></div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ── ABOUT SPOTLIGHT ─────────────────────────────────────────── -->
+    <section class="panel spotlight large right" id="about">
+      <div class="content span-5">
+        <h2 class="major">{{ content.about.headline }}</h2>
+        <p>{{ content.about.body }}</p>
+      </div>
+      <div class="image filtered tinted" data-position="top left">
+        {% if content.about.image_url %}
+        <img src="{{ content.about.image_url }}" alt="{{ content.about.headline }}" />
+        {% else %}
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#726193 0%,#353865 100%);"></div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ── SKILLS ICON GRID ────────────────────────────────────────── -->
+    <section class="panel color1" id="skills">
+      <div class="intro joined">
+        <h2 class="major">전문 분야</h2>
+        <p>다년간의 경험으로 쌓아온 핵심 역량입니다.</p>
+      </div>
+      <div class="inner">
+        <ul class="grid-icons three connected">
+          {% for skill in content.skills %}
+          <li>
+            <span class="icon solid {{ skill.icon }}">
+              <span class="label">{{ skill.label }}</span>
+            </span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── GALLERY ─────────────────────────────────────────────────── -->
+    <section class="panel" id="works">
+      <div class="intro color2">
+        <h2 class="major">작업물</h2>
+        <p>클릭하면 크게 볼 수 있습니다.</p>
+      </div>
+      <div class="gallery">
+        {% set works = content.works %}
+        {% if works|length >= 1 %}
+        <div class="group span-4">
+          <a href="{{ works[0].url }}" class="image filtered span-3" data-position="{{ works[0].position | default('center') }}">
+            <img src="{{ works[0].url }}" alt="{{ works[0].alt | default('') }}" />
+          </a>
+          {% if works|length >= 3 %}
+          <a href="{{ works[2].url }}" class="image filtered span-1-5" data-position="{{ works[2].position | default('center') }}">
+            <img src="{{ works[2].url }}" alt="{{ works[2].alt | default('') }}" />
+          </a>
+          {% endif %}
+          {% if works|length >= 4 %}
+          <a href="{{ works[3].url }}" class="image filtered span-1-5" data-position="{{ works[3].position | default('center') }}">
+            <img src="{{ works[3].url }}" alt="{{ works[3].alt | default('') }}" />
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% if works|length >= 2 %}
+        <a href="{{ works[1].url }}" class="image filtered span-2-5" data-position="{{ works[1].position | default('center') }}">
+          <img src="{{ works[1].url }}" alt="{{ works[1].alt | default('') }}" />
+        </a>
+        {% endif %}
+        {% if works|length >= 6 %}
+        <div class="group span-4-5">
+          <a href="{{ works[4].url }}" class="image filtered span-3" data-position="{{ works[4].position | default('top') }}">
+            <img src="{{ works[4].url }}" alt="{{ works[4].alt | default('') }}" />
+          </a>
+          <a href="{{ works[5].url }}" class="image filtered span-1-5" data-position="{{ works[5].position | default('center') }}">
+            <img src="{{ works[5].url }}" alt="{{ works[5].alt | default('') }}" />
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ── CONTACT ─────────────────────────────────────────────────── -->
+    <section class="panel color4-alt" id="contact">
+      <div class="intro color4">
+        <h2 class="major">{{ content.contact.headline }}</h2>
+        <p>{{ content.contact.body }}</p>
+      </div>
+      <div class="inner columns divided">
+        <div class="span-3-25">
+          <form method="post" action="#">
+            <div class="fields">
+              <div class="field half">
+                <label for="name">이름</label>
+                <input type="text" name="name" id="name" placeholder="홍길동" />
+              </div>
+              <div class="field half">
+                <label for="email">이메일</label>
+                <input type="email" name="email" id="email" placeholder="{{ content.contact.email }}" />
+              </div>
+              <div class="field">
+                <label for="message">메시지</label>
+                <textarea name="message" id="message" rows="4" placeholder="안녕하세요, 협업 문의드립니다..."></textarea>
+              </div>
+            </div>
+            <ul class="actions">
+              <li><input type="submit" value="보내기" class="button primary" /></li>
+            </ul>
+          </form>
+        </div>
+        {% if content.contact.links %}
+        <div class="span-1-5">
+          <ul class="contact-icons color1">
+            <li class="icon solid fa-envelope">
+              <a href="mailto:{{ content.contact.email }}">{{ content.contact.email }}</a>
+            </li>
+            {% for link in content.contact.links %}
+            <li class="icon brands {{ link.icon }}">
+              <a href="{{ link.url }}">{{ link.label }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+  </div><!-- /#wrapper -->
+</div><!-- /#page-wrapper -->
+
+<!-- Scroll hint -->
+<div class="scroll-hint">
+  <i class="fas fa-arrows-left-right"></i> 드래그 또는 스크롤
+</div>
+
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+/* breakpoints.js v1.0 | @ajlkn | MIT */
+var breakpoints=function(){"use strict";function e(e){t.init(e)}var t={list:null,media:{},events:[],init:function(e){t.list=e,window.addEventListener("resize",t.poll),window.addEventListener("orientationchange",t.poll),window.addEventListener("load",t.poll),window.addEventListener("fullscreenchange",t.poll)},active:function(e){var n,a,s,i,r,d,c;if(!(e in t.media)){if(">="==e.substr(0,2)?(a="gte",n=e.substr(2)):"<="==e.substr(0,2)?(a="lte",n=e.substr(2)):">"==e.substr(0,1)?(a="gt",n=e.substr(1)):"<"==e.substr(0,1)?(a="lt",n=e.substr(1)):"!"==e.substr(0,1)?(a="not",n=e.substr(1)):(a="eq",n=e),n&&n in t.list)if(i=t.list[n],Array.isArray(i)){if(r=parseInt(i[0]),d=parseInt(i[1]),isNaN(r)){if(isNaN(d))return;c=i[1].substr(String(d).length)}else c=i[0].substr(String(r).length);if(isNaN(r))switch(a){case"gte":s="screen";break;case"lte":s="screen and (max-width: "+d+c+")";break;case"gt":s="screen and (min-width: "+(d+1)+c+")";break;case"lt":s="screen and (max-width: -1px)";break;case"not":s="screen and (min-width: "+(d+1)+c+")";break;default:s="screen and (max-width: "+d+c+")"}else if(isNaN(d))switch(a){case"gte":s="screen and (min-width: "+r+c+")";break;case"lte":s="screen";break;case"gt":s="screen and (max-width: -1px)";break;case"lt":s="screen and (max-width: "+(r-1)+c+")";break;case"not":s="screen and (max-width: "+(r-1)+c+")";break;default:s="screen and (min-width: "+r+c+")"}else switch(a){case"gte":s="screen and (min-width: "+r+c+")";break;case"lte":s="screen and (max-width: "+d+c+")";break;case"gt":s="screen and (min-width: "+(d+1)+c+")";break;case"lt":s="screen and (max-width: "+(r-1)+c+")";break;case"not":s="screen and (max-width: "+(r-1)+c+"), screen and (min-width: "+(d+1)+c+")";break;default:s="screen and (min-width: "+r+c+") and (max-width: "+d+c+")"}}else s="("==i.charAt(0)?"screen and "+i:i;t.media[e]=!!s&&s}return t.media[e]!==!1&&window.matchMedia(t.media[e]).matches},on:function(e,n){t.events.push({query:e,handler:n,state:!1}),t.active(e)&&n()},poll:function(){var e,n;for(e=0;e<t.events.length;e++)n=t.events[e],t.active(n.query)?n.state||(n.state=!0,n.handler()):n.state&&(n.state=!1)}};return e._=t,e.on=function(e,n){t.on(e,n)},e.active=function(e){return t.active(e)},e}();
+</script>
+
+<script>
+/* browser.js v1.0.1 | @ajlkn | MIT */
+var browser=function(){"use strict";var t={name:null,version:null,os:null,osVersion:null,touch:null,mobile:null,_canUse:null,canUse:function(e){t._canUse||(t._canUse=document.createElement("div"));var n=t._canUse.style,r=e.charAt(0).toUpperCase()+e.slice(1);return e in n||"Moz"+r in n||"Webkit"+r in n||"O"+r in n||"ms"+r in n},init:function(){for(var e=navigator.userAgent,n="other",r=0,i=[["firefox",/Firefox\/([0-9\.]+)/],["bb",/BlackBerry.+Version\/([0-9\.]+)/],["bb",/BB[0-9]+.+Version\/([0-9\.]+)/],["opera",/OPR\/([0-9\.]+)/],["opera",/Opera\/([0-9\.]+)/],["edge",/Edge\/([0-9\.]+)/],["safari",/Version\/([0-9\.]+).+Safari/],["chrome",/Chrome\/([0-9\.]+)/],["ie",/MSIE ([0-9]+)/],["ie",/Trident\/.+rv:([0-9]+)/]],o=0;o<i.length;o++)if(e.match(i[o][1])){n=i[o][0],r=parseFloat(RegExp.$1);break}for(t.name=n,t.version=r,n="other",i=[["ios",/([0-9_]+) like Mac OS X/,function(e){return e.replace("_",".").replace("_","")}],["ios",/CPU like Mac OS X/,function(e){return 0}],["wp",/Windows Phone ([0-9\.]+)/,null],["android",/Android ([0-9\.]+)/,null],["mac",/Macintosh.+Mac OS X ([0-9_]+)/,function(e){return e.replace("_",".").replace("_","")}],["windows",/Windows NT ([0-9\.]+)/,null],["bb",/BlackBerry.+Version\/([0-9\.]+)/,null],["bb",/BB[0-9]+.+Version\/([0-9\.]+)/,null],["linux",/Linux/,null],["bsd",/BSD/,null],["unix",/X11/,null]],o=r=0;o<i.length;o++)if(e.match(i[o][1])){n=i[o][0],r=parseFloat(i[o][2]?i[o][2](RegExp.$1):RegExp.$1);break}"mac"==n&&"ontouchstart"in window&&(1024==screen.width&&1366==screen.height||834==screen.width&&1112==screen.height||810==screen.width&&1080==screen.height||768==screen.width&&1024==screen.height)&&(n="ios"),t.os=n,t.osVersion=r,t.touch="wp"==t.os?0<navigator.msMaxTouchPoints:!!("ontouchstart"in window),t.mobile="wp"==t.os||"android"==t.os||"ios"==t.os||"bb"==t.os}};return t.init(),t}();
+</script>
+
+<script>
+(function($){
+  var settings={keyboardShortcuts:{enabled:true,distance:50},scrollWheel:{enabled:true,factor:1},scrollZones:{enabled:true,speed:15},dragging:{enabled:true,momentum:0.875,threshold:10},excludeSelector:'input:focus, select:focus, textarea:focus, audio, video, iframe',linkScrollSpeed:1000};
+  var $window=$(window),$document=$(document),$body=$('body'),$html=$('html'),$bodyHtml=$('body,html'),$wrapper=$('#wrapper');
+
+  breakpoints({xlarge:['1281px','1680px'],large:['981px','1280px'],medium:['737px','980px'],small:['481px','736px'],xsmall:['361px','480px'],xxsmall:[null,'360px']});
+
+  $window.on('load',function(){window.setTimeout(function(){$body.removeClass('is-preload');},100);});
+
+  if(browser.mobile){settings.keyboardShortcuts.enabled=false;settings.scrollWheel.enabled=false;settings.scrollZones.enabled=false;settings.dragging.enabled=false;$body.css('overflow-x','auto');}
+
+  if(!browser.canUse('object-fit')){$('.image[data-position]').each(function(){var $this=$(this),$img=$this.children('img');$this.css('background-image','url("'+$img.attr('src')+'")').css('background-position',$this.data('position')).css('background-size','cover').css('background-repeat','no-repeat');$img.css('opacity','0');});}
+
+  // Keyboard
+  if(settings.keyboardShortcuts.enabled)(function(){$wrapper.on('keypress keyup keydown',settings.excludeSelector,function(e){e.stopPropagation();});$window.on('keydown',function(e){var s=false;switch(e.keyCode){case 37:$document.scrollLeft($document.scrollLeft()-settings.keyboardShortcuts.distance);s=true;break;case 39:$document.scrollLeft($document.scrollLeft()+settings.keyboardShortcuts.distance);s=true;break;case 33:$document.scrollLeft($document.scrollLeft()-$window.width()+100);s=true;break;case 34:case 32:$document.scrollLeft($document.scrollLeft()+$window.width()-100);s=true;break;case 36:$document.scrollLeft(0);s=true;break;case 35:$document.scrollLeft($document.width());s=true;break;}if(s){e.preventDefault();e.stopPropagation();$bodyHtml.stop();}});})();
+
+  // Scroll wheel
+  if(settings.scrollWheel.enabled)(function(){var nw=function(e){var px=10,lh=40,ph=800,sX=0,sY=0,pX=0,pY=0;if('detail' in e)sY=e.detail;else if('wheelDelta' in e)sY=e.wheelDelta/-120;else if('wheelDeltaY' in e)sY=e.wheelDeltaY/-120;if('wheelDeltaX' in e)sX=e.wheelDeltaX/-120;if('axis' in e&&e.axis===e.HORIZONTAL_AXIS){sX=sY;sY=0;}pX=sX*px;pY=sY*px;if('deltaY' in e)pY=e.deltaY;if('deltaX' in e)pX=e.deltaX;if((pX||pY)&&e.deltaMode){if(e.deltaMode==1){pX*=lh;pY*=lh;}else{pX*=ph;pY*=ph;}}if(pX&&!sX)sX=(pX<1)?-1:1;if(pY&&!sY)sY=(pY<1)?-1:1;return{spinX:sX,spinY:sY,pixelX:pX,pixelY:pY};};$body.on('wheel',function(e){if(breakpoints.active('<=small'))return;e.preventDefault();e.stopPropagation();$bodyHtml.stop();var n=nw(e.originalEvent),x=(n.pixelX!=0?n.pixelX:n.pixelY),delta=Math.min(Math.abs(x),150)*settings.scrollWheel.factor,dir=x>0?1:-1;$document.scrollLeft($document.scrollLeft()+(delta*dir));});})();
+
+  // Scroll zones
+  if(settings.scrollZones.enabled)(function(){var $l=$('<div class="scrollZone left"></div>'),$r=$('<div class="scrollZone right"></div>'),$z=$l.add($r),paused=false,iId=null,dir,act=function(d){if(breakpoints.active('<=small'))return;if(paused)return;$bodyHtml.stop();dir=d;clearInterval(iId);iId=setInterval(function(){$document.scrollLeft($document.scrollLeft()+(settings.scrollZones.speed*dir));},25);},deact=function(){paused=false;clearInterval(iId);};$z.appendTo($wrapper).on('mouseleave mousedown',function(){deact();});$l.css('left','0').on('mouseenter',function(){act(-1);});$r.css('right','0').on('mouseenter',function(){act(1);});$wrapper.on('---pauseScrollZone',function(){paused=true;setTimeout(function(){paused=false;},500);});})();
+
+  // Dragging
+  if(settings.dragging.enabled)(function(){var dragging=false,dragged=false,distance=0,startScroll,mIId,vIId,startX,currentX,previousX,velocity,dir;$wrapper.on('mouseup mousemove mousedown','.image, img',function(e){e.preventDefault();}).on('mouseup mousemove mousedown',settings.excludeSelector,function(e){e.stopPropagation();dragging=false;$wrapper.removeClass('is-dragging');clearInterval(vIId);clearInterval(mIId);$wrapper.triggerHandler('---pauseScrollZone');}).on('mousedown',function(e){if(breakpoints.active('<=small'))return;clearInterval(mIId);$bodyHtml.stop();dragging=true;$wrapper.addClass('is-dragging');startScroll=$document.scrollLeft();startX=e.clientX;previousX=startX;currentX=startX;distance=0;dir=0;clearInterval(vIId);vIId=setInterval(function(){velocity=Math.abs(currentX-previousX);dir=(currentX>previousX?-1:1);previousX=currentX;},50);}).on('mousemove',function(e){if(!dragging)return;currentX=e.clientX;$document.scrollLeft(startScroll+(startX-currentX));distance=Math.abs(startScroll-$document.scrollLeft());if(!dragged&&distance>settings.dragging.threshold){$wrapper.addClass('is-dragged');dragged=true;}}).on('mouseup mouseleave',function(e){var m;if(!dragging)return;if(dragged){setTimeout(function(){$wrapper.removeClass('is-dragged');},100);dragged=false;}if(distance>settings.dragging.threshold)e.preventDefault();dragging=false;$wrapper.removeClass('is-dragging');clearInterval(vIId);clearInterval(mIId);$wrapper.triggerHandler('---pauseScrollZone');if(settings.dragging.momentum>0){m=velocity;mIId=setInterval(function(){if(isNaN(m)){clearInterval(mIId);return;}$document.scrollLeft($document.scrollLeft()+(m*dir));m=m*settings.dragging.momentum;if(Math.abs(m)<1)clearInterval(mIId);},15);}});})();
+
+  // Link scroll
+  $wrapper.on('mousedown mouseup','a[href^="#"]',function(e){e.stopPropagation();}).on('click','a[href^="#"]',function(e){var $this=$(this),href=$this.attr('href'),$target,x,y;if(href=='#'||($target=$(href)).length==0)return;e.preventDefault();e.stopPropagation();if(breakpoints.active('<=small')){x=$target.offset().top-(Math.max(0,$window.height()-$target.outerHeight())/2);y={scrollTop:x};}else{x=$target.offset().left-(Math.max(0,$window.width()-$target.outerWidth())/2);y={scrollLeft:x};}$bodyHtml.stop().animate(y,settings.linkScrollSpeed,'swing');});
+
+  // Gallery lightbox
+  $('.gallery').on('click','a',function(e){var $a=$(this),$gallery=$a.parents('.gallery'),$modal=$gallery.children('.modal'),$modalImg=$modal.find('img'),href=$a.attr('href');if(!href||!href.match(/\.(jpg|gif|png|webp|jpeg)$/i))return;e.preventDefault();e.stopPropagation();if($modal[0]._locked)return;$modal[0]._locked=true;$modalImg.attr('src',href);$modal.addClass('visible');$modal.focus();setTimeout(function(){$modal[0]._locked=false;},600);}).on('click','.modal',function(e){var $modal=$(this),$modalImg=$modal.find('img');if($modal[0]._locked)return;if(!$modal.hasClass('visible'))return;e.stopPropagation();$modal[0]._locked=true;$modal.removeClass('loaded');setTimeout(function(){$modal.removeClass('visible');$wrapper.triggerHandler('---pauseScrollZone');setTimeout(function(){$modalImg.attr('src','');$modal[0]._locked=false;$body.focus();},475);},125);}).on('keypress','.modal',function(e){var $modal=$(this);if(e.keyCode==27)$modal.trigger('click');}).on('mouseup mousedown mousemove','.modal',function(e){e.stopPropagation();}).prepend('<div class="modal" tabIndex="-1"><div class="inner"><img src="" /></div></div>').find('img').on('load',function(e){var $modalImg=$(this),$modal=$modalImg.parents('.modal');setTimeout(function(){if(!$modal.hasClass('visible'))return;$modal.addClass('loaded');},275);});
+
+})(jQuery);
+</script>
+
+</body>
+</html>

@@ -25,3 +25,11 @@ output/
 source/
 tmp/
 V3/
+linkdrop-assets/
+# 런타임 생성 파일
+*.log
+*.lock
+denoland.vscode-deno/
+.claude/scheduled_tasks.lock
+# MCP 설정 (API 키 포함 — 절대 커밋 금지)
+.mcp.json

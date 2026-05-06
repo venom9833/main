@@ -1,0 +1,183 @@
+{
+  "id": "landing",
+  "label": "랜딩페이지",
+  "version": "1.0.0",
+  "description": "제품·서비스를 소개하는 전환 최적화 원페이지 랜딩. Hero → Features → Social Proof → CTA 섹션 순서.",
+
+  "layout": {
+    "type": "full-width-sections",
+    "maxWidth": {
+      "content": "1100px",
+      "narrow": "760px"
+    },
+    "sidebar": false,
+    "section_flow": "vertical scroll, 각 섹션 full-viewport-width"
+  },
+
+  "sections": {
+    "order": ["nav", "hero", "social_proof_bar", "problem", "solution", "features", "how_it_works", "testimonials", "pricing", "faq", "final_cta", "footer"]
+  },
+
+  "palette": {
+    "background":        "#ffffff",
+    "surface":           "#f8fafc",
+    "surface_dark":      "#0f172a",
+    "text_primary":      "#0f172a",
+    "text_secondary":    "#475569",
+    "text_on_dark":      "#f8fafc",
+    "accent":            "#d97706",
+    "accent_light":      "#fffbeb",
+    "accent_dark":       "#b45309",
+    "accent_gradient":   "linear-gradient(135deg, #f59e0b, #d97706)",
+    "hero_bg":           "#0f172a",
+    "hero_text":         "#f8fafc",
+    "feature_icon_bg":   "#fffbeb",
+    "divider":           "#e2e8f0",
+    "cta_bg":            "accent_gradient",
+    "cta_text":          "#ffffff",
+    "price_bg":          "#f8fafc",
+    "price_highlight":   "#fffbeb",
+    "price_border":      "#d97706"
+  },
+
+  "typography": {
+    "font_primary":  "'Pretendard', -apple-system, sans-serif",
+    "base_size":     "1.05rem",
+    "line_height":   1.7,
+    "hero_h1_size":  "clamp(2.5rem, 6vw, 4rem)",
+    "section_h2_size": "clamp(1.8rem, 4vw, 2.5rem)"
+  },
+
+  "blocks": {
+    "nav": {
+      "style": "fixed top, blur backdrop",
+      "elements": ["logo", "menu_links", "cta_button"],
+      "background": "rgba(255,255,255,0.92)",
+      "backdrop_filter": "blur(12px)",
+      "border_bottom": "1px solid divider",
+      "height": "64px"
+    },
+    "hero": {
+      "background": "hero_bg",
+      "elements": ["eyebrow_badge", "h1_headline", "subheadline", "cta_primary", "cta_secondary_optional", "hero_image_or_video_placeholder"],
+      "layout": "centered 또는 left+right split",
+      "padding": "8rem 2rem",
+      "eyebrow_badge": {
+        "style": "pill badge",
+        "background": "rgba(245,158,11,0.15)",
+        "color": "#fbbf24",
+        "border": "1px solid rgba(245,158,11,0.3)"
+      },
+      "cta_primary": {
+        "background": "accent_gradient",
+        "color": "#ffffff",
+        "padding": "1rem 2.5rem",
+        "border_radius": "10px",
+        "font_size": "1.1rem",
+        "font_weight": 700
+      }
+    },
+    "social_proof_bar": {
+      "background": "surface",
+      "elements": ["logo_strip 또는 stat_numbers"],
+      "stat_format": "큰 숫자 + 단위 + 설명",
+      "padding": "2.5rem 2rem"
+    },
+    "problem_section": {
+      "background": "#ffffff",
+      "style": "공감 유도 — 독자의 현재 고통 3가지",
+      "layout": "3-column grid 또는 numbered list",
+      "pain_point_card": {
+        "icon": "emoji 또는 SVG",
+        "title": "문제 제목",
+        "description": "2~3줄 설명"
+      }
+    },
+    "feature_card": {
+      "icon_bg": "feature_icon_bg",
+      "icon_size": "2rem",
+      "border": "1px solid divider",
+      "border_radius": "14px",
+      "padding": "1.5rem",
+      "hover": "box-shadow 강화"
+    },
+    "how_it_works": {
+      "style": "numbered steps — 3단계",
+      "step_format": ["step_number_circle", "title", "description"],
+      "connector": "dashed horizontal arrow",
+      "step_number": { "background": "accent", "color": "#ffffff", "shape": "circle", "size": "2.5rem" }
+    },
+    "testimonial_card": {
+      "structure": ["quote_mark", "body", "avatar_placeholder", "name", "role_company"],
+      "background": "surface",
+      "border_radius": "16px",
+      "padding": "2rem",
+      "quote_mark": { "color": "accent", "size": "3rem", "font_family": "Georgia" }
+    },
+    "pricing_card": {
+      "layout": "2~3 column grid",
+      "structure": ["plan_name", "price", "billing_cycle", "description", "feature_list", "cta_button"],
+      "highlight_card": {
+        "border": "2px solid accent",
+        "background": "price_highlight",
+        "badge": "인기 / 추천"
+      },
+      "feature_list_marker": "✓"
+    },
+    "faq_accordion": {
+      "style": "click to expand",
+      "structure": ["question", "answer"],
+      "border": "1px solid divider",
+      "border_radius": "10px",
+      "expand_icon": "+ / −"
+    },
+    "final_cta": {
+      "background": "surface_dark",
+      "elements": ["headline", "subheadline", "cta_primary", "trust_badges"],
+      "padding": "6rem 2rem",
+      "text_color": "text_on_dark"
+    },
+    "footer": {
+      "elements": ["logo", "nav_links", "social_links", "copyright"],
+      "background": "surface_dark",
+      "text_color": "#94a3b8",
+      "padding": "3rem 2rem"
+    }
+  },
+
+  "conversion_rules": [
+    "CTA 버튼은 Hero·Features·Footer 최소 3곳에 배치",
+    "CTA 버튼 텍스트는 동사 시작 — '지금 시작하기', '무료로 해보기'",
+    "Hero 섹션에서 가치 제안은 5초 내 이해 가능하도록",
+    "사회적 증거(후기·수치)는 Hero 직후 배치",
+    "가격 섹션 전에 반드시 신뢰 요소 배치",
+    "FAQ는 구매 직전 마지막 의심 해소 용도"
+  ],
+
+  "inline_emphasis": {
+    "bold":          "핵심 가치 키워드, 수치",
+    "accent_color":  "강조 수치, 혜택 키워드",
+    "strikethrough": "할인 전 원가 표시"
+  },
+
+  "tone": {
+    "voice": "2인칭 직접 대화 — '여러분', '당신의 문제를 해결합니다'",
+    "headline_style": "숫자·질문·약속 형식으로 주목 유도",
+    "cta_urgency": "시간·수량 제한 요소 선택적 포함"
+  },
+
+  "chapter_internal_flow": [
+    "네비게이션 바 (고정)",
+    "히어로 — 가치 제안 + CTA",
+    "소셜 프루프 바 — 로고·수치",
+    "문제 공감 섹션",
+    "솔루션 소개",
+    "핵심 기능 (Feature 카드)",
+    "사용 방법 (3단계)",
+    "고객 후기",
+    "가격 플랜",
+    "FAQ",
+    "최종 CTA 섹션",
+    "푸터"
+  ]
+}
