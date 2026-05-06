@@ -1,23 +1,14 @@
 {
-  "_note": "V3 고정 화풍 2종. 캐릭터 image_prompt에 {style_prompt}로 주입됨.",
+  "_note": "V3 고정 화풍 1종. 캐릭터 image_prompt에 {style_prompt}로 주입됨.",
 
-  "masako": {
-    "label": "마사코 스타일",
-    "description": "웹툰 일러스트 — 먹선, 스크린톤, 절제된 감정 표현",
-    "base_style_prompt": "masako style illustration, clean manga ink lines, soft screen tone shading, muted color palette, cinematic Korean drama composition, expressive emotional restraint, webtoon panel aesthetic",
-    "negative_prompt": "photorealistic, 3d render, ugly, deformed, extra limbs, western comic, bright saturated colors, childish, chibi",
-    "bg_prompt_suffix": "empty scene no people, masako style illustration, manga ink lines, muted tones",
-    "pillow_palette": [[15, 12, 30], [50, 35, 75]],
-    "pillow_accent": [160, 100, 200]
-  },
-
-  "real": {
-    "label": "리얼리티 스타일",
-    "description": "한국 드라마 실사 — 50mm 렌즈, 자연 채광, 영화적 구도",
-    "base_style_prompt": "photorealistic, Korean drama cinematography, 50mm lens shallow depth of field, natural cinematic lighting, realistic skin texture, cinematic restraint, Korean drama still cut",
-    "negative_prompt": "illustration, anime, cartoon, painting, drawing, cgi, 3d render, ugly, deformed, extra fingers, extra limbs, NSFW",
-    "bg_prompt_suffix": "no people, empty scene, Korean drama cinematography, natural lighting, 50mm lens",
-    "pillow_palette": [[18, 22, 35], [45, 55, 80]],
-    "pillow_accent": [80, 120, 180]
+  "polystyle": {
+    "label": "폴리 스타일",
+    "description": "로우폴리 하드 폴리곤 메시 — 평탄한 면, 그라데이션 없음, 6색 고정 팔레트, 3등신 캐릭터",
+    "base_style_prompt": "low-poly hard polygon mesh illustration, all surfaces flat facets no gradients no blending, six-color palette only deep black #111118 dark navy #1A2840 bright blue #4A90D9 white #F5F5F5 natural skin #D4BEA0 crimson red #C0392B accent only, hard geometric shadow edges, 3-head proportion chibi-style characters, Korean drama cinematic framing, no text no written words no letters no labels no signs no captions",
+    "negative_prompt": "photorealistic, smooth shading, gradients, blending, soft shadows, oil painting, watercolor, anime, extra colors outside palette, realistic body proportions, 7-head proportion, 8-head proportion, long neck, elongated body, deformed, extra limbs, text, watermark",
+    "bg_prompt_suffix": "no people no characters, empty architectural scene, low-poly geometric interior or urban exterior, flat facet surfaces, seven-color background palette only near-black #180A20 dark purple #462374 deep mauve #7D2E67 medium purple #B752B8 orchid pink #D67DD1 lavender #AC8AE1 silver-white #DDDDDD, hard geometric shadow edges, cinematic Korean drama setting",
+    "crimson_rule": "crimson red #C0392B on ONE emotional object per scene only — single accent, never on characters",
+    "pillow_palette": [[17, 17, 24], [26, 40, 64]],
+    "pillow_accent": [192, 57, 43]
   }
 }

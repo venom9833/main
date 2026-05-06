@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ content.brand }}</title>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="lenis">
+
+  <!-- SVG Sprite -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="triangle" viewBox="0 0 24 24">
+      <path d="M21.8926 14.0764C22.2294 13.8654 22.509 13.5625 22.7034 13.1981C22.8977 12.8337 23 12.4205 23 12C23 11.5795 22.8977 11.1663 22.7034 10.8019C22.509 10.4375 22.2294 10.1346 21.8926 9.92358L6.33399 0.321606C5.99627 0.111023 5.6132 0.00010868 5.22323 4.6788e-07C4.83327 -0.000107745 4.45014 0.110594 4.11232 0.32099C3.7745 0.531386 3.49388 0.834069 3.29863 1.19865C3.10339 1.56323 3.0004 1.97687 3 2.39803L3 21.602C3.0004 22.0231 3.10339 22.4368 3.29863 22.8013C3.49387 23.1659 3.77449 23.4686 4.11231 23.679C4.45013 23.8894 4.83326 24.0001 5.22323 24C5.61319 23.9999 5.99627 23.889 6.33399 23.6784L21.8926 14.0764Z"/>
+    </symbol>
+    <symbol id="pause" viewBox="0 0 24 24">
+      <path d="M4.5 1C3.12 1 2 2.06 2 3.36v17.28C2 21.94 3.12 23 4.5 23h3.33c1.38 0 2.5-1.06 2.5-2.36V3.36c0-1.3-1.12-2.36-2.5-2.36zm11.67 0c-1.38 0-2.5 1.06-2.5 2.36v17.28c0 1.3 1.12 2.36 2.5 2.36h3.33c1.38 0 2.5-1.06 2.5-2.36V3.36C22 2.06 20.88 1 19.5 1z"/>
+    </symbol>
+    <symbol id="menu" viewBox="0 0 24 24">
+      <path d="M24 19V21H0V19H24ZM24 11V13H0V11H24ZM24 3V5H0V3H24Z"/>
+    </symbol>
+    <symbol id="close" viewBox="0 0 24 24">
+      <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/>
+    </symbol>
+  </svg>
+
+  <!-- HEADER -->
+  <header class="site-header" id="hdr">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="/" class="header-logo js-header-logotype" aria-label="{{ content.brand }}">
+        <svg width="140" height="44" viewBox="0 0 140 44" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="32" font-family="'Barlow Condensed', sans-serif" font-size="32" font-weight="900" fill="white" letter-spacing="2">{{ content.brand }}</text>
+        </svg>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="header-nav js-header-nav">
+        <ul>
+          {% for link in content.nav_links %}
+          <li><a href="{{ link.href }}">{{ link.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      <!-- CTA + Menu Button -->
+      <div class="header-right">
+        <a href="#contact" class="btn-glass js-header-cta">{{ content.header_cta }}</a>
+        <button class="btn-menu" id="menuToggle" aria-label="Open Menu">
+          <span class="menu-label">MENU</span>
+          <span class="menu-icon">
+            <svg width="20" height="20" fill="white"><use href="#menu"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU OVERLAY -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-inner">
+      <button class="mobile-menu-close" id="menuClose" aria-label="Close Menu">
+        <svg width="24" height="24" fill="white"><use href="#close"/></svg>
+      </button>
+      <nav class="mobile-nav">
+        <ul>
+          {% for link in content.nav_links %}
+          <li><a href="{{ link.href }}">{{ link.label }}</a></li>
+          {% endfor %}
+          <li><a href="#contact" class="mobile-cta">{{ content.header_cta }}</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+    <div class="scroll-container">
+
+      {% for section in content.sections %}
+      <div class="scroll-section">
+        <div class="scroll-section-inner js-index-scroll-item-inner">
+          <!-- Video Background or Gradient Fallback -->
+          <div class="video-bg" {% if not section.video_url %}style="background: {{ section.bg_gradient if section.bg_gradient else 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)' }}"{% endif %}>
+            {% if section.video_url %}
+            <video class="section-video" autoplay muted loop playsinline
+              data-src="{{ section.video_url }}"
+              {% if section.poster_url %}poster="{{ section.poster_url }}"{% endif %}>
+            </video>
+            {% endif %}
+            <div class="vignette"></div>
+          </div>
+          <!-- Content -->
+          {% if section.type == "hero" %}
+          <article class="section-content hero-content">
+            <div class="content-inner">
+              <h1 class="type-heading-lg">{{ section.headline }}</h1>
+              {% if section.body %}<p class="hero-desc">{{ section.body }}</p>{% endif %}
+              <div class="btn-wrap">
+                <a href="#" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">{{ section.cta_primary }}</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+          {% elif section.type == "final_cta" %}
+          <article class="section-content hero-content">
+            <div class="content-inner">
+              <h2 class="type-heading-lg">{{ section.headline }}</h2>
+              {% if section.body %}<p class="hero-desc">{{ section.body }}</p>{% endif %}
+              <div class="btn-wrap">
+                <a href="#contact" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">{{ section.cta_primary }}</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+          {% else %}
+          <article class="section-content">
+            <div class="content-inner">
+              {% if section.tag %}<span class="type-tag">{{ section.tag }}</span>{% endif %}
+              <h2 class="type-heading-xl">{{ section.headline }}</h2>
+              <div class="btn-row">
+                <a href="#" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">{{ section.cta_primary }}</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+                {% if section.cta_secondary %}
+                <a href="#" class="btn-text">{{ section.cta_secondary }}
+                  <span class="btn-icon-sm">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+                {% endif %}
+              </div>
+            </div>
+          </article>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+    </div><!-- /.scroll-container -->
+  </main>
+
+  <!-- HLS.js (for .m3u8 streams — Mux, Cloudflare Stream, etc.) -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.15/dist/hls.min.js"></script>
+  <!-- Lenis (Smooth Scroll) -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script>
+/* =====================
+   VIDEO STUDIO TEMPLATE
+   script.js
+   ===================== */
+
+// ── 1. Lenis Smooth Scroll ──────────────────────────
+const lenis = new Lenis({
+  duration: 1.4,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  orientation: 'vertical',
+  smoothWheel: true,
+});
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// Lenis + GSAP ScrollTrigger
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+
+// ── 2. Header scroll effect ─────────────────────────
+const header = document.getElementById('hdr');
+
+lenis.on('scroll', ({ scroll }) => {
+  if (scroll > 30) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+});
+
+
+// ── 3. Mobile Menu ──────────────────────────────────
+const menuToggle = document.getElementById('menuToggle');
+const menuClose  = document.getElementById('menuClose');
+const mobileMenu = document.getElementById('mobileMenu');
+
+function openMenu() {
+  mobileMenu.classList.add('is-open');
+  lenis.stop();
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  mobileMenu.classList.remove('is-open');
+  lenis.start();
+  document.body.style.overflow = '';
+}
+
+menuToggle.addEventListener('click', openMenu);
+menuClose.addEventListener('click', closeMenu);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMenu();
+});
+
+mobileMenu.addEventListener('click', (e) => {
+  if (e.target === mobileMenu) closeMenu();
+});
+
+
+// ── 4. Section Fade-in (IntersectionObserver) ────────
+const sectionContents = document.querySelectorAll('.section-content');
+
+const observerOptions = {
+  root: null,
+  threshold: 0.15,
+  rootMargin: '0px 0px -5% 0px',
+};
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      sectionObserver.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+sectionContents.forEach((el) => sectionObserver.observe(el));
+
+
+// ── 5. GSAP Parallax - video background ──────────
+const scrollSections = document.querySelectorAll('.scroll-section');
+
+scrollSections.forEach((section) => {
+  const videoBg = section.querySelector('.video-bg');
+  if (!videoBg) return;
+
+  gsap.fromTo(videoBg,
+    { yPercent: -8 },
+    {
+      yPercent: 8,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      }
+    }
+  );
+});
+
+
+// ── 6. GSAP heading text animation ───────────────────
+const headings = document.querySelectorAll('.type-heading-xl, .type-heading-lg');
+
+headings.forEach((heading) => {
+  gsap.fromTo(heading,
+    { opacity: 0, y: 50, skewY: 2 },
+    {
+      opacity: 1,
+      y: 0,
+      skewY: 0,
+      duration: 1.0,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: heading,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      }
+    }
+  );
+});
+
+
+// ── 7. GSAP tag animation ────────────────
+const tags = document.querySelectorAll('.type-tag');
+
+tags.forEach((tag) => {
+  gsap.fromTo(tag,
+    { opacity: 0, y: 20 },
+    {
+      opacity: 0.85,
+      y: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: tag,
+        start: 'top 88%',
+        toggleActions: 'play none none none',
+      }
+    }
+  );
+});
+
+
+// ── 8. GSAP button animation ──────────────────────────
+const btnRows = document.querySelectorAll('.btn-row, .btn-wrap');
+
+btnRows.forEach((row) => {
+  const btns = row.querySelectorAll('.btn-glass, .btn-text');
+  gsap.fromTo(btns,
+    { opacity: 0, y: 20 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: row,
+        start: 'top 90%',
+        toggleActions: 'play none none none',
+      }
+    }
+  );
+});
+
+
+// ── 9. hero-desc fade-in ────────────────────────────
+const heroDescs = document.querySelectorAll('.hero-desc');
+
+heroDescs.forEach((desc) => {
+  gsap.fromTo(desc,
+    { opacity: 0, y: 24 },
+    {
+      opacity: 0.9,
+      y: 0,
+      duration: 0.9,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: desc,
+        start: 'top 87%',
+        toggleActions: 'play none none none',
+      }
+    }
+  );
+});
+
+
+// ── 10. Video init — HLS.js (.m3u8) / native (.mp4) ──────────────
+document.querySelectorAll('video[data-src]').forEach(function(video) {
+  var src = video.dataset.src;
+  if (!src) return;
+
+  if (src.indexOf('.m3u8') !== -1) {
+    if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+      var hls = new Hls({ enableWorker: false, maxBufferLength: 30 });
+      hls.loadSource(src);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function() {
+        video.play().catch(function() {
+          document.addEventListener('click', function() { video.play(); }, { once: true });
+        });
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // Safari native HLS
+      video.src = src;
+      video.play().catch(function() {
+        document.addEventListener('touchstart', function() { video.play(); }, { once: true });
+      });
+    }
+  } else {
+    video.src = src;
+    video.muted = true;
+    var p = video.play();
+    if (p !== undefined) {
+      p.catch(function() {
+        document.addEventListener('touchstart', function() { video.play(); }, { once: true });
+        document.addEventListener('click', function() { video.play(); }, { once: true });
+      });
+    }
+  }
+});
+
+
+// ── 11. Current section indicator ──────────────────────────────
+let currentSection = 0;
+
+scrollSections.forEach((section, index) => {
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top center',
+    end: 'bottom center',
+    onEnter: () => { currentSection = index; },
+    onEnterBack: () => { currentSection = index; },
+  });
+});
+
+
+// ── 12. Glass button shine effect ────────────────
+document.querySelectorAll('.btn-glass').forEach((btn) => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    btn.style.setProperty('--shine-x', x + '%');
+    btn.style.setProperty('--shine-y', y + '%');
+  });
+});
+
+
+// ── 13. ScrollTrigger refresh ───────────────────────
+window.addEventListener('load', () => {
+  ScrollTrigger.refresh();
+});
+
+window.addEventListener('resize', () => {
+  ScrollTrigger.refresh();
+});
+  </script>
+</body>
+</html>

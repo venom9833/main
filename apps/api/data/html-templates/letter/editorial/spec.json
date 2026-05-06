@@ -1,0 +1,50 @@
+{
+  "id": "letter",
+  "mode": "skeleton",
+  "label": "에디토리얼",
+  "description": "뉴스레터 칼럼·에세이·의견문 — 양피지 감성 Magazine Editorial 레이아웃",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "paper":      "#fcf7ec",
+    "ink":        "#2b241e",
+    "burgundy":   "#8b2c2c",
+    "gold":       "#c49b48",
+    "border":     "#d6cdbe",
+    "bg-subtle":  "#f5efe6"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["publication", "title", "author", "body"],
+    "properties": {
+      "publication": { "type": "string", "description": "매거진·뉴스레터 이름 (예: The Weekly Brief, 주간 인사이트)" },
+      "issue":       { "type": "string", "description": "권호 (예: Vol. 3 No. 12, 2025 Spring Issue)" },
+      "date":        { "type": "string", "description": "발행일" },
+      "category":    { "type": "string", "description": "카테고리 배지 (예: Opinion, Essay, Analysis, 칼럼, 에세이)" },
+      "title":    { "type": "string", "description": "아티클 제목" },
+      "subtitle": { "type": "string", "description": "부제목 (선택)" },
+      "author": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "bio":  { "type": "string", "description": "짧은 작가 소개 1문장 (선택)" }
+        }
+      },
+      "body": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 10,
+        "description": "본문 단락 배열 (첫 단락에 드롭캡 자동 적용)",
+        "items": { "type": "string" }
+      },
+      "pull_quote": { "type": "string", "description": "본문 중간 강조 인용구 — 풀 쿼트 (선택)" },
+      "tags": {
+        "type": "array",
+        "maxItems": 5,
+        "description": "주제 태그 (선택)",
+        "items": { "type": "string" }
+      }
+    }
+  }
+}

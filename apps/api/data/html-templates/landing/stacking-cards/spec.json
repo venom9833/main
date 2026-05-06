@@ -1,0 +1,115 @@
+{
+  "id": "landing",
+  "mode": "skeleton",
+  "label": "랜딩페이지",
+  "description": "6장 카드가 순차 적층되는 풀스크린 랜딩페이지 (StackingCards)",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "shared_sc_file": "stacking-cards-base.css",
+  "palette": {
+    "background": "#0f172a",
+    "accent": "#818cf8",
+    "accent_dark": "#4f46e5",
+    "text_on_dark": "#f8fafc",
+    "text_on_light": "#0f172a",
+    "text_muted_dark": "#94a3b8",
+    "text_muted_light": "#64748b"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["hero", "features", "steps", "social_proof", "pricing", "final_cta"],
+    "properties": {
+      "hero": {
+        "type": "object",
+        "required": ["eyebrow", "headline", "tagline", "cta_label"],
+        "description": "1번 카드 — 히어로",
+        "properties": {
+          "eyebrow":   { "type": "string", "description": "상단 작은 레이블 (짧게, 7자 내외)" },
+          "headline":  { "type": "string", "description": "메인 헤드라인 (임팩트, 20자 내외)" },
+          "tagline":   { "type": "string", "description": "헤드라인 보완 문장 (1~2문장, 간결하게)" },
+          "cta_label": { "type": "string", "description": "CTA 버튼 텍스트" }
+        }
+      },
+      "features": {
+        "type": "object",
+        "required": ["heading", "items"],
+        "description": "2번 카드 — 핵심 기능",
+        "properties": {
+          "heading": { "type": "string", "description": "섹션 레이블 (6자 이하 대문자)" },
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "required": ["icon", "title", "desc"],
+              "properties": {
+                "icon":  { "type": "string", "description": "이모지 (1자)" },
+                "title": { "type": "string", "description": "기능 제목 (10자 내외)" },
+                "desc":  { "type": "string", "description": "기능 설명 (1~2문장)" }
+              }
+            }
+          }
+        }
+      },
+      "steps": {
+        "type": "object",
+        "required": ["heading", "items"],
+        "description": "3번 카드 — 이용 단계",
+        "properties": {
+          "heading": { "type": "string", "description": "섹션 레이블 (6자 이하 대문자)" },
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "required": ["title", "desc"],
+              "properties": {
+                "title": { "type": "string", "description": "단계 제목" },
+                "desc":  { "type": "string", "description": "단계 설명 (1~2문장)" }
+              }
+            }
+          }
+        }
+      },
+      "social_proof": {
+        "type": "object",
+        "required": ["heading", "quote", "author"],
+        "description": "4번 카드 — 소셜 증거",
+        "properties": {
+          "heading":    { "type": "string", "description": "섹션 레이블 (6자 이하 대문자)" },
+          "quote":      { "type": "string", "description": "인용문 (2~3문장, 임팩트 있게)" },
+          "author":     { "type": "string", "description": "이름" },
+          "role":       { "type": "string", "description": "직함 또는 역할 (선택)" },
+          "stat_value": { "type": "string", "description": "핵심 수치 (예: 98%, 10,000+, 선택)" },
+          "stat_label": { "type": "string", "description": "수치 설명 (선택)" }
+        }
+      },
+      "pricing": {
+        "type": "object",
+        "required": ["heading", "label", "price", "period", "features", "cta_label"],
+        "description": "5번 카드 — 가격",
+        "properties": {
+          "heading":   { "type": "string", "description": "섹션 레이블" },
+          "label":     { "type": "string", "description": "플랜 이름" },
+          "price":     { "type": "string", "description": "가격 (예: ₩49,000)" },
+          "period":    { "type": "string", "description": "과금 단위 (예: /월)" },
+          "features":  { "type": "array", "items": { "type": "string" }, "minItems": 4, "maxItems": 5 },
+          "cta_label": { "type": "string", "description": "버튼 텍스트" }
+        }
+      },
+      "final_cta": {
+        "type": "object",
+        "required": ["heading", "body", "cta_label"],
+        "description": "6번 카드 — 마지막 CTA",
+        "properties": {
+          "heading":   { "type": "string", "description": "강렬한 마무리 헤드라인" },
+          "body":      { "type": "string", "description": "마지막 설득 문구 (1~2문장)" },
+          "cta_label": { "type": "string", "description": "CTA 버튼 텍스트" },
+          "sub_text":  { "type": "string", "description": "버튼 아래 보조 문구 (선택)" }
+        }
+      }
+    }
+  }
+}

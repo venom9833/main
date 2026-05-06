@@ -1,23 +1,44 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
-import { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import {
   getSeries, getSeriesStatus, approvePipelineStep,
   retryPipelineStep
 } from '@/lib/seriesStore';
+import { getPipelineLogs, setPipelineLogs } from '@/lib/useLogDB';
 import PipelineStatus from '@/components/PipelineStatus';
 import ApprovalPanel from '@/components/ApprovalPanel';
 import WorldEditor from '@/components/WorldEditor';
 import KeyframeSetupEditor from '@/components/KeyframeSetupEditor';
 import CastingReviewPanel from '@/components/CastingReviewPanel';
+import SourceUploadEditor from '@/components/SourceUploadEditor';
+import ExtensionDrawer from '@/components/ExtensionDrawer';
 import type { Series, PipelineStep, Chapter } from '@/types/series';
 
 const API = 'http://localhost:8001/api/v1';
-const TERMINAL_STEPS = new Set(['done', 'failed', 'chapter_done', 'awaiting_world_approval', 'awaiting_casting_approval', 'awaiting_script_approval', 'awaiting_keyframe_setup', 'awaiting_upload_approval']);
+const TERMINAL_STEPS = new Set(['done', 'failed', 'chapter_done', 'awaiting_source_upload', 'awaiting_world_approval', 'awaiting_casting_approval', 'awaiting_script_approval', 'awaiting_keyframe_setup', 'awaiting_tts', 'awaiting_upload_approval']);
+
+const BLOB_STYLE_LIGHT = `
+  @keyframes blob-drift-s { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(60px,-40px) scale(1.08); } 66% { transform: translate(-40px,30px) scale(0.96); } 100% { transform: translate(0,0) scale(1); } }
+  .ld-bg-l { position: fixed; inset: 0; background: #e8f0fa; z-index: 0; pointer-events: none; }
+  .ld-blob-l { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.3; pointer-events: none; z-index: 1; }
+  .ld-blob-l1 { width: 700px; height: 700px; background: radial-gradient(circle, #5ee7df, #3b82f6); top: -200px; left: -150px; animation: blob-drift-s 22s ease-in-out infinite alternate; }
+  .ld-blob-l2 { width: 600px; height: 600px; background: radial-gradient(circle, #b490f5, #ec4899); bottom: -200px; right: -100px; animation: blob-drift-s 17s ease-in-out infinite alternate; animation-delay: -8s; }
+  .ld-blob-l3 { width: 400px; height: 400px; background: radial-gradient(circle, #ffd27f, #f7a8c4); top: 40%; left: 50%; animation: blob-drift-s 25s ease-in-out infinite alternate; animation-delay: -13s; }
+`;
 
 export default function SeriesDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+
   const [series, setSeries] = useState<Series | null>(null);
+
   const [step, setStep] = useState<PipelineStep>('idle');
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -28,6 +49,14 @@ export default function SeriesDetailPage() {
   const [scriptRegen, setScriptRegen] = useState(false);
   const [scriptRevise, setScriptRevise] = useState(false);
   const [revisionKey, setRevisionKey] = useState(0);
+  const [scriptApproving, setScriptApproving] = useState<string | null>(null);
+  const reviseAbortRef = useRef(false);
+  const [lintLoading, setLintLoading] = useState(false);
+  const [lintRevising, setLintRevising] = useState(false);
+  const [lintReport, setLintReport] = useState('');
+  const [lintReviseResult, setLintReviseResult] = useState<string | null>(null);
+  // 키프레임 익스텐션 패널 열림 여부 (대본 승인 단계에서 사용)
+  const [extensionOpen, setExtensionOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
@@ -35,7 +64,7 @@ export default function SeriesDetailPage() {
       setStep(st.pipeline_step);
       setError(st.error_detail ?? null);
       // 대본 완료 이후 단계에서 챕터 목록 갱신
-      const scriptDoneSteps = ['awaiting_script_approval', 'awaiting_keyframe_setup', 'keyframe', 'tts', 'render', 'awaiting_upload_approval', 'chapter_done', 'done'];
+      const scriptDoneSteps = ['awaiting_script_approval', 'awaiting_keyframe_setup', 'keyframe', 'awaiting_tts', 'tts', 'render', 'awaiting_upload_approval', 'chapter_done', 'done'];
       if (scriptDoneSteps.includes(st.pipeline_step)) {
         fetch(`${API}/series/${id}/chapters`).then(r => r.ok ? r.json() : []).then(setChapters).catch(() => {});
       }
@@ -69,33 +98,66 @@ export default function SeriesDetailPage() {
     loadChapters();
   }, [id, refresh, loadSeries, loadChapters]);
 
-  // awaiting_source_upload: 사용자에게 보여지는 게이트 없음 — 즉시 세계관 생성 시작
-  useEffect(() => {
-    if (step !== 'awaiting_source_upload') return;
-    fetch(`${API}/series/${id}/approve/source_upload`, { method: 'POST' })
-      .then(() => refresh());
-  }, [step, id, refresh]);
 
   useEffect(() => {
     if (TERMINAL_STEPS.has(step)) return;
-    const es = new EventSource(`${API}/series/${id}/stream`);
-    es.onmessage = (e) => {
-      const event = JSON.parse(e.data);
-      if (event.type === 'ping') return;
-      refresh();
-      loadSeries();
-      if (event.type === 'done') es.close();
+    let closed = false;
+    let retries = 0;
+    let currentEs: EventSource | null = null;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+    function connect() {
+      if (closed) return;
+      currentEs = new EventSource(`${API}/series/${id}/stream`);
+      currentEs.onmessage = async (e) => {
+        const event = JSON.parse(e.data);
+        if (event.type === 'ping') return;
+        retries = 0; // 수신 성공 → 재시도 카운트 리셋
+        await loadSeries();
+        refresh();
+        if (event.type === 'done') { currentEs?.close(); }
+      };
+      currentEs.onerror = () => {
+        currentEs?.close();
+        if (closed) return;
+        retries++;
+        if (retries <= 3) {
+          // 지수 백오프: 2s, 4s, 6s
+          setTimeout(connect, retries * 2000);
+        } else if (!pollTimer) {
+          // SSE 3회 연속 실패 → 3초 폴링으로 전환
+          pollTimer = setInterval(() => { if (!closed) refresh(); }, 3000);
+        }
+      };
+    }
+
+    connect();
+    return () => {
+      closed = true;
+      currentEs?.close();
+      if (pollTimer) clearInterval(pollTimer);
     };
-    es.onerror = () => es.close();
-    return () => es.close();
   }, [id, step, refresh, loadSeries]);
+
+  // awaiting_world_approval 고착 방지 — openingHook 미확보 시 2초 간격 재시도
+  // series 상태가 바뀔 때마다 재평가 → openingHook 확보되면 자동 중단
+  useEffect(() => {
+    if (step !== 'awaiting_world_approval') return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((series as any)?.world_data?.openingHook) return; // 이미 확보됨
+    const timer = setInterval(() => loadSeries(), 2000);
+    return () => clearInterval(timer);
+  }, [step, series, loadSeries]);
+
+  // 언마운트 시 handleScriptRevise 폴링 루프 중단
+  useEffect(() => { return () => { reviseAbortRef.current = true; }; }, []);
 
   if (notFound) return (
     <div style={{ padding: '3rem 2rem', fontFamily: "var(--font-en), 'Pretendard', sans-serif", textAlign: 'center' }}>
       <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.5)', marginBottom: '1rem' }}>
         시리즈를 찾을 수 없습니다
       </p>
-      <a href="/series" style={{ color: '#a5b4fc', fontSize: '0.9rem' }}>← 목록으로 돌아가기</a>
+      <a href="/series" style={{ color: '#6366f1', fontSize: '0.9rem' }}>← 목록으로 돌아가기</a>
     </div>
   );
 
@@ -113,12 +175,15 @@ export default function SeriesDetailPage() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (snap0 as any[]).map((c) => [c.chapter as number, (c.content ?? '') as string])
     );
+    reviseAbortRef.current = false;
     setScriptRevise(true);
     try {
       await fetch(`${API}/series/${id}/revise-script`, { method: 'POST' });
       // 최대 120초 폴링 (1.5초 간격) — POST 이후 내용 변경 감지
       for (let i = 0; i < 80; i++) {
+        if (reviseAbortRef.current) break; // 언마운트 시 즉시 중단
         await new Promise(r => setTimeout(r, 1500));
+        if (reviseAbortRef.current) break;
         const snap = await fetch(`${API}/series/${id}/chapters`).then(r => r.json()).catch(() => []);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const changed = (snap as any[]).some((c) => (c.content ?? '') !== (contents0.get(c.chapter) ?? ''));
@@ -147,37 +212,97 @@ export default function SeriesDetailPage() {
     }
   };
 
+  const handleLintAndRevise = async () => {
+    if (!confirm('위키 기준으로 대본을 검수한 뒤 수정 필요 항목을 자동 재작성합니다.\n계속하시겠습니까?')) return;
+    setLintLoading(true);
+    setLintReport('');
+    setLintReviseResult(null);
+    try {
+      // 1단계: Lint 검수
+      const lintRes = await fetch(`${API}/wiki/${id}/lint`, { method: 'POST' });
+      const lintData = await lintRes.json();
+      const report = lintData.report ?? '';
+      setLintReport(report);
+
+      // 2단계: 자동 수정
+      setLintLoading(false);
+      setLintRevising(true);
+      const reviseRes = await fetch(`${API}/wiki/${id}/revise`, { method: 'POST' });
+      const reviseData = await reviseRes.json();
+      const count = reviseData.revised ?? 0;
+      setLintReviseResult(count > 0 ? `챕터 ${reviseData.chapters?.join(', ')}화 재작성 완료.` : '수정 필요 항목이 없습니다.');
+      if (count > 0) { setRevisionKey(k => k + 1); refresh(); }
+    } finally {
+      setLintLoading(false);
+      setLintRevising(false);
+    }
+  };
+
+  const handleApproveWithProvider = async (artStyle: string) => {
+    if (scriptApproving) return;
+    setScriptApproving('gemini');
+    try {
+      // 1. artStyle 저장
+      await fetch(`${API}/series/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ settings: { keyframeProvider: 'gemini', artStyle } }),
+      });
+      // 2. 대본 승인 → awaiting_keyframe_setup 전이
+      await approvePipelineStep(id, 'script');
+      // 3. 키프레임 설정 즉시 승인 → keyframe 단계 진입 (Gemini 미호출 — 씬 JSON 그대로 사용)
+      await approvePipelineStep(id, 'keyframe_setup');
+      // 4. 키프레임 검토 페이지로 이동
+      router.push(`/series/keyframe?series_id=${id}`);
+    } catch {
+      refresh();
+    } finally {
+      setScriptApproving(null);
+    }
+  };
+
   return (
-    <div style={{ background: '#DDDDDD', minHeight: 'calc(100vh - 56px)' }}>
-    <main style={{ maxWidth: '960px', margin: '0 auto', padding: '2rem', fontFamily: "var(--font-en), 'Pretendard', sans-serif" }}>
+  <>
+  <style dangerouslySetInnerHTML={{ __html: BLOB_STYLE_LIGHT }} />
+  <div className="ld-bg-l" />
+  <div className="ld-blob-l ld-blob-l1" />
+  <div className="ld-blob-l ld-blob-l2" />
+  <div className="ld-blob-l ld-blob-l3" />
+  <div style={{ position: 'relative', zIndex: 2, minHeight: 'calc(100vh - 56px)', padding: '2rem 1rem' }}>
+  <main style={{ maxWidth: '960px', margin: '0 auto', fontFamily: "var(--font-en), 'Pretendard', sans-serif", padding: '2rem' }}>
 
       {/* 헤더 */}
-      <div style={{ marginBottom: '2rem' }}>
+      <div className="glass-dark" style={{ marginBottom: '2rem', padding: '1.5rem 2rem', borderRadius: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 700, flex: 1, color: '#000000' }}>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 700, flex: 1, color: 'rgba(255,255,255,0.95)' }}>
             {series.title || series.topic}
           </h1>
           <a href={`/series/${id}/wiki`} style={{
             padding: '0.4rem 1rem', borderRadius: '8px',
-            border: '1px solid rgba(0,0,0,0.2)',
-            color: '#000000', textDecoration: 'none', fontSize: '0.85rem',
+            border: '1px solid rgba(255,255,255,0.2)',
+            color: 'rgba(255,255,255,0.92)', textDecoration: 'none', fontSize: '0.85rem',
           }}>
             위키 →
           </a>
         </div>
-        <p style={{ color: 'rgba(0,0,0,0.5)', marginTop: '0.3rem', fontSize: '0.9rem' }}>
+        <p style={{ color: 'rgba(255,255,255,0.5)', marginTop: '0.3rem', fontSize: '0.9rem' }}>
           {series.topic}
         </p>
       </div>
 
       {/* 제작 공정 스텝바 */}
-      <PipelineStatus currentStep={step} error={error} />
+      <div className="glass-dark" style={{ borderRadius: '16px', padding: '1rem 1.25rem', marginBottom: '0.5rem' }}>
+        <PipelineStatus currentStep={step} error={error} />
+      </div>
 
       {/* ── 단계별 콘텐츠 패널 ── */}
 
-      {/* 소스 업로드 처리 중 — 사용자 게이트 없음, 자동 진행 */}
+      {/* 소스 업로드 — 파일 업로드 + AI 분류 제안 */}
       {step === 'awaiting_source_upload' && (
-        <StepRunningPanel step="world" />
+        <SourceUploadEditor
+          seriesId={id}
+          onConfirm={() => { refresh(); loadSeries(); }}
+        />
       )}
 
       {/* 세계관 확인 & 편집 — openingHook이 있을 때만 마운트 (race condition 방지) */}
@@ -190,7 +315,7 @@ export default function SeriesDetailPage() {
         />
       )}
       {step === 'awaiting_world_approval' && series && !(series as any).world_data?.openingHook && (
-        <div style={{ padding: '2rem', textAlign: 'center', color: 'rgba(0,0,0,0.4)', fontFamily: "var(--font-en), 'Pretendard', sans-serif" }}>
+        <div style={{ padding: '2rem', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontFamily: "var(--font-en), 'Pretendard', sans-serif" }}>
           세계관 생성 중...
         </div>
       )}
@@ -220,14 +345,12 @@ export default function SeriesDetailPage() {
 
       {/* 대본 승인 */}
       {step === 'awaiting_script_approval' && (
-        <div style={{
+        <div className="glass-dark" style={{
           marginTop: '2rem',
-          background: 'linear-gradient(135deg, rgba(30,27,75,0.95), rgba(17,24,39,0.97))',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: '20px',
           padding: '2rem',
+          borderRadius: '16px',
           fontFamily: "var(--font-en), 'Pretendard', sans-serif",
-          color: '#e2e8f0',
+          color: 'rgba(255,255,255,0.92)',
           display: 'flex',
           flexDirection: 'column',
           gap: '1.5rem',
@@ -235,43 +358,41 @@ export default function SeriesDetailPage() {
           {/* 헤더 */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: '#e2e8f0' }}>대본 확인</h2>
-              <span style={{
-                fontSize: '0.65rem', padding: '0.15rem 0.55rem', borderRadius: '6px',
-                background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)',
-                color: '#a5b4fc', fontWeight: 600,
-              }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: 'rgba(255,255,255,0.92)' }}>대본 확인</h2>
+              <span className="glass-badge glass-badge--violet">
                 {chapters.length}화
               </span>
               <span style={{ flex: 1 }} />
               <button
-                onClick={handleScriptRevise}
-                disabled={scriptRevise || scriptRegen}
-                style={{
-                  padding: '0.3rem 0.85rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 600,
-                  border: '1px solid rgba(99,102,241,0.4)', background: 'rgba(99,102,241,0.08)',
-                  color: (scriptRevise || scriptRegen) ? 'rgba(255,255,255,0.25)' : '#a5b4fc',
-                  cursor: (scriptRevise || scriptRegen) ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
-                }}
+                onClick={handleLintAndRevise}
+                disabled={lintLoading || lintRevising || scriptRevise || scriptRegen}
+                className="glass-btn glass-btn--ghost glass-btn--sm"
+                style={{ borderRadius: '8px' }}
               >
-                {scriptRevise ? '교정 중…' : '대본 교정'}
+                {lintLoading ? '검수 중…' : lintRevising ? '교정 중…' : '대본 교정'}
+              </button>
+              {/* 키프레임 익스텐션 버튼 — 컷별 이미지 생성 보조 도구 */}
+              <button
+                onClick={() => setExtensionOpen(true)}
+                disabled={lintLoading || lintRevising || scriptRevise || scriptRegen}
+                className="glass-btn glass-btn--ghost glass-btn--sm"
+                style={{ borderRadius: '8px', borderColor: 'rgba(139,92,246,0.4)', color: '#a78bfa' }}
+              >
+                키프레임 익스텐션
               </button>
               <button
                 onClick={handleScriptRegenerate}
                 disabled={scriptRegen || scriptRevise}
-                style={{
-                  padding: '0.3rem 0.85rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 600,
-                  border: '1px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)',
-                  color: (scriptRegen || scriptRevise) ? 'rgba(255,255,255,0.25)' : '#fca5a5',
-                  cursor: (scriptRegen || scriptRevise) ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
-                }}
+                className="glass-btn glass-btn--danger glass-btn--sm"
+                style={{ borderRadius: '8px' }}
               >
                 {scriptRegen ? '재생성 중…' : '대본 재생성'}
               </button>
             </div>
-            <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+            <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
               생성된 대본을 검토하고 승인하면 영상 제작이 시작됩니다.
             </p>
+
           </div>
 
           <ChapterList key={revisionKey} seriesId={id} chapters={chapters} expandedCh={expandedCh} setExpandedCh={setExpandedCh} />
@@ -280,13 +401,68 @@ export default function SeriesDetailPage() {
             <ScriptDownloadPanel series={series} chapters={chapters} busy={scriptRevise || scriptRegen} />
           )}
 
-          <ApprovalPanel
-            seriesId={id} step={step}
-            onApprove={async () => {
-              await approvePipelineStep(id, 'script');
+          <ScriptApprovalButtons
+            approving={scriptApproving}
+            disabled={scriptRevise || scriptRegen}
+            onApprove={handleApproveWithProvider}
+          />
+
+          {/* Lint 결과 패널 */}
+          {(lintReport || lintReviseResult) && (
+            <div style={{ borderRadius: '16px', border: '1px solid rgba(99,102,241,0.3)', background: 'rgba(99,102,241,0.05)', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.85rem 1.25rem', borderBottom: '1px solid rgba(99,102,241,0.15)' }}>
+                <span style={{ fontWeight: 700, color: '#a78bfa', fontSize: '0.9rem' }}>🔍 Lint 보고서</span>
+                <button
+                  onClick={() => { setLintReport(''); setLintReviseResult(null); }}
+                  style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '1.1rem' }}
+                >✕</button>
+              </div>
+              {lintReviseResult && (
+                <div style={{ padding: '0.7rem 1.25rem', background: 'rgba(16,185,129,0.1)', borderBottom: '1px solid rgba(16,185,129,0.2)', color: '#6ee7b7', fontWeight: 600, fontSize: '0.85rem' }}>
+                  ✅ {lintReviseResult}
+                </div>
+              )}
+              <pre style={{ padding: '1.25rem', whiteSpace: 'pre-wrap', color: 'rgba(255,255,255,0.8)', fontSize: '0.83rem', lineHeight: 1.7, margin: 0, maxHeight: '500px', overflowY: 'auto' }}>
+                {lintReport}
+              </pre>
+            </div>
+          )}
+
+          {/* 키프레임 익스텐션 패널 — 컷별 이미지 생성 보조 도구 */}
+          <ExtensionDrawer
+            open={extensionOpen}
+            onClose={() => setExtensionOpen(false)}
+            seriesId={id}
+            chapters={chapters.map(c => ({ id: c.id, chapter: c.chapter, role: c.role }))}
+          />
+        </div>
+      )}
+
+      {/* TTS 시작 승인 — 키프레임 검토 완료 후 TTS 생성 시작 */}
+      {step === 'awaiting_tts' && (
+        <div className="glass-dark" style={{
+          marginTop: '2rem',
+          padding: '2rem',
+          borderRadius: '16px',
+          color: 'rgba(255,255,255,0.92)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}>
+          <h2 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>🎙 음성(TTS) 생성 시작</h2>
+          <p style={{ margin: 0, color: 'rgba(255,255,255,0.55)', fontSize: '0.9rem' }}>
+            키프레임 검토가 완료됐습니다. 아래 버튼을 누르면 모든 컷의 음성을 자동 생성합니다.
+          </p>
+          <button
+            onClick={async () => {
+              await approvePipelineStep(id, 'tts');
               refresh();
             }}
-          />
+            className="glass-btn glass-btn--accent glass-btn--lg"
+            style={{ alignSelf: 'flex-start' }}
+          >
+            TTS 생성 시작
+          </button>
         </div>
       )}
 
@@ -328,9 +504,10 @@ export default function SeriesDetailPage() {
       )}
 
       {/* 실행 로그 */}
-      <SeriesLogs seriesId={id} />
+      <SeriesLogs seriesId={id} seriesTitle={series.title || series.topic} />
     </main>
     </div>
+  </>
   );
 }
 
@@ -338,16 +515,14 @@ export default function SeriesDetailPage() {
 
 const STEP_LABELS: Record<string, string> = {
   awaiting_source_upload: '소스 업로드', world: '세계관 생성', casting: '캐스팅',
-  script: '대본 생성', keyframe: '키프레임 생성',
+  script: '대본 생성', keyframe: '키프레임 생성', awaiting_tts: 'TTS 시작 대기',
   tts: '음성(TTS) 생성', render: '영상 렌더링', upload: 'YouTube 업로드',
 };
 
 function StepRunningPanel({ step }: { step: string }) {
   return (
-    <div style={{
+    <div className="glass-dark" style={{
       padding: '2rem', borderRadius: '16px',
-      background: 'rgba(99,102,241,0.06)',
-      border: '1px solid rgba(99,102,241,0.2)',
       display: 'flex', alignItems: 'center', gap: '1.25rem',
     }}>
       <div style={{
@@ -357,7 +532,7 @@ function StepRunningPanel({ step }: { step: string }) {
         flexShrink: 0,
       }} />
       <div>
-        <p style={{ fontWeight: 600, fontSize: '1rem', marginBottom: '0.25rem' }}>
+        <p style={{ fontWeight: 600, fontSize: '1rem', marginBottom: '0.25rem', color: 'rgba(255,255,255,0.92)' }}>
           {STEP_LABELS[step] ?? step} 진행 중…
         </p>
         <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.85rem' }}>
@@ -481,10 +656,10 @@ function ChapterScenes({ seriesId, chapter }: { seriesId: string; chapter: numbe
   };
 
   if (loading) return (
-    <div style={{ padding: '1.5rem', color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem' }}>씬 로딩 중…</div>
+    <div style={{ padding: '1.5rem', color: 'rgba(255,255,255,0.35)', fontSize: '0.85rem' }}>씬 로딩 중…</div>
   );
   if (!scenes.length) return (
-    <div style={{ padding: '1.5rem', color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem' }}>씬 데이터 없음</div>
+    <div style={{ padding: '1.5rem', color: 'rgba(255,255,255,0.35)', fontSize: '0.85rem' }}>씬 데이터 없음</div>
   );
 
   const totalCuts = scenes.reduce((s, sc) => s + sc.cuts.length, 0);
@@ -493,19 +668,19 @@ function ChapterScenes({ seriesId, chapter }: { seriesId: string; chapter: numbe
   const remSec    = Math.round(totalSec % 60);
 
   return (
-    <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+    <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
       {/* 챕터 합계 */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: '1rem',
         padding: '0.55rem 1.4rem',
         background: 'rgba(255,255,255,0.02)',
-        borderBottom: '1px solid rgba(255,255,255,0.04)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
       }}>
-        <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)' }}>
-          총 <b style={{ color: 'rgba(255,255,255,0.55)' }}>{totalCuts}컷</b>
+        <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>
+          총 <b style={{ color: 'rgba(255,255,255,0.7)' }}>{totalCuts}컷</b>
         </span>
-        <span style={{ fontSize: '0.65rem', fontFamily: "'Consolas', monospace", color: 'rgba(255,255,255,0.3)' }}>
-          예상 <b style={{ color: 'rgba(255,255,255,0.55)' }}>
+        <span style={{ fontSize: '0.65rem', fontFamily: "var(--font-en), 'Pretendard', sans-serif", color: 'rgba(255,255,255,0.4)' }}>
+          예상 <b style={{ color: 'rgba(255,255,255,0.7)' }}>
             {totalMin > 0 ? `${totalMin}분 ${remSec}초` : `${remSec}초`}
           </b>
         </span>
@@ -523,20 +698,20 @@ function ChapterScenes({ seriesId, chapter }: { seriesId: string; chapter: numbe
             <div style={{
               display: 'flex', alignItems: 'center', gap: '0.6rem',
               padding: '0.7rem 1.4rem 0.4rem',
-              borderTop: scene.sceneIndex === 0 ? 'none' : '1px solid rgba(255,255,255,0.06)',
+              borderTop: scene.sceneIndex === 0 ? 'none' : '1px solid rgba(255,255,255,0.08)',
             }}>
               <span style={{
-                fontSize: '0.62rem', fontWeight: 700, fontFamily: "'Consolas', 'Courier New', monospace",
-                color: isHookCopy ? '#f87171' : scene.isHook ? '#fbbf24' : 'rgba(255,255,255,0.25)',
+                fontSize: '0.62rem', fontWeight: 700, fontFamily: "var(--font-en), 'Pretendard', sans-serif",
+                color: isHookCopy ? '#f87171' : scene.isHook ? '#fbbf24' : 'rgba(255,255,255,0.3)',
                 letterSpacing: '0.04em', textTransform: 'uppercase',
               }}>
                 {isHookCopy ? '▶ HOOK 도입부 (복사본)' : scene.isHook ? `SCENE ${scene.sceneIndex}  HOOK 원본` : `SCENE ${scene.sceneIndex}`}
               </span>
-              <span style={{ flex: 1, height: '1px', background: isHookCopy ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.05)' }} />
-              <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.18)' }}>
+              <span style={{ flex: 1, height: '1px', background: isHookCopy ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.08)' }} />
+              <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.25)' }}>
                 {scene.cuts.length}컷
               </span>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.15)', fontFamily: "'Consolas', monospace" }}>
+              <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.2)', fontFamily: "var(--font-en), 'Pretendard', sans-serif" }}>
                 ~{sceneSec.toFixed(0)}s
               </span>
             </div>
@@ -550,8 +725,8 @@ function ChapterScenes({ seriesId, chapter }: { seriesId: string; chapter: numbe
               return (
                 <div key={cut.cut_index} style={{
                   padding: '0.6rem 1.4rem 0.9rem 1.8rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.03)',
-                  background: isDialogue ? 'rgba(255,255,255,0.015)' : 'transparent',
+                  borderBottom: '1px solid rgba(255,255,255,0.06)',
+                  background: isDialogue ? 'rgba(99,102,241,0.04)' : 'transparent',
                 }}>
                   {/* 컷 마스터코드 뱃지 */}
                   <div style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -561,7 +736,7 @@ function ChapterScenes({ seriesId, chapter }: { seriesId: string; chapter: numbe
                       borderRadius: '999px',
                       fontSize: '0.72rem',
                       fontWeight: 700,
-                      fontFamily: "'Consolas', 'Courier New', monospace",
+                      fontFamily: "var(--font-en), 'Pretendard', sans-serif",
                       letterSpacing: '0.05em',
                       color: '#ffffff',
                       background: cut.is_hook ? '#FF0000' : 'rgba(99,102,241,0.7)',
@@ -573,7 +748,7 @@ function ChapterScenes({ seriesId, chapter }: { seriesId: string; chapter: numbe
                       title={isMixed ? undefined : '클릭 → 나레이션 ↔ 대사 전환'}
                       style={{
                         fontSize: '0.62rem', fontWeight: 600,
-                        color: isDialogue ? '#34d399' : isMixed ? '#fbbf24' : 'rgba(255,255,255,0.2)',
+                        color: isDialogue ? '#34d399' : isMixed ? '#fbbf24' : 'rgba(255,255,255,0.3)',
                         letterSpacing: '0.06em', textTransform: 'uppercase',
                         cursor: isMixed ? 'default' : 'pointer',
                         opacity: patchingCodes.has(cut.scene_code) ? 0.4 : 1,
@@ -589,15 +764,15 @@ function ChapterScenes({ seriesId, chapter }: { seriesId: string; chapter: numbe
                       borderRadius: '999px',
                       fontSize: '0.68rem',
                       fontWeight: 600,
-                      fontFamily: "'Consolas', 'Courier New', monospace",
+                      fontFamily: "var(--font-en), 'Pretendard', sans-serif",
                       letterSpacing: '0.03em',
                       background: cutSec < 3
                         ? 'rgba(239,68,68,0.18)'
                         : cutSec > 30
                           ? 'rgba(251,191,36,0.15)'
                           : 'rgba(255,255,255,0.06)',
-                      color: cutSec < 3 ? '#f87171' : cutSec > 30 ? '#fbbf24' : 'rgba(255,255,255,0.35)',
-                      border: `1px solid ${cutSec < 3 ? 'rgba(239,68,68,0.3)' : cutSec > 30 ? 'rgba(251,191,36,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                      color: cutSec < 3 ? '#f87171' : cutSec > 30 ? '#fbbf24' : 'rgba(255,255,255,0.45)',
+                      border: `1px solid ${cutSec < 3 ? 'rgba(239,68,68,0.3)' : cutSec > 30 ? 'rgba(251,191,36,0.25)' : 'rgba(255,255,255,0.1)'}`,
                     }}>
                       {cutSec.toFixed(1)}s
                     </span>
@@ -672,7 +847,7 @@ function ChapterScenes({ seriesId, chapter }: { seriesId: string; chapter: numbe
                           <div key={si} style={{ paddingLeft: '0.2rem' }}>
                             <span style={{
                               fontSize: '0.65rem', fontWeight: 700,
-                              color: 'rgba(255,255,255,0.2)', letterSpacing: '0.06em',
+                              color: 'rgba(255,255,255,0.3)', letterSpacing: '0.06em',
                               display: 'block', marginBottom: '0.15rem', textTransform: 'uppercase',
                             }}>
                               narr
@@ -756,7 +931,7 @@ function ChapterScriptTabs({ seriesId, chapter }: { seriesId: string; chapter: n
     border: 'none', cursor: 'pointer',
     borderRadius: '6px',
     background: active ? 'rgba(99,102,241,0.25)' : 'transparent',
-    color: active ? '#a5b4fc' : 'rgba(255,255,255,0.3)',
+    color: active ? '#6366f1' : 'rgba(255,255,255,0.4)',
     transition: 'all 0.15s',
   });
 
@@ -766,7 +941,7 @@ function ChapterScriptTabs({ seriesId, chapter }: { seriesId: string; chapter: n
       <div style={{
         display: 'flex', gap: '0.25rem', alignItems: 'center',
         padding: '0.5rem 1.2rem',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
         background: 'rgba(0,0,0,0.15)',
       }}>
         <button style={tabStyle(tab === 'structured')} onClick={() => setTab('structured')}>
@@ -804,9 +979,9 @@ function ChapterScriptTabs({ seriesId, chapter }: { seriesId: string; chapter: n
                 onClick={handleCopy}
                 style={{
                   padding: '0.35rem 0.85rem', borderRadius: '8px',
-                  border: copied ? '1px solid rgba(16,185,129,0.4)' : '1px solid rgba(255,255,255,0.1)',
-                  background: copied ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.05)',
-                  color: copied ? '#34d399' : 'rgba(255,255,255,0.45)',
+                  border: copied ? '1px solid rgba(16,185,129,0.4)' : '1px solid rgba(255,255,255,0.12)',
+                  background: copied ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.04)',
+                  color: copied ? '#10b981' : 'rgba(255,255,255,0.5)',
                   fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
                 }}
               >
@@ -832,7 +1007,7 @@ function ChapterScriptTabs({ seriesId, chapter }: { seriesId: string; chapter: n
                 명문 후보 — guide에 추가할 문장을 선택하세요
               </div>
               {candidates.length === 0 ? (
-                <p style={{ padding: '1rem', fontSize: '0.82rem', color: 'rgba(255,255,255,0.3)' }}>
+                <p style={{ padding: '1rem', fontSize: '0.82rem', color: 'rgba(255,255,255,0.35)' }}>
                   추출된 후보가 없습니다.
                 </p>
               ) : (
@@ -878,18 +1053,18 @@ function ChapterScriptTabs({ seriesId, chapter }: { seriesId: string; chapter: n
             </div>
           )}
           {rawLoading ? (
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem' }}>불러오는 중…</p>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.85rem' }}>불러오는 중…</p>
           ) : rawText ? (
             <p style={{
               whiteSpace: 'pre-wrap', lineHeight: 2.0,
-              fontSize: '0.88rem', color: 'rgba(255,255,255,0.75)',
+              fontSize: '0.88rem', color: 'rgba(255,255,255,0.8)',
               fontFamily: "var(--font-en), 'Pretendard', sans-serif",
               margin: 0,
             }}>
               {rawText}
             </p>
           ) : (
-            <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.85rem' }}>대본 없음</p>
+            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem' }}>대본 없음</p>
           )}
         </div>
       )}
@@ -916,10 +1091,9 @@ function ChapterList({ seriesId, chapters, expandedCh, setExpandedCh }: {
         const isOpen = expandedCh === ch.chapter;
         const roleColor = ROLE_COLOR[ch.role] ?? '#6366f1';
         return (
-          <div key={ch.chapter} style={{
+          <div key={ch.chapter} className="glass-dark" style={{
             borderRadius: '12px',
-            border: `1px solid ${ch.approved ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.07)'}`,
-            background: 'rgba(255,255,255,0.02)',
+            border: `1px solid ${ch.approved ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.18)'}`,
             overflow: 'hidden',
           }}>
             {/* 헤더 */}
@@ -933,15 +1107,15 @@ function ChapterList({ seriesId, chapters, expandedCh, setExpandedCh }: {
               }}>
                 {ch.role}
               </span>
-              <span style={{ fontWeight: 600, fontSize: '0.92rem', flex: 1, color: '#e2e8f0' }}>
+              <span style={{ fontWeight: 600, fontSize: '0.92rem', flex: 1, color: 'rgba(255,255,255,0.92)' }}>
                 {ch.chapter}화
               </span>
               {ch.approved && (
-                <span style={{ fontSize: '0.68rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.15rem 0.5rem', borderRadius: '999px' }}>
+                <span className="glass-badge glass-badge--success" style={{ textTransform: 'none', letterSpacing: 0 }}>
                   승인
                 </span>
               )}
-              <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem', flexShrink: 0 }}>
+              <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem', flexShrink: 0 }}>
                 {isOpen ? '▲' : '▼'}
               </span>
             </div>
@@ -974,7 +1148,7 @@ function VideoPreview({ url }: { url: string }) {
     <div>
       <h2 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.75rem' }}>최종 영상 확인</h2>
       <video src={url} controls style={{ width: '100%', borderRadius: '14px', background: '#000', maxHeight: '520px' }} />
-      <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+      <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', marginTop: '0.5rem' }}>
         영상 확인 후 아래 승인 버튼을 눌러 업로드를 시작하세요.
       </p>
     </div>
@@ -983,7 +1157,7 @@ function VideoPreview({ url }: { url: string }) {
 
 function DonePanel({ url }: { url: string }) {
   return (
-    <div style={{ padding: '2.5rem', textAlign: 'center', background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '16px', marginTop: '1rem' }}>
+    <div className="glass-dark" style={{ padding: '2.5rem', textAlign: 'center', border: '1px solid rgba(16,185,129,0.35)', borderRadius: '16px', marginTop: '1rem' }}>
       <p style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎉</p>
       <p style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '1.25rem' }}>YouTube 업로드 완료</p>
       <a href={url} target="_blank" rel="noopener noreferrer"
@@ -991,7 +1165,7 @@ function DonePanel({ url }: { url: string }) {
         style={{ display: 'inline-block', padding: '0.75rem 2.25rem', background: '#ff0000', color: '#fff', borderRadius: '10px', fontWeight: 700, textDecoration: 'none', fontSize: '1rem' }}>
         YouTube에서 보기 →
       </a>
-      <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.8rem', marginTop: '1rem' }}>{url}</p>
+      <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8rem', marginTop: '1rem' }}>{url}</p>
     </div>
   );
 }
@@ -1039,29 +1213,22 @@ function ScriptDownloadPanel({ series, chapters, busy = false }: {
   }
 
   return (
-    <div style={{
+    <div className="glass-dark" style={{
       padding: '1rem 1.25rem',
       borderRadius: '12px',
-      border: '1px solid rgba(255,255,255,0.08)',
-      background: 'rgba(255,255,255,0.02)',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     }}>
       <div>
         <p style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.15rem' }}>JSON 다운로드</p>
-        <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)' }}>
+        <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)' }}>
           {chapters.length}화 · 전체 씬/컷 포함 (마스터코드 포함)
         </p>
       </div>
       <button
         onClick={downloadJson}
         disabled={downloading || busy}
-        style={{
-          padding: '0.5rem 1.25rem', borderRadius: '8px',
-          border: '1px solid rgba(255,255,255,0.15)',
-          background: 'rgba(255,255,255,0.05)',
-          color: (downloading || busy) ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.7)',
-          fontSize: '0.85rem', fontWeight: 600, cursor: (downloading || busy) ? 'default' : 'pointer',
-        }}
+        className="glass-btn glass-btn--ghost glass-btn--sm"
+        style={{ borderRadius: '8px' }}
       >
         {busy ? '교정/재생성 중…' : downloading ? '준비 중…' : `↓ ${(series as any)?.series_code ?? 'script'}.json`}
       </button>
@@ -1099,9 +1266,9 @@ function ChapterDonePanel({ seriesId, completedChapter, onNext }: {
   }
 
   return (
-    <div style={{
+    <div className="glass-dark" style={{
       padding: '2rem', borderRadius: '16px', marginTop: '1rem',
-      background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)',
+      border: '1px solid rgba(16,185,129,0.3)',
     }}>
       {/* 완료 헤더 */}
       <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
@@ -1109,7 +1276,7 @@ function ChapterDonePanel({ seriesId, completedChapter, onNext }: {
         <p style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.35rem' }}>
           {completedChapter}화 업로드 완료
         </p>
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>
+        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem' }}>
           독자 반응을 확인하고 계속 여부를 결정하세요
         </p>
       </div>
@@ -1138,25 +1305,16 @@ function ChapterDonePanel({ seriesId, completedChapter, onNext }: {
           <button
             onClick={() => setConfirmTerminate(true)}
             disabled={action !== 'idle'}
-            style={{
-              padding: '0.65rem 1.4rem', borderRadius: '10px',
-              border: '1px solid rgba(239,68,68,0.35)',
-              background: 'transparent', color: '#f87171',
-              fontWeight: 600, fontSize: '0.9rem',
-              cursor: action !== 'idle' ? 'not-allowed' : 'pointer',
-            }}
+            className="glass-btn glass-btn--danger"
+            style={{ borderRadius: '10px' }}
           >
             시리즈 종결
           </button>
           <button
             onClick={handleNext}
             disabled={action !== 'idle'}
-            style={{
-              padding: '0.65rem 2rem', borderRadius: '10px', border: 'none',
-              background: action === 'next' ? 'rgba(99,102,241,0.5)' : '#6366f1',
-              color: '#fff', fontWeight: 700, fontSize: '0.95rem',
-              cursor: action !== 'idle' ? 'not-allowed' : 'pointer',
-            }}
+            className="glass-btn glass-btn--accent"
+            style={{ borderRadius: '10px' }}
           >
             {action === 'next' ? '시작 중…' : `${completedChapter + 1}화 시작`}
           </button>
@@ -1199,19 +1357,115 @@ function ChapterDonePanel({ seriesId, completedChapter, onNext }: {
       )}
 
       {/* 누적 화수 표시 */}
-      <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.2)' }}>
+      <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
         현재 {completedChapter}화 완료 · 무제한 연재 가능
       </p>
     </div>
   );
 }
 
+const ART_STYLES_ACTIVE = [
+  { key: 'polystyle', label: '폴리 스타일' },
+] as const;
+
+const ART_STYLES_COMING = [
+  { key: 'masako',   label: '마사코 스타일' },
+  { key: 'noir_oil', label: '누아르 유화'   },
+] as const;
+
+type ArtStyleType = typeof ART_STYLES_ACTIVE[number]['key'];
+
+function ScriptApprovalButtons({
+  approving, disabled = false, onApprove,
+}: {
+  approving: string | null;
+  disabled?: boolean;
+  onApprove: (artStyle: string) => void;
+}) {
+  const [artStyle, setArtStyle] = useState<ArtStyleType>('polystyle');
+  const isBusy = !!approving || disabled;
+  return (
+    <div className="glass-dark" style={{
+      padding: '1.5rem 2rem',
+      border: '1px solid rgba(245,158,11,0.3)',
+      borderRadius: '16px',
+    }}>
+      <p style={{
+        fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)',
+        textAlign: 'center', marginBottom: '1rem',
+      }}>
+        대본을 승인하고 화풍을 선택하세요
+      </p>
+
+      {/* 화풍 선택 */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.25rem' }}>
+        {/* 활성 스타일 */}
+        {ART_STYLES_ACTIVE.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => !isBusy && setArtStyle(key)}
+            disabled={isBusy}
+            style={{
+              padding: '0.4rem 1.2rem', borderRadius: '20px',
+              border: artStyle === key ? '1.5px solid rgba(245,158,11,0.8)' : '1px solid rgba(255,255,255,0.15)',
+              background: artStyle === key ? 'rgba(245,158,11,0.18)' : 'transparent',
+              color: artStyle === key ? '#f59e0b' : 'rgba(255,255,255,0.45)',
+              fontSize: '0.82rem', fontWeight: artStyle === key ? 700 : 400,
+              cursor: isBusy ? 'not-allowed' : 'pointer',
+              transition: 'all 0.15s',
+            }}
+          >
+            {label}
+          </button>
+        ))}
+
+        {/* 준비 중 스타일 */}
+        {ART_STYLES_COMING.map(({ label }) => (
+          <span
+            key={label}
+            title="준비 중"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.4rem 1.2rem', borderRadius: '20px',
+              border: '1px dashed rgba(255,255,255,0.12)',
+              color: 'rgba(255,255,255,0.2)',
+              fontSize: '0.82rem', cursor: 'not-allowed',
+            }}
+          >
+            {label}
+            <span style={{
+              fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.04em',
+              padding: '0.1rem 0.4rem', borderRadius: '8px',
+              background: 'rgba(255,255,255,0.06)',
+              color: 'rgba(255,255,255,0.25)',
+            }}>
+              준비 중
+            </span>
+          </span>
+        ))}
+      </div>
+
+      {/* 승인 버튼 */}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <button
+          onClick={() => !isBusy && onApprove(artStyle)}
+          disabled={isBusy}
+          className="glass-btn glass-btn--amber glass-btn--lg"
+          style={{ borderRadius: '12px' }}
+        >
+          {approving ? '처리 중…' : '대본 승인 → 키프레임 제작'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function ErrorPanel({ error, onRetry }: { error: string; onRetry: () => void }) {
   return (
-    <div style={{ padding: '1.5rem', background: 'rgba(239,68,68,0.08)', borderRadius: '12px', border: '1px solid rgba(239,68,68,0.25)', marginTop: '1rem' }}>
+    <div className="glass-dark" style={{ padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(239,68,68,0.35)', marginTop: '1rem' }}>
       <p style={{ color: '#f87171', fontWeight: 600, marginBottom: '0.5rem' }}>오류 발생</p>
-      <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.88rem' }}>{error}</p>
-      <button onClick={onRetry} style={{ marginTop: '1rem', padding: '0.5rem 1.25rem', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
+      <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.88rem' }}>{error}</p>
+      <button onClick={onRetry} className="glass-btn glass-btn--danger glass-btn--sm" style={{ marginTop: '1rem', borderRadius: '8px' }}>
         재시도
       </button>
     </div>
@@ -1277,7 +1531,7 @@ function MetaSummary({ step, meta }: { step: string; meta?: Record<string, unkno
 
   if (items.length === 0) return null;
   return (
-    <div style={{ fontSize: '0.7rem', color: 'rgba(0,0,0,0.45)', marginTop: '0.2rem', lineHeight: 1.5 }}>
+    <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.45)', marginTop: '0.2rem', lineHeight: 1.5 }}>
       {items.join('  /  ')}
     </div>
   );
@@ -1290,6 +1544,7 @@ const LOG_STEP_LABELS: Record<string, string> = {
   script: '대본 생성',
   awaiting_script_approval: '대본 승인 대기',
   keyframe: '키프레임 생성',
+  awaiting_tts: 'TTS 시작 대기',
   tts: 'TTS 음성 생성',
   render: '영상 렌더링',
   awaiting_upload_approval: '업로드 승인 대기',
@@ -1314,16 +1569,27 @@ function formatDuration(startedAt: string, finishedAt?: string): string {
   return `${Math.floor(sec / 60)}분 ${sec % 60}초`;
 }
 
-function SeriesLogs({ seriesId }: { seriesId: string }) {
+function SeriesLogs({ seriesId, seriesTitle }: { seriesId: string; seriesTitle: string }) {
   const [logs, setLogs] = useState<PipelineLog[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
+  // IDB 캐시에서 즉시 복원 (API 응답 전 빈 상태 방지)
+  useEffect(() => {
+    getPipelineLogs<PipelineLog>(seriesId).then(cached => {
+      if (cached.length > 0) setLogs(cached);
+    });
+  }, [seriesId]);
+
   const load = useCallback(() => {
     fetch(`${API}/series/${seriesId}/logs`)
-      .then(r => r.ok ? r.json() : [])
-      .then(setLogs)
+      .then(r => r.ok ? r.json() : null)
+      .then((data: PipelineLog[] | null) => {
+        if (!data) return;
+        setLogs(data);
+        setPipelineLogs<PipelineLog>(seriesId, data, seriesTitle);
+      })
       .catch(() => {});
-  }, [seriesId]);
+  }, [seriesId, seriesTitle]);
 
   useEffect(() => {
     load();
@@ -1332,16 +1598,16 @@ function SeriesLogs({ seriesId }: { seriesId: string }) {
   }, [load]);
 
   return (
-    <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1.75rem' }}>
+    <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.75rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-        <h2 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'rgba(0,0,0,0.45)', letterSpacing: '0.04em' }}>
+        <h2 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.04em' }}>
           실행 로그
         </h2>
         <button
           onClick={load}
           style={{
-            background: 'none', border: '1px solid rgba(0,0,0,0.12)',
-            color: 'rgba(0,0,0,0.4)', padding: '0.25rem 0.75rem',
+            background: 'none', border: '1px solid rgba(255,255,255,0.12)',
+            color: 'rgba(255,255,255,0.4)', padding: '0.25rem 0.75rem',
             borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem',
           }}
         >
@@ -1350,7 +1616,7 @@ function SeriesLogs({ seriesId }: { seriesId: string }) {
       </div>
 
       {logs.length === 0 ? (
-        <p style={{ color: 'rgba(0,0,0,0.3)', fontSize: '0.82rem' }}>로그 없음</p>
+        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.82rem' }}>로그 없음</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
           {logs.map((log, idx) => {
@@ -1361,10 +1627,10 @@ function SeriesLogs({ seriesId }: { seriesId: string }) {
             return (
               <div
                 key={log.id}
+                className="glass-dark"
                 style={{
                   borderRadius: '10px',
-                  border: `1px solid ${isLatest ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.04)'}`,
-                  background: isLatest ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.015)',
+                  border: `1px solid ${isLatest ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.1)'}`,
                   overflow: 'hidden',
                 }}
               >
@@ -1379,17 +1645,13 @@ function SeriesLogs({ seriesId }: { seriesId: string }) {
                   }}
                 >
                   {/* 상태 뱃지 */}
-                  <span style={{
-                    padding: '0.15rem 0.55rem', borderRadius: '999px', fontSize: '0.72rem',
-                    fontWeight: 700, background: badge.bg, color: badge.color,
-                    flexShrink: 0, minWidth: 52, textAlign: 'center',
-                  }}>
+                  <span className={`glass-badge glass-badge--${log.status === 'success' ? 'success' : log.status === 'failed' ? 'error' : log.status === 'running' ? 'running' : 'amber'}`} style={{ flexShrink: 0, minWidth: 52, justifyContent: 'center', textTransform: 'none', letterSpacing: 0 }}>
                     {badge.label}
                   </span>
 
                   {/* 단계명 */}
                   <span style={{
-                    color: isLatest ? '#000000' : 'rgba(0,0,0,0.5)',
+                    color: isLatest ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.5)',
                     fontWeight: isLatest ? 600 : 400, flex: 1,
                   }}>
                     {LOG_STEP_LABELS[log.step] ?? log.step}
@@ -1397,12 +1659,12 @@ function SeriesLogs({ seriesId }: { seriesId: string }) {
                   </span>
 
                   {/* 소요 시간 */}
-                  <span style={{ color: 'rgba(0,0,0,0.35)', fontSize: '0.75rem', flexShrink: 0 }}>
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem', flexShrink: 0 }}>
                     {formatDuration(log.started_at, log.finished_at)}
                   </span>
 
                   {/* 시작 시각 */}
-                  <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: '0.72rem', flexShrink: 0, minWidth: 55, textAlign: 'right' }}>
+                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.72rem', flexShrink: 0, minWidth: 55, textAlign: 'right' }}>
                     {new Date(log.started_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </span>
 
@@ -1431,7 +1693,7 @@ function SeriesLogs({ seriesId }: { seriesId: string }) {
                     <pre style={{
                       margin: 0, fontSize: '0.74rem', color: '#991b1b',
                       whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-                      lineHeight: 1.6, fontFamily: "'Consolas', 'Courier New', monospace",
+                      lineHeight: 1.6, fontFamily: "var(--font-en), 'Pretendard', sans-serif",
                     }}>
                       {log.error_detail}
                     </pre>

@@ -1,0 +1,61 @@
+{
+  "id": "blank",
+  "label": "빈 문서",
+  "version": "1.0.0",
+  "description": "템플릿 제약 없이 주제만 입력하면 AI가 자유롭게 구조를 설계하는 빈 문서.",
+
+  "layout": {
+    "type": "single-column",
+    "maxWidth": "800px",
+    "margin": "0 auto",
+    "padding": "3rem 2rem",
+    "sidebar": false
+  },
+
+  "palette": {
+    "background":     "#ffffff",
+    "surface":        "#f8fafc",
+    "text_primary":   "#111827",
+    "text_secondary": "#6b7280",
+    "accent":         "#6b7280",
+    "accent_light":   "#f3f4f6",
+    "divider":        "#e5e7eb"
+  },
+
+  "typography": {
+    "font_primary": "'Pretendard', -apple-system, sans-serif",
+    "base_size":    "1rem",
+    "line_height":  1.8
+  },
+
+  "ai_instructions": {
+    "freedom": "최대",
+    "structure_rule": "주제를 분석해 가장 적합한 섹션 구조를 AI가 자율 결정",
+    "layout_options": ["single-column", "two-column", "full-width-sections"],
+    "block_options": ["heading", "paragraph", "list", "table", "callout", "code", "image_placeholder"],
+    "palette_rule": "주제의 분위기에 맞는 색상 팔레트를 AI가 자율 선택",
+    "constraints": [
+      "기본 HTML + inline style 또는 <style> 태그 사용",
+      "외부 라이브러리 CDN 의존 최소화",
+      "모바일 반응형 meta viewport 필수 포함",
+      "한국어 주제는 한국어 우선, 영문 혼용 허용"
+    ]
+  },
+
+  "base_html_skeleton": {
+    "doctype": "<!DOCTYPE html>",
+    "lang": "ko",
+    "meta": ["charset=UTF-8", "viewport width=device-width initial-scale=1.0"],
+    "style_location": "<style> 태그 내부 또는 inline — 외부 파일 금지"
+  },
+
+  "tone": {
+    "voice": "주제에 맞게 AI가 자율 결정",
+    "style": "주제에 맞게 AI가 자율 결정"
+  },
+
+  "chapter_internal_flow": [
+    "AI가 주제를 분석해 자율적으로 섹션 구성",
+    "필요 시 위 다른 템플릿의 블록 패턴을 참고하여 혼합 적용 가능"
+  ]
+}

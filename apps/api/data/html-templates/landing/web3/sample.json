@@ -1,0 +1,182 @@
+{
+  "brand": {
+    "name": "VORTEX",
+    "tagline": "Decentralized. Permissionless. Unstoppable."
+  },
+  "nav_links": [
+    { "label": "Protocol", "href": "#features" },
+    { "label": "Tokenomics", "href": "#tokens" },
+    { "label": "Stats", "href": "#stats" },
+    { "label": "Docs", "href": "https://docs.vortex.finance" }
+  ],
+  "hero": {
+    "badge": "🚀 메인넷 런칭 — 지금 거래 가능",
+    "title_line1": "DeFi의",
+    "title_line2": "새로운",
+    "title_line3": "표준.",
+    "subtitle": "VORTEX는 차세대 탈중앙화 거래소 프로토콜입니다. 0.01% 수수료, MEV 방지 거래 실행, 크로스체인 즉시 브릿징 — 기존 DEX의 한계를 넘어섭니다.",
+    "cta_primary": "앱 실행하기",
+    "cta_secondary": "백서 읽기"
+  },
+  "ticker_items": [
+    { "symbol": "ETH/USDC", "value": "$3,847.22", "change": "+2.4%", "direction": "up" },
+    { "symbol": "BTC/USDT", "value": "$68,120.50", "change": "+1.8%", "direction": "up" },
+    { "symbol": "SOL/USDC", "value": "$182.34", "change": "-0.7%", "direction": "down" },
+    { "symbol": "VTX/ETH", "value": "$1.284", "change": "+8.3%", "direction": "up" },
+    { "symbol": "ARB/USDC", "value": "$1.04", "change": "+3.1%", "direction": "up" },
+    { "symbol": "MATIC/USDT", "value": "$0.892", "change": "-1.2%", "direction": "down" }
+  ],
+  "features_section": {
+    "eyebrow": "PROTOCOL FEATURES",
+    "title": "거래의 미래를 경험하세요",
+    "desc": "VORTEX 프로토콜은 기존 AMM의 한계를 극복하는 혁신적인 Concentrated Liquidity와 AI 기반 라우팅 엔진으로 최적의 거래를 보장합니다."
+  },
+  "features": [
+    {
+      "icon": "⚡",
+      "title": "초고속 거래 실행",
+      "desc": "평균 0.3초 내 거래 확정. Optimism/Arbitrum 기반 L2 아키텍처로 가스비를 95% 절감합니다.",
+      "tag": "CORE",
+      "icon_color": "#caff00",
+      "highlight": false
+    },
+    {
+      "icon": "🛡️",
+      "title": "MEV 방지 거래",
+      "desc": "독점적 Private Mempool 기술로 프론트런닝, 샌드위치 공격으로부터 사용자 거래를 완벽히 보호합니다.",
+      "tag": "EXCLUSIVE",
+      "icon_color": "#7b4dff",
+      "highlight": true
+    },
+    {
+      "icon": "🌉",
+      "title": "크로스체인 즉시 브릿징",
+      "desc": "Ethereum, BSC, Polygon, Arbitrum, Optimism 간 1클릭 즉시 브릿징. 대기 시간 평균 12초.",
+      "tag": "BRIDGE",
+      "icon_color": "#ff2d78",
+      "highlight": false
+    },
+    {
+      "icon": "💎",
+      "title": "Concentrated Liquidity",
+      "desc": "Uniswap V3 방식보다 4배 높은 자본 효율. 유동성 공급자는 동일 자본으로 4배 높은 수수료 수익을 얻습니다.",
+      "tag": "YIELD",
+      "icon_color": "#caff00",
+      "highlight": false
+    },
+    {
+      "icon": "🤖",
+      "title": "AI 최적 라우팅",
+      "desc": "50개 이상의 유동성 풀을 실시간 분석해 슬리피지를 최소화하는 최적 경로를 0.1초 내에 계산합니다.",
+      "tag": "AI",
+      "icon_color": "#7b4dff",
+      "highlight": false
+    },
+    {
+      "icon": "🗳️",
+      "title": "온체인 거버넌스",
+      "desc": "VTX 토큰 홀더는 프로토콜 파라미터, 수수료 구조, 새로운 풀 추가에 직접 투표할 수 있습니다.",
+      "tag": "DAO",
+      "icon_color": "#ff2d78",
+      "highlight": false
+    }
+  ],
+  "stats_section": {
+    "eyebrow": "PROTOCOL METRICS",
+    "title": "숫자가 증명합니다"
+  },
+  "stats": [
+    { "number": "$2.4B+", "label": "총 거래량 (TVL)" },
+    { "number": "980K+", "label": "활성 지갑 수" },
+    { "number": "0.01%", "label": "최저 수수료" },
+    { "number": "99.97%", "label": "프로토콜 가동률" }
+  ],
+  "tokens_section": {
+    "eyebrow": "SUPPORTED ASSETS",
+    "title": "주요 토큰 현황"
+  },
+  "tokens": [
+    {
+      "name": "VORTEX",
+      "ticker": "VTX",
+      "price": "$1.284",
+      "change": "+8.3%",
+      "direction": "up",
+      "icon_char": "V",
+      "icon_bg": "#caff00",
+      "icon_color": "#0a0a0f",
+      "sparkline_color": "#caff00"
+    },
+    {
+      "name": "Ethereum",
+      "ticker": "ETH",
+      "price": "$3,847.22",
+      "change": "+2.4%",
+      "direction": "up",
+      "icon_char": "Ξ",
+      "icon_bg": "#7b4dff",
+      "icon_color": "#ffffff",
+      "sparkline_color": "#7b4dff"
+    },
+    {
+      "name": "USD Coin",
+      "ticker": "USDC",
+      "price": "$1.000",
+      "change": "0.0%",
+      "direction": "neutral",
+      "icon_char": "$",
+      "icon_bg": "#2775ca",
+      "icon_color": "#ffffff",
+      "sparkline_color": "#2775ca"
+    },
+    {
+      "name": "Arbitrum",
+      "ticker": "ARB",
+      "price": "$1.041",
+      "change": "+3.1%",
+      "direction": "up",
+      "icon_char": "A",
+      "icon_bg": "#ff2d78",
+      "icon_color": "#ffffff",
+      "sparkline_color": "#ff2d78"
+    },
+    {
+      "name": "Wrapped BTC",
+      "ticker": "WBTC",
+      "price": "$68,120.50",
+      "change": "+1.8%",
+      "direction": "up",
+      "icon_char": "₿",
+      "icon_bg": "#f7931a",
+      "icon_color": "#ffffff",
+      "sparkline_color": "#f7931a"
+    }
+  ],
+  "cta": {
+    "title": "DeFi의 미래에 합류하세요",
+    "subtitle": "지금 연결하면 VTX 에어드랍 대상에 자동 등록됩니다. 초기 유동성 공급자에게는 3배 VTX 보상이 지급됩니다.",
+    "label": "앱 실행하기",
+    "show_download": true,
+    "launch_toast": "🚀 메인넷 런칭 — 지금 거래 시작 가능",
+    "cta_toast": "✅ 지갑 연결 완료 — VTX 보상 등록됨"
+  },
+  "footer": {
+    "brand_desc": "VORTEX는 탈중앙화 금융의 인프라를 구축합니다. 코드는 오픈소스이며, 스마트 컨트랙트는 Certik에 의해 감사 완료되었습니다.",
+    "link_columns": [
+      {
+        "title": "프로토콜",
+        "links": ["스왑", "유동성 공급", "브릿징", "파밍", "거버넌스"]
+      },
+      {
+        "title": "개발자",
+        "links": ["API 문서", "SDK", "GitHub", "버그 바운티"]
+      },
+      {
+        "title": "커뮤니티",
+        "links": ["Discord", "Telegram", "Twitter / X", "미디엄", "채용"]
+      }
+    ],
+    "copyright": "© 2026 VORTEX Protocol Foundation",
+    "bottom_tagline": "Not financial advice. DeFi involves risk. DYOR."
+  }
+}

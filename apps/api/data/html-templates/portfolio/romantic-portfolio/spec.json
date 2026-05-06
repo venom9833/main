@@ -1,0 +1,81 @@
+{
+  "id": "portfolio/romantic-portfolio",
+  "mode": "skeleton",
+  "label": "로맨틱 포트폴리오",
+  "description": "드라마틱 풀스크린 히어로 이미지 hover reveal + 감성 About + 갤러리 + 3D 글로브 + 무한 스크롤 갤러리. 개인 포트폴리오·크리에이터·아티스트에 적합.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "bg_dark": "#0a0a0a",
+    "text_primary": "#f5f0e8",
+    "accent_gold": "#c9a96e"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["name", "title_line1", "title_line2", "keywords", "about", "works", "friends"],
+    "properties": {
+      "name": {"type": "string", "description": "주인공 이름 (대문자)"},
+      "title_line1": {"type": "string", "description": "상단 레이블 (예: COMPUTER SCIENCE ENGINEERING)"},
+      "title_line2": {"type": "string", "description": "히어로 이름 대형 텍스트"},
+      "keywords": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": {"type": "string", "description": "히어로 하단 키워드"}
+      },
+      "about": {
+        "type": "object",
+        "required": ["heading", "body1", "body2", "cta_label"],
+        "properties": {
+          "heading": {"type": "string"},
+          "body1": {"type": "string", "description": "첫 번째 단락"},
+          "body2": {"type": "string", "description": "두 번째 단락"},
+          "cta_label": {"type": "string"}
+        }
+      },
+      "works": {
+        "type": "object",
+        "required": ["heading", "items"],
+        "properties": {
+          "heading": {"type": "string", "description": "갤러리 섹션 제목"},
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 6,
+            "items": {
+              "type": "object",
+              "required": ["title", "desc"],
+              "properties": {
+                "title": {"type": "string"},
+                "desc": {"type": "string"}
+              }
+            }
+          }
+        }
+      },
+      "friends": {
+        "type": "object",
+        "required": ["section_label", "heading", "body", "items"],
+        "properties": {
+          "section_label": {"type": "string", "description": "예: meet my"},
+          "heading": {"type": "string", "description": "예: Fav's"},
+          "body": {"type": "string"},
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["name", "role"],
+              "properties": {
+                "name": {"type": "string"},
+                "role": {"type": "string"},
+                "img_url": {"type": "string", "description": "프로필 이미지 URL"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

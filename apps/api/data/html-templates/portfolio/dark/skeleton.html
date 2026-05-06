@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ content.name }} — {{ content.role }}</title>
+<style>
+{{ shared_base_css }}
+{{ shared_fonts_css }}
+{{ template_css }}
+{{ shared_print_css }}
+</style>
+{{ palette_vars }}
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="pf-nav">
+  <div class="pf-container pf-nav__inner">
+    <span class="pf-nav__brand">{{ content.name }}</span>
+    <ul class="pf-nav__links">
+      <li><a href="#projects">작업물</a></li>
+      <li><a href="#about">소개</a></li>
+      <li><a href="#skills">기술</a></li>
+      <li><a href="#contact">연락처</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="pf-hero" id="hero">
+  <div>
+    <div class="pf-hero__avatar">👤</div>
+    <h1 class="pf-hero__name">{{ content.name }}</h1>
+    <div class="pf-hero__role">{{ content.role }}</div>
+    <p class="pf-hero__tagline">{{ content.tagline }}</p>
+    <div class="pf-hero__btns">
+      <a href="#projects" class="pf-btn--primary">작업물 보기</a>
+      <a href="#contact" class="pf-btn--outline">연락하기</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="pf-section" id="about">
+  <div class="pf-container">
+    <div class="pf-about">
+      <div class="pf-section__label">About</div>
+      <div class="pf-section__title">소개</div>
+      <div class="pf-about__content">
+        <div class="pf-about__bio">
+          {% for para in content.bio %}
+          <p>{{ para }}</p>
+          {% endfor %}
+        </div>
+        {% if content.stats %}
+        <div>
+          <div class="pf-stats">
+            {% for stat in content.stats %}
+            <div class="pf-stat">
+              <span class="pf-stat__value">{{ stat.value }}</span>
+              <span class="pf-stat__label">{{ stat.label }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+{% if content.skills %}
+<section class="pf-section" id="skills">
+  <div class="pf-container">
+    <div class="pf-section__label">Skills</div>
+    <div class="pf-section__title">기술 스택</div>
+    <div class="pf-skill-categories">
+      {% for group in content.skills %}
+      <div>
+        <div class="pf-skill-cat__name">{{ group.category }}</div>
+        <div class="pf-skill-tags">
+          {% for item in group.items %}
+          <span class="pf-skill-tag">{{ item }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- PROJECTS -->
+{% if content.projects %}
+<section class="pf-section" id="projects">
+  <div class="pf-container">
+    <div class="pf-section__label">Work</div>
+    <div class="pf-section__title">프로젝트</div>
+    <div class="pf-projects-grid">
+      {% for proj in content.projects %}
+      <div class="pf-card">
+        <div class="pf-card__img" style="background: {{ proj.color }};">
+          {{ proj.name[:2] }}
+        </div>
+        <div class="pf-card__body">
+          <div class="pf-card__category">{{ proj.category }}</div>
+          <div class="pf-card__title">{{ proj.name }}</div>
+          <div class="pf-card__desc">{{ proj.description }}</div>
+          <div class="pf-card__tech">
+            {% for t in proj.tech %}
+            <span class="pf-card__tag">{{ t }}</span>
+            {% endfor %}
+          </div>
+          <div class="pf-card__links">
+            {% if proj.github_url %}
+            <a href="{{ proj.github_url }}" class="pf-card__link" target="_blank">GitHub →</a>
+            {% endif %}
+            {% if proj.live_url %}
+            <a href="{{ proj.live_url }}" class="pf-card__link pf-card__link--accent" target="_blank">Live ↗</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- EXPERIENCE -->
+{% if content.experience %}
+<section class="pf-section">
+  <div class="pf-container">
+    <div class="pf-section__label">Experience</div>
+    <div class="pf-section__title">경력</div>
+    <div class="pf-exp-list">
+      {% for exp in content.experience %}
+      <div class="pf-exp-item">
+        <div>
+          <div class="pf-exp-item__company">{{ exp.company }}</div>
+          <div class="pf-exp-item__role">{{ exp.role }}</div>
+        </div>
+        <div class="pf-exp-item__period">{{ exp.period }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- CONTACT -->
+<section class="pf-section" id="contact">
+  <div class="pf-container">
+    <div class="pf-contact">
+      <div class="pf-section__label">Contact</div>
+      <div class="pf-section__title">연락처</div>
+      <p class="pf-contact__subtitle">새로운 기회와 협업을 기다립니다. 편하게 연락해주세요.</p>
+      <div class="pf-contact__items">
+        {% if content.email %}
+        <div class="pf-contact__item">✉ <a href="mailto:{{ content.email }}">{{ content.email }}</a></div>
+        {% endif %}
+        {% if content.location %}
+        <div class="pf-contact__item">📍 {{ content.location }}</div>
+        {% endif %}
+        {% if content.github %}
+        <div class="pf-contact__item">⌥ {{ content.github }}</div>
+        {% endif %}
+      </div>
+      {% if content.available %}
+      <div class="pf-available-badge">✓ 협업 가능 · 구직 중</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="pf-footer">
+  <div class="pf-container">
+    <div class="pf-footer__top">{{ content.name }} — {{ content.role }}</div>
+    <div>© 2025 {{ content.name }} · Built with LinkDrop · <a href="#hero">↑ Top</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

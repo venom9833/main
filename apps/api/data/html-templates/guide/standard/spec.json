@@ -1,0 +1,76 @@
+{
+  "id": "guide",
+  "label": "가이드 문서",
+  "version": "2.0.0",
+  "mode": "skeleton",
+  "description": "챕터 번호·사이드바 목차·STEP/FLOW/METAPHOR 블록이 포함된 튜토리얼 가이드. 서버가 구조를 고정하고 Gemini는 콘텐츠 JSON만 생성.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "background":         "#faf8f3",
+    "surface":            "#f3ede0",
+    "text_primary":       "#2c1f0e",
+    "text_secondary":     "#6b5744",
+    "accent":             "#b45309",
+    "accent_light":       "#fef3c7",
+    "accent_border":      "#d97706",
+    "card_background":    "#f5ede0",
+    "card_border":        "#e2d5c3",
+    "code_background":    "#2c1f0e",
+    "code_text":          "#f5ede0",
+    "special_box_bg":     "#fefce8",
+    "special_box_border": "#fde68a",
+    "highlight":          "#fbbf24",
+    "sidebar_bg":         "#f3ede0",
+    "sidebar_border":     "#e2d5c3"
+  },
+  "content_schema": {
+    "type": "object",
+    "properties": {
+      "title":    { "type": "string", "description": "문서 메인 타이틀 (영문 italic 슬로건 스타일, 예: Do More, Faster.)" },
+      "subtitle": { "type": "string", "description": "한국어 부제 2줄 이내" },
+      "author":   { "type": "string" },
+      "level":    { "type": "string", "description": "예: 초급 / Beginner" },
+      "duration": { "type": "string", "description": "예: 30분" },
+      "updated":  { "type": "string", "description": "예: 2025. 04. 23" },
+      "chapters": {
+        "type": "array",
+        "description": "4~8개 챕터",
+        "items": {
+          "type": "object",
+          "properties": {
+            "number":   { "type": "string", "description": "예: 01" },
+            "keyword":  { "type": "string", "description": "챕터 한 단어 키워드 (영문 대문자, 예: INTRO)" },
+            "title":    { "type": "string", "description": "챕터 제목 (한국어 또는 영문)" },
+            "subtitle": { "type": "string", "description": "챕터 부제 (한국어 1줄)" },
+            "overview": { "type": "string", "description": "챕터 개요 2~4문장" },
+            "steps": {
+              "type": "array",
+              "description": "2~5개 STEP 블록",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": { "type": "string", "description": "예: STEP 1" },
+                  "title": { "type": "string", "description": "단계 제목 (굵게)" },
+                  "body":  { "type": "string", "description": "단계 설명 2~4문장" }
+                },
+                "required": ["label", "title", "body"]
+              }
+            },
+            "tip": { "type": "string", "description": "◆ 팁 내용 (선택, 없으면 빈 문자열)" },
+            "callout": {
+              "type": "object",
+              "description": "강조 박스 (선택)",
+              "properties": {
+                "type":    { "type": "string", "description": "METAPHOR / ANALOGY / SECURITY 중 하나" },
+                "content": { "type": "string" }
+              }
+            }
+          },
+          "required": ["number", "keyword", "title", "subtitle", "overview", "steps"]
+        }
+      }
+    },
+    "required": ["title", "subtitle", "author", "chapters"]
+  }
+}

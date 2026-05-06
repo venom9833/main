@@ -1,0 +1,25 @@
+{
+  "id": "guide/attributes",
+  "mode": "skeleton",
+  "label": "HTML Attributes 레퍼런스",
+  "description": "loading · fetchpriority · autocomplete · inputmode 4개 HTML 속성 레퍼런스 가이드. 코드 블록 + 인터랙티브 폼 + 우선순위 바 애니메이션. 개발자 문서·온보딩·기술 가이드에 적합.",
+  "skeleton_file": "skeleton.html",
+  "palette": {
+    "background": "#f5f4f0",
+    "surface": "#ffffff",
+    "text_primary": "#18171a",
+    "text_secondary": "#48464f",
+    "code_bg": "#1c1b20",
+    "accent": "#82bfdb"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["title", "brand"],
+    "properties": {
+      "title":     { "type": "string", "description": "페이지 <title> 및 문서 제목" },
+      "brand":     { "type": "string", "description": "네비게이션 브랜드명" },
+      "hero_title":{ "type": "string", "description": "히어로 h1 (HTML 허용, 예: Four attributes.<br /><strong>Real impact.</strong>)" },
+      "hero_sub":  { "type": "string", "description": "히어로 부제목 텍스트" }
+    }
+  }
+}

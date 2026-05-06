@@ -1,3 +1,9 @@
+# ============================================================
+# WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+# 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+# V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+# 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+# ============================================================
 """키프레임 서비스 — Pillow 그라데이션 키프레임 생성 + R2 업로드"""
 import asyncio
 import io
@@ -30,6 +36,7 @@ def _palette_name_from_colors(palette: list) -> str:
 
 async def run_keyframe(series_id: str) -> dict:
     """전체 씬 키프레임 병렬 생성"""
+    import json
     db = get_supabase()
 
     res = await asyncio.to_thread(
@@ -37,14 +44,44 @@ async def run_keyframe(series_id: str) -> dict:
     )
     world: dict = res.data.get("world_data") or {}
     s = res.data.get("settings") or {}
-    # artStyle: masako(기본) or real — art_styles.json 정의
-    art_style: str = s.get("artStyle", "masako")
-    # pillow 폴백용 팔레트 (art_styles.json에서 읽으면 되지만 로컬 폴백도 유지)
+    art_style: str = s.get("artStyle", "polystyle")
     palette = _ART_PALETTES.get(art_style, _ART_PALETTES["default"])
+
+    # 캐릭터 portrait R2 URL 조회용 데이터 로드
+    _svc_dir = Path(__file__).parent.parent
+    _chars_dir = _svc_dir / "data" / "characters"
+    _idx_path = _chars_dir / "_index.json"
+    _name_to_id: dict[str, str] = {}
+    if _idx_path.exists():
+        with open(_idx_path, encoding="utf-8") as f:
+            _name_to_id = {c["name"]: c["id"] for c in json.load(f).get("characters", [])}
+
+    def _resolve_portraits(scene_meta: dict) -> list[str]:
+        # 씬에 등장하는 캐릭터들의 의상 참조 이미지 경로(또는 URL) 목록을 반환한다
+        urls = []
+        _portraits_dir = _chars_dir / "portraits"  # 로컬 portrait PNG 저장 폴더
+        for char_name in (scene_meta or {}).get("characters") or []:
+            char_id = _name_to_id.get(char_name)
+            if not char_id:
+                continue
+            # 1순위: 로컬 portrait 파일 (의상 기준 이미지 — 네트워크 없이 빠르게 로드)
+            local_png = _portraits_dir / f"{char_id}_polystyle.png"
+            if local_png.exists():
+                urls.append(str(local_png))
+                continue
+            # 2순위: polystyle JSON reference_url (로컬 파일 없을 때 R2 URL 폴백)
+            style_path = _chars_dir / f"{char_id}_polystyle.json"
+            if style_path.exists():
+                import json as _json2
+                data = _json2.loads(style_path.read_text(encoding="utf-8"))
+                ref_url = data.get("reference_url", "")
+                if ref_url:
+                    urls.append(ref_url)
+        return urls
 
     scenes_res = await asyncio.to_thread(
         lambda: db.table("v3_scenes")
-        .select("id,chapter,scene_index,cut_index,image_hint,is_hook")
+        .select("id,chapter,scene_index,cut_index,image_hint,is_hook,scene_meta")
         .eq("series_id", series_id)
         .eq("status", "pending")
         .execute()
@@ -53,7 +90,6 @@ async def run_keyframe(series_id: str) -> dict:
     if not scenes:
         return {"ok": True, "note": "처리할 씬 없음"}
 
-    # series.settings.keyframeProvider 우선, 없으면 IMAGE_PROVIDER 환경변수 폴백
     from image_backends.pillow_backend import PillowBackend
     from image_backends.gemini_backend import GeminiBackend
     provider = (res.data.get("settings") or {}).get("keyframeProvider", None)
@@ -62,15 +98,17 @@ async def run_keyframe(series_id: str) -> dict:
     elif provider == "pillow":
         backend_instance = PillowBackend()
     else:
-        backend_instance = get_image_backend()  # IMAGE_PROVIDER 환경변수 기준
+        backend_instance = get_image_backend()
     queue = get_image_queue()
     palette_name = _palette_name_from_colors(palette)
 
     async def _gen(scene: dict) -> bytes:
+        portrait_urls = _resolve_portraits(scene.get("scene_meta") or {})
         return await backend_instance.generate(
             scene.get("image_hint") or "",
             art_style=art_style,
             is_hook=scene.get("is_hook", False),
+            portrait_urls=portrait_urls,
         )
 
     tasks = [

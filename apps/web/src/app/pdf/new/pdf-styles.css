@@ -1,0 +1,59 @@
+@page { size: A4; margin: 0; }
+
+@media print {
+  html, body { background: white !important; }
+  header, .pdf-controls { display: none !important; }
+  .pdf-workspace {
+    display: block !important;
+    background: white !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .pdf-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: unset !important;
+    margin: 0 !important;
+    padding: 20mm !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .pdf-page:last-child { page-break-after: avoid; }
+  .pdf-footer { display: flex !important; }
+}
+
+.pdf-page {
+  width: 210mm;
+  min-height: 297mm;
+  background: #ffffff;
+  margin: 0 auto 24px;
+  padding: 20mm;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.18);
+  border-radius: 2px;
+  box-sizing: border-box;
+  font-family: 'Noto Serif KR', 'Georgia', 'Times New Roman', serif;
+  font-size: 11pt;
+  line-height: 1.75;
+  color: #1a1a1a;
+  position: relative;
+}
+
+.pdf-h1 { font-size: 18pt; font-weight: 700; margin: 0 0 14pt; color: #111; border-bottom: 2px solid #333; padding-bottom: 6pt; }
+.pdf-h2 { font-size: 14pt; font-weight: 700; margin: 16pt 0 8pt; color: #1a1a1a; }
+.pdf-h3 { font-size: 12pt; font-weight: 600; margin: 12pt 0 6pt; color: #2a2a2a; }
+.pdf-p  { margin: 0 0 9pt; text-indent: 1em; }
+.pdf-ul { margin: 6pt 0 9pt 1.4em; padding: 0; }
+.pdf-ul li { margin-bottom: 4pt; }
+
+.pdf-footer {
+  display: none;
+  position: absolute;
+  bottom: 12mm; left: 20mm; right: 20mm;
+  border-top: 0.5pt solid #ccc;
+  padding-top: 4pt;
+  justify-content: flex-end;
+}
+
+.pdf-footer-num { font-size: 9pt; color: #888; font-family: Arial, sans-serif; }

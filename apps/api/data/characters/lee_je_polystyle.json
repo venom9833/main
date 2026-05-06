@@ -1,0 +1,41 @@
+{
+  "id": "lee_je",
+  "name": "이지은",
+  "style": "noir_oil",
+  "appearance_en": {
+    "face_shape": "oval face, clean jaw, alert and slightly angular — a face built for argument and quick thought",
+    "skin": "warm beige Korean skin, clear but carrying fatigue — light under-eye shadows from months of late nights and early mornings, the skin of someone who stopped sleeping well when the income stopped",
+    "eyes": "dark brown sharp eyes, double eyelid, direct and slightly challenging gaze — the eyes that identified the exact moment the situation became wrong and have not stopped watching since",
+    "nose": "small straight nose, clean and well-defined",
+    "mouth": "full soft lips, neutral expression always one breath from speaking — the mouth that says '솔직히 말하면 그거 잘못된 거잖아요' before the other person has finished their sentence",
+    "eyebrows": "straight well-defined dark brows, slightly heavy — draw together when she is angry, which makes her more precise not less",
+    "distinctive_marks": "light under-eye fatigue, clean jawline, contained restless energy visible in the set of the face",
+    "hair": "shoulder-length straight dark hair, or simply pulled back — functional not styled, the hair of someone who stopped caring about hair when bigger things needed caring about",
+    "body": {
+      "height_cm": 162,
+      "weight_kg": 52,
+      "proportions": "slim average frame, upright posture — still presenting as put-together while the inside is a different story",
+      "posture": "upright with slight forward lean — alert and ready, the posture of someone who has learned that if she doesn't advocate for herself nobody will",
+      "body_prompt": "162cm slim upright Korean woman, alert slightly forward-leaning posture, contained energy of restrained frustration"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "plain crew-neck top or simple blouse, practical and unadorned — dressed to be taken seriously without effort, no accessories",
+        "wardrobe_prompt": "plain crew-neck top or simple blouse, practical and unadorned, no accessories"
+      }
+    },
+    "emotion_baseline": "bright and direct with controlled frustration underneath — the face of someone who quit what was wrong and is living honestly with the consequence",
+    "fal_identity_prompt": "34-year-old Korean woman, oval face with clean jaw, sharp dark double-eyelid eyes with direct challenging gaze, straight well-defined dark brows, small straight nose, full soft lips neutral or slightly tense, shoulder-length straight dark hair or simply pulled back, 162cm slim upright frame, warm beige Korean skin with light under-eye fatigue shadows"
+  },
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/v3/characters/portraits/lee_je_polystyle.png",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of the job she left because it was wrong, warm amber of direct energy and justified clarity as primary light, steel blue of freelance uncertainty lived honestly, painterly figurative realism, Korean drama cinematic composition, directness as a survival strategy earned not performed",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, passive, soft, demure, glamorous, airbrushed"
+}

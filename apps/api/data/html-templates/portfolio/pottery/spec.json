@@ -1,0 +1,118 @@
+{
+  "id": "portfolio",
+  "mode": "skeleton",
+  "label": "포트폴리오",
+  "description": "Neo-Brutalism + 공예 미학 — 일러스트레이터·도예가·크래프터 전용 작품 포트폴리오",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "cream":  "#f5f0e8",
+    "clay":   "#e8613a",
+    "yellow": "#d4a84b",
+    "green":  "#7a9e5e",
+    "pink":   "#b05c52",
+    "ink":    "#1a1a1a",
+    "mud":    "#7a5c44"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["artist", "ticker_items", "about_heading", "about", "works_heading", "works", "process_heading", "process", "contact_heading", "contact"],
+    "properties": {
+      "artist": {
+        "type": "object",
+        "required": ["name", "medium", "tagline", "badge"],
+        "description": "작가 기본 정보",
+        "properties": {
+          "name":     { "type": "string", "description": "이름 또는 작가명" },
+          "medium":   { "type": "string", "description": "작업 매체·분야 (예: Ceramics Artist, Illustrator, Textile)" },
+          "tagline":  { "type": "string", "description": "한 줄 작업 철학" },
+          "badge":    { "type": "string", "description": "배지 텍스트 (예: ★ 도예 작가 — Seoul)" },
+          "location": { "type": "string", "description": "활동 지역 (선택)" }
+        }
+      },
+      "hero": {
+        "type": "object",
+        "required": ["line1", "line2", "line3"],
+        "description": "히어로 3줄 타이틀",
+        "properties": {
+          "line1": { "type": "string", "description": "1줄: 채워진 텍스트" },
+          "line2": { "type": "string", "description": "2줄: 아웃라인 텍스트" },
+          "line3": { "type": "string", "description": "3줄: 점토색 강조" }
+        }
+      },
+      "ticker_items": {
+        "type": "array",
+        "minItems": 4,
+        "maxItems": 7,
+        "description": "마키 티커 아이템 (작업 키워드)",
+        "items": { "type": "string" }
+      },
+      "about_heading": { "type": "string", "description": "소개 섹션 제목" },
+      "about": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "description": "작가 소개 단락",
+        "items": { "type": "string" }
+      },
+      "works_heading": { "type": "string", "description": "작품 섹션 제목 (예: SELECTED WORKS)" },
+      "works": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 6,
+        "description": "대표 작품 목록",
+        "items": {
+          "type": "object",
+          "required": ["title", "medium", "desc"],
+          "properties": {
+            "title":    { "type": "string", "description": "작품명" },
+            "medium":   { "type": "string", "description": "재료·기법 (예: 백자, 수채화, 린넨 자수)" },
+            "year":     { "type": "string", "description": "제작 연도 (선택)" },
+            "desc":     { "type": "string", "description": "작품 설명 1~2문장" },
+            "color":    { "type": "string", "description": "작품 대표 색상 HEX (장식 블록용, 선택)" },
+            "tag":      { "type": "string", "description": "배지 (선택, 예: SOLD, AVAILABLE, COMMISSION)" }
+          }
+        }
+      },
+      "process_heading": { "type": "string", "description": "작업 방식 섹션 제목 (예: MY PROCESS)" },
+      "process": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 4,
+        "description": "작업 프로세스 단계",
+        "items": {
+          "type": "object",
+          "required": ["step", "title", "desc"],
+          "properties": {
+            "step":  { "type": "string", "description": "단계 번호 또는 이름 (예: 01, SKETCH)" },
+            "title": { "type": "string" },
+            "desc":  { "type": "string", "description": "단계 설명 1~2문장" }
+          }
+        }
+      },
+      "contact_heading": { "type": "string", "description": "연락처 섹션 제목 (예: LET'S WORK TOGETHER)" },
+      "contact": {
+        "type": "object",
+        "required": ["body", "cta_label"],
+        "properties": {
+          "body":      { "type": "string", "description": "컨택 유도 문장 1~2문장" },
+          "cta_label": { "type": "string", "description": "CTA 버튼 텍스트" },
+          "items": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["icon", "label", "value"],
+              "properties": {
+                "icon":  { "type": "string" },
+                "label": { "type": "string" },
+                "value": { "type": "string" },
+                "url":   { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,237 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-base: 'Plus Jakarta Sans', 'Pretendard', sans-serif;
+}
+
+/* Resume Neumorphism — 소프트 그림자 이력서 */
+
+body { font-family: var(--font-base); background: var(--c-bg); color: var(--c-text-primary); }
+
+:root {
+  --nm-shadow:         7px 7px 16px var(--c-shadow-dark),  -7px -7px 16px var(--c-shadow-light);
+  --nm-shadow-sm:      4px 4px 10px var(--c-shadow-dark),  -4px -4px 10px var(--c-shadow-light);
+  --nm-shadow-inset:   inset 3px 3px 7px var(--c-shadow-dark), inset -3px -3px 7px var(--c-shadow-light);
+}
+
+/* ─── 페이지 ─── */
+.rnm-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ─── 헤더 ─── */
+.rnm-header {
+  background: var(--c-bg);
+  border-radius: 18px;
+  padding: 2rem 2.25rem;
+  box-shadow: var(--nm-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.rnm-name {
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 0 0 0.3rem;
+}
+
+.rnm-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--c-accent);
+  margin: 0;
+}
+
+.rnm-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: flex-end;
+}
+
+.rnm-contact-item {
+  font-size: 0.72rem;
+  color: var(--c-text-secondary);
+}
+
+/* ─── 2단 레이아웃 ─── */
+.rnm-body {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ─── 카드 ─── */
+.rnm-card {
+  background: var(--c-bg);
+  border-radius: 16px;
+  padding: 1.6rem 1.6rem;
+  box-shadow: var(--nm-shadow);
+  margin-bottom: 1.5rem;
+}
+.rnm-card:last-child { margin-bottom: 0; }
+
+.rnm-section-title {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--c-accent);
+  margin: 0 0 1.25rem;
+}
+
+/* ─── 요약 ─── */
+.rnm-summary {
+  font-size: 0.875rem;
+  color: var(--c-text-secondary);
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ─── 경력 ─── */
+.rnm-exp-list { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.rnm-exp-item {
+  background: var(--c-bg);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  box-shadow: var(--nm-shadow-sm);
+  border-left: 3px solid var(--c-accent);
+}
+
+.rnm-exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.rnm-exp-role {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.rnm-exp-company {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--c-accent);
+  margin-top: 0.1rem;
+}
+
+.rnm-exp-period {
+  font-size: 0.65rem;
+  color: var(--c-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-top: 0.2rem;
+}
+
+.rnm-bullets {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.rnm-bullets li {
+  font-size: 0.79rem;
+  color: var(--c-text-secondary);
+  line-height: 1.55;
+}
+
+/* ─── 기술 ─── */
+.rnm-skill-groups { display: flex; flex-direction: column; gap: 0.85rem; }
+
+.rnm-skill-group { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.rnm-skill-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-text-secondary);
+}
+
+.rnm-skill-tags { display: flex; flex-wrap: wrap; gap: 0.38rem; }
+
+.rnm-skill-tag {
+  font-size: 0.7rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 20px;
+  background: var(--c-bg);
+  box-shadow: var(--nm-shadow-inset);
+  color: var(--c-text-primary);
+  font-weight: 500;
+}
+
+/* ─── 학력 ─── */
+.rnm-edu-list { display: flex; flex-direction: column; gap: 0.9rem; }
+
+.rnm-edu-item {
+  background: var(--c-bg);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  box-shadow: var(--nm-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.rnm-edu-school { font-size: 0.82rem; font-weight: 700; }
+.rnm-edu-degree { font-size: 0.76rem; color: var(--c-accent); }
+.rnm-edu-period { font-size: 0.66rem; color: var(--c-text-secondary); }
+.rnm-edu-note   { font-size: 0.65rem; color: var(--c-text-secondary); font-style: italic; }
+
+/* ─── 자격증 ─── */
+.rnm-cert-list { display: flex; flex-direction: column; gap: 0.7rem; }
+
+.rnm-cert-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 9px;
+  background: var(--c-bg);
+  box-shadow: var(--nm-shadow-sm);
+}
+
+.rnm-cert-name { font-size: 0.78rem; font-weight: 600; }
+.rnm-cert-meta { font-size: 0.65rem; color: var(--c-text-secondary); }
+
+/* ─── 반응형 ─── */
+@media (max-width: 680px) {
+  .rnm-body { grid-template-columns: 1fr; }
+  .rnm-header { flex-direction: column; align-items: flex-start; }
+  .rnm-contacts { align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .rnm-page { padding: 1.25rem 0.875rem 3rem; gap: 1.25rem; }
+  .rnm-header { padding: 1.5rem 1.25rem; border-radius: 14px; }
+  .rnm-card { padding: 1.25rem 1.1rem; border-radius: 12px; }
+  .rnm-exp-header { flex-direction: column; gap: 0.2rem; }
+  .rnm-exp-period { white-space: normal; }
+}
+
+@media print {
+  .rnm-page { padding: 0; }
+  .rnm-card, .rnm-header { box-shadow: none; border: 1px solid #e5e7eb; }
+  .rnm-exp-item, .rnm-edu-item, .rnm-cert-item { box-shadow: none; border: 1px solid #e5e7eb; }
+  .rnm-skill-tag { box-shadow: none; border: 1px solid #e5e7eb; }
+}

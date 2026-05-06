@@ -1,0 +1,561 @@
+/* ============================================================
+   landing/video-bg — template styles
+   "Secret Level" 스타일 풀스크린 scroll-snap 랜딩페이지
+   외부 JS 의존성 없음 (GSAP/Lenis 제거 → 순수 CSS scroll-snap)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,900;1,700&family=Barlow:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* ── 커스텀 프로퍼티 ────────────────────────────────────────── */
+:root {
+  --font-display: 'Barlow Condensed', 'Noto Sans KR', sans-serif;
+  --font-body: 'Barlow', 'Noto Sans KR', sans-serif;
+  --hdr-height: 64px;
+  --section-px: 5vw;
+  --section-pb: 5vh;
+  --transition-base: 0.3s ease;
+}
+
+/* ── 리셋 & 기반 ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* scroll-container 가 담당 */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── SCROLL CONTAINER ───────────────────────────────────────── */
+.scroll-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE/Edge */
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;                  /* Chrome/Safari */
+}
+
+/* ── 각 섹션 ────────────────────────────────────────────────── */
+.scroll-section {
+  height: 100vh;
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  align-items: flex-end;          /* 콘텐츠 기본: 하단 정렬 */
+  overflow: hidden;
+}
+
+/* hero / final_cta 타입: 중앙 정렬 */
+.scroll-section--hero,
+.scroll-section--final_cta {
+  align-items: center;
+}
+
+/* ── 섹션 배경 ──────────────────────────────────────────────── */
+.section-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.section-bg video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* 그라디언트 배경 (video_url 없을 때 inline style로 background 주입됨) */
+.section-bg--gradient {
+  /* bg_gradient 값이 style 속성으로 직접 주입 */
+}
+
+/* ── 비네트 오버레이 ─────────────────────────────────────────── */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.32) 40%,
+    rgba(0, 0, 0, 0.10) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* hero / final_cta: 더 균형 잡힌 오버레이 */
+.scroll-section--hero .vignette,
+.scroll-section--final_cta .vignette {
+  background: rgba(0, 0, 0, 0.50);
+}
+
+/* ── 섹션 콘텐츠 ─────────────────────────────────────────────── */
+.section-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 var(--section-px) var(--section-pb);
+  max-width: 900px;
+  width: 100%;
+}
+
+/* hero / final_cta: 중앙 정렬 */
+.scroll-section--hero .section-content,
+.scroll-section--final_cta .section-content {
+  text-align: center;
+  margin: 0 auto;
+  padding: 0 var(--section-px);
+}
+
+/* ── 타이포그래피 ─────────────────────────────────────────────── */
+
+/* 소형 태그 레이블 */
+.type-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.70);
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.30);
+  padding: 0.25rem 0.75rem;
+  border-radius: 2px;
+}
+
+/* project 섹션 대형 헤딩 */
+.type-heading-xl {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  word-break: keep-all;
+}
+
+/* hero / final_cta 헤딩 */
+.type-heading-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin-bottom: 1.25rem;
+  word-break: keep-all;
+}
+
+/* 부제 텍스트 */
+.section-desc {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 600px;
+  margin-bottom: 2rem;
+  word-break: keep-all;
+}
+
+/* hero / final_cta desc: 중앙 */
+.scroll-section--hero .section-desc,
+.scroll-section--final_cta .section-desc {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── 버튼 행 ──────────────────────────────────────────────────── */
+.btn-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.scroll-section--hero .btn-row,
+.scroll-section--final_cta .btn-row {
+  justify-content: center;
+}
+
+/* Glass 버튼 */
+.btn-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    background var(--transition-base),
+    border-color var(--transition-base),
+    transform 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.20);
+  border-color: rgba(255, 255, 255, 0.85);
+  transform: translateY(-2px);
+}
+
+.btn-glass:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  font-size: 0.75rem;
+  opacity: 0.80;
+  transition: transform var(--transition-base);
+}
+
+.btn-glass:hover .btn-icon {
+  transform: translateX(3px);
+}
+
+/* 텍스트 링크 버튼 */
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition:
+    color var(--transition-base),
+    border-color var(--transition-base);
+  white-space: nowrap;
+}
+
+.btn-text:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.60);
+}
+
+.btn-icon-sm {
+  font-size: 0.7rem;
+  transition: transform var(--transition-base);
+}
+
+.btn-text:hover .btn-icon-sm {
+  transform: translateX(3px);
+}
+
+/* ── SITE HEADER (fixed) ─────────────────────────────────────── */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--hdr-height);
+  padding: 0 var(--section-px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background: transparent;
+  transition:
+    background var(--transition-base),
+    backdrop-filter var(--transition-base);
+}
+
+/* 스크롤 시 반투명 */
+.site-header.is-scrolled {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* 로고 */
+.header-logo {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* 데스크톱 네비 */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.header-nav a {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.header-nav a:hover {
+  color: #ffffff;
+}
+
+/* 헤더 CTA */
+.header-cta {
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  flex-shrink: 0;
+}
+
+/* ── 햄버거 버튼 (모바일) ───────────────────────────────────── */
+.btn-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.btn-menu span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition:
+    transform var(--transition-base),
+    opacity var(--transition-base);
+}
+
+/* ── 모바일 메뉴 오버레이 ──────────────────────────────────── */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10, 10, 10, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.mobile-menu.is-open {
+  transform: translateX(0);
+}
+
+/* 닫기 버튼 */
+.mobile-menu-close {
+  position: absolute;
+  top: 1.25rem;
+  right: var(--section-px);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.70);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-base);
+}
+
+.mobile-menu-close:hover {
+  color: #ffffff;
+}
+
+/* 모바일 nav 링크 */
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+.mobile-nav a {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color var(--transition-base);
+}
+
+.mobile-nav a:hover {
+  color: #ffffff;
+}
+
+.mobile-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 4px;
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  margin-top: 0.5rem;
+}
+
+/* ── 스크롤 인디케이터 (옵션) ──────────────────────────────── */
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.55;
+  animation: bounce 2s infinite;
+}
+
+.scroll-hint span {
+  display: block;
+  width: 1.5px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.60);
+}
+
+.scroll-hint::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.60);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.60);
+  transform: rotate(45deg);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── 반응형 (모바일 ≤ 768px) ────────────────────────────────── */
+@media (max-width: 768px) {
+  /* 헤더: nav 숨김, 햄버거 표시 */
+  .header-nav {
+    display: none;
+  }
+
+  .header-cta {
+    display: none;
+  }
+
+  .btn-menu {
+    display: flex;
+  }
+
+  /* 섹션 콘텐츠 패딩 */
+  .section-content {
+    padding: 0 1.25rem 3rem;
+  }
+
+  .scroll-section--hero .section-content,
+  .scroll-section--final_cta .section-content {
+    padding: 0 1.25rem;
+  }
+
+  /* 대형 헤딩 모바일 크기 조정 */
+  .type-heading-xl {
+    font-size: clamp(2.25rem, 10vw, 4rem);
+  }
+
+  .type-heading-lg {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+
+  /* 버튼 행 세로 배치 */
+  .btn-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .scroll-section--hero .btn-row,
+  .scroll-section--final_cta .btn-row {
+    align-items: center;
+  }
+}
+
+/* ── prefers-reduced-motion ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  /* scroll-snap: instant (부드러운 스크롤 제거) */
+  .scroll-container {
+    scroll-behavior: auto;
+  }
+
+  /* 모든 transition 즉시 */
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  /* bounce 애니메이션 정지 */
+  .scroll-hint {
+    animation: none;
+  }
+
+  /* 버튼 hover transform 제거 */
+  .btn-glass:hover {
+    transform: none;
+  }
+}

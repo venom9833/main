@@ -1,8 +1,16 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getWikiPage, updateWikiPage, searchWiki } from '@/lib/seriesStore';
 import type { WikiPage } from '@/types/series';
+
+const API = 'http://localhost:8001/api/v1';
 
 const SLUGS = ['world', 'characters', 'foreshadows', 'timeline'];
 const SLUG_LABELS: Record<string, string> = {
@@ -20,6 +28,34 @@ export default function WikiPage() {
   const [query, setQuery] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [lintReport, setLintReport] = useState('');
+  const [lintLoading, setLintLoading] = useState(false);
+  const [revising, setRevising] = useState(false);
+  const [reviseResult, setReviseResult] = useState<string | null>(null);
+
+  const runLintAndRevise = async () => {
+    if (!confirm('위키 기준으로 대본을 검수한 뒤 수정 필요 항목을 자동 재작성합니다.\n계속하시겠습니까?')) return;
+    setLintLoading(true);
+    setLintReport('');
+    setReviseResult(null);
+    try {
+      // 1단계: Lint 검수
+      const lintRes = await fetch(`${API}/wiki/${id}/lint`, { method: 'POST' });
+      const lintData = await lintRes.json();
+      setLintReport(lintData.report ?? '');
+
+      // 2단계: 자동 수정
+      setLintLoading(false);
+      setRevising(true);
+      const reviseRes = await fetch(`${API}/wiki/${id}/revise`, { method: 'POST' });
+      const reviseData = await reviseRes.json();
+      const count = reviseData.revised ?? 0;
+      setReviseResult(count > 0 ? `챕터 ${reviseData.chapters?.join(', ')}화 재작성 완료.` : '수정 필요 항목이 없습니다.');
+    } finally {
+      setLintLoading(false);
+      setRevising(false);
+    }
+  };
 
   useEffect(() => {
     getWikiPage(id, activeSlug).then(p => {
@@ -49,9 +85,18 @@ export default function WikiPage() {
 
   return (
     <main style={{ minHeight: '100vh', fontFamily: "var(--font-en), 'Pretendard', sans-serif", padding: '2rem', maxWidth: '960px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
         <button onClick={() => router.push(`/series/${id}`)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '1rem' }}>← 돌아가기</button>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>위키</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, flex: 1 }}>위키</h1>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button
+            onClick={runLintAndRevise}
+            disabled={lintLoading || revising}
+            style={{ padding: '0.5rem 1.2rem', borderRadius: '8px', border: 'none', cursor: (lintLoading || revising) ? 'not-allowed' : 'pointer', background: (lintLoading || revising) ? 'rgba(99,102,241,0.3)' : 'rgba(99,102,241,0.7)', color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}
+          >
+            {lintLoading ? '검수 중...' : revising ? '교정 중...' : '대본 교정'}
+          </button>
+        </div>
       </div>
 
       {/* 탭 */}
@@ -108,7 +153,7 @@ export default function WikiPage() {
             <textarea value={draft} onChange={e => setDraft(e.target.value)} style={{
               width: '100%', minHeight: '400px', background: 'rgba(255,255,255,0.05)',
               border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px',
-              color: '#fff', padding: '1rem', fontSize: '0.95rem', resize: 'vertical', outline: 'none', fontFamily: 'monospace',
+              color: '#fff', padding: '1rem', fontSize: '0.95rem', resize: 'vertical', outline: 'none', fontFamily: "var(--font-en), 'Pretendard', sans-serif",
             }} />
           ) : (
             <pre style={{ whiteSpace: 'pre-wrap', color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem', lineHeight: 1.7, margin: 0 }}>
@@ -117,6 +162,26 @@ export default function WikiPage() {
           )}
         </div>
       </div>
+      {/* Lint 리포트 */}
+      {(lintReport || reviseResult) && (
+        <div style={{ marginTop: '2rem', borderRadius: '16px', border: '1px solid rgba(99,102,241,0.3)', background: 'rgba(99,102,241,0.05)', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderBottom: '1px solid rgba(99,102,241,0.15)' }}>
+            <span style={{ fontWeight: 700, color: '#a78bfa' }}>🔍 Lint 보고서 — 33차원</span>
+            <button
+              onClick={() => { setLintReport(''); setReviseResult(null); }}
+              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '1.2rem' }}
+            >✕</button>
+          </div>
+          {reviseResult && (
+            <div style={{ padding: '0.8rem 1.5rem', background: 'rgba(16,185,129,0.1)', borderBottom: '1px solid rgba(16,185,129,0.2)', color: '#6ee7b7', fontWeight: 600, fontSize: '0.9rem' }}>
+              ✅ {reviseResult}
+            </div>
+          )}
+          <pre style={{ padding: '1.5rem', whiteSpace: 'pre-wrap', color: 'rgba(255,255,255,0.8)', fontSize: '0.88rem', lineHeight: 1.75, margin: 0, maxHeight: '600px', overflowY: 'auto' }}>
+            {lintReport}
+          </pre>
+        </div>
+      )}
     </main>
   );
 }

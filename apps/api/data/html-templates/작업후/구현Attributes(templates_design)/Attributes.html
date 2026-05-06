@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Attributes</title>
+
+    <!-- Preload hero image with high priority -->
+    <link
+      rel="preload"
+      href="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80"
+      as="image"
+      fetchpriority="high"
+    />
+    <!-- Preload body font, low priority — doesn't compete with hero -->
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_KU7NSg.woff2"
+      as="font"
+      type="font/woff2"
+      fetchpriority="low"
+      crossorigin
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="nav">
+      <div class="nav-inner">
+        <span class="nav-brand">HTML Attributes</span>
+        <ul class="nav-links">
+          <li><a href="#loading" class="active">loading</a></li>
+          <li><a href="#fetchpriority">fetchpriority</a></li>
+          <li><a href="#autocomplete">autocomplete</a></li>
+          <li><a href="#inputmode">inputmode</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="page">
+      <!-- HERO -->
+      <header class="hero">
+        <div class="hero-eyebrow">Reference Boilerplate</div>
+        <h1>Four attributes.<br /><strong>Real impact.</strong></h1>
+        <p class="hero-sub">
+          No JavaScript. No visual change. These attributes give the browser the
+          context it needs to load faster, prioritise smarter, and serve the
+          right keyboard.
+        </p>
+        <div class="pill-row">
+          <span class="pill"><span class="pill-dot"></span>loading</span>
+          <span class="pill"><span class="pill-dot"></span>fetchpriority</span>
+          <span class="pill"><span class="pill-dot"></span>autocomplete</span>
+          <span class="pill"><span class="pill-dot"></span>inputmode</span>
+        </div>
+        <div class="hero-img-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80"
+            alt="Developer working at a laptop — hero image loaded with eager and fetchpriority high"
+            loading="eager"
+            fetchpriority="high"
+            width="1200"
+            height="600"
+          />
+          <div class="hero-img-badge">
+            loading="eager" · fetchpriority="high" · width + height set
+          </div>
+        </div>
+      </header>
+
+      <!-- ══ 01 · loading ══ -->
+      <section class="section reveal" id="loading">
+        <div class="section-header">
+          <div class="section-num">01</div>
+          <div class="section-meta">
+            <div class="section-tag">loading</div>
+            <h2>Defer what the user can't see yet</h2>
+          </div>
+        </div>
+        <p class="section-body">
+          By default the browser fetches every image immediately — even ones
+          three screens below the fold.
+          <code class="inline">loading="lazy"</code> defers the request until
+          the user scrolls near it. If they never scroll there, the request
+          never happens.
+        </p>
+        <p class="section-body">
+          Always include explicit <code class="inline">width</code> and
+          <code class="inline">height</code>
+          on lazy images. Without them the layout shifts when the image arrives,
+          hurting your CLS score.
+        </p>
+
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Image loading comparison</span>
+            <span class="card-head-badge">DevTools → Network to verify</span>
+          </div>
+          <div class="card-body">
+            <div class="img-compare">
+              <figure>
+                <img
+                  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=70"
+                  alt="Code on a screen — loaded eagerly"
+                  loading="eager"
+                  fetchpriority="high"
+                  width="800"
+                  height="500"
+                />
+                <figcaption>
+                  <span class="badge-dark">eager</span> Loads immediately
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=70"
+                  alt="Programming on a monitor — deferred"
+                  loading="lazy"
+                  width="800"
+                  height="500"
+                />
+                <figcaption>
+                  <span class="badge-light">lazy</span> Deferred until
+                  near-viewport
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Lazy-loaded iframe</span>
+            <span class="card-head-badge">loading="lazy"</span>
+          </div>
+          <div class="card-body" style="padding: 0">
+            <div class="map-card">
+              <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-0.12,51.49,-0.09,51.51&layer=mapnik"
+                title="OpenStreetMap — lazy-loaded iframe example"
+                loading="lazy"
+              >
+              </iframe>
+            </div>
+            <p
+              style="
+                padding: 12px 16px 16px;
+                font-size: 0.8rem;
+                color: var(--ink-3);
+                font-family: var(--font-mono);
+              "
+            >
+              loading="lazy" also works on &lt;iframe&gt; — the browser won't
+              fetch it until the user scrolls near.
+            </p>
+          </div>
+        </div>
+
+        <div class="code-wrap reveal">
+          <div class="code-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-bar-label">HTML</span>
+          </div>
+          <pre><span class="cc">&lt;!-- Above the fold — load right away --&gt;</span>
+<span class="ct">&lt;img</span>
+  <span class="ca">src</span>=<span class="cv">"hero.jpg"</span>
+  <span class="ca">alt</span>=<span class="cv">"Hero"</span>
+  <span class="ca">loading</span>=<span class="cv">"eager"</span>
+  <span class="ca">fetchpriority</span>=<span class="cv">"high"</span>
+  <span class="ca">width</span>=<span class="cv">"1200"</span>
+  <span class="ca">height</span>=<span class="cv">"600"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Below the fold — defer until user scrolls near --&gt;</span>
+<span class="ct">&lt;img</span>
+  <span class="ca">src</span>=<span class="cv">"section-photo.jpg"</span>
+  <span class="ca">alt</span>=<span class="cv">"Article photo"</span>
+  <span class="ca">loading</span>=<span class="cv">"lazy"</span>
+  <span class="ca">width</span>=<span class="cv">"800"</span>
+  <span class="ca">height</span>=<span class="cv">"500"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Works on iframes too --&gt;</span>
+<span class="ct">&lt;iframe</span> <span class="ca">src</span>=<span class="cv">"map.html"</span> <span class="ca">title</span>=<span class="cv">"Map"</span> <span class="ca">loading</span>=<span class="cv">"lazy"</span><span class="ct">&gt;&lt;/iframe&gt;</span></pre>
+        </div>
+
+        <div class="callout reveal">
+          <span class="callout-icon">⚠</span>
+          <p>
+            Never use <code class="inline">loading="lazy"</code> on images
+            visible when the page first opens. Deferring them increases your
+            Largest Contentful Paint time, hurting both UX and search rankings.
+          </p>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+
+      <!-- ══ 02 · fetchpriority ══ -->
+      <section class="section reveal" id="fetchpriority">
+        <div class="section-header">
+          <div class="section-num">02</div>
+          <div class="section-meta">
+            <div class="section-tag">fetchpriority</div>
+            <h2>Tell the browser what matters first</h2>
+          </div>
+        </div>
+        <p class="section-body">
+          Images are low priority by default — even your hero.
+          <code class="inline">fetchpriority="high"</code>
+          moves it to the front of the loading queue from the very start,
+          instead of waiting behind fonts and scripts.
+        </p>
+
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title"
+              >Loading queue — bandwidth allocation</span
+            >
+          </div>
+          <div class="priority-bars">
+            <div class="pbar-row">
+              <span class="pbar-label">hero.jpg</span>
+              <div class="pbar-track">
+                <div class="pbar-fill" data-w="88"></div>
+              </div>
+              <span class="pbar-badge">fetchpriority="high"</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">main.css</span>
+              <div class="pbar-track">
+                <div class="pbar-fill" data-w="72"></div>
+              </div>
+              <span class="pbar-badge">render-blocking</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">section-img.jpg</span>
+              <div class="pbar-track">
+                <div class="pbar-fill" data-w="38"></div>
+              </div>
+              <span class="pbar-badge">default (low)</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">analytics.js</span>
+              <div class="pbar-track">
+                <div class="pbar-fill" data-w="12"></div>
+              </div>
+              <span class="pbar-badge">fetchpriority="low"</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">secondary-font</span>
+              <div class="pbar-track">
+                <div class="pbar-fill" data-w="8"></div>
+              </div>
+              <span class="pbar-badge">fetchpriority="low"</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-wrap reveal">
+          <div class="code-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-bar-label">HTML — &lt;head&gt;</span>
+          </div>
+          <pre><span class="cc">&lt;!-- Preload hero with high priority --&gt;</span>
+<span class="ct">&lt;link</span> <span class="ca">rel</span>=<span class="cv">"preload"</span> <span class="ca">href</span>=<span class="cv">"hero.jpg"</span>
+  <span class="ca">as</span>=<span class="cv">"image"</span> <span class="ca">fetchpriority</span>=<span class="cv">"high"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Secondary font — low priority, doesn't block rendering --&gt;</span>
+<span class="ct">&lt;link</span> <span class="ca">rel</span>=<span class="cv">"preload"</span> <span class="ca">href</span>=<span class="cv">"secondary.woff2"</span>
+  <span class="ca">as</span>=<span class="cv">"font"</span> <span class="ca">fetchpriority</span>=<span class="cv">"low"</span> <span class="ca">crossorigin</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- LCP image: eager prevents deferral, high wins the queue --&gt;</span>
+<span class="ct">&lt;img</span>
+  <span class="ca">src</span>=<span class="cv">"hero.jpg"</span>
+  <span class="ca">loading</span>=<span class="cv">"eager"</span>
+  <span class="ca">fetchpriority</span>=<span class="cv">"high"</span>
+  <span class="ca">width</span>=<span class="cv">"1200"</span> <span class="ca">height</span>=<span class="cv">"600"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Analytics: deprioritise entirely --&gt;</span>
+<span class="ct">&lt;script</span> <span class="ca">src</span>=<span class="cv">"analytics.js"</span>
+  <span class="ca">fetchpriority</span>=<span class="cv">"low"</span> <span class="ca">defer</span><span class="ct">&gt;&lt;/script&gt;</span></pre>
+        </div>
+
+        <div class="callout reveal">
+          <span class="callout-icon">ℹ</span>
+          <p>
+            <code class="inline">loading="eager"</code> prevents deferral.
+            <code class="inline">fetchpriority="high"</code> wins the bandwidth
+            race. They do different things — both belong on your hero image.
+            Fully supported across all major browsers since October 2024.
+          </p>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+
+      <!-- ══ 03 · autocomplete ══ -->
+      <section class="section reveal" id="autocomplete">
+        <div class="section-header">
+          <div class="section-num">03</div>
+          <div class="section-meta">
+            <div class="section-tag">autocomplete</div>
+            <h2>Tell the browser what each field holds</h2>
+          </div>
+        </div>
+        <p class="section-body">
+          Beyond <code class="inline">on</code> and
+          <code class="inline">off</code>, the spec defines over 50 token
+          values. When the browser knows what a field expects, it offers the
+          right saved value instantly — or generates one, in the case of
+          <code class="inline">new-password</code>.
+        </p>
+
+        <!-- Personal & Login -->
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Personal details &amp; login</span>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field">
+                <label for="given-name">First name</label>
+                <input
+                  id="given-name"
+                  type="text"
+                  autocomplete="given-name"
+                  placeholder="Ada"
+                />
+              </div>
+              <div class="field">
+                <label for="family-name">Last name</label>
+                <input
+                  id="family-name"
+                  type="text"
+                  autocomplete="family-name"
+                  placeholder="Lovelace"
+                />
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="email">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  autocomplete="email"
+                  inputmode="email"
+                  placeholder="ada@example.com"
+                />
+              </div>
+              <div class="field">
+                <label for="tel">Phone</label>
+                <input
+                  id="tel"
+                  type="tel"
+                  autocomplete="tel"
+                  inputmode="tel"
+                  placeholder="+1 555 000 0000"
+                />
+              </div>
+            </div>
+            <div class="form-rule"></div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="username">Username</label>
+                <input
+                  id="username"
+                  type="text"
+                  autocomplete="username"
+                  placeholder="ada_lovelace"
+                />
+              </div>
+              <div class="field">
+                <label for="current-pass">Current password</label>
+                <!-- current-password → browser offers saved credentials -->
+                <input
+                  id="current-pass"
+                  type="password"
+                  autocomplete="current-password"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            <div class="form-grid cols-1">
+              <div class="field">
+                <label for="new-pass">New password</label>
+                <!-- new-password → browser offers to GENERATE a strong password -->
+                <input
+                  id="new-pass"
+                  type="password"
+                  autocomplete="new-password"
+                  placeholder="Browser will offer to generate one"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Shipping address</span>
+          </div>
+          <div class="card-body">
+            <div class="form-grid cols-1">
+              <div class="field">
+                <label for="street">Street address</label>
+                <input
+                  id="street"
+                  type="text"
+                  autocomplete="street-address"
+                  placeholder="123 Main St"
+                />
+              </div>
+            </div>
+            <div class="form-grid cols-3">
+              <div class="field">
+                <label for="postal">Postal code</label>
+                <input
+                  id="postal"
+                  type="text"
+                  autocomplete="postal-code"
+                  inputmode="numeric"
+                  placeholder="10001"
+                />
+              </div>
+              <div class="field">
+                <label for="city">City</label>
+                <input
+                  id="city"
+                  type="text"
+                  autocomplete="address-level2"
+                  placeholder="New York"
+                />
+              </div>
+              <div class="field">
+                <label for="country">Country</label>
+                <input
+                  id="country"
+                  type="text"
+                  autocomplete="country"
+                  placeholder="US"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">Payment</span>
+            <span class="card-head-badge"
+              >cc-name · cc-number · cc-exp · cc-csc</span
+            >
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field">
+                <label for="cc-name">Name on card</label>
+                <input
+                  id="cc-name"
+                  type="text"
+                  autocomplete="cc-name"
+                  placeholder="Ada Lovelace"
+                />
+              </div>
+              <div class="field">
+                <label for="cc-number">Card number</label>
+                <!-- autocomplete names the field; inputmode shows numeric keyboard -->
+                <input
+                  id="cc-number"
+                  type="text"
+                  autocomplete="cc-number"
+                  inputmode="numeric"
+                  pattern="[0-9\s]{13,19}"
+                  placeholder="1234 5678 9012 3456"
+                />
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="cc-exp">Expiry</label>
+                <input
+                  id="cc-exp"
+                  type="text"
+                  autocomplete="cc-exp"
+                  inputmode="numeric"
+                  placeholder="MM / YY"
+                />
+              </div>
+              <div class="field">
+                <label for="cc-csc">CVV</label>
+                <input
+                  id="cc-csc"
+                  type="text"
+                  autocomplete="cc-csc"
+                  inputmode="numeric"
+                  maxlength="4"
+                  placeholder="123"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OTP -->
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title">One-time verification code</span>
+            <span class="card-head-badge">one-time-code</span>
+          </div>
+          <div class="card-body">
+            <p
+              style="
+                font-size: 0.875rem;
+                color: var(--ink-2);
+                margin-bottom: 14px;
+                line-height: 1.6;
+              "
+            >
+              On iOS, <code class="inline">autocomplete="one-time-code"</code> +
+              <code class="inline">inputmode="numeric"</code>
+              triggers automatic SMS code detection. The entire copy-paste flow
+              becomes a single tap.
+            </p>
+            <div class="form-grid cols-1">
+              <div class="field">
+                <label for="otp">6-digit code</label>
+                <!-- one-time-code + inputmode="numeric" = SMS autofill on iOS -->
+                <input
+                  id="otp"
+                  type="text"
+                  autocomplete="one-time-code"
+                  inputmode="numeric"
+                  maxlength="6"
+                  pattern="\d{6}"
+                  placeholder="000000"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-wrap reveal">
+          <div class="code-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-bar-label">HTML — notable tokens</span>
+          </div>
+          <pre><span class="cc">&lt;!-- current-password: offers saved credentials --&gt;</span>
+<span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cv">"password"</span> <span class="ca">autocomplete</span>=<span class="cv">"current-password"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- new-password: offers to generate a strong password --&gt;</span>
+<span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cv">"password"</span> <span class="ca">autocomplete</span>=<span class="cv">"new-password"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- OTP: triggers SMS autofill on iOS --&gt;</span>
+<span class="ct">&lt;input</span>
+  <span class="ca">type</span>=<span class="cv">"text"</span>
+  <span class="ca">autocomplete</span>=<span class="cv">"one-time-code"</span>
+  <span class="ca">inputmode</span>=<span class="cv">"numeric"</span>
+  <span class="ca">maxlength</span>=<span class="cv">"6"</span>
+  <span class="ca">pattern</span>=<span class="cv">"\d{6}"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Credit card: three attributes, three jobs --&gt;</span>
+<span class="ct">&lt;input</span>
+  <span class="ca">type</span>=<span class="cv">"text"</span>
+  <span class="ca">autocomplete</span>=<span class="cv">"cc-number"</span>      <span class="cc">&lt;!-- what the field collects --&gt;</span>
+  <span class="ca">inputmode</span>=<span class="cv">"numeric"</span>          <span class="cc">&lt;!-- which keyboard to show --&gt;</span>
+  <span class="ca">pattern</span>=<span class="cv">"[0-9\s]{13,19}"</span>    <span class="cc">&lt;!-- validation --&gt;</span>
+  <span class="ca">placeholder</span>=<span class="cv">"1234 5678 9012 3456"</span><span class="ct">&gt;</span></pre>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+
+      <!-- ══ 04 · inputmode ══ -->
+      <section class="section reveal" id="inputmode">
+        <div class="section-header">
+          <div class="section-num">04</div>
+          <div class="section-meta">
+            <div class="section-tag">inputmode</div>
+            <h2>Show the right keyboard on mobile</h2>
+          </div>
+        </div>
+        <p class="section-body">
+          <code class="inline">inputmode</code> controls only which virtual
+          keyboard appears — not validation or field behaviour. More flexible
+          than changing <code class="inline">type</code>, which affects both.
+          <code class="inline">numeric</code> and
+          <code class="inline">decimal</code> look the same on desktop but are
+          different keyboards on iOS and Android.
+        </p>
+
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-head-title"
+              >All inputmode values — tap each on mobile</span
+            >
+          </div>
+          <div class="card-body">
+            <div class="im-grid">
+              <div class="im-item">
+                <span class="im-badge">numeric</span>
+                <div class="field">
+                  <label for="im-numeric">PIN / postal / OTP</label>
+                  <input
+                    id="im-numeric"
+                    type="text"
+                    inputmode="numeric"
+                    placeholder="0–9 only"
+                  />
+                </div>
+              </div>
+              <div class="im-item">
+                <span class="im-badge">decimal</span>
+                <div class="field">
+                  <label for="im-decimal">Price / measurement</label>
+                  <input
+                    id="im-decimal"
+                    type="text"
+                    inputmode="decimal"
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+              <div class="im-item">
+                <span class="im-badge">tel</span>
+                <div class="field">
+                  <label for="im-tel">Telephone keypad</label>
+                  <input
+                    id="im-tel"
+                    type="text"
+                    inputmode="tel"
+                    placeholder="+1 555 000 0000"
+                  />
+                </div>
+              </div>
+              <div class="im-item">
+                <span class="im-badge">email</span>
+                <div class="field">
+                  <label for="im-email">@ shortcut key</label>
+                  <input
+                    id="im-email"
+                    type="email"
+                    inputmode="email"
+                    placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+              <div class="im-item">
+                <span class="im-badge">url</span>
+                <div class="field">
+                  <label for="im-url">/ and .com keys</label>
+                  <input
+                    id="im-url"
+                    type="text"
+                    inputmode="url"
+                    placeholder="https://…"
+                  />
+                </div>
+              </div>
+              <div class="im-item">
+                <span class="im-badge">search</span>
+                <div class="field">
+                  <label for="im-search">Enter → Search</label>
+                  <input
+                    id="im-search"
+                    type="search"
+                    inputmode="search"
+                    placeholder="Search…"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-wrap reveal">
+          <div class="code-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-bar-label">HTML</span>
+          </div>
+          <pre><span class="cc">&lt;!-- Digits 0–9 only. PINs, postal codes, verification codes --&gt;</span>
+<span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cv">"text"</span> <span class="ca">inputmode</span>=<span class="cv">"numeric"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- Digits + decimal separator. Prices, measurements --&gt;</span>
+<span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cv">"text"</span> <span class="ca">inputmode</span>=<span class="cv">"decimal"</span><span class="ct">&gt;</span>
+
+<span class="cc">&lt;!-- OTP field: autocomplete + inputmode working together --&gt;</span>
+<span class="ct">&lt;input</span>
+  <span class="ca">type</span>=<span class="cv">"text"</span>
+  <span class="ca">autocomplete</span>=<span class="cv">"one-time-code"</span>
+  <span class="ca">inputmode</span>=<span class="cv">"numeric"</span>
+  <span class="ca">maxlength</span>=<span class="cv">"6"</span>
+  <span class="ca">pattern</span>=<span class="cv">"\d{6}"</span><span class="ct">&gt;</span></pre>
+        </div>
+
+        <div class="callout reveal">
+          <span class="callout-icon">ℹ</span>
+          <p>
+            On a desktop browser all six inputmode values look like a regular
+            text field. Open this page on iOS or Android and tap each field to
+            see the different keyboards.
+          </p>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="reveal">
+        <p>No JavaScript · No visual change · Four attributes · Real impact.</p>
+        <div class="footer-tags">
+          <span class="footer-tag">loading</span>
+          <span class="footer-tag">fetchpriority</span>
+          <span class="footer-tag">autocomplete</span>
+          <span class="footer-tag">inputmode</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

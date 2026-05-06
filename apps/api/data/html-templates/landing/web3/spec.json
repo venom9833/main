@@ -1,0 +1,158 @@
+{
+  "id": "landing",
+  "mode": "skeleton",
+  "label": "Web3 랜딩",
+  "description": "Web3·DeFi·크립토 앱 전용 다크 랜딩페이지 — Acid Green + 퍼플 네온 팔레트",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "acid":    "#caff00",
+    "void":    "#0a0a0f",
+    "surface": "#1a1a28",
+    "purple":  "#7b4dff",
+    "pink":    "#ff2d78",
+    "muted":   "rgba(255,255,255,0.45)"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["brand", "nav_links", "hero", "ticker_items", "features_section", "features", "stats_section", "stats", "tokens_section", "tokens", "cta", "footer"],
+    "properties": {
+      "brand": {
+        "type": "object",
+        "properties": {
+          "name":    { "type": "string" },
+          "tagline": { "type": "string" }
+        }
+      },
+      "nav_links": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": { "type": "string" },
+            "href":  { "type": "string" }
+          }
+        }
+      },
+      "hero": {
+        "type": "object",
+        "properties": {
+          "badge":         { "type": "string" },
+          "title_line1":   { "type": "string" },
+          "title_line2":   { "type": "string" },
+          "title_line3":   { "type": "string" },
+          "subtitle":      { "type": "string" },
+          "cta_primary":   { "type": "string" },
+          "cta_secondary": { "type": "string" }
+        }
+      },
+      "ticker_items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "symbol":    { "type": "string" },
+            "value":     { "type": "string" },
+            "change":    { "type": "string" },
+            "direction": { "type": "string" }
+          }
+        }
+      },
+      "features_section": {
+        "type": "object",
+        "properties": {
+          "eyebrow": { "type": "string" },
+          "title":   { "type": "string" },
+          "desc":    { "type": "string" }
+        }
+      },
+      "features": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "icon":       { "type": "string" },
+            "title":      { "type": "string" },
+            "desc":       { "type": "string" },
+            "tag":        { "type": "string" },
+            "icon_color": { "type": "string" },
+            "highlight":  { "type": "boolean" }
+          }
+        }
+      },
+      "stats_section": {
+        "type": "object",
+        "properties": {
+          "eyebrow": { "type": "string" },
+          "title":   { "type": "string" }
+        }
+      },
+      "stats": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "number": { "type": "string" },
+            "label":  { "type": "string" }
+          }
+        }
+      },
+      "tokens_section": {
+        "type": "object",
+        "properties": {
+          "eyebrow": { "type": "string" },
+          "title":   { "type": "string" }
+        }
+      },
+      "tokens": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":            { "type": "string" },
+            "ticker":          { "type": "string" },
+            "price":           { "type": "string" },
+            "change":          { "type": "string" },
+            "direction":       { "type": "string" },
+            "icon_char":       { "type": "string" },
+            "icon_bg":         { "type": "string" },
+            "icon_color":      { "type": "string" },
+            "sparkline_color": { "type": "string" }
+          }
+        }
+      },
+      "cta": {
+        "type": "object",
+        "properties": {
+          "title":         { "type": "string" },
+          "subtitle":      { "type": "string" },
+          "label":         { "type": "string" },
+          "show_download": { "type": "boolean" },
+          "launch_toast":  { "type": "string" },
+          "cta_toast":     { "type": "string" }
+        }
+      },
+      "footer": {
+        "type": "object",
+        "properties": {
+          "brand_desc": { "type": "string" },
+          "link_columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "links": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          },
+          "copyright":      { "type": "string" },
+          "bottom_tagline": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "landing/ethereal",
+  "mode": "skeleton",
+  "label": "Ethereal 수평 스크롤 포트폴리오",
+  "description": "드래그·휠·키보드로 가로 스크롤하는 풀스크린 랜딩. 배너·스포트라이트·아이콘 그리드·갤러리·연락처 패널 5종 구성. 포트폴리오·크리에이티브 에이전시·개인 브랜딩에 최적.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "color1": "#726193",
+    "color2": "#e37b7c",
+    "color3": "#ffe4b4",
+    "color4": "#353865",
+    "text_dark": "#2e2b37",
+    "text_light": "#ffffff"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["name", "role", "intro", "cta_text", "about", "skills", "contact"],
+    "properties": {
+      "name": { "type": "string", "description": "브랜드 또는 이름" },
+      "role": { "type": "string", "description": "직책·역할 (예: 크리에이티브 디렉터)" },
+      "intro": { "type": "string", "description": "히어로 소개 문장 (2~3줄)" },
+      "cta_text": { "type": "string", "description": "히어로 CTA 버튼 텍스트" },
+      "hero_image": { "type": "string", "description": "히어로 이미지 URL (선택)" },
+      "about": {
+        "type": "object",
+        "required": ["headline", "body"],
+        "properties": {
+          "headline": { "type": "string" },
+          "body": { "type": "string" },
+          "image_url": { "type": "string", "description": "스포트라이트 배경 이미지 URL (선택)" }
+        }
+      },
+      "skills": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 6,
+        "items": {
+          "type": "object",
+          "required": ["icon", "label"],
+          "properties": {
+            "icon": { "type": "string", "description": "Font Awesome 아이콘 클래스 (예: fa-gem)" },
+            "label": { "type": "string", "description": "기술·서비스명" }
+          }
+        }
+      },
+      "works": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 9,
+        "items": {
+          "type": "object",
+          "required": ["url"],
+          "properties": {
+            "url": { "type": "string", "description": "이미지 URL" },
+            "alt": { "type": "string" },
+            "position": { "type": "string", "description": "CSS object-position (예: center, top left)" }
+          }
+        }
+      },
+      "contact": {
+        "type": "object",
+        "required": ["headline", "body", "email"],
+        "properties": {
+          "headline": { "type": "string" },
+          "body": { "type": "string" },
+          "email": { "type": "string" },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["icon", "label", "url"],
+              "properties": {
+                "icon": { "type": "string", "description": "fa- 클래스 (예: fa-instagram)" },
+                "label": { "type": "string" },
+                "url": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

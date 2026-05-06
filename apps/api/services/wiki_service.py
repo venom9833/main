@@ -1,3 +1,9 @@
+# ============================================================
+# WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+# 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+# V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+# 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+# ============================================================
 """V3 Wiki 서비스 — Supabase pgvector 기반 RAG + 풀 Wiki API"""
 import asyncio
 import json
@@ -20,6 +26,29 @@ WIKI_SLUGS = ["world", "characters", "foreshadows", "timeline"]
 
 # prompts/ 경로
 _PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
+
+# 🔒 LD-009: source_type 규칙 테이블 — Gemini 라우팅 완전 제거
+# trend/news/fact/viral 은 ingest_source 상단에서 별도 처리 (기존 유지)
+_SOURCE_SLUG_MAP: dict[str, str] = {
+    "url":       "world",   # 외부 참조 링크 → 세계관 (build_rag_context 포함 보장)
+    "user_note": "world",   # 사용자 메모 → 세계관
+}
+
+# user_file 확장자 → 슬러그 매핑
+_FILE_EXT_SLUG_MAP: dict[str, str] = {
+    ".srt": "timeline",
+    ".vtt": "timeline",
+    ".pdf": "facts",
+    ".txt": "facts",
+}
+
+
+def _resolve_file_slug(source_ref: str) -> str | None:
+    """user_file source_ref('file:{filename}')에서 확장자 → 슬러그 결정"""
+    if not source_ref or not source_ref.startswith("file:"):
+        return None
+    ext = Path(source_ref[5:]).suffix.lower()
+    return _FILE_EXT_SLUG_MAP.get(ext)
 
 
 def _get_client() -> genai.Client:
@@ -254,23 +283,40 @@ async def ingest_source(
     source_ref: Optional[str] = None,
     title: str = "",
 ) -> dict:
+    """소스 1건 수집 → RAG 인제스트 + wiki 페이지 패치
+
+    🔒 LD-009 라우팅 순서:
+      1. trend/news/fact/viral  → facts 직결 (Python)
+      2. url / user_note        → _SOURCE_SLUG_MAP 직결 (Python)
+      3. user_file              → 확장자 기반 직결 (Python)
+      4. text / 미매핑          → ✅ Gemini Free (GEMINI_FREE_API_KEY)
     """
-    소스 1건 수집 → RAG 인제스트 + wiki 페이지 패치
-    구조화 타입(trend/news/fact): Gemini 없이 facts에 직접 추가
-    기타(url/text/chapter/user_note): Gemini ingest 프롬프트 → 패치 적용
-    """
-    from services.gemini_helper import call_gemini, extract_json
+    from services.gemini_helper import call_free_llm, extract_json
 
     # 1. RAG 인제스트 (항상)
     await ingest_chunk(series_id, source_type, content, source_ref=source_ref)
 
+    entry_header = f"\n### {title or source_ref or source_type}\n"
+
     # 2. 구조화 타입: facts 페이지에 직접 추가
     if source_type in ("trend", "news", "fact", "viral"):
-        entry = f"\n### {title or source_ref or source_type}\n{content[:500]}"
-        await append_wiki_page(series_id, "facts", entry)
+        await append_wiki_page(series_id, "facts", entry_header + content[:500])
         return {"ok": True, "mode": "direct", "source_type": source_type}
 
-    # 3. 기타 타입: Gemini ingest 프롬프트로 wiki 패치 생성
+    # 3. 🔒 LD-009: Python 규칙 테이블 직결 (url / user_note)
+    if source_type in _SOURCE_SLUG_MAP:
+        slug = _SOURCE_SLUG_MAP[source_type]
+        await append_wiki_page(series_id, slug, entry_header + content[:500])
+        return {"ok": True, "mode": "direct_map", "source_type": source_type, "slug": slug}
+
+    # 4. 🔒 LD-009: user_file → 확장자 기반 직결
+    if source_type == "user_file":
+        slug = _resolve_file_slug(source_ref or "")
+        if slug:
+            await append_wiki_page(series_id, slug, entry_header + content[:500])
+            return {"ok": True, "mode": "file_ext_map", "source_type": source_type, "slug": slug}
+
+    # 5. text / 미매핑 user_file → ✅ Gemini Free (무료 API)
     pages = await list_wiki_pages(series_id)
     page_summaries = [{"slug": p["slug"], "updated_at": p["updated_at"]} for p in pages]
 
@@ -287,7 +333,12 @@ async def ingest_source(
   "existing_pages": {json.dumps(page_summaries, ensure_ascii=False)}
 }}
 """
-    raw = await call_gemini(prompt, max_tokens=3000, temperature=0.3)
+    # 🟢 FREE-LLM: wiki 인제스트 라우팅 (text 타입 / 미매핑 user_file) — Cerebras 우선
+    try:
+        raw = await call_free_llm(prompt, max_tokens=3000, temperature=0.3)
+    except Exception as e:
+        # 무료 체인 전체 실패 → wiki 패치 스킵 (RAG 청크는 이미 저장됨)
+        return {"ok": False, "error": f"무료 LLM 실패 — wiki 패치 스킵: {e}", "patches": 0}
 
     try:
         data = extract_json(raw)
@@ -298,11 +349,13 @@ async def ingest_source(
             kind = patch.get("patch_kind", "append")
             if not slug or not content_md:
                 continue
+            if slug not in WIKI_SLUGS:
+                continue
             if kind == "append":
                 await append_wiki_page(series_id, slug, f"\n{content_md}")
             else:
                 await upsert_wiki_page(series_id, slug, content_md)
-        return {"ok": True, "mode": "gemini", "patches": len(patches)}
+        return {"ok": True, "mode": "gemini_free", "patches": len(patches)}
     except Exception as e:
         return {"ok": False, "error": str(e), "raw": raw[:300]}
 
@@ -349,10 +402,32 @@ async def ingest_file(series_id: str, filename: str, file_bytes: bytes) -> dict:
     if not text.strip():
         return {"ok": False, "error": "텍스트 추출 결과 없음"}
 
-    # ── 3. Python 소스 분석 → world_data.source_summary 저장 ─────────────────
-    from services.source_analyzer import analyze as _analyze_source
+    # ── 3. Python 소스 분석 → 분류 → world_data.source_summary 저장 ────────────
+    from services.source_analyzer import analyze as _analyze_source, classify as _classify_source
     analysis = _analyze_source(text, filename)
     if analysis.get("summary"):
+        # 분류 추가
+        classification = _classify_source(analysis)
+
+        # ambiguous이면 LLM 보조 분류
+        if classification["type"] == "ambiguous":
+            try:
+                from services.source_classifier import classify_with_llm
+                llm_result = await classify_with_llm(text[:500], analysis)
+                classification = {
+                    "type": llm_result.get("source_type", "ambiguous"),
+                    "confidence": llm_result.get("confidence", 0.5),
+                    "reason": llm_result.get("reason", ""),
+                    "signals": classification.get("signals", {}),
+                    "method": "llm",
+                }
+            except Exception:
+                classification["method"] = "python_fallback"
+        else:
+            classification["method"] = "python"
+
+        analysis["classification"] = classification
+
         db = get_supabase()
         series_res = await asyncio.to_thread(
             lambda: db.table("v3_series").select("world_data").eq("id", series_id).single().execute()
@@ -458,8 +533,12 @@ async def run_lint(series_id: str) -> str:
     chapters = chapters_res.data or []
 
     lint_prompt_raw = (_PROMPTS_DIR / "wiki_lint.md").read_text(encoding="utf-8")
-    # SYSTEM_INSTRUCTION 블록 제거 (프롬프트 본문만)
-    lint_guide = re.sub(r"<!-- SYSTEM_INSTRUCTION -->[\s\S]+?<!-- /SYSTEM_INSTRUCTION -->", "", lint_prompt_raw).strip()
+    # wiki_query.md SYSTEM_INSTRUCTION 추출 → INCLUDE 지시문 실제 교체
+    wiki_query_raw = (_PROMPTS_DIR / "wiki_query.md").read_text(encoding="utf-8")
+    query_si_m = re.search(r"<!-- SYSTEM_INSTRUCTION -->([\s\S]+?)<!-- /SYSTEM_INSTRUCTION -->", wiki_query_raw)
+    wiki_query_si = query_si_m.group(1).strip() if query_si_m else ""
+    lint_guide = re.sub(r"<!-- INCLUDE: wiki_query\.md#SYSTEM_INSTRUCTION -->", wiki_query_si, lint_prompt_raw)
+    lint_guide = lint_guide.replace("<!-- SYSTEM_INSTRUCTION -->", "").replace("<!-- /SYSTEM_INSTRUCTION -->", "").strip()
 
     pages_text = "\n\n".join(
         f"### [{p['slug']}]\n{(p['content_md'] or '')[:800]}" for p in pages

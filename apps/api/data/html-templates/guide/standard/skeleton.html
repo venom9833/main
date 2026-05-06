@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ content.title }} — 가이드</title>
+<style>
+{{ shared_base_css }}
+{{ shared_fonts_css }}
+{{ template_css }}
+{{ shared_print_css }}
+</style>
+{{ palette_vars }}
+</head>
+<body>
+
+<div class="guide-layout">
+
+  <!-- 헤더 배너 -->
+  <header class="guide-header">
+    <div class="guide-header__meta">
+      <span>LEVEL: {{ content.level or "ALL" }}</span>
+      <span>DURATION: {{ content.duration or "—" }}</span>
+      <span>UPDATED: {{ content.updated or "2025" }}</span>
+    </div>
+    <h1 class="guide-header__title">{{ content.title }}</h1>
+    <div class="guide-header__subtitle">{{ content.subtitle }}</div>
+    {% if content.author %}
+    <div class="guide-header__author">by {{ content.author }}</div>
+    {% endif %}
+  </header>
+
+  <!-- 사이드바 목차 -->
+  <aside class="guide-sidebar">
+    <div class="guide-sidebar__title">목차 / Contents</div>
+    <ul class="guide-toc">
+      {% for ch in content.chapters %}
+      <li class="guide-toc__item">
+        <a href="#ch-{{ ch.number }}" class="guide-toc__link">
+          <span class="guide-toc__num">{{ ch.number }}</span>
+          <span>{{ ch.title }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </aside>
+
+  <!-- 메인 콘텐츠 -->
+  <main class="guide-main">
+    {% for ch in content.chapters %}
+    <article class="guide-chapter" id="ch-{{ ch.number }}">
+
+      <!-- 챕터 레이블 + 제목 -->
+      <div class="guide-chapter__label">{{ ch.number }} / {{ ch.keyword }}</div>
+      <h2 class="guide-chapter__title">{{ ch.title }}</h2>
+      <div class="guide-chapter__subtitle">{{ ch.subtitle }}</div>
+      <hr class="guide-divider">
+
+      <!-- 개요 -->
+      <p class="guide-overview">{{ ch.overview }}</p>
+
+      <!-- CALLOUT (선택) -->
+      {% if ch.callout and ch.callout.content %}
+      <div class="guide-callout">
+        <div class="guide-callout__type">{{ ch.callout.type or "METAPHOR" }}</div>
+        <div class="guide-callout__body">{{ ch.callout.content }}</div>
+      </div>
+      {% endif %}
+
+      <!-- STEP 블록 -->
+      {% for step in ch.steps %}
+      <div class="guide-step">
+        <div class="guide-step__num">{{ loop.index }}</div>
+        <div class="guide-step__content">
+          <div class="guide-step__label">{{ step.label }}</div>
+          <div class="guide-step__title">{{ step.title }}</div>
+          <div class="guide-step__body">{{ step.body }}</div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <!-- TIP (선택) -->
+      {% if ch.tip %}
+      <div class="guide-tip">
+        <div class="guide-tip__label">◆ TIP</div>
+        <div class="guide-tip__body">{{ ch.tip }}</div>
+      </div>
+      {% endif %}
+
+    </article>
+    {% endfor %}
+  </main>
+
+</div>
+
+</body>
+</html>

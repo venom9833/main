@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.header.title }} — {{ content.header.author }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<main class="lo-document">
+
+  <!-- ─── HEADER ─── -->
+  <header class="lo-header">
+    {% if content.header.eyebrow %}
+    <div class="lo-eyebrow">{{ content.header.eyebrow }}</div>
+    {% endif %}
+    <h1 class="lo-title">{{ content.header.title }}</h1>
+    <div class="lo-subhead">
+      <span>{{ content.header.author }}{% if content.header.author_title %} · {{ content.header.author_title }}{% endif %}</span>
+      <span>{{ content.header.date }}</span>
+    </div>
+  </header>
+
+  <!-- ─── BODY ─── -->
+  <div class="lo-body">
+    {% if content.salutation %}
+    <p class="lo-salutation">{{ content.salutation }}</p>
+    {% endif %}
+
+    {% set ns = namespace(first=true) %}
+    {% for section in content.sections %}
+      {% if section.label %}
+      <p class="lo-section-label">{{ section.label }}</p>
+      {% endif %}
+      {% for para in section.paragraphs %}
+        {% if ns.first %}
+          <p class="lo-first-p">{{ para }}</p>
+          {% set ns.first = false %}
+        {% else %}
+          <p>{{ para }}</p>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+
+    {% if content.closing %}
+    <p class="lo-closing">{{ content.closing }}</p>
+    {% endif %}
+  </div>
+
+  <!-- ─── SIGNATURE ─── -->
+  <div class="lo-signature-block">
+    <div class="lo-signature-name">
+      {{ content.signature.name }}
+      {% if content.signature.title %}<small>{{ content.signature.title }}</small>{% endif %}
+    </div>
+    {% if content.signature.organization %}
+    <div class="lo-signature-org">{{ content.signature.organization }}</div>
+    {% endif %}
+    <div class="lo-attest">{{ content.header.date }}</div>
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  {% if content.footer_badge or content.footer_note %}
+  <footer class="lo-doc-footer">
+    {% if content.footer_badge %}<span class="lo-badge">{{ content.footer_badge }}</span>{% endif %}
+    {% if content.footer_note %}<span>{{ content.footer_note }}</span>{% endif %}
+  </footer>
+  {% endif %}
+
+</main>
+</body>
+</html>

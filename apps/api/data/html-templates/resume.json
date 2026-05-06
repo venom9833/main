@@ -1,0 +1,136 @@
+{
+  "id": "resume",
+  "label": "이력서",
+  "version": "1.0.0",
+  "description": "경력·기술·학력을 구조화한 1페이지 이력서. 좌측 사이드바(연락처·기술)와 우측 메인(경력·학력) 2단 구조.",
+
+  "layout": {
+    "type": "two-column",
+    "sidebar": {
+      "position": "left",
+      "width": "260px",
+      "behavior": "static",
+      "background": "#1e293b"
+    },
+    "main": {
+      "type": "single-column",
+      "padding": "2.5rem 3rem",
+      "background": "#ffffff"
+    },
+    "page": {
+      "maxWidth": "900px",
+      "minHeight": "297mm",
+      "margin": "0 auto"
+    }
+  },
+
+  "sections": {
+    "order": ["header", "sidebar", "experience", "education", "projects"],
+    "sidebar_sections": ["contact", "skills", "languages", "certifications"],
+    "main_sections":    ["summary", "experience", "education", "projects"]
+  },
+
+  "header": {
+    "position": "top-full-width",
+    "elements": ["name", "job_title", "tagline"],
+    "name": {
+      "size": "2.6rem",
+      "weight": 800,
+      "color": "#ffffff"
+    },
+    "job_title": {
+      "size": "1rem",
+      "weight": 500,
+      "color": "#94a3b8"
+    }
+  },
+
+  "palette": {
+    "sidebar_bg":       "#1e293b",
+    "sidebar_text":     "#e2e8f0",
+    "sidebar_label":    "#94a3b8",
+    "sidebar_accent":   "#6366f1",
+    "main_bg":          "#ffffff",
+    "main_text":        "#111827",
+    "main_secondary":   "#6b7280",
+    "accent":           "#4f46e5",
+    "accent_light":     "#eef2ff",
+    "section_divider":  "#e5e7eb",
+    "tag_bg":           "#f3f4f6",
+    "tag_text":         "#374151"
+  },
+
+  "typography": {
+    "font_primary": "'Pretendard', -apple-system, sans-serif",
+    "base_size":    "0.9rem",
+    "line_height":  1.7
+  },
+
+  "blocks": {
+    "section_title": {
+      "style": "border-left 3px solid accent + padding-left",
+      "size": "0.75rem",
+      "weight": 700,
+      "case": "uppercase",
+      "letter_spacing": "0.1em",
+      "color": "accent",
+      "margin_bottom": "1rem"
+    },
+    "experience_item": {
+      "structure": ["company", "period_right_aligned", "role", "description_bullets"],
+      "date_format": "YYYY.MM — YYYY.MM",
+      "date_position": "right",
+      "bullet_marker": "·"
+    },
+    "skill_tag": {
+      "style": "pill",
+      "background": "rgba(255,255,255,0.08)",
+      "color": "sidebar_text",
+      "border_radius": "4px",
+      "padding": "0.2rem 0.6rem",
+      "font_size": "0.78rem"
+    },
+    "contact_item": {
+      "structure": ["icon", "label"],
+      "icon_style": "emoji 또는 SVG",
+      "font_size": "0.82rem"
+    },
+    "education_item": {
+      "structure": ["school", "degree", "period", "gpa_optional"],
+      "date_position": "right"
+    }
+  },
+
+  "inline_emphasis": {
+    "bold":        "직책명, 핵심 성과 수치",
+    "accent_text": "회사명, 프로젝트명",
+    "number":      "퍼센트·수치는 굵게 + accent 색상"
+  },
+
+  "divider": {
+    "style": "solid 1px",
+    "color": "section_divider",
+    "margin": "1.5rem 0"
+  },
+
+  "print": {
+    "page_size": "A4",
+    "margin": "0",
+    "break_rule": "section은 페이지 중간에서 잘리지 않도록"
+  },
+
+  "tone": {
+    "voice": "3인칭 서술 또는 명사형 압축 (동사 생략)",
+    "length": "경력 항목당 2~4줄 불릿",
+    "number_emphasis": "수치·퍼센트·규모를 적극 활용"
+  },
+
+  "chapter_internal_flow": [
+    "이름 + 직함 헤더",
+    "사이드바: 연락처 → 기술스택 → 언어 → 자격증",
+    "메인: 요약 한 단락",
+    "메인: 경력 (최신순)",
+    "메인: 학력",
+    "메인: 프로젝트 (선택)"
+  ]
+}

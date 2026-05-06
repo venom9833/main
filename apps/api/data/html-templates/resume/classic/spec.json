@@ -1,0 +1,118 @@
+{
+  "id": "resume",
+  "label": "이력서",
+  "version": "2.0.0",
+  "mode": "skeleton",
+  "description": "경력·기술·학력을 구조화한 이력서. 서버가 스켈레톤과 CSS를 고정 제공, Gemini는 콘텐츠 JSON만 생성.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "sidebar_bg":      "#1e293b",
+    "sidebar_text":    "#e2e8f0",
+    "sidebar_label":   "#94a3b8",
+    "sidebar_accent":  "#6366f1",
+    "main_bg":         "#ffffff",
+    "main_text":       "#111827",
+    "main_secondary":  "#6b7280",
+    "accent":          "#4f46e5",
+    "accent_light":    "#eef2ff",
+    "section_divider": "#e5e7eb",
+    "tag_bg":          "#f3f4f6",
+    "tag_text":        "#374151"
+  },
+  "content_schema": {
+    "type": "object",
+    "properties": {
+      "name":      { "type": "string", "description": "지원자 이름" },
+      "job_title": { "type": "string", "description": "직책/직함 (예: Senior Frontend Engineer)" },
+      "tagline":   { "type": "string", "description": "한 줄 자기소개 (20자 내외)" },
+      "contact": {
+        "type": "object",
+        "properties": {
+          "email":    { "type": "string" },
+          "phone":    { "type": "string" },
+          "location": { "type": "string" },
+          "linkedin": { "type": "string" },
+          "github":   { "type": "string" }
+        },
+        "required": ["email", "phone", "location"]
+      },
+      "summary": { "type": "string", "description": "3~5문장 핵심 요약" },
+      "skills": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "category": { "type": "string" },
+            "items":    { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["category", "items"]
+        }
+      },
+      "experience": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "company":  { "type": "string" },
+            "role":     { "type": "string" },
+            "period":   { "type": "string" },
+            "location": { "type": "string" },
+            "bullets":  { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["company", "role", "period", "bullets"]
+        }
+      },
+      "education": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "school":  { "type": "string" },
+            "degree":  { "type": "string" },
+            "period":  { "type": "string" },
+            "note":    { "type": "string" }
+          },
+          "required": ["school", "degree", "period"]
+        }
+      },
+      "projects": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":        { "type": "string" },
+            "description": { "type": "string" },
+            "tech":        { "type": "array", "items": { "type": "string" } },
+            "link":        { "type": "string" }
+          },
+          "required": ["name", "description", "tech"]
+        }
+      },
+      "certifications": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":   { "type": "string" },
+            "issuer": { "type": "string" },
+            "year":   { "type": "string" }
+          },
+          "required": ["name", "issuer", "year"]
+        }
+      },
+      "languages": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lang":  { "type": "string" },
+            "level": { "type": "string" }
+          },
+          "required": ["lang", "level"]
+        }
+      }
+    },
+    "required": ["name", "job_title", "contact", "summary", "skills", "experience", "education"]
+  }
+}

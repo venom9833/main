@@ -1,0 +1,103 @@
+{
+  "identity": {
+    "handle": "@neural_dev",
+    "name": "정우성",
+    "role": "AI Engineer / Full-Stack Developer",
+    "tagline": "모델을 배포하고, 서비스를 만들고, 세상에 내보냅니다",
+    "system_id": "SYS-2026-042",
+    "status": "BUILDING",
+    "location": "Seoul, KR"
+  },
+  "metrics_heading": "SYSTEM METRICS",
+  "metrics": [
+    { "label": "경력", "value": "6Y", "unit": "years active" },
+    { "label": "프로젝트", "value": "47", "unit": "shipped" },
+    { "label": "기술 스택", "value": "22+", "unit": "modules loaded" },
+    { "label": "GitHub", "value": "8.4K", "unit": "stars earned" }
+  ],
+  "modules_heading": "LOADED MODULES",
+  "modules": [
+    {
+      "category": "AI / ML",
+      "items": ["PyTorch", "Transformers", "LangChain", "OpenAI API", "Gemini API", "FastAPI"]
+    },
+    {
+      "category": "Frontend",
+      "items": ["React", "TypeScript", "Next.js", "Framer Motion", "Three.js", "Tailwind CSS"]
+    },
+    {
+      "category": "Backend",
+      "items": ["Python", "FastAPI", "Node.js", "PostgreSQL", "Redis", "Kafka"]
+    },
+    {
+      "category": "Infra",
+      "items": ["Docker", "Kubernetes", "AWS", "Terraform", "GitHub Actions"]
+    },
+    {
+      "category": "Data",
+      "items": ["Pandas", "NumPy", "Supabase", "Pinecone", "DuckDB"]
+    }
+  ],
+  "projects_heading": "ACTIVE PROCESSES",
+  "projects": [
+    {
+      "name": "NeuralSearch",
+      "status": "DEPLOYED",
+      "desc": "벡터 임베딩 기반 시맨틱 검색 엔진. 기존 키워드 검색 대비 검색 정확도 67% 향상, 평균 응답 시간 120ms. 현재 3개 기업에서 프로덕션으로 운영 중입니다.",
+      "tags": ["Python", "Pinecone", "FastAPI", "React"],
+      "metric": "3 enterprise clients",
+      "url": "https://neuralsearch.example.com"
+    },
+    {
+      "name": "VideoScript AI",
+      "status": "ACTIVE",
+      "desc": "유튜브 주제 입력 → 시나리오 자동 생성 → TTS 음성 합성 → 영상 렌더링까지 end-to-end 파이프라인. Remotion 기반 React 렌더러 사용.",
+      "tags": ["LangChain", "edge-tts", "Remotion", "FastAPI"],
+      "metric": "2,100+ monthly runs",
+      "url": "https://github.com/neural-dev/videoscript"
+    },
+    {
+      "name": "Latent Space Explorer",
+      "status": "ACTIVE",
+      "desc": "t-SNE / UMAP으로 언어 모델의 임베딩 공간을 3D로 시각화하는 오픈소스 도구. 연구자와 MLOps 엔지니어를 위한 인터랙티브 탐색 환경입니다.",
+      "tags": ["Three.js", "UMAP", "Python", "WebGL"],
+      "metric": "★ 1,840 GitHub stars",
+      "url": "https://github.com/neural-dev/latent-explorer"
+    },
+    {
+      "name": "AgentOS",
+      "status": "ACTIVE",
+      "desc": "멀티 에이전트 오케스트레이션 프레임워크. Task 분해 → 에이전트 할당 → 결과 합성까지 자동화. LangGraph 기반으로 복잡한 워크플로를 선언적으로 정의합니다.",
+      "tags": ["LangGraph", "OpenAI", "Redis", "FastAPI"],
+      "metric": "Beta — invite only",
+      "url": ""
+    }
+  ],
+  "connect_heading": "NETWORK INTERFACES",
+  "connect_items": [
+    {
+      "protocol": "EMAIL",
+      "icon": "📧",
+      "value": "woosung.jung@example.com",
+      "url": "mailto:woosung.jung@example.com"
+    },
+    {
+      "protocol": "GITHUB",
+      "icon": "🐙",
+      "value": "github.com/neural-dev",
+      "url": "https://github.com/neural-dev"
+    },
+    {
+      "protocol": "LINKEDIN",
+      "icon": "💼",
+      "value": "linkedin.com/in/woosungjung",
+      "url": "https://linkedin.com/in/woosungjung"
+    },
+    {
+      "protocol": "API",
+      "icon": "🔗",
+      "value": "woosung.dev",
+      "url": "https://woosung.dev"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "yoon_ms",
+  "name": "윤말순",
+  "style": "noir_oil",
+  "appearance_en": {
+    "face_shape": "narrow oval face, slightly hollowed cheeks, delicate bone structure visible beneath thinning skin — the face of someone who was once fuller before the quiet years of less",
+    "skin": "pale yellowed Korean skin, papery and translucent at temples, fine dense wrinkles across cheeks and forehead, deep nasolabial folds, age spots at temples and forehead — indoor skin, seen through welfare centre windows more than sunlight",
+    "eyes": "dark brown eyes, heavy-lidded, gaze quiet and turned inward — still scanning gently, still hoping without naming it. The eyes that wait without showing they are waiting",
+    "nose": "small soft slightly pinched nose, fine-boned and unremarkable",
+    "mouth": "thin lips, slightly pursed at rest — the mouth that produces '괜찮아요' as a reflex before the sentence is finished",
+    "eyebrows": "thin sparse brows, mostly grey, flat without arch — a face that stopped showing surprise because surprises have not been kind",
+    "distinctive_marks": "deep worry line between brows, fine vertical lines at lip corners, hollow beneath cheekbones, translucent temples",
+    "hair": "short thinning grey permed hair, kept neat — the one variable still within her control",
+    "body": {
+      "height_cm": 154,
+      "weight_kg": 45,
+      "proportions": "slight thin frame, shoulders drawn inward as if occupying as little space as possible",
+      "posture": "shoulders curved inward, hands folded in lap — the posture of someone perpetually uncertain whether they are allowed to be where they are",
+      "body_prompt": "154cm slight thin Korean grandmother, drawn-in shoulders, hands folded quietly, body shaped by decades of taking up as little space as possible"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "pale grey or muted beige cardigan over thin blouse, dark trousers, worn flat shoes — clean and faded, the same cardigan for years, chosen because it disappears",
+        "wardrobe_prompt": "pale grey cardigan over thin blouse, dark trousers, worn soft flat shoes, neat but faded"
+      }
+    },
+    "emotion_baseline": "very still and quietly resigned — not visibly sad, just absent of expectation. The face of someone who decided not to want things and almost got there",
+    "fal_identity_prompt": "66-year-old Korean woman, narrow oval face with sunken cheeks, heavy-lidded quietly inward-gazing dark eyes, thin sparse grey brows without arch, small soft nose, thin slightly pursed lips, short thinning grey permed hair neatly kept, 154cm slight drawn-in-shoulder frame, pale yellowed papery Korean skin with fine dense wrinkles and age spots at temples"
+  },
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/v3/characters/portraits/yoon_ms_polystyle.png",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of rooms she has learned not to ask too much of, warm amber of the welfare centre window at 2pm as the only primary light, steel blue of quiet resignation arrived at after everything else was tried, painterly figurative realism, Korean drama cinematic composition, a life that decided not to want things and is almost at peace",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, warm expression, energetic, young, glamorous, airbrushed"
+}

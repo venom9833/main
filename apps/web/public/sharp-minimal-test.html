@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthetica AI - 미래를 위한 지능형 솔루션</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --base-color: #E9E9E9;
+            --white-color: #FFFFFF;
+            --black-color: #000000;
+            --dark-gray-color: #333333;
+            --dark-bg-color: #111111;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--dark-gray-color);
+            background-color: var(--base-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--dark-bg-color);
+            color: var(--white-color);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--dark-gray-color);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white-color);
+            text-decoration: none;
+            letter-spacing: -0.05em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 40px;
+        }
+
+        nav ul li a {
+            color: var(--base-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--white-color);
+        }
+
+        .hero {
+            background-color: var(--dark-bg-color);
+            color: var(--white-color);
+            padding: 120px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--dark-gray-color);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            letter-spacing: -0.05em;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--base-color);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--white-color);
+            color: var(--dark_gray-color);
+            padding: 15px 35px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border: 1px solid var(--white-color);
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--white-color);
+            border: 1px solid var(--white-color);
+        }
+        
+        .section {
+            padding: 100px 0;
+            border-bottom: 1px solid var(--dark-gray-color);
+        }
+
+        .section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-dark {
+            background-color: var(--dark-bg-color);
+            color: var(--base-color);
+        }
+
+        .section-white {
+            background-color: var(--white-color);
+            color: var(--dark_gray-color);
+        }
+
+        .section-base {
+            background-color: var(--base-color);
+            color: var(--dark_gray-color);
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 50px;
+            text-align: center;
+            letter-spacing: -0.04em;
+            color: inherit;
+        }
+        
+        .section-dark h2 {
+            color: var(--white-color);
+        }
+
+        .grid-3-cols {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background-color: var(--white-color);
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--base-color);
+        }
+        
+        .section-dark .feature-card {
+            background-color: var(--dark-gray-color);
+            color: var(--base-color);
+            border: 1px solid var(--dark-bg-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark-gray-color);
+            letter-spacing: -0.03em;
+        }
+        
+        .section-dark .feature-card h3 {
+            color: var(--white-color);
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--dark-gray-color);
+        }
+        
+        .section-dark .feature-card p {
+            color: var(--base-color);
+        }
+
+        .text-block {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .text-block p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 80px 0;
+            background-color: var(--dark-gray-color);
+            color: var(--white-color);
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: var(--white-color);
+        }
+
+        .cta-section p {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            color: var(--base-color);
+        }
+
+        .btn-cta {
+            background-color: var(--white-color);
+            color: var(--dark-gray-color);
+            border: 1px solid var(--white-color);
+        }
+
+        .btn-cta:hover {
+            background-color: transparent;
+            color: var(--white-color);
+        }
+
+        footer {
+            background-color: var(--black-color);
+            color: var(--dark-gray-color);
+            padding: 40px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--dark-gray-color);
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        footer a {
+            color: var(--base-color);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            color: var(--white-color);
+        }
+
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0 15px 10px;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+
+            .section {
+                padding: 80px 0;
+            }
+
+            .grid-3-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="#" class="logo">Synthetica AI</a>
+            <nav>
+                <ul>
+                    <li><a href="#services">서비스</a></li>
+                    <li><a href="#solutions">솔루션</a></li>
+                    <li><a href="#about">회사소개</a></li>
+                    <li><a href="#contact">문의</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>미래를 위한 지능형 솔루션</h1>
+            <p>Synthetica AI는 첨단 인공지능 기술로 비즈니스 혁신을 가속화합니다. 데이터에서 통찰력을, 아이디어에서 현실을 만드세요.</p>
+            <a href="#contact" class="btn">지금 문의하기</a>
+        </div>
+    </section>
+
+    <section id="services" class="section section-dark">
+        <div class="container">
+            <h2>우리의 핵심 서비스</h2>
+            <div class="grid-3-cols">
+                <div class="feature-card">
+                    <h3>AI 기반 데이터 분석</h3>
+                    <p>방대한 데이터를 심층적으로 분석하여 숨겨진 패턴과 가치를 발견하고, 전략적 의사결정을 지원합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>맞춤형 AI 모델 개발</h3>
+                    <p>고객의 특정 요구사항에 맞춰 최적화된 AI 모델을 설계하고 개발하여 비즈니스 효율을 극대화합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>자동화 및 최적화</h3>
+                    <p>반복적인 업무를 자동화하고 프로세스를 최적화하여 생산성을 향상시키고 비용을 절감합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solutions" class="section section-white">
+        <div class="container">
+            <h2>산업별 AI 솔루션</h2>
+            <div class="text-block">
+                <p>Synthetica AI는 다양한 산업 분야에서 실질적인 변화를 이끌어내는 맞춤형 AI 솔루션을 제공합니다. 금융, 헬스케어, 제조, 리테일 등 각 산업의 특성과 도전 과제를 깊이 이해하고, 이에 최적화된 지능형 시스템을 구축하여 고객의 경쟁 우위를 확보합니다.</p>
+                <p>우리의 솔루션은 예측 분석, 지능형 자동화, 고객 경험 개선, 리스크 관리 등 폭넓은 영역을 아우르며, 데이터 기반의 혁신을 통해 기업의 지속 가능한 성장을 지원합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section section-base">
+        <div class="container">
+            <h2>Synthetica AI, 우리는 누구인가?</h2>
+            <div class="text-block">
+                <p>Synthetica AI는 인공지능 기술의 최전선에서 미래를 개척하는 스타트업입니다. 우리는 최고의 AI 전문가들과 혁신적인 엔지니어들로 구성되어 있으며, 복잡한 문제를 단순하고 우아한 솔루션으로 해결하는 것을 목표로 합니다.</p>
+                <p>우리의 비전은 AI를 통해 인간의 잠재력을 확장하고, 모든 기업이 지능적인 의사결정을 내릴 수 있도록 돕는 것입니다. 기술에 대한 깊은 이해와 고객 중심의 접근 방식으로, 우리는 단순한 기술 제공을 넘어 진정한 파트너로서 함께 성장합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="cta-section">
+        <div class="container">
+            <h2>당신의 비즈니스를 혁신할 준비가 되셨습니까?</h2>
+            <p>Synthetica AI와 함께라면 가능합니다. 지금 바로 문의하여 전문가와 상담하세요.</p>
+            <a href="mailto:info@synthetica.ai" class="btn btn-cta">문의하기</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Synthetica AI. All rights reserved.</p>
+            <div>
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

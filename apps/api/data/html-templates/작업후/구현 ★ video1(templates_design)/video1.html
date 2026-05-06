@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secret Level – An Entertainment Studio Powered by AI</title>
+  <link rel="stylesheet" href="video1.css" />
+  <!-- Google Fonts 대체 폰트 (Aeonik은 유료 → Barlow Condensed + Barlow) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="lenis">
+
+  <!-- SVG Sprite -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="triangle" viewBox="0 0 24 24">
+      <path d="M21.8926 14.0764C22.2294 13.8654 22.509 13.5625 22.7034 13.1981C22.8977 12.8337 23 12.4205 23 12C23 11.5795 22.8977 11.1663 22.7034 10.8019C22.509 10.4375 22.2294 10.1346 21.8926 9.92358L6.33399 0.321606C5.99627 0.111023 5.6132 0.00010868 5.22323 4.6788e-07C4.83327 -0.000107745 4.45014 0.110594 4.11232 0.32099C3.7745 0.531386 3.49388 0.834069 3.29863 1.19865C3.10339 1.56323 3.0004 1.97687 3 2.39803L3 21.602C3.0004 22.0231 3.10339 22.4368 3.29863 22.8013C3.49387 23.1659 3.77449 23.4686 4.11231 23.679C4.45013 23.8894 4.83326 24.0001 5.22323 24C5.61319 23.9999 5.99627 23.889 6.33399 23.6784L21.8926 14.0764Z"/>
+    </symbol>
+    <symbol id="pause" viewBox="0 0 24 24">
+      <path d="M4.5 1C3.12 1 2 2.06 2 3.36v17.28C2 21.94 3.12 23 4.5 23h3.33c1.38 0 2.5-1.06 2.5-2.36V3.36c0-1.3-1.12-2.36-2.5-2.36zm11.67 0c-1.38 0-2.5 1.06-2.5 2.36v17.28c0 1.3 1.12 2.36 2.5 2.36h3.33c1.38 0 2.5-1.06 2.5-2.36V3.36C22 2.06 20.88 1 19.5 1z"/>
+    </symbol>
+    <symbol id="menu" viewBox="0 0 24 24">
+      <path d="M24 19V21H0V19H24ZM24 11V13H0V11H24ZM24 3V5H0V3H24Z"/>
+    </symbol>
+    <symbol id="close" viewBox="0 0 24 24">
+      <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/>
+    </symbol>
+  </svg>
+
+  <!-- HEADER -->
+  <header class="site-header" id="hdr">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="/" class="header-logo js-header-logotype" aria-label="Secret Level">
+        <svg width="52" height="44" viewBox="0 0 52 44" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="20" font-family="'Barlow Condensed', sans-serif" font-size="18" font-weight="900" fill="white" letter-spacing="1">SECRET</text>
+          <text x="0" y="42" font-family="'Barlow Condensed', sans-serif" font-size="18" font-weight="900" fill="white" letter-spacing="1">LEVEL</text>
+        </svg>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="header-nav js-header-nav">
+        <ul>
+          <li><a href="/brand">Brand</a></li>
+          <li><a href="/narrative">Narrative</a></li>
+          <li><a href="/liquid-engine">Liquid Engine</a></li>
+          <li><a href="https://academy.secretlevel.co">Academy</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/news">News</a></li>
+        </ul>
+      </nav>
+
+      <!-- CTA + Menu Button -->
+      <div class="header-right">
+        <a href="/get-in-touch" class="btn-glass js-header-cta">Get In Touch</a>
+        <button class="btn-menu" id="menuToggle" aria-label="Open Menu">
+          <span class="menu-label">MENU</span>
+          <span class="menu-icon">
+            <svg width="20" height="20" fill="white"><use href="#menu"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU OVERLAY -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-inner">
+      <button class="mobile-menu-close" id="menuClose" aria-label="Close Menu">
+        <svg width="24" height="24" fill="white"><use href="#close"/></svg>
+      </button>
+      <nav class="mobile-nav">
+        <ul>
+          <li><a href="/brand">Brand</a></li>
+          <li><a href="/narrative">Narrative</a></li>
+          <li><a href="/liquid-engine">Liquid Engine</a></li>
+          <li><a href="https://academy.secretlevel.co">Academy</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/news">News</a></li>
+          <li><a href="/get-in-touch" class="mobile-cta">Get In Touch</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+    <div class="scroll-container">
+
+      <!-- SECTION 1: Hero -->
+      <div class="scroll-section">
+        <div class="scroll-section-inner js-index-scroll-item-inner">
+          <!-- Video Background -->
+          <div class="video-bg">
+            <video autoplay muted loop playsinline>
+              <!-- 본인 영상으로 교체하세요 -->
+              <source src="videos/hero.mp4" type="video/mp4" />
+            </video>
+            <div class="vignette"></div>
+          </div>
+          <!-- Content -->
+          <article class="section-content hero-content">
+            <div class="content-inner">
+              <h1 class="type-heading-lg">An Entertainment Studio Powered by AI</h1>
+              <p class="hero-desc">Secret Level Is an AI-Native Entertainment Studio Creating Films, Series, and Brand Worlds With Hollywood Craftsmanship, at the Speed of Culture.</p>
+              <div class="btn-wrap">
+                <a href="/about" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">Watch Showreel</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Ashwick -->
+      <div class="scroll-section">
+        <div class="scroll-section-inner js-index-scroll-item-inner">
+          <div class="video-bg">
+            <video autoplay muted loop playsinline>
+              <source src="videos/ashwick.mp4" type="video/mp4" />
+            </video>
+            <div class="vignette"></div>
+          </div>
+          <article class="section-content">
+            <div class="content-inner">
+              <span class="type-tag">Secret Level Originals</span>
+              <h2 class="type-heading-xl">Ashwick</h2>
+              <div class="btn-row">
+                <a href="/narrative/ashwick" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">Watch Project</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+                <a href="/narrative" class="btn-text">See All Narrative work
+                  <span class="btn-icon-sm">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- SECTION 3: The Heist 3 -->
+      <div class="scroll-section">
+        <div class="scroll-section-inner js-index-scroll-item-inner">
+          <div class="video-bg">
+            <video autoplay muted loop playsinline>
+              <source src="videos/heist3.mp4" type="video/mp4" />
+            </video>
+            <div class="vignette"></div>
+          </div>
+          <article class="section-content">
+            <div class="content-inner">
+              <span class="type-tag">Secret Level Originals</span>
+              <h2 class="type-heading-xl">The Heist 3</h2>
+              <div class="btn-row">
+                <a href="/narrative/heist-3" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">Watch Project</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+                <a href="/narrative" class="btn-text">See All Narrative work
+                  <span class="btn-icon-sm">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- SECTION 4: East LA -->
+      <div class="scroll-section">
+        <div class="scroll-section-inner js-index-scroll-item-inner">
+          <div class="video-bg">
+            <video autoplay muted loop playsinline>
+              <source src="videos/east-la.mp4" type="video/mp4" />
+            </video>
+            <div class="vignette"></div>
+          </div>
+          <article class="section-content">
+            <div class="content-inner">
+              <span class="type-tag">Taboo and will.i.am</span>
+              <h2 class="type-heading-xl">East LA</h2>
+              <div class="btn-row">
+                <a href="/brand/east-la" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">Watch Project</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+                <a href="/brand" class="btn-text">See All Brand work
+                  <span class="btn-icon-sm">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- SECTION 5: Stitched Together -->
+      <div class="scroll-section">
+        <div class="scroll-section-inner js-index-scroll-item-inner">
+          <div class="video-bg">
+            <video autoplay muted loop playsinline>
+              <source src="videos/stitched-together.mp4" type="video/mp4" />
+            </video>
+            <div class="vignette"></div>
+          </div>
+          <article class="section-content">
+            <div class="content-inner">
+              <span class="type-tag">Coca-Cola</span>
+              <h2 class="type-heading-xl">Stitched Together</h2>
+              <div class="btn-row">
+                <a href="/brand/stitched-together" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">Watch Project</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+                <a href="/brand" class="btn-text">See All Brand work
+                  <span class="btn-icon-sm">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- SECTION 6: Imperfectly Perfect -->
+      <div class="scroll-section">
+        <div class="scroll-section-inner js-index-scroll-item-inner">
+          <div class="video-bg">
+            <video autoplay muted loop playsinline>
+              <source src="videos/imperfectly-perfect.mp4" type="video/mp4" />
+            </video>
+            <div class="vignette"></div>
+          </div>
+          <article class="section-content">
+            <div class="content-inner">
+              <span class="type-tag">Secret Level Originals</span>
+              <h2 class="type-heading-xl">Imperfectly Perfect</h2>
+              <div class="btn-row">
+                <a href="/narrative/imperfectly-perfect" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">Watch Project</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+                <a href="/narrative" class="btn-text">See All Narrative work
+                  <span class="btn-icon-sm">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- SECTION 7: Final CTA -->
+      <div class="scroll-section">
+        <div class="scroll-section-inner js-index-scroll-item-inner">
+          <div class="video-bg">
+            <video autoplay muted loop playsinline>
+              <source src="videos/hero.mp4" type="video/mp4" />
+            </video>
+            <div class="vignette"></div>
+          </div>
+          <article class="section-content hero-content">
+            <div class="content-inner">
+              <h2 class="type-heading-lg">An Entertainment Studio Powered by AI</h2>
+              <p class="hero-desc">Secret Level Is an AI-Native Entertainment Studio Creating Films, Series, and Brand Worlds With Hollywood Craftsmanship, at the Speed of Culture.</p>
+              <div class="btn-wrap">
+                <a href="/about" class="btn-glass">
+                  <span class="glass-surface-effect"></span>
+                  <span class="btn-label">Watch Showreel</span>
+                  <span class="btn-icon">
+                    <svg width="16" height="16" fill="white"><use href="#triangle"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+    </div><!-- /.scroll-container -->
+  </main>
+
+  <!-- Lenis (Smooth Scroll) -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="video1.js"></script>
+</body>
+</html>

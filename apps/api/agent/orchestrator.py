@@ -1,3 +1,9 @@
+# ============================================================
+# WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+# 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+# V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+# 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+# ============================================================
 """V3 파이프라인 오케스트레이터 — FastAPI BackgroundTasks 기반"""
 import asyncio
 import traceback
@@ -15,6 +21,7 @@ _AWAITING_STEPS = {
     PipelineStep.AWAITING_CASTING_APPROVAL,
     PipelineStep.AWAITING_SCRIPT_APPROVAL,
     PipelineStep.AWAITING_KEYFRAME_SETUP,
+    PipelineStep.AWAITING_TTS,
     PipelineStep.AWAITING_UPLOAD_APPROVAL,
 }
 
@@ -25,6 +32,7 @@ _AUTO_APPROVE_KEYS: dict[PipelineStep, str] = {
     PipelineStep.AWAITING_CASTING_APPROVAL: "autoApproveCasting",
     PipelineStep.AWAITING_SCRIPT_APPROVAL:  "autoApproveScript",
     PipelineStep.AWAITING_KEYFRAME_SETUP:   "autoApproveKeyframe",
+    PipelineStep.AWAITING_TTS:              "autoApproveTts",
     PipelineStep.AWAITING_UPLOAD_APPROVAL:  "autoApproveUpload",
 }
 
@@ -63,6 +71,7 @@ async def run_pipeline(series_id: str, start_step: PipelineStep = PipelineStep.A
                     PipelineStep.AWAITING_CASTING_APPROVAL: "casting",
                     PipelineStep.AWAITING_SCRIPT_APPROVAL:  "script",
                     PipelineStep.AWAITING_KEYFRAME_SETUP:   "keyframe_setup",
+                    PipelineStep.AWAITING_TTS:              "tts",
                     PipelineStep.AWAITING_UPLOAD_APPROVAL:  "upload",
                 }
                 next_step = APPROVAL_TRANSITIONS.get(_key_map.get(step, ""))
@@ -101,7 +110,7 @@ async def run_pipeline(series_id: str, start_step: PipelineStep = PipelineStep.A
                         await asyncio.sleep(wait)
 
         if not success:
-            _update_series(db, series_id, PipelineStep.FAILED, error=f"{step} 실패")
+            _update_series(db, series_id, PipelineStep.FAILED, error=f"step={step.value} 실패")
             await event_bus.publish(series_id, {"type": "done", "step": "failed"})
             return
 
@@ -159,17 +168,51 @@ async def _run_architect(series_id: str):
 
 async def _run_script(series_id: str):
     from services.script_service import run_script
+    from services.wiki_service import run_lint
+    from services.reviser_service import run_reviser
+
     await run_script(series_id)
 
+    # 대본 생성 직후 자동 품질 루프: Lint → Revise
+    # 실패해도 파이프라인은 계속 진행 (awaiting_script_approval로 이동)
+    try:
+        await run_lint(series_id)
+    except Exception as e:
+        print(f"[auto-lint] 실패 (무시): {e}")
+
+    try:
+        result = await run_reviser(series_id)
+        revised = result.get("revised", 0)
+        if revised:
+            print(f"[auto-revise] {revised}개 챕터 자동 수정 완료: {result.get('chapters')}")
+        else:
+            print(f"[auto-revise] 수정 필요 항목 없음")
+    except Exception as e:
+        print(f"[auto-revise] 실패 (무시): {e}")
+
 async def _run_keyframe(series_id: str):
-    from services.keyframe_service import run_keyframe
-    await run_keyframe(series_id)
+    """키프레임 단계 — 자동 생성 없음. 씬 JSON(image_hint 등)은 대본 구조화 시 이미 생성됨.
+    사용자는 /series/keyframe 페이지에서 직접 검토·개별 재생성.
+    이 단계는 즉시 완료 → TTS로 진행.
+    """
+    return {"ok": True, "skipped": True, "note": "키프레임 자동생성 비활성 — 씬 JSON 사용"}
 
 async def _run_tts(series_id: str):
     from services.tts_service import run_tts
     await run_tts(series_id)
 
 async def _run_render(series_id: str):
+    # Ken Burns 먼저 자동 실행 — 로컬 MP3+이미지 → MP4 (미생성 컷만)
+    try:
+        from services.kenburns_service import batch_kenburns
+        db = get_supabase()
+        ser = db.table("v3_series").select("current_chapter").eq("id", series_id).single().execute()
+        chapter = (ser.data or {}).get("current_chapter", 1)
+        result = await batch_kenburns(series_id, chapter, db)
+        print(f"[render-pre-kenburns] processed={result.get('processed')} skipped={result.get('skipped')}")
+    except Exception as e:
+        print(f"[render-pre-kenburns] 실패 (무시): {e}")
+
     from services.render_service import run_render
     await run_render(series_id)
 

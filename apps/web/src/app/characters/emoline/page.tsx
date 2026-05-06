@@ -1,3 +1,9 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 
 import { useCallback, useState, useEffect, useRef } from 'react';
@@ -536,7 +542,7 @@ function CharacterDetailPanel({ char, onClose, onSituationAdded }: {
   return (
     <div style={{
       position: 'fixed',
-      top: 56, right: 0, bottom: 0,
+      top: 82, right: 0, bottom: 0,
       width: 380,
       background: 'rgba(10,10,25,0.97)',
       backdropFilter: 'blur(24px)',
@@ -850,7 +856,7 @@ function CharactersEmolineFlow() {
     : '저장';
 
   return (
-    <div style={{ width: '100%', height: 'calc(100vh - 56px)', marginTop: 56, overflow: 'hidden' }}>
+    <div style={{ width: '100%', height: 'calc(100vh - 82px)', marginTop: 82, overflow: 'hidden' }}>
       {selectedChar && (
         <CharacterDetailPanel
           char={selectedChar}

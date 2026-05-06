@@ -1,0 +1,119 @@
+{
+  "id": "product",
+  "mode": "skeleton",
+  "label": "제품 소개",
+  "description": "6장 카드가 순차 적층되는 풀스크린 제품 소개 (StackingCards)",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "shared_sc_file": "stacking-cards-base.css",
+  "palette": {
+    "background": "#042f2e",
+    "accent": "#2dd4bf",
+    "accent_dark": "#0d9488",
+    "text_on_dark": "#f0fdfa",
+    "text_on_light": "#0f172a",
+    "text_muted_dark": "#5eead4",
+    "text_muted_light": "#64748b"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["product", "stats", "features_heading", "features", "workflow_heading", "workflow", "use_cases_heading", "use_cases", "pricing_heading", "plans", "cta_heading", "cta_body", "cta_primary"],
+    "properties": {
+      "product": {
+        "type": "object",
+        "required": ["name", "category", "tagline"],
+        "description": "1번 카드 — 제품 헤더",
+        "properties": {
+          "name":     { "type": "string", "description": "제품 이름" },
+          "category": { "type": "string", "description": "카테고리 배지 (짧게, 예: SaaS, SDK, API)" },
+          "tagline":  { "type": "string", "description": "핵심 가치 한 줄 (20자 내외)" },
+          "version":  { "type": "string", "description": "버전 (선택, 예: v2.1)" }
+        }
+      },
+      "stats": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "description": "핵심 수치 3개 (히어로 하단 고정)",
+        "items": {
+          "type": "object",
+          "required": ["value", "label"],
+          "properties": {
+            "value": { "type": "string", "description": "수치 값 (예: 99.9%, <2초, 500+)" },
+            "label": { "type": "string", "description": "지표 이름 (짧게)" }
+          }
+        }
+      },
+      "features_heading": { "type": "string", "description": "2번 카드 섹션 레이블 (6자 이하 대문자)" },
+      "features": {
+        "type": "array",
+        "minItems": 4,
+        "maxItems": 4,
+        "description": "핵심 기능 4개 (2×2 그리드)",
+        "items": {
+          "type": "object",
+          "required": ["icon", "title", "desc"],
+          "properties": {
+            "icon":  { "type": "string", "description": "이모지 (1자)" },
+            "title": { "type": "string", "description": "기능 제목 (10자 내외)" },
+            "desc":  { "type": "string", "description": "기능 설명 (1~2문장)" }
+          }
+        }
+      },
+      "workflow_heading": { "type": "string", "description": "3번 카드 섹션 레이블 (6자 이하 대문자)" },
+      "workflow": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 4,
+        "description": "동작 흐름 단계",
+        "items": {
+          "type": "object",
+          "required": ["icon", "title", "desc"],
+          "properties": {
+            "icon":  { "type": "string", "description": "이모지 (1자)" },
+            "title": { "type": "string", "description": "단계 제목" },
+            "desc":  { "type": "string", "description": "단계 설명 (1~2문장)" }
+          }
+        }
+      },
+      "use_cases_heading": { "type": "string", "description": "4번 카드 섹션 레이블" },
+      "use_cases": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "description": "활용 사례 3개 (카드 3열)",
+        "items": {
+          "type": "object",
+          "required": ["icon", "role", "benefit"],
+          "properties": {
+            "icon":    { "type": "string", "description": "이모지" },
+            "role":    { "type": "string", "description": "사용자 역할 또는 상황 (짧게)" },
+            "benefit": { "type": "string", "description": "얻는 가치 2~3문장" }
+          }
+        }
+      },
+      "pricing_heading": { "type": "string", "description": "5번 카드 섹션 레이블" },
+      "plans": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "description": "요금 플랜 2~3개",
+        "items": {
+          "type": "object",
+          "required": ["name", "price", "period", "features"],
+          "properties": {
+            "name":     { "type": "string" },
+            "price":    { "type": "string", "description": "가격 (예: 무료, ₩49,000)" },
+            "period":   { "type": "string", "description": "과금 단위 (예: /월, 영구)" },
+            "featured": { "type": "boolean" },
+            "features": { "type": "array", "items": { "type": "string" }, "minItems": 3 }
+          }
+        }
+      },
+      "cta_heading":   { "type": "string", "description": "6번 카드 헤드라인" },
+      "cta_body":      { "type": "string", "description": "6번 카드 본문" },
+      "cta_primary":   { "type": "string", "description": "주요 버튼 텍스트" },
+      "cta_secondary": { "type": "string", "description": "보조 버튼 텍스트 (선택)" }
+    }
+  }
+}

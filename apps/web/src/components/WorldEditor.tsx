@@ -1,3 +1,9 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 import { useState, useEffect } from 'react';
 
@@ -57,7 +63,6 @@ const cardBase: React.CSSProperties = {
   borderRadius: '10px',
   padding: '0.85rem 1rem',
   cursor: 'pointer',
-  transition: 'all 0.15s',
   display: 'flex',
   flexDirection: 'column',
   gap: '0.5rem',
@@ -234,38 +239,46 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
   };
 
   const sectionLabelStyle: React.CSSProperties = {
-    fontSize: '0.72rem',
-    color: 'rgba(255,255,255,0.4)',
-    fontWeight: 600,
+    fontSize: '0.7rem',
+    color: 'rgba(255,255,255,0.38)',
+    fontWeight: 700,
     textTransform: 'uppercase',
-    letterSpacing: '0.08em',
+    letterSpacing: '0.1em',
     marginBottom: '0.75rem',
   };
 
   const textareaStyle: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '8px',
-    color: '#fff',
-    padding: '0.55rem 0.75rem',
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.12)',
+    borderRadius: '10px',
+    color: 'rgba(255,255,255,0.92)',
+    padding: '0.6rem 0.85rem',
     fontSize: '0.88rem',
     resize: 'vertical',
     fontFamily: 'inherit',
-    lineHeight: 1.6,
+    lineHeight: 1.7,
     width: '100%',
     boxSizing: 'border-box',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    outline: 'none',
+    transition: 'border-color 0.15s',
   };
 
   const inputStyle: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '8px',
-    color: '#fff',
-    padding: '0.55rem 0.75rem',
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.12)',
+    borderRadius: '10px',
+    color: 'rgba(255,255,255,0.92)',
+    padding: '0.6rem 0.85rem',
     fontSize: '0.88rem',
     fontFamily: 'inherit',
     width: '100%',
     boxSizing: 'border-box',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    outline: 'none',
+    transition: 'border-color 0.15s',
   };
 
   const renderTextarea = (key: string, label: string, rows: number) => (
@@ -303,23 +316,28 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
               <div
                 key={opt.id}
                 onClick={() => toggleOption(dimension, opt.id)}
+                className="glass glass-card"
                 style={{
                   padding: '0.6rem 0.75rem',
                   borderRadius: '8px',
                   cursor: 'pointer',
-                  border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.08)',
-                  background: isSelected ? 'rgba(99,102,241,0.12)' : 'rgba(255,255,255,0.02)',
-                  transition: 'all 0.15s',
+                  ...(isSelected ? {
+                    border: '2px solid var(--accent-violet)',
+                    background: 'rgba(180,144,245,0.15)',
+                    boxShadow: '0 0 20px rgba(180,144,245,0.2)',
+                  } : {}),
                 }}
               >
-                <div style={{ fontWeight: 700, fontSize: '0.82rem', color: isSelected ? '#a5b4fc' : '#fff', marginBottom: '0.2rem' }}>
-                  {isSelected && '✓ '}{opt.label}
-                </div>
-                <div style={{
-                  fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', lineHeight: 1.4,
-                  overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-                }}>
-                  {opt.scene}
+                <div style={{ position: 'relative', zIndex: 2 }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.82rem', color: isSelected ? 'var(--accent-violet)' : '#fff', marginBottom: '0.2rem' }}>
+                    {isSelected && '✓ '}{opt.label}
+                  </div>
+                  <div style={{
+                    fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', lineHeight: 1.4,
+                    overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                  }}>
+                    {opt.scene}
+                  </div>
                 </div>
               </div>
             );
@@ -332,12 +350,7 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
   const hasStoryArc = Object.keys(storyArc).length > 0;
 
   return (
-    <div style={{
-      borderRadius: '16px',
-      border: '1px solid rgba(99,102,241,0.3)',
-      background: '#111111',
-      padding: '1.75rem',
-    }}>
+    <div className="glass-dark" style={{ borderRadius: '16px', border: '1px solid rgba(180,144,245,0.3)', padding: '1.75rem' }}>
 
       {/* 헤더 */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
@@ -352,15 +365,8 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
         <button
           onClick={handleSave}
           disabled={saving}
-          style={{
-            padding: '0.4rem 1rem',
-            borderRadius: '8px',
-            border: '1px solid rgba(255,255,255,0.12)',
-            background: saved ? 'rgba(16,185,129,0.12)' : 'transparent',
-            color: saved ? '#10b981' : 'rgba(255,255,255,0.45)',
-            fontSize: '0.8rem',
-            cursor: 'pointer',
-          }}
+          className={`glass-btn glass-btn--sm glass-btn--ghost${saved ? ' glass-btn--success' : ''}`}
+          style={{ borderRadius: '8px' }}
         >
           {saving ? '저장 중…' : saved ? '저장됨 ✓' : '임시 저장'}
         </button>
@@ -371,8 +377,8 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
         {/* 섹션0 — 세계관 옵션 설정 */}
         <div style={{
           borderRadius: '12px',
-          border: '1px solid rgba(99,102,241,0.2)',
-          background: 'rgba(99,102,241,0.04)',
+          border: '1px solid rgba(180,144,245,0.2)',
+          background: 'rgba(99,102,241,0.07)',
           overflow: 'hidden',
         }}>
           {/* 헤더 — 클릭으로 열기/닫기 */}
@@ -385,7 +391,7 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#a5b4fc', letterSpacing: '0.05em' }}>
+                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--accent-violet)', letterSpacing: '0.05em' }}>
                   ★ 세계관 초기 설정
                 </span>
                 {Object.values(selectedOptions).filter(Boolean).length > 0 && (
@@ -461,21 +467,26 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
                               <div
                                 key={opt.id}
                                 onClick={() => toggleOption('resolution_method', opt.id)}
+                                className="glass glass-card"
                                 style={{
                                   padding: '0.6rem 0.75rem', borderRadius: '8px', cursor: 'pointer',
-                                  border: isSelected ? `2px solid ${accent}` : '1px solid rgba(255,255,255,0.08)',
-                                  background: isSelected ? `${accent}18` : 'rgba(255,255,255,0.02)',
-                                  transition: 'all 0.15s',
+                                  ...(isSelected ? {
+                                    border: `2px solid ${accent}`,
+                                    background: `${accent}28`,
+                                    boxShadow: `0 0 20px ${accent}33`,
+                                  } : {}),
                                 }}
                               >
-                                <div style={{ fontWeight: 700, fontSize: '0.82rem', color: isSelected ? accent : '#fff', marginBottom: '0.2rem' }}>
-                                  {isSelected && '✓ '}{opt.label}
-                                </div>
-                                <div style={{
-                                  fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', lineHeight: 1.4,
-                                  overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-                                }}>
-                                  {opt.scene}
+                                <div style={{ position: 'relative', zIndex: 2 }}>
+                                  <div style={{ fontWeight: 700, fontSize: '0.82rem', color: isSelected ? accent : '#fff', marginBottom: '0.2rem' }}>
+                                    {isSelected && '✓ '}{opt.label}
+                                  </div>
+                                  <div style={{
+                                    fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', lineHeight: 1.4,
+                                    overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                                  }}>
+                                    {opt.scene}
+                                  </div>
                                 </div>
                               </div>
                             );
@@ -502,21 +513,26 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
                           <div
                             key={opt.id}
                             onClick={() => toggleOption('narrative_pov', opt.id)}
+                            className="glass glass-card"
                             style={{
                               padding: '0.7rem 0.85rem', borderRadius: '8px', cursor: 'pointer',
-                              border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.08)',
-                              background: isSelected ? 'rgba(99,102,241,0.12)' : 'rgba(255,255,255,0.02)',
-                              transition: 'all 0.15s',
+                              ...(isSelected ? {
+                                border: '2px solid var(--accent-violet)',
+                                background: 'rgba(180,144,245,0.15)',
+                                boxShadow: '0 0 20px rgba(180,144,245,0.2)',
+                              } : {}),
                             }}
                           >
-                            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: isSelected ? '#a5b4fc' : '#fff', marginBottom: '0.3rem' }}>
-                              {isSelected && '✓ '}{opt.label}
-                            </div>
-                            <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginBottom: '0.25rem' }}>
-                              {opt.tension}
-                            </div>
-                            <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.25)', fontStyle: 'italic' }}>
-                              "{opt.scene}"
+                            <div style={{ position: 'relative', zIndex: 2 }}>
+                              <div style={{ fontWeight: 700, fontSize: '0.85rem', color: isSelected ? 'var(--accent-violet)' : '#fff', marginBottom: '0.3rem' }}>
+                                {isSelected && '✓ '}{opt.label}
+                              </div>
+                              <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginBottom: '0.25rem' }}>
+                                {opt.tension}
+                              </div>
+                              <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.25)', fontStyle: 'italic' }}>
+                                "{opt.scene}"
+                              </div>
                             </div>
                           </div>
                         );
@@ -529,12 +545,8 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
                     <button
                       onClick={handleRegenerate}
                       disabled={regenerating}
-                      style={{
-                        padding: '0.5rem 1.4rem', borderRadius: '8px',
-                        border: '1px solid rgba(245,158,11,0.4)',
-                        background: regenerating ? 'rgba(245,158,11,0.06)' : 'rgba(245,158,11,0.1)',
-                        color: '#fbbf24', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer',
-                      }}
+                      className="glass-btn glass-btn--amber"
+                      style={{ borderRadius: '8px' }}
                     >
                       {regenerating ? '생성 중…' : '이 설정으로 다시 생성'}
                     </button>
@@ -581,8 +593,8 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
                     </span>
                   </div>
                   <div style={{
-                    background: 'rgba(255,255,255,0.02)',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.08)',
                     borderRadius: '8px',
                     color: 'rgba(255,255,255,0.55)',
                     padding: '0.55rem 0.75rem',
@@ -614,7 +626,7 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
         <div>
           <p style={sectionLabelStyle}>갈등 유형</p>
           <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.3)', marginBottom: '0.75rem' }}>
-            갈등 유형은 캐스팅 AI가 인물을 선발하는 기준입니다 — <span style={{ color: conflicts.length >= 2 ? '#f87171' : 'rgba(255,255,255,0.3)' }}>최대 2개 ({conflicts.length}/2)</span>
+            갈등 유형은 캐스팅 AI가 인물을 선발하는 기준입니다 — <span className={conflicts.length >= 2 ? 'glass-badge glass-badge--error' : 'glass-badge glass-badge--violet'}>최대 2개 {conflicts.length}/2</span>
           </p>
 
           {/* 드라마 공식 카드 그리드 */}
@@ -625,19 +637,21 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
                 <div
                   key={formula.id}
                   onClick={() => toggleConflict(formula.id)}
+                  className="glass glass-card"
                   style={
                     selected
-                      ? { ...cardBase, border: '2px solid #6366f1', background: 'rgba(99,102,241,0.12)' }
-                      : { ...cardBase, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }
+                      ? { ...cardBase, border: '2px solid var(--accent-violet)', background: 'rgba(180,144,245,0.15)', boxShadow: '0 0 20px rgba(180,144,245,0.2)' }
+                      : cardBase
                   }
                 >
+                  <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {/* 상단: type명 + 선택 표시 */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontWeight: 700, fontSize: '0.92rem', color: selected ? '#a5b4fc' : '#fff' }}>
+                    <span style={{ fontWeight: 700, fontSize: '0.92rem', color: selected ? 'var(--accent-violet)' : '#fff' }}>
                       {formula.type}
                     </span>
                     {selected && (
-                      <span style={{ color: '#a5b4fc', fontSize: '0.85rem' }}>✓</span>
+                      <span style={{ color: 'var(--accent-violet)', fontSize: '0.85rem' }}>✓</span>
                     )}
                   </div>
                   {/* 중간: hook 텍스트 */}
@@ -661,11 +675,12 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
                       padding: '0.15rem 0.5rem',
                       borderRadius: '999px',
                       display: 'inline-block',
-                      background: selected ? 'rgba(99,102,241,0.2)' : 'rgba(255,255,255,0.06)',
-                      color: selected ? '#a5b4fc' : 'rgba(255,255,255,0.4)',
+                      background: selected ? 'rgba(180,144,245,0.2)' : 'rgba(255,255,255,0.06)',
+                      color: selected ? 'var(--accent-violet)' : 'rgba(255,255,255,0.4)',
                     }}>
                       {formula.tone}
                     </span>
+                  </div>
                   </div>
                 </div>
               );
@@ -680,8 +695,8 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
               gap: '1rem',
               padding: '0.85rem 1.1rem',
               borderRadius: '10px',
-              background: 'rgba(99,102,241,0.06)',
-              border: '1px solid rgba(99,102,241,0.2)',
+              background: 'rgba(180,144,245,0.06)',
+              border: '1px solid rgba(180,144,245,0.18)',
             }}>
               {/* 주인공 A */}
               <div style={{
@@ -703,7 +718,7 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
                   if (!formula) return null;
                   return (
                     <div key={id} style={{ lineHeight: 1.4, marginBottom: '0.3rem' }}>
-                      <span style={{ fontSize: '0.85rem', color: '#a5b4fc', fontWeight: 600 }}>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--accent-violet)', fontWeight: 600 }}>
                         ⚡ {formula.type}
                       </span>
                       <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', display: 'block', fontStyle: 'italic' }}>
@@ -796,8 +811,8 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
         <div style={{
           padding: '1rem 1.25rem',
           borderRadius: '10px',
-          background: 'rgba(99,102,241,0.06)',
-          border: '1px solid rgba(99,102,241,0.2)',
+          background: 'rgba(180,144,245,0.07)',
+          border: '1px solid rgba(180,144,245,0.2)',
           fontSize: '0.85rem',
           color: 'rgba(255,255,255,0.55)',
           lineHeight: 1.6,
@@ -812,17 +827,8 @@ export default function WorldEditor({ seriesId, worldData, onConfirm }: Props) {
         <button
           onClick={handleConfirm}
           disabled={saving}
-          style={{
-            padding: '0.75rem 2.5rem',
-            borderRadius: '12px',
-            border: 'none',
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            color: '#fff',
-            fontWeight: 700,
-            fontSize: '1rem',
-            cursor: 'pointer',
-            boxShadow: '0 4px 20px rgba(99,102,241,0.3)',
-          }}
+          className="glass-btn glass-btn--accent glass-btn--lg"
+          style={{ borderRadius: '12px', minWidth: '220px', justifyContent: 'center' }}
         >
           다음 — 캐릭터 확인 →
         </button>

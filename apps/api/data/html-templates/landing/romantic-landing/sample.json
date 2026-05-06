@@ -1,0 +1,65 @@
+{
+  "brand": "LinkDrop Studio",
+  "hero": {
+    "label_top": "AI CONTENT · VIDEO PRODUCTION · CREATIVE AUTOMATION",
+    "name_line1": "LINKDROP",
+    "name_line2": "STUDIO",
+    "keywords": ["IMAGINATION", "AUTOMATION", "STORYTELLING"],
+    "image_bottom": "https://ik.imagekit.io/gopichakradhar/assets/1.png",
+    "image_top": "https://ik.imagekit.io/gopichakradhar/assets/2.png"
+  },
+  "about": {
+    "image": "https://ik.imagekit.io/gopichakradhar/assets/ABOUT1.png?updatedAt=1766904002904",
+    "heading": "AI로 피어나는 이야기",
+    "body1": "LinkDrop Studio는 AI 네이티브 영상 스튜디오입니다. 아이디어 하나가 시나리오가 되고, 시나리오가 영상이 되는 마법 같은 과정을 경험해보세요.",
+    "body2": "기획부터 편집까지, 당신의 브랜드 세계관을 완성도 높은 영상으로 표현합니다. AI가 반복 작업을 맡고 당신은 창의성에만 집중합니다.",
+    "cta_label": "스튜디오 둘러보기 ♥"
+  },
+  "services": {
+    "heading": "우리가 만드는 것들",
+    "items": [
+      {"title": "AI 브랜드 필름", "desc": "브랜드 스토리를 감성적인 영상으로"},
+      {"title": "유튜브 자동화", "desc": "채널 성장을 위한 콘텐츠 파이프라인"},
+      {"title": "쇼츠·릴스 제작", "desc": "바이럴을 이끄는 숏폼 콘텐츠"},
+      {"title": "제품 소개 영상", "desc": "구매 전환율을 높이는 제품 스토리"},
+      {"title": "SNS 콘텐츠 패키지", "desc": "일관된 브랜드 이미지로 팬을 만드는 콘텐츠"}
+    ]
+  },
+  "gallery_images": [
+    "https://ik.imagekit.io/gopichakradhar/songa/1.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/2.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/3.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/4.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/5.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/6.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/7.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/8.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/9.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/10.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/11.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/12.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/13.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/14.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/15.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/16.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/17.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/18.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/19.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/20.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/21.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/22.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/23.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/24.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/25.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/26.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/27.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/28.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/29.png",
+    "https://ik.imagekit.io/gopichakradhar/songa/30.png"
+  ],
+  "cta": {
+    "heading": "당신의 이야기를 시작하세요",
+    "body": "LinkDrop Studio와 함께라면 아이디어가 완성된 영상이 됩니다.",
+    "cta_label": "무료 상담 신청 ♥"
+  }
+}

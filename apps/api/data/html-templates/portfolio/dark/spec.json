@@ -1,0 +1,97 @@
+{
+  "id": "portfolio",
+  "label": "포트폴리오",
+  "version": "2.0.0",
+  "mode": "skeleton",
+  "description": "다크 테마 포트폴리오. 서버가 스켈레톤과 CSS를 고정 제공, Gemini는 콘텐츠 JSON만 생성.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "background":        "#0f172a",
+    "surface":           "#1e293b",
+    "surface_hover":     "#253347",
+    "text_primary":      "#f1f5f9",
+    "text_secondary":    "#94a3b8",
+    "accent":            "#db2777",
+    "skill_tag_bg":      "#1e293b",
+    "skill_tag_border":  "#334155",
+    "skill_tag_text":    "#94a3b8",
+    "card_bg":           "#1e293b",
+    "card_border":       "#334155",
+    "card_hover_border": "#db2777",
+    "image_placeholder": "#253347",
+    "divider":           "#334155"
+  },
+  "content_schema": {
+    "type": "object",
+    "properties": {
+      "name":     { "type": "string", "description": "이름" },
+      "role":     { "type": "string", "description": "직함/역할 (예: Full-Stack Developer)" },
+      "tagline":  { "type": "string", "description": "한 줄 소개 (30자 내외)" },
+      "email":    { "type": "string" },
+      "location": { "type": "string" },
+      "github":   { "type": "string", "description": "GitHub URL 또는 핸들" },
+      "linkedin": { "type": "string", "description": "LinkedIn URL 또는 핸들" },
+      "bio": {
+        "type": "array",
+        "description": "자기소개 단락 2~3개",
+        "items": { "type": "string" }
+      },
+      "stats": {
+        "type": "array",
+        "description": "하이라이트 수치 3개",
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string", "description": "예: 5년+, 30+, 100만" },
+            "label": { "type": "string", "description": "예: 경력, 완료 프로젝트" }
+          },
+          "required": ["value", "label"]
+        }
+      },
+      "skills": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "category": { "type": "string" },
+            "items":    { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["category", "items"]
+        }
+      },
+      "projects": {
+        "type": "array",
+        "description": "3~6개 프로젝트",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":        { "type": "string" },
+            "category":    { "type": "string", "description": "예: Web App, Mobile, Open Source" },
+            "description": { "type": "string", "description": "2문장 이내" },
+            "tech":        { "type": "array", "items": { "type": "string" }, "description": "최대 4개" },
+            "color":       { "type": "string", "description": "이미지 placeholder 색상 (hex, 예: #4f46e5)" },
+            "github_url":  { "type": "string" },
+            "live_url":    { "type": "string" }
+          },
+          "required": ["name", "category", "description", "tech", "color"]
+        }
+      },
+      "experience": {
+        "type": "array",
+        "description": "경력 (선택, 없으면 빈 배열)",
+        "items": {
+          "type": "object",
+          "properties": {
+            "company": { "type": "string" },
+            "role":    { "type": "string" },
+            "period":  { "type": "string" }
+          },
+          "required": ["company", "role", "period"]
+        }
+      },
+      "available": { "type": "boolean", "description": "협업/구직 가능 여부" }
+    },
+    "required": ["name", "role", "tagline", "email", "bio", "stats", "skills", "projects"]
+  }
+}

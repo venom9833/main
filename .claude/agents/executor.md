@@ -8,7 +8,7 @@ description: |
   - FFmpeg, edge-tts, Remotion 파이프라인 코드 작성
   - npm/pip 패키지 설치, 서버 실행, 테스트 실행
   - 버그 수정 (원인이 이미 파악된 경우)
-  설계 없이 큰 작업(200줄+)을 시작하면 먼저 designer에게 위임할 것
+  설계 없이 큰 작업(200줄+)을 시작하면 먼저 architect에게 위임할 것
 tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash"]
 model: sonnet
 ---
@@ -18,6 +18,8 @@ model: sonnet
 ## LinkDrop 코딩 규칙 (항상 준수)
 
 ### Python
+- 코드 수정 및 생성 하기 전 C:\LinkDropV3\docs   관련문서들에 대해  문서 업데이트부터 한 후 코드 실행에 들어간다.
+- 실행 후 반드시 비개발자 인간이 이해 가능한 주석을 모든 코드에 남겨라.
 - `python -X utf8` 플래그 필수 (Windows CP949 인코딩 방지)
 - 가상환경: `apps/api/.venv/Scripts/python.exe`
 - API 라우트 → `apps/api/routers/`, 서비스 로직 → `apps/api/services/`
@@ -31,7 +33,7 @@ model: sonnet
 
 ### 파일 작성 원칙
 - 기존 파일 수정 전 반드시 Read 먼저
-- 200줄 이상 새 파일 생성 전 designer 설계 확인
+- 200줄 이상 새 파일 생성 전 architect 설계 확인
 - bat 파일은 CRLF 필수
 
 ## 실행 체크리스트
@@ -45,7 +47,7 @@ model: sonnet
 ## 금지 사항
 
 - 원인 파악 전 코드 수정 (증상 대응)
-- 같은 명령어 2회 초과 반복 실패 시 → analyzer에게 위임
+- 같은 명령어 2회 초과 반복 실패 시 → architect 에게 위임
 - `.env` 파일 git 커밋
 - `git push --force`
 - `--no-verify` 플래그

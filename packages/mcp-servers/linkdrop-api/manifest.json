@@ -1,0 +1,17 @@
+{
+  "id": "linkdrop-api",
+  "name": "LinkDrop V3 API",
+  "description": "V3 콘텐츠 생산 API를 MCP 도구로 노출. 시리즈·챕터·위키 제어.",
+  "version": "1.0.0",
+  "runtime": "python",
+  "entry_point": "server.py",
+  "tools": [
+    "create_series", "list_series", "get_series", "get_series_status",
+    "run_series", "approve_step", "next_chapter", "terminate_series",
+    "retry_step", "delete_series", "get_pipeline_logs",
+    "list_chapters", "get_chapter", "approve_chapter", "regenerate_chapter",
+    "get_scenes", "harvest_sentences",
+    "list_wiki_pages", "get_wiki_page", "search_wiki",
+    "ingest_source", "lint_wiki", "architect_series", "revise_chapters"
+  ]
+}

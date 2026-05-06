@@ -1,0 +1,36 @@
+{
+  "brand": "LinkDrop AI",
+  "nav_links": [
+    {"label": "기능", "href": "#features"},
+    {"label": "가격", "href": "#pricing"},
+    {"label": "사례", "href": "#cases"},
+    {"label": "블로그", "href": "#blog"}
+  ],
+  "header_cta": "무료 시작",
+  "hero": {
+    "eyebrow": "AI 콘텐츠 자동화 플랫폼",
+    "headline": "주제 하나로<br>영상·글·SNS 완성",
+    "tagline": "LinkDrop AI는 주제만 입력하면 시나리오·TTS·영상·썸네일까지 자동으로 만들어드립니다. 크리에이터의 시간을 10배로 늘려드려요.",
+    "cta_primary": "지금 무료로 시작하기",
+    "cta_secondary": "데모 영상 보기"
+  },
+  "stats": [
+    {"num": "5초", "desc": "평균 영상 생성"},
+    {"num": "9종", "desc": "AI 화풍 스타일"},
+    {"num": "무료", "desc": "베타 기간 이용"}
+  ],
+  "features_heading": "모든 콘텐츠를 자동으로",
+  "features": [
+    {"icon": "🎬", "title": "AI 영상 생성", "desc": "주제만 입력하면 시나리오부터 편집까지 자동 완성"},
+    {"icon": "🎙️", "title": "TTS 성우 더빙", "desc": "한국어 자연스러운 AI 음성으로 나레이션 자동 생성"},
+    {"icon": "🖼️", "title": "썸네일 제작", "desc": "클릭률 높은 유튜브·릴스 썸네일 자동 디자인"},
+    {"icon": "📝", "title": "블로그 자동 작성", "desc": "영상 대본을 SEO 최적화 블로그 포스팅으로 변환"},
+    {"icon": "📱", "title": "SNS 숏폼 변환", "desc": "유튜브 영상을 릴스·쇼츠·틱톡 형식으로 자동 컷편집"},
+    {"icon": "📊", "title": "성과 분석 대시보드", "desc": "채널 성장 지표를 한눈에 파악하고 최적 업로드 시간 추천"}
+  ],
+  "cta": {
+    "headline": "지금 바로 첫 영상을 만들어보세요",
+    "body": "신용카드 없이 무료로 시작. 5분 안에 첫 콘텐츠가 완성됩니다.",
+    "label": "무료로 시작하기 →"
+  }
+}

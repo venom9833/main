@@ -1,0 +1,240 @@
+{
+  "id": "guide",
+  "label": "가이드 문서",
+  "version": "1.0.0",
+  "description": "챕터 번호·사이드바 목차·다양한 특수 블록이 포함된 튜토리얼/가이드 형식 문서",
+
+  "layout": {
+    "type": "two-column",
+    "sidebar": {
+      "position": "left",
+      "width": "240px",
+      "behavior": "sticky",
+      "top": "2rem"
+    },
+    "main": {
+      "type": "single-column",
+      "padding": "0 3rem",
+      "maxWidth": "720px"
+    }
+  },
+
+  "chapter": {
+    "numbering": {
+      "format": "NN / KEYWORD",
+      "digits": 2,
+      "zeroPad": true,
+      "examples": ["01 / INTRO", "02 / PREPARATION", "03 / WORKSPACE", "10 / OUTRO"]
+    },
+    "keyword": {
+      "case": "uppercase",
+      "language": "english",
+      "rule": "챕터 내용을 한 단어로 압축"
+    }
+  },
+
+  "headings": {
+    "h1": {
+      "role": "페이지 최상위 타이틀",
+      "style": "영문 이탤릭체 + 한국어 혼용 허용",
+      "example": "Cowork, not Answer.",
+      "size": "3rem",
+      "weight": 800
+    },
+    "h2": {
+      "role": "챕터 제목",
+      "style": "영문 또는 한국어 — 챕터 성격에 따라 선택",
+      "example": "What is Cowork? / 사전 준비물",
+      "size": "1.6rem",
+      "weight": 700
+    },
+    "subtitle": {
+      "role": "챕터 부제 — H2 바로 아래 배치",
+      "style": "소문자 한국어, 고딕 소형 텍스트",
+      "example": "'답변'에서 '대행'으로, 패러다임의 전환",
+      "size": "1rem",
+      "weight": 400,
+      "color": "secondary"
+    },
+    "h3": {
+      "role": "섹션 소제목",
+      "example": "시나리오: AI 트렌드 뉴스 브리핑 자동화",
+      "size": "1.1rem",
+      "weight": 600
+    }
+  },
+
+  "palette": {
+    "background":      "#faf8f3",
+    "surface":         "#f3ede0",
+    "text_primary":    "#2c1f0e",
+    "text_secondary":  "#6b5744",
+    "accent":          "#b45309",
+    "accent_light":    "#fef3c7",
+    "accent_border":   "#d97706",
+    "card_background": "#f5ede0",
+    "card_border":     "#e2d5c3",
+    "code_background": "#2c1f0e",
+    "code_text":       "#f5ede0",
+    "special_box_bg":  "#fefce8",
+    "special_box_border": "#fde68a",
+    "highlight":       "#fbbf24"
+  },
+
+  "typography": {
+    "font_korean":  "'Pretendard', -apple-system, sans-serif",
+    "font_english": "'Georgia', 'Times New Roman', serif",
+    "font_mono":    "'JetBrains Mono', 'Fira Code', monospace",
+    "base_size":    "1rem",
+    "line_height":  1.8,
+    "patterns": {
+      "italic_english":    "브랜드명, 슬로건 — font-style: italic",
+      "bold_korean":       "핵심 개념 강조 — font-weight: 700",
+      "inline_code_box":   "제품명·UI메뉴명·폴더명 강조 박스",
+      "cli_command":       "영문 소문자 스팬 — CLI 명령어 (/generate_report)",
+      "section_tag":       "영문 대문자 레이블 — METAPHOR / ANALOGY / SECURITY / FLOW"
+    }
+  },
+
+  "inline_emphasis": {
+    "bold":           "핵심 개념어, 중요 행동 지침",
+    "italic":         "브랜드명, 슬로건, 영문 고유명사",
+    "inline_code":    "UI 메뉴명, 제품명, 폴더명, 경로",
+    "guillemet":      "공식 제품·프로그램 이름 — 『Claude for Chrome』",
+    "double_quote":   "UI 버튼 텍스트, 클릭해야 할 메뉴 이름",
+    "arrow":          "순서·단계·경로 안내 →",
+    "middle_dot":     "레이블 내부 구분 — FLOW 1 · 수집",
+    "em_dash":        "설명 보충 분리 —"
+  },
+
+  "blocks": {
+    "step": {
+      "label_format": "STEP N",
+      "label_case": "uppercase",
+      "structure": ["label", "title_bold", "body"],
+      "numbering": "sequential_per_chapter",
+      "example": {
+        "label": "STEP 1",
+        "title": "제목 텍스트 (굵게)",
+        "body": "본문 설명"
+      }
+    },
+    "flow": {
+      "label_format": "FLOW N · 한국어단계명",
+      "structure": ["label", "subtitle", "body"],
+      "presentation": "card",
+      "background": "surface_color",
+      "example": {
+        "label": "FLOW 1 · 수집",
+        "subtitle": "소제목",
+        "body": "설명 본문"
+      }
+    },
+    "metaphor": {
+      "variants": ["METAPHOR", "ANALOGY", "SECURITY", "DOWNLOAD"],
+      "role": "개념 비유·보안 안내·다운로드 안내 등 다목적 박스",
+      "border_style": "dotted 또는 left-thick-line",
+      "background": "special_box_bg",
+      "text_style": "italic 또는 normal"
+    },
+    "tip": {
+      "marker": "◆",
+      "label_format": "◆ 한국어레이블",
+      "uses": ["팁", "경고", "부가 정보"],
+      "examples": ["◆ 네이밍 팁", "◆ 왜 제작자 확인이 필요한가요?", "◆ 카카오톡 200자 제한 안내"]
+    },
+    "code_prompt": {
+      "background": "code_background",
+      "text_color": "code_text",
+      "font": "font_mono",
+      "header": {
+        "label_format": "PROMPT · 설명문 또는 Folder Structure",
+        "copy_button": true,
+        "copy_button_position": "right"
+      }
+    },
+    "checklist": {
+      "title": "Pre-flight Check",
+      "item_format": "□ 항목명(굵게) — 보충설명(일반체)",
+      "interactive": true,
+      "separator": "em_dash"
+    },
+    "folder_tree": {
+      "style": "ascii_art",
+      "characters": ["└──", "├──", "←"],
+      "annotation": "← 화살표 + 한국어 주석",
+      "copy_button": true,
+      "example": "바탕화면 (Desktop)\n└── 클로드코드\n    └── 브리핑   ← 주석\n        ├── 보고서/\n        └── 로그/"
+    },
+    "table": {
+      "columns": 2,
+      "header_row": true,
+      "col1_role": "항목명",
+      "col2_role": "설정 내용"
+    }
+  },
+
+  "navigation": {
+    "title": "목차 / Contents",
+    "title_style": "한·영 병기",
+    "item_style": "한국어 축약형 (3~10자)",
+    "behavior": "anchor_scroll",
+    "max_items": 10
+  },
+
+  "header_banner": {
+    "elements": [
+      "author_avatar_circle",
+      "author_name",
+      "author_handle",
+      "year",
+      "category_label_uppercase",
+      "h1_slogan_italic",
+      "subtitle_korean_2lines",
+      "meta_grid"
+    ],
+    "meta_grid": {
+      "layout": "horizontal_4col",
+      "items": ["LEVEL", "DURATION", "COST", "UPDATED"],
+      "key_style": "영문 대문자",
+      "value_style": "한국어·영문 혼용"
+    }
+  },
+
+  "footer": {
+    "elements": [
+      "document_title",
+      "built_by_credit",
+      "copyright",
+      "last_updated"
+    ],
+    "copyright_format": "© YYYY 작성자 · All rights reserved",
+    "updated_format":   "Last updated: YYYY. MM. DD"
+  },
+
+  "tone": {
+    "person": "2인칭 직접 대화 — '여러분', '~해주세요', '~할 수 있습니다'",
+    "metaphor_usage": "적극 활용 — 추상 개념을 일상 사물로 설명",
+    "tone_keyword": "긍정적·격려적",
+    "instruction_style": "클릭→입력→확인 순서를 단계별로 분리",
+    "language_mix": "기술 용어 영문, 설명 한국어"
+  },
+
+  "chapter_internal_flow": [
+    "챕터 레이블 (NN / KEYWORD)",
+    "챕터 제목 H2",
+    "부제 (한국어 핵심 메시지 1줄)",
+    "구분선 (점선 수평선)",
+    "개요 단락 (2~4문장)",
+    "비유 블록 METAPHOR / ANALOGY (선택)",
+    "STEP 블록 (단계별 실행 가이드)",
+    "팁 블록 ◆ (선택)",
+    "결과 확인 문장"
+  ],
+
+  "divider": {
+    "style": "dashed",
+    "color": "accent_border",
+    "margin": "2rem 0"
+  }
+}

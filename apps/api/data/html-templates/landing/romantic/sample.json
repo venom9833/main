@@ -1,0 +1,56 @@
+{
+  "brand": "Moonlight Studio",
+  "hero": {
+    "eyebrow": "K-Drama Production",
+    "title_line1": "Stories That",
+    "title_line2": "Move Hearts",
+    "tagline": "감동이 흐르는 이야기를 만듭니다",
+    "cta_label": "작품 보기",
+    "hero_img_top": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1200&q=80",
+    "hero_img_bottom": "https://images.unsplash.com/photo-1481595357459-84468f6eeaac?w=1200&q=80"
+  },
+  "about": {
+    "heading": "A Journey of Passion",
+    "body": "우리는 감정의 언어로 이야기를 씁니다. 매 장면은 시가 되고, 모든 대사는 마음에 닿습니다. 달빛이 스며드는 밤처럼, 우리의 작품은 당신의 일상에 조용히 스며듭니다.",
+    "cta_label": "우리 이야기 ♥",
+    "img_url": "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=80"
+  },
+  "ticker_items": [
+    "MOONLIGHT STUDIO",
+    "K-DRAMA",
+    "EMOTIONAL STORIES",
+    "감동의 순간",
+    "SINCE 2020",
+    "AWARD WINNING"
+  ],
+  "works": {
+    "heading": "Love Letters in Frame",
+    "items": [
+      {
+        "title": "달빛 아래서",
+        "category": "로맨스 드라마",
+        "img_url": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=80"
+      },
+      {
+        "title": "첫사랑의 계절",
+        "category": "청춘 멜로",
+        "img_url": "https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=600&q=80"
+      },
+      {
+        "title": "그 여름의 기억",
+        "category": "감성 드라마",
+        "img_url": "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600&q=80"
+      },
+      {
+        "title": "사랑의 온도",
+        "category": "로맨틱 코미디",
+        "img_url": "https://images.unsplash.com/photo-1523438096851-71e58cf86bbc?w=600&q=80"
+      }
+    ]
+  },
+  "contact": {
+    "heading": "Let's Create Something Beautiful",
+    "body": "당신의 이야기가 세상에 빛나도록 함께 만들어가겠습니다.",
+    "cta_label": "문의하기"
+  }
+}

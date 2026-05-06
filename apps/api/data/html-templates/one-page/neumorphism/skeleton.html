@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.person.name }} — {{ content.person.title }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="nm-page">
+
+  <!-- Header -->
+  <header class="nm-header">
+    <div class="nm-avatar">{{ content.person.avatar_emoji }}</div>
+    <h1 class="nm-name">{{ content.person.name }}</h1>
+    <p class="nm-title">{{ content.person.title }}</p>
+    {% if content.person.location %}<p class="nm-location">📍 {{ content.person.location }}</p>{% endif %}
+    <p class="nm-tagline">{{ content.person.tagline }}</p>
+  </header>
+
+  <!-- About -->
+  <section class="nm-card">
+    <h2 class="nm-section-title">{{ content.about_heading }}</h2>
+    {% for para in content.about %}
+    <p class="nm-body">{{ para }}</p>
+    {% endfor %}
+  </section>
+
+  <!-- Skills -->
+  <section class="nm-card">
+    <h2 class="nm-section-title">{{ content.skills_heading }}</h2>
+    <div class="nm-skill-groups">
+      {% for sg in content.skill_groups %}
+      <div class="nm-skill-group">
+        <span class="nm-skill-label">{{ sg.group }}</span>
+        <div class="nm-skill-tags">
+          {% for skill in sg.skills %}<span class="nm-skill-tag">{{ skill }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="nm-card">
+    <h2 class="nm-section-title">{{ content.experience_heading }}</h2>
+    <div class="nm-exp-list">
+      {% for exp in content.experiences %}
+      <div class="nm-exp-item">
+        <div class="nm-exp-header">
+          <div>
+            <span class="nm-exp-role">{{ exp.role }}</span>
+            <span class="nm-exp-company">{{ exp.company }}</span>
+          </div>
+          <span class="nm-exp-period">{{ exp.period }}</span>
+        </div>
+        <ul class="nm-bullets">
+          {% for bullet in exp.bullets %}<li>{{ bullet }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="nm-card">
+    <h2 class="nm-section-title">{{ content.projects_heading }}</h2>
+    <div class="nm-projects">
+      {% for proj in content.projects %}
+      <div class="nm-project">
+        <h3 class="nm-proj-title">
+          {% if proj.url %}<a href="{{ proj.url }}" target="_blank">{{ proj.title }}</a>{% else %}{{ proj.title }}{% endif %}
+        </h3>
+        <p class="nm-proj-desc">{{ proj.desc }}</p>
+        <div class="nm-proj-tags">
+          {% for tag in proj.tags %}<span class="nm-pill">{{ tag }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="nm-card">
+    <h2 class="nm-section-title">{{ content.contact_heading }}</h2>
+    <div class="nm-contact-list">
+      {% for item in content.contact_items %}
+      <a class="nm-contact-btn" {% if item.url %}href="{{ item.url }}" target="_blank"{% else %}href="#"{% endif %}>
+        <span class="nm-contact-icon">{{ item.icon }}</span>
+        <span class="nm-contact-label">{{ item.label }}</span>
+        <span class="nm-contact-value">{{ item.value }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if content.footer_text %}
+  <footer class="nm-footer">{{ content.footer_text }}</footer>
+  {% endif %}
+
+</div>
+</body>
+</html>

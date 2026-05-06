@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&family=Noto+Sans+KR:wght@400&display=swap');
+
+:root {
+  --font-base: 'Noto Sans KR', sans-serif;
+  --font-serif: 'Noto Serif KR', serif;
+}
+
+/* Guide ContentsMarker — 가이드 전용 콘텐츠 스타일 */
+
+body {
+  background: var(--c-background);
+  color: var(--c-text-primary);
+  font-family: var(--font-base);
+  line-height: 1.75;
+}
+
+/* ─── 헤더 ─── */
+.cm-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--c-accent);
+  margin: 0 0 1rem;
+}
+.cm-title {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 0.6rem;
+}
+.cm-subtitle {
+  font-size: 1rem;
+  color: var(--c-text-secondary);
+  margin: 0 0 1.25rem;
+  font-weight: 400;
+}
+.cm-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.78rem;
+  color: var(--c-text-secondary);
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--c-divider);
+  margin-bottom: 2rem;
+}
+.cm-author { font-weight: 600; }
+
+/* ─── 본문 ─── */
+.cm-intro {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--c-text-secondary);
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--c-divider);
+}
+
+article section {
+  margin-bottom: 2.5rem;
+}
+
+article h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--c-divider);
+}
+
+article section:first-of-type h2 { border-top: none; padding-top: 0; }
+
+article h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1.75rem 0 0.6rem;
+  color: var(--c-text-primary);
+}
+
+article p {
+  font-size: 0.925rem;
+  margin: 0 0 1rem;
+  color: var(--c-text-secondary);
+}
+
+article hr {
+  border: none;
+  border-top: 1px solid var(--c-divider);
+  margin: 2.5rem 0;
+}
+
+/* 결론 섹션 */
+.cm-conclusion {
+  background: var(--c-surface);
+  padding: 1.5rem 1.75rem;
+  border-left: 3px solid var(--c-accent);
+}
+.cm-conclusion p {
+  margin: 0;
+  font-size: 0.925rem;
+  color: var(--c-text-primary);
+  font-style: italic;
+}
+
+/* ─── 푸터 ─── */
+.cm-footer {
+  padding: 1.5rem 0;
+  font-size: 0.72rem;
+  color: var(--c-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 768px) {
+  .cm-meta { flex-direction: column; gap: 0.35rem; }
+  .cm-intro { font-size: 0.975rem; }
+  article h2 { font-size: 1.2rem; }
+  article p { font-size: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+  .cm-title { font-size: clamp(1.5rem, 6vw, 2rem); }
+  .cm-subtitle { font-size: 0.9rem; }
+  .cm-intro { font-size: 0.925rem; }
+  .cm-conclusion { padding: 1.25rem 1.1rem; }
+}
+
+/* ─── 인쇄 ─── */
+@media print {
+  table-of-contents { display: none; }
+  .cm-layout { grid-template-columns: 1fr; }
+  .cm-header, .cm-main, .cm-footer { grid-column: 1; }
+}

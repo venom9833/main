@@ -1,0 +1,11 @@
+{
+  "id": "skill-4-telegram-bot",
+  "name": "08_텔레그램_봇_에이전트",
+  "category": 4,
+  "label_number": "08",
+  "description": "텔레그램 봇을 통해 사용자 명령을 수신하고 파이프라인 실행 및 시스템 상태를 대화형으로 제어합니다.",
+  "icon": "faPaperPlane",
+  "entry_point": "logic.py",
+  "version": "1.0.0",
+  "author": "LinkDropV2"
+}

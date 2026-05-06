@@ -1,0 +1,135 @@
+{
+  "person": {
+    "name": "윤도현",
+    "title": "iOS / Android 모바일 개발자",
+    "avatar_emoji": "📱",
+    "tagline": "앱 스토어에서 별점 4.8을 유지하는 것이 목표입니다",
+    "location": "서울, 대한민국"
+  },
+  "about_heading": "소개",
+  "about": [
+    "Swift와 Kotlin을 주력으로 5년간 금융, 헬스케어, 라이프스타일 앱을 개발했습니다. 출시한 앱의 누적 다운로드 수는 140만 건이며, 평균 앱 스토어 평점 4.7점을 유지하고 있습니다.",
+    "성능 최적화와 매끄러운 애니메이션에 집착합니다. 60fps를 유지하지 못하는 화면은 출시하지 않는 것이 원칙입니다. 사용자가 앱을 쓰면서 '느리다'거나 '튄다'는 느낌을 받지 않도록 코드 레벨에서 끊임없이 프로파일링합니다.",
+    "크로스플랫폼 개발에도 경험이 있어서 Flutter로 iOS/Android를 동시에 개발하는 프로젝트도 리드했습니다. 네이티브와 크로스플랫폼의 장단점을 모두 이해하고 프로젝트에 맞는 선택을 합니다."
+  ],
+  "skills_heading": "기술 스택",
+  "skill_groups": [
+    {
+      "group": "iOS",
+      "skills": ["Swift", "SwiftUI", "UIKit", "Combine", "Core Data", "XCTest"]
+    },
+    {
+      "group": "Android",
+      "skills": ["Kotlin", "Jetpack Compose", "Room", "Coroutines", "Hilt", "Espresso"]
+    },
+    {
+      "group": "크로스플랫폼",
+      "skills": ["Flutter", "Dart", "React Native", "Expo"]
+    },
+    {
+      "group": "백엔드 / 서비스",
+      "skills": ["Firebase", "Supabase", "REST API", "GraphQL", "FastAPI"]
+    }
+  ],
+  "experience_heading": "경력",
+  "experiences": [
+    {
+      "id": "exp-fintech",
+      "role": "iOS 개발 리드",
+      "company": "핀테크 스타트업 머니온",
+      "period": "2022.04 — 현재",
+      "bullets": [
+        "투자 앱 iOS 전담 개발, 앱 스토어 평점 4.8점 유지 (리뷰 2,800개+)",
+        "SwiftUI로 전체 UI 마이그레이션, 코드 복잡도 40% 감소",
+        "생체인증 통합 및 보안 키체인 관리 모듈 설계",
+        "주간 릴리즈 파이프라인 도입, CI/CD 자동화로 배포 시간 70% 단축"
+      ]
+    },
+    {
+      "id": "exp-health",
+      "role": "모바일 개발자",
+      "company": "헬스케어 앱 웰핏",
+      "period": "2020.08 — 2022.03",
+      "bullets": [
+        "Flutter로 iOS/Android 동시 개발, 3개월 만에 런칭 달성",
+        "헬스킷/구글핏 연동 및 실시간 운동 데이터 시각화",
+        "오프라인 모드 구현 및 백그라운드 동기화 최적화",
+        "앱 스토어 피처드 선정 (건강 & 피트니스 카테고리)"
+      ]
+    },
+    {
+      "id": "exp-agency",
+      "role": "iOS 개발자",
+      "company": "모바일 에이전시 앱팩토리",
+      "period": "2019.06 — 2020.07",
+      "bullets": [
+        "다양한 분야(커머스, 물류, 교육) 앱 8개 납품",
+        "UIKit 기반 커스텀 애니메이션 컴포넌트 내부 라이브러리 구축"
+      ]
+    }
+  ],
+  "projects_heading": "주요 프로젝트",
+  "projects": [
+    {
+      "id": "proj-moneyapp",
+      "title": "머니온 투자 앱",
+      "desc": "누적 다운로드 80만 건의 개인 투자 앱 iOS 버전을 전담 개발했습니다. 실시간 주가 차트, 포트폴리오 분석, 생체인증 보안을 구현했으며 현재도 활성 유지보수 중입니다.",
+      "tags": ["Swift", "SwiftUI", "Combine", "Core Data"],
+      "url": "https://apps.apple.com/moneyapp"
+    },
+    {
+      "id": "proj-wellfit",
+      "title": "웰핏 운동 트래커",
+      "desc": "Flutter 기반 iOS/Android 크로스플랫폼 운동 기록 앱. 애플 헬스킷·구글 핏 연동, 인공지능 운동 루틴 추천 기능 포함. 앱 스토어 피처드 선정.",
+      "tags": ["Flutter", "Dart", "HealthKit", "Google Fit"],
+      "url": "https://apps.apple.com/wellfit"
+    },
+    {
+      "id": "proj-swift-components",
+      "title": "오픈소스: SwiftMotion",
+      "desc": "SwiftUI 기반 고성능 애니메이션 컴포넌트 라이브러리. 스프링 물리 기반 30개 이상의 인터랙션 컴포넌트를 제공합니다. GitHub star 1,200+.",
+      "tags": ["Swift", "SwiftUI", "오픈소스"],
+      "url": "https://github.com/dohyun/swiftmotion"
+    },
+    {
+      "id": "proj-flutter-template",
+      "title": "Flutter Clean Arch Template",
+      "desc": "DDD + Clean Architecture 기반 Flutter 프로젝트 템플릿. Riverpod 상태관리, Freezed 모델 생성, 자동화된 테스트 설정 포함. 주간 다운로드 850+.",
+      "tags": ["Flutter", "Riverpod", "Clean Architecture"],
+      "url": "https://github.com/dohyun/flutter-clean-template"
+    }
+  ],
+  "contact_heading": "연락처",
+  "contact_items": [
+    {
+      "icon": "📧",
+      "label": "이메일",
+      "value": "dohyun.yoon@example.com",
+      "url": "mailto:dohyun.yoon@example.com"
+    },
+    {
+      "icon": "🐙",
+      "label": "GitHub",
+      "value": "github.com/dohyun-yoon",
+      "url": "https://github.com/dohyun-yoon"
+    },
+    {
+      "icon": "💼",
+      "label": "LinkedIn",
+      "value": "linkedin.com/in/dohyunyoon",
+      "url": "https://linkedin.com/in/dohyunyoon"
+    },
+    {
+      "icon": "✍️",
+      "label": "기술 블로그",
+      "value": "dohyun.dev",
+      "url": "https://dohyun.dev"
+    },
+    {
+      "icon": "📱",
+      "label": "앱 포트폴리오",
+      "value": "dohyun.dev/apps",
+      "url": "https://dohyun.dev/apps"
+    }
+  ]
+}

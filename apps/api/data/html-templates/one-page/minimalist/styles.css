@@ -1,0 +1,147 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-base: 'Manrope', 'Pretendard', sans-serif;
+}
+
+/* ========================================
+   One-Page Minimalist — Fixed Stylesheet v2
+   원칙: 배경 제거 / 직각 / 그림자 없음 / 1px 선 / 여백이 구조
+   ======================================== */
+
+body {
+  background: var(--c-background);
+  color: var(--c-text-primary);
+  font-family: var(--font-base);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5rem 1.5rem 4rem;
+}
+
+.op-wrap {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* ─── 헤더 ─── */
+.op-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.op-avatar {
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  display: block;
+  line-height: 1;
+}
+.op-name {
+  font-size: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 0.35rem;
+}
+.op-role {
+  font-size: 0.75rem;
+  color: var(--c-text-secondary);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+/* ─── 구분선: 단순 1px ─── */
+.op-divider {
+  border: none;
+  border-top: 1px solid var(--c-divider);
+  margin: 2.5rem 0;
+}
+
+/* ─── 태그라인 ─── */
+.op-tagline {
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--c-text-primary);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+/* ─── 소개 ─── */
+.op-about {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--c-text-secondary);
+  line-height: 1.85;
+  margin-bottom: 3rem;
+}
+
+/* ─── 링크: 배경 없음, bottom border만 ─── */
+.op-links {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3.5rem;
+  border-top: 1px solid var(--c-divider);
+}
+.op-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--c-divider);
+  text-decoration: none;
+  color: var(--c-text-primary);
+  background: transparent;
+  transition: color 0.12s;
+  border-radius: 0;
+}
+.op-link:hover {
+  color: var(--c-accent);
+}
+.op-link:hover .op-link__arrow {
+  color: var(--c-accent);
+  transform: translateX(3px);
+}
+.op-link__icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+  opacity: 0.7;
+}
+.op-link__body { flex: 1; min-width: 0; }
+.op-link__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: block;
+}
+.op-link__desc {
+  font-size: 0.76rem;
+  color: var(--c-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.1rem;
+}
+.op-link__arrow {
+  font-size: 0.8rem;
+  color: var(--c-text-secondary);
+  flex-shrink: 0;
+  transition: transform 0.12s, color 0.12s;
+}
+
+/* ─── 푸터 ─── */
+.op-footer {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--c-text-secondary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+  body { padding: 3rem 1.25rem 2.5rem; }
+  .op-name { font-size: 2.2rem; }
+}

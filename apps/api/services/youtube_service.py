@@ -218,6 +218,134 @@ def _set_thumbnail(video_id: str, access_token: str, thumb_url: str):
         pass  # 썸네일 실패는 무시 (업로드 자체는 성공)
 
 
+async def upload_captions(
+    series_id: str,
+    chapter: int,
+    langs: list[str],
+    mp4_path: str = "",
+) -> dict:
+    """챕터 SRT 병합 → KR 번인 / EN·JP YouTube caption track 업로드.
+
+    KR("ko"): SRT를 영상 픽셀에 burn-in → {mp4_path 기반}_kr_sub.mp4 생성.
+              YouTube에 별도 caption track 업로드 안 함.
+    EN/JP:    SRT 번역 후 YouTube captions.insert (소프트 자막 트랙).
+
+    mp4_path: KR 번인 대상 MP4 경로. 미입력 시 로컬 output 폴더에서 자동 탐색.
+    video_id / youtubeToken: v3_series.settings에서 로드.
+    """
+    from services.srt_service import merge_chapter_srt, translate_srt, burn_subtitles
+
+    db = get_supabase()
+    ser = await asyncio.to_thread(
+        lambda: db.table("v3_series").select("series_code,settings").eq("id", series_id).single().execute()
+    )
+    data = ser.data or {}
+    cfg: dict = data.get("settings") or {}
+    series_code: str = data.get("series_code") or series_id
+    video_id = cfg.get("videoId", "")
+    token = cfg.get("youtubeToken", "")
+
+    kr_srt = await merge_chapter_srt(series_id, chapter)
+    if not kr_srt:
+        raise RuntimeError(f"ch{chapter:02d} SRT 없음 — TTS 완료 후 실행 가능")
+
+    results = {}
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp = Path(tmpdir)
+
+        for lang in langs:
+            if lang == "ko":
+                # KR: SRT 생성 후 영상에 burn-in (YouTube caption track 업로드 안 함)
+                srt_path = tmp / f"ch{chapter:02d}_ko.srt"
+                srt_path.write_text(kr_srt, encoding="utf-8")
+
+                # 대상 MP4 경로 결정
+                src_mp4 = Path(mp4_path) if mp4_path else (
+                    Path(__file__).parent.parent.parent.parent
+                    / "output" / series_code / f"ch{chapter:02d}" / f"ch{chapter:02d}_final.mp4"
+                )
+                if not src_mp4.exists():
+                    results["ko"] = {"ok": False, "error": f"MP4 없음: {src_mp4}"}
+                    continue
+
+                out_mp4 = src_mp4.parent / f"ch{chapter:02d}_final_kr.mp4"
+                try:
+                    await asyncio.to_thread(burn_subtitles, src_mp4, srt_path, out_mp4)
+                    results["ko"] = {"ok": True, "output": str(out_mp4)}
+                except Exception as exc:
+                    results["ko"] = {"ok": False, "error": str(exc)}
+
+            else:
+                # EN/JP: 번역 후 YouTube captions.insert
+                if not video_id or not token:
+                    results[lang] = {"ok": False, "error": "video_id 또는 youtubeToken 없음"}
+                    continue
+
+                content = await translate_srt(kr_srt, lang)
+                srt_path = tmp / f"ch{chapter:02d}_{lang}.srt"
+                srt_path.write_text(content, encoding="utf-8")
+
+                lang_label = {"en": "English", "ja": "日本語"}.get(lang, lang)
+                try:
+                    caption_id = await asyncio.to_thread(
+                        _insert_caption, video_id, token, str(srt_path), lang, lang_label
+                    )
+                    results[lang] = {"ok": True, "caption_id": caption_id}
+                except Exception as exc:
+                    results[lang] = {"ok": False, "error": str(exc)}
+
+    return {"ok": True, "chapter": chapter, "results": results}
+
+
+def _insert_caption(
+    video_id: str,
+    access_token: str,
+    srt_path: str,
+    lang: str,
+    name: str,
+) -> str:
+    """YouTube Data API v3 captions.insert — multipart 업로드"""
+    import urllib.request
+
+    with open(srt_path, "rb") as f:
+        srt_data = f.read()
+
+    metadata = json.dumps({
+        "snippet": {
+            "videoId": video_id,
+            "language": lang,
+            "name": name,
+            "isDraft": False,
+        }
+    }).encode("utf-8")
+
+    boundary = b"---ld-caption-boundary"
+    body = (
+        b"--" + boundary + b"\r\n"
+        b"Content-Type: application/json; charset=UTF-8\r\n\r\n"
+        + metadata + b"\r\n"
+        b"--" + boundary + b"\r\n"
+        b"Content-Type: text/plain; charset=UTF-8\r\n\r\n"
+        + srt_data + b"\r\n"
+        b"--" + boundary + b"--"
+    )
+
+    req = urllib.request.Request(
+        "https://www.googleapis.com/upload/youtube/v3/captions"
+        "?uploadType=multipart&part=snippet",
+        data=body,
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": f"multipart/related; boundary={boundary.decode()}",
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(req) as resp:
+        result = json.loads(resp.read().decode("utf-8"))
+        return result["id"]
+
+
 async def _download_file(url: str, dest: Path):
     async with httpx.AsyncClient(timeout=300) as client:
         resp = await client.get(url)

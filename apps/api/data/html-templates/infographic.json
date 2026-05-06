@@ -1,0 +1,150 @@
+{
+  "id": "infographic",
+  "label": "인포그래픽",
+  "version": "1.0.0",
+  "description": "복잡한 정보를 시각적으로 정리한 세로형 인포그래픽. 아이콘·수치·색상 구역으로 시선 흐름 유도.",
+
+  "layout": {
+    "type": "single-column",
+    "maxWidth": "800px",
+    "margin": "0 auto",
+    "padding": "0",
+    "sidebar": false,
+    "flow": "top-to-bottom 단방향 스크롤"
+  },
+
+  "sections": {
+    "order": ["header", "intro_stat", "main_sections", "comparison", "timeline_optional", "takeaway", "source_footer"]
+  },
+
+  "palette": {
+    "background":      "#ffffff",
+    "section_1_bg":    "#1e293b",
+    "section_1_text":  "#f8fafc",
+    "section_2_bg":    "#dc2626",
+    "section_2_text":  "#ffffff",
+    "section_3_bg":    "#0284c7",
+    "section_3_text":  "#ffffff",
+    "section_4_bg":    "#059669",
+    "section_4_text":  "#ffffff",
+    "section_5_bg":    "#7c3aed",
+    "section_5_text":  "#ffffff",
+    "neutral_bg":      "#f8fafc",
+    "neutral_text":    "#0f172a",
+    "accent":          "#dc2626",
+    "number_color":    "#fbbf24",
+    "divider":         "#e2e8f0"
+  },
+
+  "typography": {
+    "font_primary":  "'Pretendard', -apple-system, sans-serif",
+    "base_size":     "1rem",
+    "line_height":   1.6,
+    "stat_number_size": "clamp(3rem, 8vw, 5rem)",
+    "section_title_size": "1.4rem"
+  },
+
+  "blocks": {
+    "header_banner": {
+      "background": "section_1_bg",
+      "elements": ["category_label", "title_h1", "subtitle", "source_date"],
+      "padding": "4rem 3rem",
+      "title": { "size": "2.2rem", "weight": 800, "color": "#ffffff" },
+      "category_label": { "case": "uppercase", "size": "0.72rem", "color": "#94a3b8", "letter_spacing": "0.15em" }
+    },
+    "stat_hero": {
+      "style": "큰 숫자 + 단위 + 설명 — 시선 고정용 핵심 수치",
+      "number_size": "stat_number_size",
+      "number_color": "number_color",
+      "layout": "centered",
+      "padding": "3rem"
+    },
+    "color_section": {
+      "style": "배경색으로 구역 구분 — 각 주제마다 색상 변경",
+      "padding": "3rem",
+      "elements": ["section_number", "section_title", "content_blocks"]
+    },
+    "stat_card_grid": {
+      "layout": "2~3 column grid",
+      "card": {
+        "structure": ["icon_large", "number_large", "unit", "label"],
+        "background": "rgba(255,255,255,0.12)",
+        "border_radius": "14px",
+        "padding": "1.5rem",
+        "text_align": "center"
+      }
+    },
+    "icon_list": {
+      "item_format": ["icon_emoji_or_svg", "title_bold", "description"],
+      "layout": "vertical list",
+      "icon_size": "2rem",
+      "gap": "1.5rem"
+    },
+    "progress_bar": {
+      "structure": ["label", "percentage_text", "bar_visual"],
+      "bar_height": "12px",
+      "bar_bg": "rgba(255,255,255,0.2)",
+      "bar_fill": "rgba(255,255,255,0.9)",
+      "border_radius": "999px"
+    },
+    "comparison_table": {
+      "layout": "2-column VS table",
+      "col1_label": "항목 A",
+      "col2_label": "항목 B",
+      "row_alt": true,
+      "winner_marker": "✓"
+    },
+    "timeline": {
+      "style": "vertical with connecting line",
+      "item_format": ["year_or_date", "title", "description"],
+      "dot_color": "number_color",
+      "line_color": "rgba(255,255,255,0.3)"
+    },
+    "takeaway_box": {
+      "style": "핵심 메시지 강조 블록",
+      "background": "neutral_bg",
+      "border_left": "6px solid accent",
+      "padding": "2rem 2.5rem",
+      "title": "핵심 요약 / Key Takeaway",
+      "bullet_max": 3
+    },
+    "source_footer": {
+      "elements": ["출처 목록", "작성자", "작성일"],
+      "font_size": "0.78rem",
+      "color": "neutral_text",
+      "padding": "2rem 3rem",
+      "background": "neutral_bg"
+    }
+  },
+
+  "visual_rules": [
+    "섹션마다 배경색을 달리해 구역을 명확히 구분",
+    "핵심 수치는 최대한 크게 — stat_number_size 기준",
+    "텍스트보다 아이콘·수치·그래프를 우선 배치",
+    "한 섹션당 핵심 포인트 1~3개로 제한",
+    "색상은 팔레트 5종 내에서만 사용 — 무분별한 색상 혼용 금지",
+    "모든 수치에 단위 명시 (%, 명, 억 원 등)"
+  ],
+
+  "inline_emphasis": {
+    "number":      "accent 또는 number_color로 대형 표시",
+    "bold":        "핵심 키워드만 굵게",
+    "no_italic":   "인포그래픽에서 이탤릭 사용 최소화"
+  },
+
+  "tone": {
+    "voice": "간결·압축 — 문장보다 수치와 키워드 중심",
+    "length": "설명 텍스트는 1~2줄 이하",
+    "data_first": "데이터 → 해석 순서 (해석 먼저 쓰지 말 것)"
+  },
+
+  "chapter_internal_flow": [
+    "헤더 배너 (주제 + 카테고리)",
+    "핵심 수치 히어로 (stat_hero)",
+    "색상 구역 섹션 반복 (각 주제별)",
+    "비교 테이블 (선택)",
+    "타임라인 (선택)",
+    "핵심 요약 박스",
+    "출처 푸터"
+  ]
+}

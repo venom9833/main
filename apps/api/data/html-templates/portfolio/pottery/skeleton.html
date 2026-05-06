@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.artist.name }} — {{ content.artist.medium }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="pt-nav">
+  <div class="pt-nav-logo">{{ content.artist.name }}</div>
+  <a href="#contact" class="pt-nav-cta">✦ 컨택하기</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="pt-hero pt-grainy">
+  <div class="pt-hero-bg" aria-hidden="true">
+    <div class="pt-bg-col pt-bg-col--1"></div>
+    <div class="pt-bg-col pt-bg-col--2"></div>
+    <div class="pt-bg-col pt-bg-col--3"></div>
+    <div class="pt-bg-col pt-bg-col--4"></div>
+    <div class="pt-bg-col pt-bg-col--5"></div>
+    <div class="pt-bg-col pt-bg-col--6"></div>
+  </div>
+  <div class="pt-hero-overlay" aria-hidden="true"></div>
+  <div class="pt-ghost-bg" aria-hidden="true">WORK</div>
+
+  <div class="pt-hero-content">
+    <div class="pt-hero-chip">{{ content.artist.badge }}</div>
+    {% if content.hero %}
+    <h1 class="pt-hero-title">
+      <span class="pt-fill">{{ content.hero.line1 }}</span>
+      <span class="pt-stroke">{{ content.hero.line2 }}</span>
+      <span class="pt-clay">{{ content.hero.line3 }}</span>
+    </h1>
+    {% else %}
+    <h1 class="pt-hero-title">
+      <span class="pt-fill">{{ content.artist.name }}</span>
+      <span class="pt-stroke">{{ content.artist.medium }}</span>
+    </h1>
+    {% endif %}
+    <p class="pt-hero-sub">{{ content.artist.tagline }}</p>
+    <div class="pt-hero-actions">
+      <a href="#works" class="pt-btn-primary">작품 보기 ↓</a>
+      <a href="#contact" class="pt-btn-ghost">컨택하기 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TICKER ─── -->
+<div class="pt-ticker" aria-hidden="true">
+  <div class="pt-ticker-inner">
+    {% for item in content.ticker_items %}
+    <span class="pt-ticker-item">{{ item }}</span><span class="pt-ticker-sep">◆</span>
+    {% endfor %}
+    {% for item in content.ticker_items %}
+    <span class="pt-ticker-item">{{ item }}</span><span class="pt-ticker-sep">◆</span>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ─── ABOUT ─── -->
+<section class="pt-section" id="about">
+  <div class="pt-about-inner">
+    <div class="pt-about-medium">{{ content.artist.medium | upper }}</div>
+    <div class="pt-about-text">
+      <h2 class="pt-section-heading">{{ content.about_heading }}</h2>
+      {% for para in content.about %}
+      <p class="pt-body">{{ para }}</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ─── WORKS ─── -->
+<section class="pt-section pt-grainy" id="works">
+  <h2 class="pt-section-heading">{{ content.works_heading }}</h2>
+  <div class="pt-works">
+    {% for work in content.works %}
+    <div class="pt-work-card">
+      <!-- 작품 색상 블록 (이미지 대체) -->
+      <div class="pt-work-thumb" style="background:{{ work.color | default('#c8845a') }};" aria-hidden="true">
+        {% if work.tag %}<span class="pt-work-tag">{{ work.tag }}</span>{% endif %}
+        <span class="pt-work-year">{% if work.year %}{{ work.year }}{% endif %}</span>
+      </div>
+      <div class="pt-work-body">
+        <h3 class="pt-work-title">{{ work.title }}</h3>
+        <span class="pt-work-medium">{{ work.medium }}</span>
+        <p class="pt-work-desc">{{ work.desc }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ─── PROCESS ─── -->
+<section class="pt-section" id="process">
+  <h2 class="pt-section-heading">{{ content.process_heading }}</h2>
+  <div class="pt-process">
+    {% for step in content.process %}
+    <div class="pt-proc-item">
+      <div class="pt-proc-step">{{ step.step }}</div>
+      <h3 class="pt-proc-title">{{ step.title }}</h3>
+      <p class="pt-proc-desc">{{ step.desc }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section class="pt-cta-section pt-grainy" id="contact">
+  <div class="pt-cta-inner">
+    <h2 class="pt-cta-heading">{{ content.contact_heading }}</h2>
+    <p class="pt-cta-body">{{ content.contact.body }}</p>
+    <a href="#" class="pt-btn-primary pt-btn--large">{{ content.contact.cta_label }}</a>
+    {% if content.contact.items %}
+    <div class="pt-contact-list">
+      {% for item in content.contact.items %}
+      <a class="pt-contact-item" {% if item.url %}href="{{ item.url }}" target="_blank"{% else %}href="#"{% endif %}>
+        <span>{{ item.icon }}</span>
+        <span class="pt-contact-label">{{ item.label }}</span>
+        <span class="pt-contact-value">{{ item.value }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="pt-footer">
+  <div class="pt-footer-brand">{{ content.artist.name }}</div>
+  {% if content.artist.location %}
+  <span class="pt-footer-loc">📍 {{ content.artist.location }}</span>
+  {% endif %}
+</footer>
+
+</body>
+</html>

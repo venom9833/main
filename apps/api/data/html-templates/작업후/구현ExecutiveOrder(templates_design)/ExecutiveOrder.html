@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Order No. 1 · Abraham Lincoln</title>
+    <style>
+        /* RESET & MODERN CSS CONFIGURATION */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* DISPLAY-P3 COLOR PALETTE – vivid, wide‑gamut */
+            @media (color-gamut: p3) {
+                --paper-light: color(display-p3 0.99 0.97 0.92);  /* warm off-white */
+                --ink-dark:   color(display-p3 0.12 0.10 0.09);  /* deep warm black */
+                --accent-burgundy: color(display-p3 0.55 0.18 0.18); /* rich Lincoln red */
+                --accent-gold: color(display-p3 0.85 0.65 0.25);   /* muted gold */
+                --border-fine: color(display-p3 0.78 0.72 0.66);
+                --bg-subtle:   color(display-p3 0.96 0.94 0.90);
+            }
+
+            /* FALLBACK sRGB – graceful degradation */
+            --paper-light: #fcf7ec;
+            --ink-dark:   #2b241e;
+            --accent-burgundy: #8b2c2c;
+            --accent-gold: #c49b48;
+            --border-fine: #d6cdbe;
+            --bg-subtle:   #f5efe6;
+
+            /* TYPOGRAPHY – modern responsive clamp() */
+            --font-serif: 'Times New Roman', Times, Georgia, serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            
+            --fs-title: clamp(2.2rem, 8vw, 4rem);
+            --fs-subhead: clamp(1.1rem, 4vw, 1.6rem);
+            --fs-body: clamp(1rem, 2.2vw, 1.24rem);
+            --fs-meta: clamp(0.8rem, 2vw, 1rem);
+            
+            --max-width: 75ch;
+            --space-xl: 3.5rem;
+            --space-lg: 2.5rem;
+            --space-md: 1.8rem;
+            --space-sm: 1.2rem;
+            --space-xs: 0.8rem;
+        }
+
+        /* BASE STYLES */
+        body {
+            background-color: var(--paper-light);
+            color: var(--ink-dark);
+            font-family: var(--font-serif);
+            line-height: 1.7;
+            font-weight: 400;
+            font-size: var(--fs-body);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--space-lg) var(--space-sm);
+            min-height: 100vh;
+        }
+
+        /* main card – subtle texture & depth */
+        .document {
+            max-width: var(--max-width);
+            width: 100%;
+            background-color: var(--paper-light);
+            border: 1px solid var(--border-fine);
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08),
+                        0 2px 8px rgba(0, 0, 0, 0.02);
+            padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3.5rem);
+            border-radius: 2px 2px 12px 12px;
+            transition: box-shadow 0.2s ease;
+        }
+
+        /* modern underline effect for headings */
+        h1, h2 {
+            font-family: var(--font-sans);
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: var(--fs-title);
+            color: var(--accent-burgundy);
+            margin-bottom: var(--space-xs);
+            border-left: 8px solid var(--accent-gold);
+            padding-left: 1.2rem;
+            text-wrap: balance;
+        }
+
+        .subhead {
+            font-size: var(--fs-subhead);
+            font-family: var(--font-sans);
+            color: var(--ink-dark);
+            opacity: 0.8;
+            margin-bottom: var(--space-lg);
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: var(--space-sm);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: var(--space-xs);
+        }
+
+        .subhead span {
+            background: var(--bg-subtle);
+            padding: 0.2rem 0.8rem;
+            font-size: var(--fs-meta);
+            border-radius: 30px;
+            color: var(--accent-burgundy);
+            border: 1px solid var(--border-fine);
+        }
+
+        /* main text – generous spacing */
+        .order-text {
+            margin-top: var(--space-md);
+        }
+
+        .order-text p {
+            margin-bottom: 1.6em;
+            text-align: justify;
+            hyphens: auto;
+            hanging-punctuation: first allow-end last;
+        }
+
+        /* small caps for signature / byline */
+        .signature-block {
+            margin-top: var(--space-xl);
+            font-family: var(--font-sans);
+            border-top: 2px dashed var(--border-fine);
+            padding-top: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: var(--space-xs);
+        }
+
+        .signature {
+            font-size: var(--fs-subhead);
+            font-weight: 450;
+            color: var(--accent-burgundy);
+            letter-spacing: 0.5px;
+        }
+
+        .signature small {
+            font-size: var(--fs-meta);
+            color: var(--ink-dark);
+            opacity: 0.7;
+            font-variant: small-caps;
+        }
+
+        .attest {
+            font-size: var(--fs-meta);
+            font-style: italic;
+            color: var(--ink-dark);
+            opacity: 0.8;
+        }
+
+        /* modern footnote / document footer */
+        .doc-footer {
+            margin-top: var(--space-xl);
+            font-size: var(--fs-meta);
+            font-family: var(--font-sans);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm) var(--space-md);
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-sm) 0;
+            border-top: 1px solid var(--border-fine);
+            color: color-mix(in srgb, var(--ink-dark) 70%, transparent);
+        }
+
+        .badge {
+            background: color-mix(in srgb, var(--accent-gold) 15%, transparent);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border: 1px solid var(--accent-gold);
+            font-weight: 450;
+            color: var(--ink-dark);
+        }
+
+        .badge::before {
+            content: "✦";
+            color: var(--accent-burgundy);
+            font-size: 1.2em;
+        }
+
+        /* pull-quote style for first paragraph */
+        .first-p::first-letter {
+            font-size: 4.2em;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.2rem;
+            color: var(--accent-burgundy);
+            font-weight: 500;
+            font-family: var(--font-serif);
+            padding-top: 0.1rem;
+        }
+
+        /* responsive refinements */
+        @media (max-width: 550px) {
+            .document {
+                padding: 2rem 1.2rem;
+            }
+            .subhead {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* subtle highlight for war department line */
+        .war-dept {
+            font-weight: 500;
+            color: var(--accent-burgundy);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95em;
+        }
+
+        /* display-p3 enhanced saturation for supporting browsers */
+        @supports (color: color(display-p3 1 1 1)) {
+            .badge, .subhead span {
+                background: color(display-p3 0.96 0.93 0.88);
+            }
+        }
+    </style>
+    <!-- load modern fallback font (Inter) for clean UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="document">
+        <h1>Executive Order № 1</h1>
+        <div class="subhead">
+            <span>Abraham Lincoln</span>
+            <span>February 14, 1862</span>
+        </div>
+
+        <div class="order-text">
+            <p class="war-dept">WAR DEPARTMENT</p>
+
+            <p class="first-p">The breaking out of a formidable insurrection based on a conflict of political ideas, being an event without precedent in the United States, was necessarily attended by great confusion and perplexity of the public mind. Disloyalty before unsuspected suddenly became bold, and treason astonished the world by bringing at once into the field military forces superior in number to the standing Army of the United States.</p>
+
+            <p>Every department of the Government was paralyzed by treason. Defection appeared in the Senate, in the House of Representatives, in the Cabinet, in the Federal courts; ministers and consuls returned from foreign countries to enter the insurrectionary councils or land or naval forces; commanding and other officers of the Army and in the Navy betrayed our councils or deserted their posts for commands in the insurgent forces. Treason was flagrant in the revenue and in the post-office service, as well as in the Territorial governments and in the Indian reserves.</p>
+
+            <p>Not only governors, judges, legislators, and ministerial officers in the States, but even whole States rushed one after another with apparent unanimity into rebellion. The capital was besieged and its connection with all the States cut off.</p>
+
+            <p>Even in the portions of the country which were most loyal political combinations and secret societies were formed furthering the work of disunion, while, from motives of disloyalty or cupidity or from excited passions or perverted sympathies, individuals were found furnishing men, money, and materials of war and supplies to the insurgents' military and naval forces. Armies, ships, fortifications, navy-yards, arsenals, military posts, and garrisons one after another were betrayed or abandoned to the insurgents.</p>
+
+            <p>Congress had not anticipated, and so had not provided for, the emergency. The municipal authorities were powerless and inactive. The judicial machinery seemed as if it had been designed, not to sustain the Government, but to embarrass and betray it.</p>
+
+            <p>Foreign intervention, openly invited and industriously instigated by the abettors of the insurrection, became imminent, and has only been prevented by the practice of strict and impartial justice, with the most perfect moderation, in our intercourse with nations.</p>
+
+            <p>The public mind was alarmed and apprehensive, though fortunately not distracted or disheartened. It seemed to be doubtful whether the Federal Government, which one year before had been thought a model worthy of universal acceptance, had indeed the ability to defend and maintain itself.</p>
+
+            <p>Some reverses, which, perhaps, were unavoidable, suffered by newly levied and inefficient forces, discouraged the loyal and gave new hopes to the insurgents. Voluntary enlistments seemed about to cease and desertions commenced. Parties speculated upon the question whether conscription had not become necessary to fill up the armies of the United States.</p>
+
+            <p>In this emergency the President felt it his duty to employ with energy the extraordinary powers which the Constitution confides to him in cases of insurrection. He called into the field such military and naval forces, unauthorized by the existing laws, as seemed necessary. He directed measures to prevent the use of the post-office for treasonable correspondence. He subjected passengers to and from foreign countries to new passport regulations, and he instituted a blockade, suspended the writ of habeas corpus in various places, and caused persons who were represented to him as being or about to engage in disloyal and treasonable practices to be arrested by special civil as well as military agencies and detained in military custody when necessary to prevent them and deter others from such practices. Examinations of such cases were instituted, and some of the persons so arrested have been discharged from time to time under circumstances or upon conditions compatible, as was thought, with the public safety.</p>
+
+            <p>Meantime a favorable change of public opinion has occurred. The line between loyalty and disloyalty is plainly defined. The whole structure of the Government is firm and stable. Apprehension of public danger and facilities for treasonable practices have diminished with the passions which prompted heedless persons to adopt them. The insurrection is believed to have culminated and to be declining.</p>
+
+            <p>The President, in view of these facts, and anxious to favor a return to the normal course of the Administration as far as regard for the public welfare will allow, directs that all political prisoners or state prisoners now held in military custody be released on their subscribing to a parole engaging them to render no aid or comfort to the enemies in hostility to the United States.</p>
+
+            <p>The Secretary of War will, however, in his discretion, except from the effect of this order any persons detained as spies in the service of the insurgents, or others whose release at the present moment may be deemed incompatible with the public safety.</p>
+
+            <p>To all persons who shall be so released and who shall keep their parole the President grants an amnesty for any past offenses of treason or disloyalty which they may have committed.</p>
+
+            <p>Extraordinary arrests will hereafter be made under the direction of the military authorities alone.</p>
+
+            <p>By order of the President:</p>
+        </div>
+
+        <div class="signature-block">
+            <div class="signature">Edwin M. Stanton <small>Secretary of War</small></div>
+            <div class="attest">February 14, 1862</div>
+        </div>
+
+        <!-- document footer with modern p3 color badge and metadata -->
+        <footer class="doc-footer">
+            <span class="badge">display-p3 · wide gamut</span>
+            <span>National Archives / Retroactively numbered 1907</span>
+            <span>† first numbered executive order</span>
+        </footer>
+    </main>
+
+    <!-- small note on CSS functions used -->
+    <div style="max-width:var(--max-width); margin-top:var(--space-sm); font-size:0.8rem; font-family:var(--font-sans); color:color-mix(in srgb, var(--ink-dark) 60%, transparent); text-align:center; border-top:0; padding:var(--space-xs);">
+        rendered with clamp(), color-mix(), display-p3, ch units, system‑ui fallback, hanging‑punctuation & first‑letter
+    </div>
+</body>
+</html>

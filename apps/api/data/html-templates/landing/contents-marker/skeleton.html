@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.hero.headline }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  {% if shared_cm_css %}<style>{{ shared_cm_css }}</style>{% endif %}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="cm-layout">
+
+  <table-of-contents></table-of-contents>
+
+  <!-- 히어로 -->
+  <header class="cm-header" id="pre">
+    <span class="ld-eyebrow">{{ content.hero.eyebrow }}</span>
+    <h1 class="ld-headline">{{ content.hero.headline }}</h1>
+    <p class="ld-tagline">{{ content.hero.tagline }}</p>
+    <div class="ld-hero-actions">
+      <a class="ld-cta-btn" href="#features">{{ content.hero.cta_label }}</a>
+      {% if content.hero.sub_text %}<p class="ld-cta-sub">{{ content.hero.sub_text }}</p>{% endif %}
+    </div>
+  </header>
+
+  <main class="cm-main">
+    <article>
+
+      <!-- 핵심 기능 -->
+      <section id="features">
+        <h2>{{ content.features_heading }}</h2>
+        <div class="ld-feature-grid">
+          {% for f in content.features %}
+          <div class="ld-feature-card">
+            <span class="ld-feature-icon">{{ f.icon }}</span>
+            <h3>{{ f.title }}</h3>
+            <p>{{ f.desc }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- 이용 방법 -->
+      <section id="how-it-works">
+        <h2>{{ content.steps_heading }}</h2>
+        <div class="ld-steps">
+          {% for step in content.steps %}
+          <div class="ld-step">
+            <span class="ld-step-num">{{ loop.index }}</span>
+            <div class="ld-step-body">
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.desc }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- 후기 -->
+      <section id="testimonials">
+        <h2>{{ content.testimonials_heading }}</h2>
+        <div class="ld-testimonial-grid">
+          {% for t in content.testimonials %}
+          <blockquote class="ld-testimonial">
+            <p>{{ t.quote }}</p>
+            <footer>
+              <strong>{{ t.name }}</strong>
+              {% if t.role %}<span class="ld-testimonial-role">{{ t.role }}</span>{% endif %}
+            </footer>
+          </blockquote>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- 가격 -->
+      <section id="pricing">
+        <h2>{{ content.pricing_heading }}</h2>
+        <div class="ld-pricing-card">
+          <div class="ld-pricing-top">
+            <span class="ld-pricing-label">{{ content.pricing.label }}</span>
+            {% if content.pricing.highlight %}
+            <span class="ld-pricing-badge">{{ content.pricing.highlight }}</span>
+            {% endif %}
+          </div>
+          <div class="ld-pricing-amount">
+            <span class="ld-price">{{ content.pricing.price }}</span>
+            <span class="ld-period">{{ content.pricing.period }}</span>
+          </div>
+          <ul class="ld-pricing-features">
+            {% for feat in content.pricing.features %}
+            <li>{{ feat }}</li>
+            {% endfor %}
+          </ul>
+          {% if content.pricing.note %}
+          <p class="ld-pricing-note">{{ content.pricing.note }}</p>
+          {% endif %}
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq">
+        <h2>{{ content.faq_heading }}</h2>
+        {% for item in content.faq %}
+        <div class="ld-faq-item" id="{{ item.id }}">
+          <h3>{{ item.question }}</h3>
+          <p>{{ item.answer }}</p>
+        </div>
+        {% endfor %}
+      </section>
+
+    </article>
+  </main>
+
+  <!-- 마지막 CTA -->
+  <div class="ld-final-cta">
+    <h2>{{ content.cta_heading }}</h2>
+    <p>{{ content.cta_body }}</p>
+    <a class="ld-cta-btn" href="#">{{ content.cta_label }}</a>
+  </div>
+
+  <hr/>
+
+  <footer class="cm-footer">
+    <p>{{ content.hero.headline }}</p>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  var tocEl = document.querySelector('table-of-contents');
+  if (!tocEl) return;
+  var article = document.querySelector('article');
+  if (!article) return;
+  var headings = Array.from(article.querySelectorAll('h2'));
+  if (!headings.length) return;
+
+  var nav = document.createElement('nav');
+  nav.setAttribute('aria-label', 'Table of Contents');
+
+  var label = document.createElement('h2');
+  label.textContent = '섹션';
+  nav.appendChild(label);
+
+  var ol = document.createElement('ol');
+  headings.forEach(function(h) {
+    var id = h.id || h.closest('section[id]')?.id || h.textContent.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w-]/g,'');
+    if (!h.id) h.id = id;
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + id;
+    a.textContent = h.textContent.trim();
+    li.appendChild(a);
+    ol.appendChild(li);
+  });
+  nav.appendChild(ol);
+
+  var hr = document.createElement('hr');
+  hr.className = 'split';
+  nav.appendChild(hr);
+
+  var back = document.createElement('div');
+  back.className = 'cm-back-to-top';
+  back.innerHTML = '<a href="#pre">↑ 처음으로</a>';
+  nav.appendChild(back);
+
+  tocEl.appendChild(nav);
+})();
+</script>
+</body>
+</html>

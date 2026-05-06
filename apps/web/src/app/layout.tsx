@@ -24,10 +24,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
+        {/* Noto Serif KR — 자막·대본 카드 공통 폰트 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body style={{ paddingTop: '56px' }}>
+      <body style={{ paddingTop: 'var(--gnb-height, 92px)' }}>
+        {/* Liquid Glass animated background */}
+        <div className="scene" aria-hidden="true">
+          <div className="scene__blob scene__blob--1" />
+          <div className="scene__blob scene__blob--2" />
+          <div className="scene__blob scene__blob--3" />
+        </div>
         <GNB />
-        {children}
+        <div style={{ position: 'relative', zIndex: 10 }}>
+          {children}
+        </div>
       </body>
     </html>
   );

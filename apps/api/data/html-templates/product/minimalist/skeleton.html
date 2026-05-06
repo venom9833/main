@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ content.product_name }}</title>
+<style>
+{{ shared_base_css }}
+{{ shared_fonts_css }}
+{{ template_css }}
+{{ shared_print_css }}
+</style>
+{{ palette_vars }}
+</head>
+<body>
+
+<!-- HERO -->
+<section class="pd-hero">
+  {% if content.badge %}
+  <div class="pd-badge">{{ content.badge }}</div>
+  {% endif %}
+  <h1 class="pd-hero__name">{{ content.product_name }}</h1>
+  <div class="pd-hero__tagline">{{ content.tagline }}</div>
+  <p class="pd-hero__desc">{{ content.description }}</p>
+  <a href="{{ content.cta_url or '#' }}" class="pd-cta">{{ content.cta_label }}</a>
+</section>
+
+<!-- FEATURES -->
+{% if content.features %}
+<div class="pd-container">
+  <section class="pd-section">
+    <div class="pd-section__label">Features</div>
+    <div class="pd-section__title">핵심 기능</div>
+    <div class="pd-features">
+      {% for feat in content.features %}
+      <div class="pd-feature">
+        <span class="pd-feature__icon">{{ feat.icon }}</span>
+        <div class="pd-feature__title">{{ feat.title }}</div>
+        <div class="pd-feature__desc">{{ feat.description }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endif %}
+
+<!-- STATS -->
+{% if content.stats %}
+<div class="pd-container">
+  <div class="pd-stats">
+    {% for stat in content.stats %}
+    <div>
+      <span class="pd-stat__value">{{ stat.value }}</span>
+      <span class="pd-stat__label">{{ stat.label }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- PRICING -->
+{% if content.pricing %}
+<div class="pd-container">
+  <section class="pd-section">
+    <div class="pd-section__label">Pricing</div>
+    <div class="pd-section__title">요금제</div>
+    <div class="pd-pricing pd-pricing--{{ content.pricing|length }}">
+      {% for plan in content.pricing %}
+      <div class="pd-plan {% if plan.highlighted %}pd-plan--highlight{% endif %}">
+        <div class="pd-plan__name">{{ plan.name }}</div>
+        <div class="pd-plan__price">{{ plan.price }}</div>
+        <div class="pd-plan__period">{{ plan.period or '' }}</div>
+        <ul class="pd-plan__features">
+          {% for feat in plan.features %}
+          <li>{{ feat }}</li>
+          {% endfor %}
+        </ul>
+        <a href="#" class="pd-plan__cta">{{ plan.cta }}</a>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endif %}
+
+<!-- TESTIMONIAL -->
+{% if content.testimonial and content.testimonial.quote %}
+<div class="pd-container">
+  <div class="pd-testimonial">
+    <div class="pd-testimonial__quote">{{ content.testimonial.quote }}</div>
+    <div class="pd-testimonial__author">{{ content.testimonial.author }}</div>
+    <div class="pd-testimonial__role">{{ content.testimonial.role }}</div>
+  </div>
+</div>
+{% endif %}
+
+<!-- BOTTOM CTA -->
+<div class="pd-container">
+  <div class="pd-bottom-cta">
+    <div class="pd-bottom-cta__title">지금 바로 시작하세요</div>
+    <div class="pd-bottom-cta__sub">{{ content.tagline }}</div>
+    <a href="{{ content.cta_url or '#' }}" class="pd-cta">{{ content.cta_label }}</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="pd-footer pd-container">
+  {{ content.footer_text or ('© 2025 ' + content.product_name) }}
+</footer>
+
+</body>
+</html>

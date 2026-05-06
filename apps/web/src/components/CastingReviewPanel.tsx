@@ -1,3 +1,9 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 import { useState, useEffect } from 'react';
 
@@ -22,13 +28,15 @@ interface CastDetail {
   situations: string[];
   relationships: Record<string, string>;
   photo_real_url: string;
-  photo_masako_url: string;
+  photo_polystyle_url: string;
   face_grid_url: string;
 }
 
 interface WorldData {
   charA?: string;
   charAName?: string;
+  charB?: string;
+  charBName?: string;
   castTrope?: string;
   fullCastDetails?: CastDetail[];
   [key: string]: unknown;
@@ -60,6 +68,8 @@ const TROPE_LABELS: Record<string, string> = {
   in_law: '시댁 갈등',
   isolation: '고독·소외',
   power_abuse: '갑질·권력',
+  llm_selected: 'AI 맞춤 선발',
+  source_extracted: '소스 원작 추출',
 };
 
 const GENDER_LABEL: Record<string, string> = { male: '남', female: '여' };
@@ -117,34 +127,76 @@ function SecretInput({ charId, name, value, onChange, disabled }: {
   );
 }
 
+function RoleBadge({ role, onClick, isActive, disabled }: {
+  role: 'A' | 'B';
+  onClick: () => void;
+  isActive: boolean;
+  disabled: boolean;
+}) {
+  const colors = {
+    A: { active: '#6366f1', activeBg: 'rgba(99,102,241,0.25)', border: 'rgba(99,102,241,0.6)', text: '#a5b4fc' },
+    B: { active: '#ec4899', activeBg: 'rgba(236,72,153,0.2)', border: 'rgba(236,72,153,0.5)', text: '#f9a8d4' },
+  };
+  const c = colors[role];
+  return (
+    <button
+      onClick={e => { e.stopPropagation(); if (!disabled) onClick(); }}
+      disabled={disabled}
+      title={isActive ? `주인공 ${role}로 지정됨` : `주인공 ${role}로 지정`}
+      style={{
+        width: 26, height: 26,
+        borderRadius: '6px',
+        border: isActive ? `1.5px solid ${c.border}` : '1px solid rgba(255,255,255,0.12)',
+        background: isActive ? c.activeBg : 'transparent',
+        color: isActive ? c.text : 'rgba(255,255,255,0.25)',
+        fontSize: '0.65rem',
+        fontWeight: 800,
+        cursor: disabled ? 'default' : isActive ? 'default' : 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0,
+        transition: 'all 0.15s',
+        opacity: disabled && !isActive ? 0.5 : 1,
+      }}
+    >
+      {role}
+    </button>
+  );
+}
+
 function CharDetailCard({
-  char, index, secret, onSecretChange, isProtagonist, secretDisabled,
+  char, secret, onSecretChange, protagonistRole, onSetA, onSetB, swapping, secretDisabled,
 }: {
   char: CastDetail;
-  index: number;
   secret: string;
   onSecretChange: (id: string, v: string) => void;
-  isProtagonist: boolean;
+  protagonistRole: 'A' | 'B' | null;
+  onSetA: () => void;
+  onSetB: () => void;
+  swapping: boolean;
   secretDisabled: boolean;
 }) {
-  const [expanded, setExpanded] = useState(isProtagonist);
-  // 마사코 이미지 우선, 없으면 real, 없으면 face_grid
-  const photoUrl = char.photo_masako_url || char.photo_real_url || char.face_grid_url;
+  const [expanded, setExpanded] = useState(protagonistRole !== null);
+  const photoUrl = char.photo_polystyle_url || char.photo_real_url || char.face_grid_url;
   const roleLabel = ROLE_LABELS[char.role] || char.role;
   const genderLabel = GENDER_LABEL[char.gender] || char.gender;
+  const isProtagonist = protagonistRole !== null;
 
   return (
     <div style={{
       background: isProtagonist ? 'rgba(99,102,241,0.06)' : 'rgba(255,255,255,0.03)',
-      border: `1px solid ${isProtagonist ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.08)'}`,
+      border: `1px solid ${
+        protagonistRole === 'A' ? 'rgba(99,102,241,0.3)' :
+        protagonistRole === 'B' ? 'rgba(236,72,153,0.25)' :
+        'rgba(255,255,255,0.08)'
+      }`,
       borderRadius: '14px',
       overflow: 'hidden',
     }}>
-      {/* 헤더 — 항상 표시 */}
+      {/* 헤더 */}
       <div
         onClick={() => setExpanded(p => !p)}
         style={{
-          display: 'flex', alignItems: 'center', gap: '0.8rem',
+          display: 'flex', alignItems: 'center', gap: '0.7rem',
           padding: '0.9rem 1rem', cursor: 'pointer',
         }}
       >
@@ -152,7 +204,7 @@ function CharDetailCard({
           <img
             src={photoUrl}
             alt={char.name}
-            style={{ width: 64, height: 64, borderRadius: '10px', objectFit: 'cover', objectPosition: 'top', flexShrink: 0, border: '1px solid rgba(255,255,255,0.1)' }}
+            style={{ width: 56, height: 56, borderRadius: '10px', objectFit: 'cover', objectPosition: 'top', flexShrink: 0, border: '1px solid rgba(255,255,255,0.1)' }}
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
           />
         )}
@@ -162,9 +214,10 @@ function CharDetailCard({
               <span style={{
                 fontSize: '0.5rem', fontWeight: 700, textTransform: 'uppercase',
                 padding: '0.1rem 0.4rem', borderRadius: '4px',
-                background: 'rgba(99,102,241,0.2)', color: '#a5b4fc',
+                background: protagonistRole === 'A' ? 'rgba(99,102,241,0.2)' : 'rgba(236,72,153,0.2)',
+                color: protagonistRole === 'A' ? '#a5b4fc' : '#f9a8d4',
               }}>
-                주인공 {index === 0 ? 'A' : 'B'}
+                주인공 {protagonistRole}
               </span>
             )}
             <span style={{
@@ -184,7 +237,14 @@ function CharDetailCard({
             </div>
           )}
         </div>
-        <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.72rem', flexShrink: 0 }}>
+
+        {/* A/B 지정 버튼 */}
+        <div style={{ display: 'flex', gap: '0.25rem', flexShrink: 0 }} onClick={e => e.stopPropagation()}>
+          <RoleBadge role="A" onClick={onSetA} isActive={protagonistRole === 'A'} disabled={swapping || protagonistRole === 'A'} />
+          <RoleBadge role="B" onClick={onSetB} isActive={protagonistRole === 'B'} disabled={swapping || protagonistRole === 'B'} />
+        </div>
+
+        <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.72rem', flexShrink: 0, marginLeft: '0.25rem' }}>
           {expanded ? '▲' : '▼'}
         </span>
       </div>
@@ -192,7 +252,6 @@ function CharDetailCard({
       {/* 상세 — 펼쳤을 때 */}
       {expanded && (
         <div style={{ padding: '0 1.2rem 1.2rem', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-          {/* 기본 정보 행 */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.5rem' }}>
             <div>
               <div style={sectionLabel}>성별·나이</div>
@@ -212,7 +271,6 @@ function CharDetailCard({
             </div>
           </div>
 
-          {/* 성격 */}
           {char.personality && (
             <div>
               <div style={sectionLabel}>성격</div>
@@ -220,7 +278,6 @@ function CharDetailCard({
             </div>
           )}
 
-          {/* 현재 상황 전체 */}
           {char.situations?.length > 0 && (
             <div>
               <div style={sectionLabel}>현재 상황</div>
@@ -232,7 +289,6 @@ function CharDetailCard({
             </div>
           )}
 
-          {/* 핵심 걱정 */}
           {char.concern && (
             <div>
               <div style={sectionLabel}>핵심 걱정</div>
@@ -240,7 +296,6 @@ function CharDetailCard({
             </div>
           )}
 
-          {/* 내면의 거짓말 */}
           {char.lie_to_self && (
             <div>
               <div style={sectionLabel}>내면의 거짓말</div>
@@ -248,7 +303,6 @@ function CharDetailCard({
             </div>
           )}
 
-          {/* 핵심 두려움 */}
           {char.fear && (
             <div>
               <div style={sectionLabel}>핵심 두려움</div>
@@ -256,7 +310,6 @@ function CharDetailCard({
             </div>
           )}
 
-          {/* 말투 */}
           {char.speaking_style && (
             <div>
               <div style={sectionLabel}>말투</div>
@@ -264,7 +317,6 @@ function CharDetailCard({
             </div>
           )}
 
-          {/* 스트레스 반응 */}
           {char.under_stress && (
             <div>
               <div style={sectionLabel}>스트레스 반응</div>
@@ -272,7 +324,6 @@ function CharDetailCard({
             </div>
           )}
 
-          {/* 관계 */}
           {Object.keys(char.relationships || {}).length > 0 && (
             <div>
               <div style={sectionLabel}>주요 관계</div>
@@ -287,7 +338,6 @@ function CharDetailCard({
             </div>
           )}
 
-          {/* 비밀 투입 */}
           <div style={{ borderTop: '1px solid rgba(251,191,36,0.1)', paddingTop: '0.9rem' }}>
             <SecretInput charId={char.id} name={char.name} value={secret} onChange={onSecretChange} disabled={secretDisabled} />
           </div>
@@ -300,18 +350,93 @@ function CharDetailCard({
 
 export default function CastingReviewPanel({ seriesId, worldData, onConfirm }: Props) {
   const [confirming, setConfirming] = useState(false);
+  const [regenerating, setRegenerating] = useState(false);
+  const [swapping, setSwapping] = useState(false);
   const [userSecrets, setUserSecrets] = useState<Record<string, string>>({});
   const [castDetails, setCastDetails] = useState<CastDetail[]>(worldData.fullCastDetails || []);
+  const [castTrope, setCastTrope] = useState<string>(worldData.castTrope || '');
   const [loadingDetails, setLoadingDetails] = useState(false);
+
+  // 주인공 A/B 선택 상태 — world_data 값으로 초기화, 없으면 순서 기반 fallback
+  const [selectedA, setSelectedA] = useState<string>(worldData.charA || '');
+  const [selectedB, setSelectedB] = useState<string>(worldData.charB || '');
+
   useEffect(() => {
-    if (castDetails.length > 0) return;
+    if (castDetails.length > 0) {
+      // charA/B가 미설정인 경우 첫 두 캐릭터로 초기화
+      if (!selectedA && castDetails[0]) setSelectedA(castDetails[0].id);
+      if (!selectedB && castDetails[1]) setSelectedB(castDetails[1].id);
+      return;
+    }
     setLoadingDetails(true);
     fetch(`${API}/series/${seriesId}/cast-details`)
       .then(r => r.ok ? r.json() : { details: [] })
-      .then(data => setCastDetails(data.details || []))
+      .then(data => {
+        const details = data.details || [];
+        setCastDetails(details);
+        if (!selectedA && details[0]) setSelectedA(details[0].id);
+        if (!selectedB && details[1]) setSelectedB(details[1].id);
+      })
       .catch(() => {})
       .finally(() => setLoadingDetails(false));
-  }, [seriesId, castDetails.length]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seriesId]);
+
+  const handleSetRole = async (charId: string, role: 'A' | 'B') => {
+    if (swapping) return;
+    const prevA = selectedA;
+    const prevB = selectedB;
+
+    let newA = selectedA;
+    let newB = selectedB;
+    if (role === 'A') {
+      newA = charId;
+      if (charId === selectedB) newB = prevA; // B→A 스왑: 기존 A가 B로
+    } else {
+      newB = charId;
+      if (charId === selectedA) newA = prevB; // A→B 스왑: 기존 B가 A로
+    }
+    if (newA === newB || !newA || !newB) return;
+
+    setSelectedA(newA);
+    setSelectedB(newB);
+    setSwapping(true);
+    try {
+      const res = await fetch(`${API}/series/${seriesId}/cast-reassign`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ charA_id: newA, charB_id: newB }),
+      });
+      if (!res.ok) throw new Error();
+    } catch {
+      setSelectedA(prevA);
+      setSelectedB(prevB);
+    } finally {
+      setSwapping(false);
+    }
+  };
+
+  const handleRegen = async () => {
+    setRegenerating(true);
+    setUserSecrets({});
+    try {
+      const res = await fetch(`${API}/series/${seriesId}/regen/casting`, { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        const newDetails: CastDetail[] = data.fullCastDetails || [];
+        if (newDetails.length > 0) {
+          setCastDetails(newDetails);
+          setSelectedA(newDetails[0]?.id || '');
+          setSelectedB(newDetails[1]?.id || '');
+        }
+        if (data.castTrope) setCastTrope(data.castTrope);
+      }
+    } catch {
+      // 실패 시 기존 캐스트 유지
+    } finally {
+      setRegenerating(false);
+    }
+  };
 
   const handleSecretChange = (charId: string, value: string) => {
     setUserSecrets(prev => ({ ...prev, [charId]: value }));
@@ -330,14 +455,15 @@ export default function CastingReviewPanel({ seriesId, worldData, onConfirm }: P
     onConfirm();
   };
 
-  const allChars = castDetails;
-  const tropeLabel = TROPE_LABELS[worldData.castTrope || ''] || worldData.castTrope || '—';
+  const tropeLabel = TROPE_LABELS[castTrope] || castTrope || '—';
 
   return (
     <div style={{
       marginTop: '2rem',
-      background: 'linear-gradient(135deg, rgba(30,27,75,0.95), rgba(17,24,39,0.97))',
-      border: '1px solid rgba(255,255,255,0.08)',
+      background: 'rgba(8,10,22,0.82)',
+      backdropFilter: 'blur(18px)',
+      WebkitBackdropFilter: 'blur(18px)',
+      border: '1px solid rgba(255,255,255,0.14)',
       borderRadius: '20px',
       padding: '2rem',
       fontFamily: "var(--font-en), 'Pretendard', sans-serif",
@@ -345,7 +471,7 @@ export default function CastingReviewPanel({ seriesId, worldData, onConfirm }: P
     }}>
       {/* 헤더 */}
       <div style={{ marginBottom: '1.8rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>캐릭터 확인</h2>
           <span style={{
             fontSize: '0.65rem', padding: '0.15rem 0.55rem', borderRadius: '6px',
@@ -355,7 +481,7 @@ export default function CastingReviewPanel({ seriesId, worldData, onConfirm }: P
             트롭 — {tropeLabel}
           </span>
           <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.35)' }}>
-            총 {allChars.length}명
+            총 {castDetails.length}명
           </span>
           <span style={{
             fontSize: '0.65rem',
@@ -364,32 +490,52 @@ export default function CastingReviewPanel({ seriesId, worldData, onConfirm }: P
           }}>
             · 비밀 {Object.values(userSecrets).filter(v => v.trim()).length}/{MAX_SECRETS}
           </span>
+          {swapping && (
+            <span style={{ fontSize: '0.65rem', color: 'rgba(251,191,36,0.7)' }}>주인공 변경 중…</span>
+          )}
+          <button
+            className="glass-btn glass-btn--ghost"
+            onClick={handleRegen}
+            disabled={regenerating || confirming || swapping}
+            style={{ marginLeft: 'auto', padding: '0.55rem 1.5rem', fontSize: '0.85rem', fontWeight: 600 }}
+          >
+            {regenerating ? (
+              <>
+                <span style={{ display: 'inline-block', width: 13, height: 13, border: '2px solid rgba(255,255,255,0.2)', borderTopColor: 'rgba(255,255,255,0.7)', borderRadius: '50%', animation: 'spin 0.7s linear infinite', flexShrink: 0 }} />
+                재생성 중…
+              </>
+            ) : '↺ 캐릭터 재생성'}
+          </button>
         </div>
         <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
-          세계관 분석으로 선정된 캐릭터입니다. 각 캐릭터에 비밀을 투입한 뒤 확정하면 대본 생성이 시작됩니다.
+          각 캐릭터 카드의 <strong style={{ color: '#a5b4fc' }}>A</strong> / <strong style={{ color: '#f9a8d4' }}>B</strong> 버튼으로 주인공을 직접 선택할 수 있습니다. 비밀을 투입한 뒤 확정하면 대본 생성이 시작됩니다.
         </p>
       </div>
 
       {/* 전체 캐릭터 리스트 — 2열 그리드 */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem', marginBottom: '2rem' }}>
-        {allChars.length === 0 ? (
-          <div style={{ padding: '2rem', textAlign: 'center', color: 'rgba(255,255,255,0.3)' }}>
+        {castDetails.length === 0 ? (
+          <div style={{ padding: '2rem', textAlign: 'center', color: 'rgba(255,255,255,0.3)', gridColumn: '1/-1' }}>
             {loadingDetails ? '캐릭터 데이터를 불러오는 중…' : '캐릭터 데이터가 없습니다'}
           </div>
         ) : (
-          allChars.map((char, i) => {
+          castDetails.map((char) => {
             const filledCount = Object.values(userSecrets).filter(v => v.trim()).length;
             const hasSecret = !!(userSecrets[char.id]?.trim());
-            const disabled = filledCount >= MAX_SECRETS && !hasSecret;
+            const secretDisabled = filledCount >= MAX_SECRETS && !hasSecret;
+            const protagonistRole: 'A' | 'B' | null =
+              char.id === selectedA ? 'A' : char.id === selectedB ? 'B' : null;
             return (
               <CharDetailCard
                 key={char.id}
                 char={char}
-                index={i}
                 secret={userSecrets[char.id] || ''}
                 onSecretChange={handleSecretChange}
-                isProtagonist={i < 2}
-                secretDisabled={disabled}
+                protagonistRole={protagonistRole}
+                onSetA={() => handleSetRole(char.id, 'A')}
+                onSetB={() => handleSetRole(char.id, 'B')}
+                swapping={swapping}
+                secretDisabled={secretDisabled}
               />
             );
           })
@@ -408,16 +554,16 @@ export default function CastingReviewPanel({ seriesId, worldData, onConfirm }: P
         </div>
         <button
           onClick={handleConfirm}
-          disabled={confirming}
+          disabled={confirming || swapping || !selectedA || !selectedB}
           style={{
             padding: '0.65rem 2rem',
             borderRadius: '12px',
             border: 'none',
-            background: confirming ? 'rgba(99,102,241,0.4)' : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            background: confirming || swapping ? 'rgba(99,102,241,0.4)' : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
             color: '#fff',
             fontWeight: 700,
             fontSize: '0.9rem',
-            cursor: confirming ? 'not-allowed' : 'pointer',
+            cursor: confirming || swapping ? 'not-allowed' : 'pointer',
             boxShadow: '0 4px 20px rgba(99,102,241,0.3)',
             whiteSpace: 'nowrap' as const,
           }}

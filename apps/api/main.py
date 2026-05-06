@@ -1,9 +1,17 @@
 """LinkDropV3 API — 포트 8001"""
 import json
+import os
 import pathlib
+import tempfile
+import time
 import uvicorn
-from fastapi import FastAPI, HTTPException
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.starlette import StarletteIntegration
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Any
 from core.config import settings
@@ -11,8 +19,53 @@ from core.database import get_supabase
 from routers import pipeline, wiki
 from routers.chapters import router as chapters_router
 from routers.youtube import router as youtube_router
+from routers.chat import router as chat_router
+from routers.parallax_test import router as parallax_test_router  # 임시 패럴랙스 테스트
+from routers.admin import router as admin_router
+from routers.html_templates import router as html_templates_router
+from routers.html_docs import router as html_docs_router
+from routers.template_hearts import router as template_hearts_router
+from routers.transcribe import router as transcribe_router
+from routers.pdf_docs import router as pdf_docs_router
+from routers.prompts import router as prompts_router
+from routers.img_prompts import router as img_prompts_router
+from routers.prompt_ratings import router as prompt_ratings_router
+from routers.public_content import router as public_content_router
+
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    integrations=[StarletteIntegration(), FastApiIntegration()],
+    traces_sample_rate=0.1,
+    environment="production",
+)
 
 app = FastAPI(title="LinkDrop V3", version="0.1.0")
+
+
+# ── Windows ProactorEventLoop ConnectionResetError 억제 ──────────────────────
+# Windows 환경에서 브라우저가 응답 수신 중 연결을 끊으면
+# "ConnectionResetError: [WinError 10054]" 가 asyncio 콜백 예외로 출력된다.
+# 기능에는 영향 없는 노이즈이므로 이벤트 루프 예외 핸들러로 조용히 무시한다.
+def _suppress_connection_reset(loop, context):
+    exc = context.get("exception")
+    if isinstance(exc, (ConnectionResetError, BrokenPipeError)):
+        return  # 무시 — 클라이언트 측 연결 해제로 인한 정상 현상
+    loop.default_exception_handler(context)
+
+
+@app.on_event("startup")
+async def _startup():
+    import asyncio
+    asyncio.get_event_loop().set_exception_handler(_suppress_connection_reset)
+    # 이미지 프롬프트 캐시 프리로드 — D:\img_prompt\index_img.json 읽기
+    try:
+        from services.img_prompt_cache import get_index
+        get_index()
+        print("[img-prompts] 캐시 로드 완료")
+    except Exception as e:
+        print(f"[img-prompts] 캐시 로드 실패 (무시): {e}")
+# ─────────────────────────────────────────────────────────────────────────────
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,6 +79,47 @@ app.include_router(pipeline.router)
 app.include_router(wiki.router)
 app.include_router(chapters_router)
 app.include_router(youtube_router)
+app.include_router(chat_router)
+app.include_router(parallax_test_router)  # 임시 패럴랙스 테스트
+app.include_router(admin_router)
+app.include_router(html_templates_router)
+app.include_router(html_docs_router)
+app.include_router(template_hearts_router)
+app.include_router(transcribe_router)
+app.include_router(pdf_docs_router)
+app.include_router(prompts_router)
+app.include_router(img_prompts_router)
+app.include_router(prompt_ratings_router)  # 프롬프트 하트 평점 API
+app.include_router(public_content_router)  # V2 파트너 공개 콘텐츠 API
+
+# 템플릿 프리뷰 이미지 정적 서빙 (향후 R2로 대체)
+_TEMPLATE_IMG_DIR = pathlib.Path(__file__).parent / "data" / "html-templates" / "img"
+_TEMPLATE_IMG_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/template-img", StaticFiles(directory=str(_TEMPLATE_IMG_DIR)), name="template-img")
+
+_MEDIA_DIR = pathlib.Path(__file__).parent / "data" / "media"
+_MEDIA_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/media", StaticFiles(directory=str(_MEDIA_DIR)), name="media")
+
+# 이미지 프롬프트 썸네일 정적 서빙 — D:\img_prompt\ 루트를 /img-prompts-static 으로 마운트
+_IMG_PROMPT_DIR = pathlib.Path(r"D:\img_prompt")
+if _IMG_PROMPT_DIR.exists():
+    app.mount(
+        "/img-prompts-static",
+        StaticFiles(directory=str(_IMG_PROMPT_DIR)),
+        name="img-prompts-static",
+    )
+
+
+@app.post("/api/v1/media/upload")
+async def upload_media(file: UploadFile = File(...)):
+    """미디어 파일 업로드 — 로컬 data/media/ 저장 후 서빙 URL 반환"""
+    media_dir = pathlib.Path(__file__).parent / "data" / "media"
+    media_dir.mkdir(parents=True, exist_ok=True)
+    safe_name = f"{int(time.time() * 1000)}_{file.filename.replace(' ', '_')}"
+    content = await file.read()
+    (media_dir / safe_name).write_bytes(content)
+    return {"url": f"http://localhost:8001/media/{safe_name}", "filename": safe_name}
 
 
 @app.get("/health")
@@ -34,8 +128,11 @@ def health():
 
 
 @app.get("/api/v1/characters")
-def get_characters():
-    """캐릭터 전체 목록 — _index.json + 개별 portrait URL 병합"""
+def get_characters(style: str = "polystyle"):
+    """캐릭터 전체 목록 — _index.json + 개별 portrait URL + 화풍별 외형 데이터 병합.
+
+    style: 화풍 키 (polystyle | polystyle). 해당 스타일 파일 없으면 polystyle로 폴백.
+    """
     data_dir = pathlib.Path(__file__).parent / "data" / "characters"
     index = json.loads((data_dir / "_index.json").read_text(encoding="utf-8"))
     result = []
@@ -43,13 +140,40 @@ def get_characters():
         detail_path = data_dir / f"{c['id']}.json"
         if detail_path.exists():
             detail = json.loads(detail_path.read_text(encoding="utf-8"))
+            core = detail.get("core") or {}
+            # 요청 화풍 → polystyle 폴백 순서로 스타일 파일 로드
+            style_appearance: dict = {}
+            style_prompt_str = ""
+            for candidate in ([style] if style != "polystyle" else []) + ["polystyle"]:
+                candidate_path = data_dir / f"{c['id']}_{candidate}.json"
+                if candidate_path.exists():
+                    style_data = json.loads(candidate_path.read_text(encoding="utf-8"))
+                    style_appearance = style_data.get("appearance_en") or {}
+                    style_prompt_str = style_data.get("style_prompt", "")
+                    break
+            # style_prompt 없으면 art_styles.json base_style_prompt 폴백
+            if not style_prompt_str:
+                art_styles_path = pathlib.Path(__file__).parent / "data" / "art_styles.json"
+                if art_styles_path.exists():
+                    art_styles = json.loads(art_styles_path.read_text(encoding="utf-8"))
+                    style_prompt_str = (art_styles.get(style) or art_styles.get("polystyle", {})).get("base_style_prompt", "")
             c = {**c,
                  "voice_id":             detail.get("voice_id", ""),
                  "supertone_voice_id":   detail.get("supertone_voice_id", ""),
                  "supertone_style":      detail.get("supertone_style", ""),
                  "photo_real_url":       detail.get("photo_real_url", ""),
-                 "photo_masako_url":     detail.get("photo_masako_url", ""),
-                 "situations":           detail.get("situations", [])}
+                 "photo_polystyle_url":  (json.loads((data_dir / f"{c['id']}_polystyle.json").read_text(encoding="utf-8")).get("reference_url", "") if (data_dir / f"{c['id']}_polystyle.json").exists() else ""),
+                 "situations":           detail.get("situations", []),
+                 "personality":          core.get("personality", ""),
+                 "speaking_style":       core.get("speaking_style", ""),
+                 "speaking_examples":    core.get("speaking_examples", []),
+                 "relationships":        detail.get("relationships", {}),
+                 # 이미지 생성용 외형 데이터 (요청 화풍 기준)
+                 "fal_identity_prompt":  style_appearance.get("fal_identity_prompt", ""),
+                 "wardrobe":             style_appearance.get("wardrobe", {}),
+                 "body_prompt":          (style_appearance.get("body") or {}).get("body_prompt", ""),
+                 "style_prompt":         style_prompt_str,
+                 "appearance_style":     style}  # 실제 로드된 화풍 키
         result.append(c)
     return result
 
@@ -256,5 +380,100 @@ def get_world_options():
     # _meta 제외하고 반환
     return {k: v for k, v in data.items() if not k.startswith("_")}
 
+async def _auto_kenburns(series_id: str, scene_code: str) -> None:
+    """TTS 저장 직후 해당 scene_code 1개만 Ken Burns/Hybrid 처리 (fire-and-forget)"""
+    import re as _re
+    try:
+        from services.kenburns_service import single_kenburns
+        from services.grid_crop_service import _normalize_scene_code as _norm
+        from core.database import get_supabase
+        db = get_supabase()
+        result = await single_kenburns(series_id, scene_code, db)
+        print(f"[auto-kenburns] {scene_code} → {result}")
+        if result.get("ok"):
+            ch_m = _re.search(r"ch(\d+)", scene_code)
+            ch_num = int(ch_m.group(1)) if ch_m else 1
+            file_code_k = _norm(scene_code)
+            local_mp4_url = f"http://localhost:8001/api/v1/series/{series_id}/chapters/{ch_num}/local-file/{file_code_k}/mp4"
+            await asyncio.to_thread(
+                lambda: db.table("v3_scenes")
+                .update({"lipsync_url": local_mp4_url})
+                .eq("series_id", series_id)
+                .eq("scene_code", scene_code)
+                .neq("type", "dialogue")
+                .execute()
+            )
+            print(f"[auto-kenburns] DB lipsync_url 저장: {scene_code}")
+    except Exception as e:
+        print(f"[auto-kenburns] 실패 (무시): {e}")
+
+
+@app.post("/api/v1/tts")
+async def tts_preview(
+    text: str = Form(...),
+    voice: str = Form("ko-KR-SunHiNeural"),
+    series_id: str = Form(""),
+    scene_code: str = Form(""),
+):
+    """단일 컷 TTS 미리듣기 — Supertone(st:) 또는 edge-tts MP3 반환 + 로컬 저장"""
+    import asyncio, re
+    from services.tts_service import _edge_tts, _supertone_tts
+
+    if not text.strip():
+        raise HTTPException(400, "text 필수")
+
+    word_events: list[dict] = []
+    with tempfile.TemporaryDirectory() as tmpdir:
+        mp3_path = pathlib.Path(tmpdir) / "preview.mp3"
+        if voice.startswith("st:"):
+            st_part = voice[3:]
+            st_parts = st_part.split(":", 1)
+            st_voice_id = st_parts[0]
+            st_style = st_parts[1] if len(st_parts) > 1 else "neutral"
+            await _supertone_tts(text, st_voice_id, str(mp3_path), style=st_style)
+        else:
+            word_events = await _edge_tts(text, str(mp3_path), voice=voice)
+        audio_bytes = mp3_path.read_bytes()
+
+    # 로컬 저장 — series_id + scene_code 있을 때만
+    if series_id and scene_code:
+        try:
+            db = get_supabase()
+            ser_res = await asyncio.to_thread(
+                lambda: db.table("v3_series").select("series_code").eq("id", series_id).single().execute()
+            )
+            series_code_val = (ser_res.data or {}).get("series_code") or series_id
+            ch_match = re.search(r'ch(\d+)', scene_code)
+            chapter = int(ch_match.group(1)) if ch_match else 1
+            from services.grid_crop_service import _normalize_scene_code
+            file_code = _normalize_scene_code(scene_code)
+            out_dir = pathlib.Path(__file__).parent.parent.parent / "output" / series_code_val / f"ch{chapter:02d}"
+            out_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / f"{file_code}.mp3").write_bytes(audio_bytes)
+            # SRT 로컬 저장 — edge-tts word_events 있을 때만 (Supertone은 빈 리스트)
+            from services.tts_service import _make_srt
+            _make_srt(word_events, str(out_dir / f"{file_code}.srt"))
+            print(f"[TTS] 저장: {out_dir / file_code}.mp3 + .srt ({len(word_events)}단어)")
+            # DB tts_url 업데이트 — 로컬 서빙 URL
+            tts_local_url = f"http://localhost:8001/api/v1/series/{series_id}/chapters/{chapter}/tts/{scene_code}"
+            await asyncio.to_thread(
+                lambda: db.table("v3_scenes")
+                .update({"tts_url": tts_local_url})
+                .eq("series_id", series_id)
+                .eq("scene_code", scene_code)
+                .execute()
+            )
+            # Ken Burns 자동 트리거 — 해당 scene_code 1개만 백그라운드 실행 (블로킹 없음)
+            asyncio.create_task(_auto_kenburns(series_id, scene_code))
+        except Exception as e:
+            print(f"[TTS] 로컬 저장 실패 (무시): {e}")
+
+    return StreamingResponse(
+        iter([audio_bytes]),
+        media_type="audio/mpeg",
+        headers={"Content-Disposition": f"inline; filename={scene_code or 'preview'}.mp3"},
+    )
+
+
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=False)

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ content.name }}</title>
+<style>
+{{ shared_base_css }}
+{{ shared_fonts_css }}
+{{ template_css }}
+{{ shared_print_css }}
+</style>
+{{ palette_vars }}
+</head>
+<body>
+<div class="op-wrap">
+
+  <header class="op-header">
+    <span class="op-avatar">{{ content.avatar_emoji }}</span>
+    <h1 class="op-name">{{ content.name }}</h1>
+    <div class="op-role">{{ content.role }}</div>
+  </header>
+
+  <hr class="op-divider">
+
+  <p class="op-tagline">{{ content.tagline }}</p>
+  <p class="op-about">{{ content.about }}</p>
+
+  <div class="op-links">
+    {% for link in content.links %}
+    <a href="{{ link.url }}" class="op-link" {% if link.url != '#' %}target="_blank" rel="noopener"{% endif %}>
+      <span class="op-link__icon">{{ link.icon }}</span>
+      <span class="op-link__body">
+        <span class="op-link__label">{{ link.label }}</span>
+        {% if link.desc %}<span class="op-link__desc">{{ link.desc }}</span>{% endif %}
+      </span>
+      <span class="op-link__arrow">→</span>
+    </a>
+    {% endfor %}
+  </div>
+
+  <footer class="op-footer">
+    {{ content.footer_text or ('© 2025 ' + content.name) }}
+  </footer>
+
+</div>
+</body>
+</html>

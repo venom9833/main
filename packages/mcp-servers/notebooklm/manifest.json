@@ -1,0 +1,19 @@
+{
+  "id": "notebooklm",
+  "name": "NotebookLM MCP",
+  "description": "notebooklm.google.com MCP 서버. 노트북 CRUD·소스 관리·쿼리·스튜디오 아티팩트를 도구로 노출.",
+  "version": "0.5.21",
+  "package": "notebooklm-mcp-cli",
+  "runtime": "python",
+  "entry_point": "C:/LinkDropV3/apps/api/.venv/Scripts/notebooklm-mcp.exe",
+  "auth": "C:/Users/User/.notebooklm-mcp-cli/profiles/default/cookies.json",
+  "tools": [
+    "notebook_create", "notebook_list", "notebook_get", "notebook_delete", "notebook_update",
+    "source_add", "source_list", "source_delete",
+    "query", "chat",
+    "studio_create", "studio_status", "studio_revise",
+    "download_artifact",
+    "note_create", "note_list", "note_update", "note_delete",
+    "refresh_auth", "save_auth_tokens"
+  ]
+}

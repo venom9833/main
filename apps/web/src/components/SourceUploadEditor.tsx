@@ -1,3 +1,9 @@
+// ============================================================
+// WARNING: V3 CORE -- 웹소설 파이프라인 핵심 파일
+// 이 파일은 V3(LinkDropV3)에서만 수정합니다.
+// V2 Claude 세션은 이 파일을 직접 수정하지 말 것.
+// 로직 변경이 필요하면 반드시 V3 작업 세션에 요청할 것.
+// ============================================================
 'use client';
 import { useState, useRef, useCallback, useEffect } from 'react';
 
@@ -11,6 +17,14 @@ interface UploadedFile {
   error?: string;
 }
 
+interface Classification {
+  type: string;
+  confidence: number;
+  signals: Record<string, unknown>;
+  reason?: string;
+  method?: string;
+}
+
 interface Props {
   seriesId: string;
   onConfirm: () => void;
@@ -20,6 +34,9 @@ export default function SourceUploadEditor({ seriesId, onConfirm }: Props) {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [dragging, setDragging] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [classification, setClassification] = useState<Classification | null>(null);
+  const [sourceMode, setSourceMode] = useState<'extract' | 'design' | null>(null);
+  const [classifying, setClassifying] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function uploadFile(file: File) {
@@ -44,7 +61,7 @@ export default function SourceUploadEditor({ seriesId, onConfirm }: Props) {
           f.name === file.name ? { ...f, status: 'done' } : f
         ));
       }
-    } catch (e: unknown) {
+    } catch {
       setFiles(prev => prev.map(f =>
         f.name === file.name ? { ...f, status: 'error', error: '네트워크 오류' } : f
       ));
@@ -65,25 +82,77 @@ export default function SourceUploadEditor({ seriesId, onConfirm }: Props) {
   const handleConfirm = useCallback(async () => {
     setConfirming(true);
     try {
+      // sourceMode가 결정된 경우 world_data에 저장
+      if (sourceMode) {
+        await fetch(`${API}/series/${seriesId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            world_data: { sourceMode },
+            settings: { autoApproveWorld: sourceMode === 'extract' },
+          }),
+        });
+      }
       const res = await fetch(`${API}/series/${seriesId}/approve/source_upload`, { method: 'POST' });
       if (!res.ok) throw new Error('승인 실패');
       onConfirm();
     } catch {
       setConfirming(false);
     }
-  }, [seriesId, onConfirm]);
+  }, [seriesId, onConfirm, sourceMode]);
 
-  // 파일 업로드 완료 시 자동으로 세계관 생성 시작
+  // 파일 업로드 완료 시 분류 결과 fetch — 최대 5회 폴링 (서버 처리 대기)
   useEffect(() => {
     if (files.length === 0 || confirming) return;
     if (files.some(f => f.status === 'error')) return;
-    if (files.every(f => f.status === 'done')) {
-      handleConfirm();
-    }
-  }, [files, confirming, handleConfirm]);
+    if (!files.every(f => f.status === 'done')) return;
+    if (classification) return;
+
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    const poll = () => {
+      setClassifying(true);
+      fetch(`${API}/series/${seriesId}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          const cls = data?.world_data?.source_summary?.classification;
+          if (cls) {
+            setClassification(cls);
+            setSourceMode(cls.type === 'novel' || cls.type === 'script' ? 'extract' : 'design');
+            setClassifying(false);
+          } else {
+            attempts += 1;
+            if (attempts < maxAttempts) {
+              setTimeout(poll, 1500); // 1.5초 후 재시도
+            } else {
+              setClassifying(false); // 5회 실패 시 포기 → 버튼 유지 비활성
+            }
+          }
+        })
+        .catch(() => { setClassifying(false); });
+    };
+
+    poll();
+  }, [files, confirming, classification, seriesId]);
 
   const allDone = files.length === 0 || files.every(f => f.status !== 'uploading');
   const hasFailed = files.some(f => f.status === 'error');
+
+  const isNovelType = classification?.type === 'novel' || classification?.type === 'script';
+  const badgeLabel =
+    classification?.type === 'novel' ? '완성형 소설/시나리오'
+    : classification?.type === 'script' ? '시나리오'
+    : classification?.type === 'news' ? '뉴스/기사'
+    : classification?.type === 'keyword' ? '키워드/소재'
+    : '분류 중';
+
+  const mainButtonLabel =
+    confirming ? '처리 중…'
+    : sourceMode === 'extract' ? '소스 그대로 캐스팅으로'
+    : sourceMode === 'design' ? '세계관 생성 시작'
+    : files.length > 0 ? `소스 ${files.filter(f => f.status === 'done').length}건으로 세계관 생성`
+    : '세계관 생성 시작';
 
   return (
     <div style={{
@@ -191,6 +260,62 @@ export default function SourceUploadEditor({ seriesId, onConfirm }: Props) {
         )}
       </div>
 
+      {/* 분류 결과 */}
+      {classifying && (
+        <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.4)' }}>
+            소스 분석 중…
+          </p>
+        </div>
+      )}
+
+      {classification && !classifying && (
+        <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          {/* 분류 결과 배지 */}
+          <div style={{ marginBottom: '1rem' }}>
+            <span style={{
+              fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.06em',
+              padding: '0.25rem 0.7rem', borderRadius: '999px',
+              background: isNovelType ? 'rgba(99,102,241,0.18)' : 'rgba(16,185,129,0.15)',
+              color: isNovelType ? '#a5b4fc' : '#6ee7b7',
+              border: `1px solid ${isNovelType ? 'rgba(99,102,241,0.35)' : 'rgba(16,185,129,0.3)'}`,
+            }}>
+              {badgeLabel}
+            </span>
+            {/* 근거 수치 */}
+            <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', marginLeft: '0.6rem' }}>
+              {[
+                classification.signals?.char_count && `${classification.signals.char_count}자`,
+                classification.signals?.korean_names_count && `인물 ${classification.signals.korean_names_count}명`,
+                classification.signals?.dialogue_count && `대화 ${classification.signals.dialogue_count}회`,
+              ].filter(Boolean).join(' · ')}
+            </span>
+          </div>
+
+          {/* 모드 고정 안내 (분류 결과 기반 — 사용자 override 불가) */}
+          <div style={{
+            display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
+            padding: '0.85rem 1rem', borderRadius: '10px',
+            background: isNovelType ? 'rgba(99,102,241,0.08)' : 'rgba(16,185,129,0.07)',
+            border: `1px solid ${isNovelType ? 'rgba(99,102,241,0.3)' : 'rgba(16,185,129,0.2)'}`,
+          }}>
+            <span style={{ fontSize: '1.1rem', flexShrink: 0, marginTop: '0.05rem' }}>
+              {isNovelType ? '🔒' : '✨'}
+            </span>
+            <div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: isNovelType ? '#a5b4fc' : '#6ee7b7' }}>
+                {isNovelType ? '소스 원문 추출 모드 (자동 고정)' : '키워드 참고 생성 모드 (자동 고정)'}
+              </div>
+              <div style={{ fontSize: '0.74rem', color: 'rgba(255,255,255,0.45)', marginTop: '0.3rem', lineHeight: 1.6 }}>
+                {isNovelType
+                  ? '완성형 소설·시나리오가 감지되었습니다. 시대·인물 이름·갈등 구조를 변형 없이 그대로 추출합니다.'
+                  : '키워드·단편 소재가 감지되었습니다. AI가 현대 한국 드라마로 새 세계관을 생성합니다.'}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 하단 버튼 */}
       <div style={{
         padding: '1rem 1.5rem',
@@ -214,20 +339,20 @@ export default function SourceUploadEditor({ seriesId, onConfirm }: Props) {
         </button>
         <button
           onClick={handleConfirm}
-          disabled={!allDone || confirming || hasFailed}
+          disabled={!allDone || confirming || hasFailed || classifying || (files.length > 0 && !classification)}
           style={{
             padding: '0.65rem 1.75rem',
             borderRadius: '10px',
             border: 'none',
-            background: (!allDone || confirming || hasFailed) ? 'rgba(99,102,241,0.35)' : '#6366f1',
+            background: (!allDone || confirming || hasFailed || classifying || (files.length > 0 && !classification)) ? 'rgba(99,102,241,0.35)' : '#6366f1',
             color: '#fff',
             fontWeight: 700,
             fontSize: '0.95rem',
-            cursor: (!allDone || confirming || hasFailed) ? 'not-allowed' : 'pointer',
+            cursor: (!allDone || confirming || hasFailed || classifying || (files.length > 0 && !classification)) ? 'not-allowed' : 'pointer',
             transition: 'background 0.15s',
           }}
         >
-          {confirming ? '처리 중…' : files.length > 0 ? `소스 ${files.filter(f=>f.status==='done').length}건으로 세계관 생성` : '세계관 생성 시작'}
+          {mainButtonLabel}
         </button>
       </div>
     </div>

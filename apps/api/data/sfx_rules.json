@@ -1,0 +1,215 @@
+{
+  "_comment": "SFX 규칙 테이블 — Gemini 0회. 키워드 매칭으로 sfx_plan 결정.",
+
+  "ambience": [
+    {
+      "id": "office_night",
+      "file": "ambience/office_night.ogg",
+      "location_keywords": ["사무실", "회사", "직장", "office"],
+      "time_keywords": ["밤", "새벽", "야간", "심야"],
+      "volume_db": -28,
+      "priority": 10
+    },
+    {
+      "id": "office_day",
+      "file": "ambience/office_day.ogg",
+      "location_keywords": ["사무실", "회사", "직장", "office"],
+      "time_keywords": ["낮", "오전", "오후"],
+      "volume_db": -26,
+      "priority": 10
+    },
+    {
+      "id": "cafe",
+      "file": "ambience/cafe.ogg",
+      "location_keywords": ["카페", "커피숍", "café", "cafe"],
+      "time_keywords": [],
+      "volume_db": -24,
+      "priority": 10
+    },
+    {
+      "id": "hospital",
+      "file": "ambience/hospital.ogg",
+      "location_keywords": ["병원", "응급실", "수술실", "진료실", "의원"],
+      "time_keywords": [],
+      "volume_db": -30,
+      "priority": 10
+    },
+    {
+      "id": "restaurant",
+      "file": "ambience/restaurant.ogg",
+      "location_keywords": ["식당", "레스토랑", "음식점", "술집", "bar", "주점"],
+      "time_keywords": [],
+      "volume_db": -24,
+      "priority": 10
+    },
+    {
+      "id": "street_day",
+      "file": "ambience/street_day.ogg",
+      "location_keywords": ["거리", "도로", "길거리", "야외", "공원", "광장"],
+      "time_keywords": ["낮", "오전", "오후"],
+      "volume_db": -22,
+      "priority": 10
+    },
+    {
+      "id": "street_night",
+      "file": "ambience/street_night.ogg",
+      "location_keywords": ["거리", "도로", "길거리", "야외", "공원", "광장"],
+      "time_keywords": ["밤", "새벽"],
+      "volume_db": -26,
+      "priority": 10
+    },
+    {
+      "id": "subway",
+      "file": "ambience/subway.ogg",
+      "location_keywords": ["지하철", "역", "플랫폼", "기차"],
+      "time_keywords": [],
+      "volume_db": -20,
+      "priority": 10
+    },
+    {
+      "id": "school",
+      "file": "ambience/school.ogg",
+      "location_keywords": ["학교", "강의실", "교실", "복도", "대학교"],
+      "time_keywords": [],
+      "volume_db": -26,
+      "priority": 10
+    },
+    {
+      "id": "interior_night",
+      "file": "ambience/interior_quiet.ogg",
+      "location_keywords": ["집", "방", "거실", "주방", "침실", "아파트", "자택", "서재", "복도"],
+      "time_keywords": ["밤", "새벽"],
+      "volume_db": -34,
+      "priority": 8
+    },
+    {
+      "id": "interior_day",
+      "file": "ambience/interior_quiet.ogg",
+      "location_keywords": ["집", "방", "거실", "주방", "침실", "아파트", "자택", "서재", "복도"],
+      "time_keywords": ["낮", "오전", "오후"],
+      "volume_db": -30,
+      "priority": 8
+    }
+  ],
+
+  "bed": [
+    {
+      "id": "melancholy",
+      "file": "bed/melancholy.ogg",
+      "atmosphere_keywords": ["절망", "후회", "슬픔", "외로움", "쓸쓸", "비통", "눈물", "비극"],
+      "volume_db": -32,
+      "priority": 10
+    },
+    {
+      "id": "tension",
+      "file": "bed/tension.ogg",
+      "atmosphere_keywords": ["긴장", "불안", "갈등", "미스터리", "위기", "두려움", "충격", "공포", "의심"],
+      "volume_db": -30,
+      "priority": 10
+    },
+    {
+      "id": "hopeful",
+      "file": "bed/hopeful.ogg",
+      "atmosphere_keywords": ["희망", "결의", "재기", "의지", "각오", "도전", "극복"],
+      "volume_db": -32,
+      "priority": 10
+    },
+    {
+      "id": "romantic",
+      "file": "bed/romantic.ogg",
+      "atmosphere_keywords": ["설렘", "로맨틱", "따뜻", "감동", "사랑", "그리움"],
+      "volume_db": -32,
+      "priority": 10
+    },
+    {
+      "id": "suspense",
+      "file": "bed/suspense.ogg",
+      "atmosphere_keywords": ["서스펜스", "음모", "비밀", "은밀", "교차", "복잡"],
+      "volume_db": -28,
+      "priority": 9
+    }
+  ],
+
+  "oneshot": [
+    {
+      "id": "phone_ring",
+      "file": "oneshot/phone_ring.ogg",
+      "text_keywords": ["전화", "벨소리", "울렸다", "진동했다", "알림", "전화기가"],
+      "volume_db": -16,
+      "priority": 10
+    },
+    {
+      "id": "door_knock",
+      "file": "oneshot/door_knock.ogg",
+      "text_keywords": ["노크", "두드렸다", "두드리는", "문을 열", "문이 열"],
+      "volume_db": -18,
+      "priority": 10
+    },
+    {
+      "id": "door_open_close",
+      "file": "oneshot/door_open.ogg",
+      "text_keywords": ["문을 닫", "문을 열", "발소리가 멀어"],
+      "volume_db": -20,
+      "priority": 9
+    },
+    {
+      "id": "paper_rustle",
+      "file": "oneshot/paper_rustle.ogg",
+      "text_keywords": ["서류", "봉투", "종이", "문서"],
+      "volume_db": -22,
+      "priority": 8
+    },
+    {
+      "id": "keyboard",
+      "file": "oneshot/keyboard_typing.ogg",
+      "text_keywords": ["키보드", "타이핑", "입력"],
+      "volume_db": -24,
+      "priority": 7
+    },
+    {
+      "id": "chair_creak",
+      "file": "oneshot/chair_creak.ogg",
+      "text_keywords": ["의자", "삐걱"],
+      "volume_db": -22,
+      "priority": 7
+    },
+    {
+      "id": "glass_set",
+      "file": "oneshot/glass_set.ogg",
+      "text_keywords": ["컵", "잔", "유리잔", "물잔", "올려놓"],
+      "volume_db": -20,
+      "priority": 8
+    },
+    {
+      "id": "rain",
+      "file": "oneshot/rain_window.ogg",
+      "text_keywords": ["비가", "빗소리", "창문"],
+      "volume_db": -26,
+      "priority": 9
+    },
+    {
+      "id": "car",
+      "file": "oneshot/car_pass.ogg",
+      "text_keywords": ["자동차", "차 소리", "경적"],
+      "volume_db": -20,
+      "priority": 8
+    },
+    {
+      "id": "footsteps",
+      "file": "oneshot/footsteps.ogg",
+      "text_keywords": ["발소리", "계단", "걸어"],
+      "volume_db": -24,
+      "priority": 7
+    }
+  ],
+
+  "fallback": {
+    "ambience": {"file": "ambience/interior_quiet.ogg", "volume_db": -34},
+    "bed": null
+  },
+
+  "type_gain_adjust": {
+    "dialogue": {"ambience_delta": -4, "bed_delta": -6, "oneshot_delta": -3},
+    "narration": {"ambience_delta": 0, "bed_delta": 0, "oneshot_delta": 0}
+  }
+}

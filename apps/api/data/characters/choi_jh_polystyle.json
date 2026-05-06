@@ -1,0 +1,37 @@
+{
+  "id": "choi_jh",
+  "style": "polystyle",
+  "name": "최재현",
+  "gender": "male",
+  "age": 22,
+  "appearance_en": {
+    "fal_identity_prompt": "22-year-old Korean male, angular jaw with lingering adolescent softness beneath rehearsed hardness, dark brown slightly bloodshot guarded eyes, pale skin with pronounced dark circles, black thick unstyled 5cm hair, thin often-closed lips, lean slightly underweight 178cm frame, affect-flat neutral expression learned from years of not showing pain",
+    "face_shape": "angular jaw, face still carrying some softness from adolescence beneath the hardness he performs",
+    "eyes": "dark brown, slightly bloodshot from late nights, guarded — the anger behind them is grief",
+    "nose": "straight, slightly wide",
+    "mouth": "thin, often closed tight — words come out cold or not at all",
+    "skin": "pale, slightly oily on the T-zone, dark circles pronounced",
+    "hair": "black, thick, 5-6cm long, unstyled — clearly not a priority",
+    "emotion_baseline": "affect-flat neutrality, the kind learned from years of not showing pain at home",
+    "body": {
+      "body_prompt": "178cm lean slightly underweight Korean man, shoulders rolled forward chin slightly down, hands shoved into pockets — the body of someone who forgets to eat",
+      "height_cm": 178,
+      "posture": "shoulders rolled forward, chin slightly down, hands shoved into pockets"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "oversized hoodie, worn straight-leg jeans, old running shoes — real, not curated. Small silver stud in left ear, frayed sleeve hem from habitual picking, jacket always slightly too big",
+        "wardrobe_prompt": "oversized charcoal or dark grey hoodie, worn straight-leg dark jeans, old running shoes, small silver stud in left ear, jacket always slightly too big, no accessories"
+      }
+    }
+  },
+  "image_prompt": {
+    "positive": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette, 22-year-old Korean male, angular jaw, dark brown bloodshot eyes, pale skin with dark circles, black unstyled thick hair, thin closed lips, lean underweight build, oversized charcoal hoodie, slouched guarded posture, deep black of blended family damage in a 22-year-old body, warm amber as primary light cutting through the guarded posture, steel blue of exhaustion beneath rehearsed indifference, painterly figurative realism, Korean drama cinematic composition",
+    "negative": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, cheerful, gym body, styled hair, bright smile, airbrushed",
+    "model": "fal-ai/flux-pulid",
+    "pulid_weight": 0.85,
+    "width": 512,
+    "height": 768
+  },
+  "reference_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/v3/characters/portraits/choi_jh_polystyle.png"
+}

@@ -1,0 +1,58 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "LinkDrop V3" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e6]:
+        - generic [ref=e7]: 웹소설+영상
+    - generic [ref=e8]:
+      - link "내 시리즈" [ref=e9] [cursor=pointer]:
+        - /url: /
+      - link "새 시리즈" [ref=e10] [cursor=pointer]:
+        - /url: /create
+      - link "캐릭터" [ref=e11] [cursor=pointer]:
+        - /url: /characters
+      - link "감정선" [ref=e12] [cursor=pointer]:
+        - /url: /characters/emoline
+      - link "키프레임" [ref=e13] [cursor=pointer]:
+        - /url: /series/keyframe
+      - link "MP4합성" [ref=e14] [cursor=pointer]:
+        - /url: /series/mp4combine
+  - generic [ref=e15]:
+    - generic [ref=e16]:
+      - heading "MP4 합성" [level=1] [ref=e17]
+      - combobox [ref=e18] [cursor=pointer]:
+        - option "시리즈 선택" [selected]
+      - combobox [ref=e19] [cursor=pointer]:
+        - option "CH01" [selected]
+        - option "CH02"
+        - option "CH03"
+        - option "CH04"
+        - option "CH05"
+        - option "CH06"
+      - button "☁ 로컬-R2 동기화" [ref=e20] [cursor=pointer]
+      - button "해상도 16:9" [ref=e21] [cursor=pointer]
+      - button "KR 합성 시작" [disabled] [ref=e22] [cursor=pointer]
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - button "◀" [ref=e25] [cursor=pointer]
+        - generic [ref=e27]: 씬 없음 — 파이프라인을 먼저 실행하세요
+        - button "▶" [ref=e28] [cursor=pointer]
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: 추천 효과음
+          - generic [ref=e32]: —
+        - generic [ref=e33]:
+          - generic [ref=e34]: 추천 BGM
+          - generic [ref=e35]: —
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - generic [ref=e38]: 전체 컷
+          - generic [ref=e39]: "0"
+        - generic [ref=e40]:
+          - generic [ref=e41]: MP4 개수
+          - generic [ref=e42]: "0"
+        - button "EN- SRT 생성" [ref=e43] [cursor=pointer]
+        - button "JP- SRT 생성" [ref=e44] [cursor=pointer]
+        - button "EN- MP3생성" [disabled] [ref=e45]
+        - button "JP- MP3생성" [disabled] [ref=e46]

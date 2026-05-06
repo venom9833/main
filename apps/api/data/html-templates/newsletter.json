@@ -1,0 +1,159 @@
+{
+  "id": "newsletter",
+  "label": "뉴스레터",
+  "version": "1.0.0",
+  "description": "이메일 클라이언트 호환 600px 고정폭 HTML 뉴스레터. 인라인 스타일 기반, 헤더·섹션·푸터 구조.",
+
+  "layout": {
+    "type": "single-column",
+    "maxWidth": "600px",
+    "margin": "0 auto",
+    "padding": "0",
+    "sidebar": false,
+    "email_compatible": true,
+    "style_method": "inline styles only — no external CSS, no class-based styles"
+  },
+
+  "sections": {
+    "order": ["preheader", "header", "hero", "main_story", "secondary_stories", "cta_block", "divider", "footer"]
+  },
+
+  "palette": {
+    "outer_background":   "#f1f5f9",
+    "container_bg":       "#ffffff",
+    "header_bg":          "#1e293b",
+    "header_text":        "#ffffff",
+    "hero_bg":            "#f8fafc",
+    "accent":             "#059669",
+    "accent_light":       "#ecfdf5",
+    "accent_dark":        "#047857",
+    "text_primary":       "#1e293b",
+    "text_secondary":     "#64748b",
+    "text_muted":         "#94a3b8",
+    "divider":            "#e2e8f0",
+    "cta_bg":             "#059669",
+    "cta_text":           "#ffffff",
+    "footer_bg":          "#f8fafc",
+    "footer_text":        "#94a3b8",
+    "tag_bg":             "#ecfdf5",
+    "tag_text":           "#059669"
+  },
+
+  "typography": {
+    "font_primary": "Arial, Helvetica, sans-serif",
+    "font_note":    "이메일 클라이언트 호환을 위해 웹폰트 사용 금지, 시스템 폰트만 사용",
+    "base_size":    "16px",
+    "line_height":  1.6
+  },
+
+  "blocks": {
+    "preheader": {
+      "role": "이메일 미리보기 텍스트 (받은편지함에서 보이는 1줄)",
+      "style": "display:none / font-size:0 / max-height:0 / overflow:hidden",
+      "max_chars": 90
+    },
+    "header": {
+      "elements": ["logo_or_brand_name", "issue_number", "date"],
+      "background": "header_bg",
+      "padding": "20px 40px",
+      "brand_size": "1.2rem",
+      "brand_weight": 700
+    },
+    "hero": {
+      "elements": ["issue_label", "headline", "subheadline", "cta_button_optional"],
+      "background": "hero_bg",
+      "padding": "40px",
+      "headline_size": "1.8rem",
+      "headline_weight": 800
+    },
+    "main_story": {
+      "structure": ["category_tag", "title", "body_2_4_paragraphs", "read_more_link"],
+      "padding": "32px 40px",
+      "image_placeholder": {
+        "width": "100%",
+        "height": "200px",
+        "background": "hero_bg",
+        "border_radius": "8px",
+        "margin_bottom": "20px"
+      }
+    },
+    "secondary_story": {
+      "layout": "two-column table (50% / 50%)",
+      "structure": ["image_thumb", "category_tag", "title", "excerpt"],
+      "padding": "0 40px 32px",
+      "note": "Gmail에서 table 레이아웃 사용 — div float 금지"
+    },
+    "cta_block": {
+      "background": "accent_light",
+      "padding": "32px 40px",
+      "elements": ["eyebrow_label", "title", "description", "button"],
+      "button": {
+        "background": "cta_bg",
+        "color": "cta_text",
+        "padding": "14px 32px",
+        "border_radius": "6px",
+        "font_weight": 700,
+        "display": "inline-block",
+        "note": "a 태그로 구현 — button 태그 이메일 미지원"
+      }
+    },
+    "category_tag": {
+      "style": "inline-block",
+      "background": "tag_bg",
+      "color": "tag_text",
+      "padding": "3px 10px",
+      "border_radius": "4px",
+      "font_size": "0.72rem",
+      "font_weight": 600,
+      "text_transform": "uppercase",
+      "letter_spacing": "0.08em",
+      "margin_bottom": "8px"
+    },
+    "divider_line": {
+      "tag": "hr",
+      "style": "border:none; border-top:1px solid divider; margin:0 40px"
+    },
+    "footer": {
+      "background": "footer_bg",
+      "padding": "24px 40px",
+      "elements": ["brand_name", "address", "unsubscribe_link", "social_links_optional", "copyright"],
+      "font_size": "0.78rem",
+      "color": "footer_text",
+      "unsubscribe": "법적 필수 항목 — 반드시 포함"
+    }
+  },
+
+  "email_rules": [
+    "모든 스타일은 inline style로 작성",
+    "외부 CSS 파일 및 <style> 태그 의존 금지",
+    "레이아웃은 table 태그 기반 — div float/flexbox 금지",
+    "이미지에 alt 속성 필수",
+    "링크 색상은 inline style로 명시",
+    "최대 너비 600px 고정",
+    "배경 이미지 사용 금지 — 일부 클라이언트 미지원",
+    "웹폰트(@font-face) 사용 금지 — 시스템 폰트만"
+  ],
+
+  "inline_emphasis": {
+    "bold":       "핵심 키워드, 수치",
+    "link":       "색상 명시 필수 (accent 색상)",
+    "no_italic":  "이메일에서 이탤릭 가독성 낮음 — 최소화"
+  },
+
+  "tone": {
+    "voice": "친근하고 직접적인 2인칭 — '안녕하세요', '이번 주 주목할 소식'",
+    "length": "본문 단락당 3~5줄 이하, 스캐너블(훑어보기 가능) 구조",
+    "cta": "버튼 텍스트는 동사 시작 — '지금 읽기', '확인하기', '신청하기'"
+  },
+
+  "chapter_internal_flow": [
+    "프리헤더 (숨김 미리보기 텍스트)",
+    "헤더 (브랜드 + 호수 + 날짜)",
+    "히어로 (이슈 헤드라인)",
+    "메인 스토리 (1건, 이미지 + 본문)",
+    "세컨더리 스토리 (2열, 2건)",
+    "CTA 블록",
+    "구분선",
+    "푸터 (수신거부 필수)"
+  ]
+}

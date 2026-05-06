@@ -1,0 +1,79 @@
+{
+  "name": "박민준",
+  "role": "Full-Stack Developer & UI Engineer",
+  "tagline": "디자인과 코드의 경계에서 경험을 만듭니다",
+  "email": "minjun.park@example.com",
+  "location": "서울, 대한민국",
+  "github": "github.com/minjun-park",
+  "linkedin": "linkedin.com/in/minjunpark",
+  "bio": [
+    "5년간 스타트업과 에이전시를 오가며 50개 이상의 프로젝트를 기획부터 배포까지 직접 담당했습니다. 사용자가 직접 느끼는 인터페이스의 디테일에 집착하며, 퍼포먼스와 접근성을 타협하지 않습니다.",
+    "React 생태계와 Node.js를 주축으로 하면서, 필요에 따라 Python FastAPI, Go를 유연하게 활용합니다. 최근에는 AI 기능 통합과 실시간 협업 도구 개발에 깊이 빠져 있습니다.",
+    "오픈소스 기여에 적극적으로 참여하며, 사내 기술 블로그 운영과 팀 내 프론트엔드 스터디를 주도하고 있습니다."
+  ],
+  "stats": [
+    { "value": "5년+", "label": "경력" },
+    { "value": "50+", "label": "완료 프로젝트" },
+    { "value": "18K+", "label": "GitHub 스타" }
+  ],
+  "skills": [
+    { "category": "프론트엔드", "items": ["React", "TypeScript", "Next.js", "Framer Motion", "Three.js"] },
+    { "category": "백엔드", "items": ["Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL"] },
+    { "category": "DevOps", "items": ["Docker", "Vercel", "AWS", "GitHub Actions"] },
+    { "category": "디자인", "items": ["Figma", "Tailwind CSS", "Storybook", "Radix UI"] }
+  ],
+  "projects": [
+    {
+      "name": "Flux Dashboard",
+      "category": "Web App",
+      "description": "실시간 데이터 시각화 플랫폼. WebSocket 기반 차트 엔진과 커스텀 그리드 레이아웃 시스템을 직접 구현했습니다.",
+      "tech": ["React", "D3.js", "Socket.io", "Node.js"],
+      "color": "#4f46e5",
+      "github_url": "https://github.com/minjun-park/flux-dashboard",
+      "live_url": "https://flux-dashboard.vercel.app"
+    },
+    {
+      "name": "CodeSync",
+      "category": "Open Source",
+      "description": "VS Code 확장 프로그램. 팀 코딩 컨벤션을 자동 감지하고 신규 파일에 즉시 적용합니다. npm 주간 다운로드 4,200+.",
+      "tech": ["TypeScript", "VS Code API", "Node.js"],
+      "color": "#db2777",
+      "github_url": "https://github.com/minjun-park/codesync",
+      "live_url": "https://marketplace.visualstudio.com/items?itemName=codesync"
+    },
+    {
+      "name": "ShopMate AI",
+      "category": "Mobile Web",
+      "description": "AI 추천 기반 쇼핑 어시스턴트 PWA. GPT-4 통합 개인화 추천 엔진으로 전환율 34% 향상.",
+      "tech": ["Next.js", "OpenAI API", "Supabase"],
+      "color": "#059669",
+      "live_url": "https://shopmate-ai.example.com"
+    },
+    {
+      "name": "DevLog",
+      "category": "Side Project",
+      "description": "개발자 전용 기술 블로그 플랫폼. MDX 기반 에디터, 코드 하이라이팅, 시리즈 기능을 갖춘 퍼블리싱 툴.",
+      "tech": ["Next.js", "MDX", "Prisma", "Vercel"],
+      "color": "#d97706",
+      "github_url": "https://github.com/minjun-park/devlog"
+    }
+  ],
+  "experience": [
+    {
+      "company": "테크 스타트업 Lumio",
+      "role": "Lead Frontend Engineer",
+      "period": "2022.06 — 현재"
+    },
+    {
+      "company": "디지털 에이전시 Sparq",
+      "role": "Full-Stack Developer",
+      "period": "2020.01 — 2022.05"
+    },
+    {
+      "company": "프리랜서",
+      "role": "웹 개발 / UI 구현",
+      "period": "2019.03 — 2019.12"
+    }
+  ],
+  "available": true
+}

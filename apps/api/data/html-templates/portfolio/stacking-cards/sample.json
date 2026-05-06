@@ -1,0 +1,118 @@
+{
+  "profile": {
+    "avatar_emoji": "💻",
+    "name": "한동현",
+    "role": "풀스택 개발자 / 창업자",
+    "tagline": "복잡한 문제를 단순하게 풀어냅니다",
+    "location": "서울, 대한민국"
+  },
+  "facts": [
+    { "value": "8년", "label": "개발 경력" },
+    { "value": "3곳", "label": "창업 경험" },
+    { "value": "풀스택", "label": "포지션" }
+  ],
+  "work_heading": "PROJECTS",
+  "projects": [
+    {
+      "title": "Moim — 팀 일정 자동화",
+      "category": "SaaS",
+      "desc": "AI가 팀원 일정을 분석해 최적의 미팅 시간을 자동 제안하는 서비스. 베타 런칭 3개월 만에 유료 사용자 1,200명 달성.",
+      "tags": ["Next.js", "FastAPI", "GPT-4"],
+      "result": "유료 사용자 1,200명"
+    },
+    {
+      "title": "Typeset — 마크다운 에디터",
+      "category": "오픈소스",
+      "desc": "실시간 협업 기능이 내장된 마크다운 에디터 VS Code 확장. 다크 모드와 커스텀 단축키를 지원하며 GitHub star 3.2K 달성.",
+      "tags": ["TypeScript", "CodeMirror", "Socket.io"],
+      "result": "GitHub ★ 3,200"
+    },
+    {
+      "title": "NutriTrack — 식단 관리",
+      "category": "모바일 앱",
+      "desc": "카메라 촬영만으로 음식을 인식하고 영양 정보를 분석하는 앱. 구글 플레이 4.7점, 다운로드 8만 건.",
+      "tags": ["React Native", "TensorFlow Lite", "Firebase"],
+      "result": "다운로드 80,000+"
+    }
+  ],
+  "skills_heading": "SKILLS",
+  "skill_groups": [
+    {
+      "group": "프론트엔드",
+      "items": ["React", "TypeScript", "Next.js", "React Native", "Three.js", "Framer Motion"]
+    },
+    {
+      "group": "백엔드",
+      "items": ["Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL"]
+    },
+    {
+      "group": "AI / 데이터",
+      "items": ["Python", "OpenAI API", "LangChain", "TensorFlow", "Pandas"]
+    },
+    {
+      "group": "인프라",
+      "items": ["Docker", "AWS", "Vercel", "Terraform", "GitHub Actions"]
+    }
+  ],
+  "process_heading": "HOW I WORK",
+  "process": [
+    {
+      "icon": "💡",
+      "title": "문제 정의",
+      "desc": "솔루션보다 문제를 먼저 깊이 이해합니다. '무엇을 만들 것인가'보다 '왜 만들어야 하는가'를 먼저 묻습니다."
+    },
+    {
+      "icon": "⚡",
+      "title": "빠른 프로토타이핑",
+      "desc": "완벽한 계획보다 빠른 실험을 선호합니다. 1주일 안에 핵심 가설을 테스트할 수 있는 프로토타입을 만듭니다."
+    },
+    {
+      "icon": "🔄",
+      "title": "반복 개선",
+      "desc": "데이터와 사용자 피드백을 기반으로 빠르게 개선합니다. 출시가 끝이 아닌 시작임을 항상 기억합니다."
+    },
+    {
+      "icon": "📈",
+      "title": "지속 성장",
+      "desc": "제품이 성장하면서 기술 부채를 관리하고 확장 가능한 구조로 진화시킵니다. 장기적 관점을 잃지 않습니다."
+    }
+  ],
+  "testimonials_heading": "TESTIMONIALS",
+  "testimonials": [
+    {
+      "quote": "동현님과 함께한 6개월 동안 우리 팀의 개발 속도가 2배 이상 빨라졌습니다. 기술적인 뛰어남은 물론이고, 복잡한 비즈니스 요구사항을 개발자 언어로 명확하게 정리해 주는 능력이 탁월했습니다.",
+      "name": "오지영",
+      "role": "CEO, 스타트업 Growvita"
+    },
+    {
+      "quote": "오픈소스 프로젝트 기여에서 처음 만났는데, 코드 품질에 대한 진지한 태도와 동료 리뷰에 쏟는 에너지가 인상적이었습니다. 같이 일하고 싶은 개발자의 정석입니다.",
+      "name": "Marcus Webb",
+      "role": "Senior Engineer, Vercel"
+    },
+    {
+      "quote": "NutriTrack 앱을 만들 때 불가능할 것 같았던 오프라인 AI 처리를 구현해 냈습니다. 제약 조건 안에서 창의적인 해법을 찾는 능력이 정말 뛰어납니다.",
+      "name": "김소연",
+      "role": "Product Lead, 헬스케어 스타트업"
+    }
+  ],
+  "contact_heading": "같이 만들어볼까요?",
+  "contact_body": "새로운 프로젝트, 협업 제안, 기술 자문 모두 환영합니다. 복잡한 문제일수록 더 흥미롭습니다.",
+  "contact_label": "연락하기",
+  "contact_items": [
+    {
+      "icon": "📧",
+      "label": "이메일",
+      "value": "donghyun.han@example.com"
+    },
+    {
+      "icon": "🐙",
+      "label": "GitHub",
+      "value": "github.com/donghyun-han"
+    },
+    {
+      "icon": "💼",
+      "label": "LinkedIn",
+      "value": "linkedin.com/in/donghyunhan"
+    }
+  ]
+}

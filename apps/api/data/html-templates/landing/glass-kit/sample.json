@@ -1,0 +1,15 @@
+{
+  "brand": "LinkDrop AI",
+  "hero": {
+    "eyebrow": "AI 영상 · 콘텐츠 자동화 · 크리에이터 플랫폼",
+    "headline": "LinkDrop AI<br>영상 플랫폼",
+    "tagline": "주제만 입력하면 AI가 시나리오·TTS·영상을 자동으로 완성합니다. 유튜브·릴스·쇼츠까지 원클릭으로.",
+    "cta_primary": "플랫폼 둘러보기 →",
+    "cta_secondary": "데모 영상 보기"
+  },
+  "stats": [
+    {"num": "5초", "desc": "영상 생성 시간"},
+    {"num": "9종", "desc": "화풍 스타일"},
+    {"num": "무료", "desc": "베타 기간 사용"}
+  ]
+}

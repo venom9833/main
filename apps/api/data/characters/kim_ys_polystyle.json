@@ -1,0 +1,49 @@
+{
+  "id": "kim_ys",
+  "name": "김영수",
+  "style": "noir_oil",
+  "appearance_en": {
+    "face_shape": "weathered oval face with deep-set wrinkles, prominent cheekbones beneath thinning skin — the face of a man built by decades of factory labor who is now slowly disappearing inside it",
+    "skin": "dark and roughened on hands and neck, paler at the temples, deeply lined and liver-spotted — the skin of outdoor labor that never fully healed",
+    "eyes": "dark brown, heavy-lidded and watery at the outer corners — still watchful but losing focus at the edges, the eyes of a man who decided long ago that showing what he sees changes nothing",
+    "nose": "broad, slightly bulbous at the tip, age-spotted across the bridge",
+    "mouth": "thin lips drawn tight in the habit of a man who learned early that complaints change nothing",
+    "eyebrows": "sparse and grey, once full — slightly irregular from years of squinting outdoors",
+    "distinctive_marks": "deep creases framing the mouth, age spots at temples and forehead, pronounced liver spots on hands, knuckles thick from manual labor",
+    "hair": "thinning white hair, kept short and combed flat — still managed each morning as the one thing still under control",
+    "body": {
+      "height_cm": 168,
+      "weight_kg": 58,
+      "proportions": "once-sturdy frame now slightly reduced, hands still large and roughened relative to the rest — the body of a man who worked with them all his life",
+      "posture": "slightly stooped forward, hands folded in lap or resting on knees — an elder's body shaped by decades of not wanting to ask for more room than he needed",
+      "body_prompt": "168cm slightly stooped Korean grandfather, large roughened working hands folded in lap, frame that was once sturdy and is now quietly diminishing"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "neatly pressed dark charcoal trousers, collared shirt always buttoned to the top, thin grey cardigan — the clothes he treats as Sunday best even on weekdays because it is the one discipline left",
+        "wardrobe_prompt": "neatly pressed dark charcoal trousers, collared shirt buttoned to top, thin grey cardigan, old watch on left wrist"
+      },
+      "casual": {
+        "description": "same trousers, collar unbuttoned, cardigan removed — rare, and only at home alone",
+        "wardrobe_prompt": "dark charcoal trousers, collared shirt unbuttoned at top, no cardigan, old watch on wrist"
+      },
+      "stressed": {
+        "description": "the same outfit but visibly disheveled — shirt untucked on one side, cardigan buttoned wrong, watch unwound",
+        "wardrobe_prompt": "dark charcoal trousers, collared shirt partially untucked, cardigan askew, old watch loose on wrist"
+      }
+    },
+    "emotion_baseline": "practiced stillness — the blank face of a man who learned very young that strong men do not show pain, and is now discovering this was the wrong lesson",
+    "fal_identity_prompt": "83-year-old Korean grandfather, deeply weathered oval face with heavy-set wrinkles, heavy-lidded watery dark eyes still watchful, sparse grey uneven brows, broad bulbous age-spotted nose, thin tightly-drawn lips, thinning white hair combed flat, 168cm slightly stooped frame with large roughened hands, dark charcoal trousers and buttoned collar shirt and thin grey cardigan, old watch on left wrist"
+  },
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/v3/characters/portraits/kim_ys_polystyle.png",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of a man whose silence has been mistaken for strength for eighty years, warm amber as the only light still finding his face, steel blue of the practiced stillness after everything he survived and never named, painterly figurative realism, Korean drama cinematic composition",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, energetic, young, healthy glow, airbrushed"
+}

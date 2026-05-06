@@ -1,0 +1,49 @@
+{
+  "id": "choi_eb",
+  "name": "최은비",
+  "style": "noir_oil",
+  "appearance_en": {
+    "face_shape": "soft round youthful face, full smooth cheeks, gentle rounded jaw — entirely adolescent in structure, carrying no hardness yet in the bone, though the expression has learned restraint",
+    "skin": "fair bright Korean skin, naturally clear and smooth, minimal pores, very slight pallor at cheeks from disrupted sleep, no blemishes — the unretouched clarity of early adolescence",
+    "eyes": "large dark brown eyes, slightly wide, long natural lashes, gaze quiet and watchful — careful, alert, reads the room before committing to any expression. Very slightly downturned outer corners giving a naturally gentle melancholic resting look. Faint shadows under eyes from nights she stayed awake listening",
+    "nose": "small, softly upturned tip, entirely youthful and unhardened",
+    "mouth": "soft full lips, naturally pink, no lip product, resting gently closed — the mouth that says '괜찮아요' before the question is finished. Rarely volunteers what she actually means",
+    "eyebrows": "soft naturally arched medium brows, ungroomed, lightly defined — purely natural adolescent brows, left rises almost imperceptibly when pretending not to notice",
+    "distinctive_marks": "no moles or scars, very faint under-eye shadows from light sleep deprivation she conceals from her mother",
+    "hair": "dark brown straight hair, medium length to shoulders, healthy natural shine, no heat styling — worn in a simple low ponytail with plain elastic or loose, falls forward naturally when she looks down",
+    "body": {
+      "height_cm": 155,
+      "weight_kg": 43,
+      "proportions": "slim slight adolescent frame, narrow shoulders, thin arms, small hands, proportions of a girl who has not yet grown into herself",
+      "posture": "shoulders drawn subtly inward, arms close to body, slight forward lean of the head — the body language of a child who entered an unfamiliar house and decided occupying minimum space was the safest strategy",
+      "body_prompt": "155cm slim slight Korean 14-year-old girl, narrow inward-drawn shoulders, arms close to body, quiet contained small presence, adolescent frame not yet grown into"
+    },
+    "wardrobe": {
+      "default": {
+        "description": "middle school uniform — white blouse collar fully buttoned, dark navy straight skirt below knee, everything neat and correct. The uniform worn as both armor and camouflage",
+        "wardrobe_prompt": "middle school uniform white blouse with collar buttoned, dark navy straight skirt below knee, clean and neat, everything in correct order"
+      },
+      "casual": {
+        "description": "simple pale round-neck t-shirt or soft hoodie in cream or light grey, straight comfortable jeans, plain white sneakers — clothes chosen not to be noticed",
+        "wardrobe_prompt": "simple pale round-neck t-shirt or cream soft hoodie, straight comfortable jeans, plain white sneakers, no accessories"
+      },
+      "school_bag": {
+        "description": "standard dark navy or black middle school backpack, slightly too large for her frame — the backpack makes her look younger and smaller than she is trying to appear",
+        "wardrobe_prompt": "standard dark navy or black middle school backpack slightly oversized on her small slim frame, worn on both shoulders"
+      }
+    },
+    "emotion_baseline": "carefully maintained neutral — not blank, not sad, just precisely managed. The expression of a child who learned early that being visibly fine is easier than being asked why she is not. Something older occasionally surfaces in her eyes in unguarded moments",
+    "fal_identity_prompt": "14-year-old Korean middle school girl, soft round face with full cheeks and gentle jaw, large dark brown slightly wide eyes with naturally downturned outer corners and faint under-eye shadows, soft naturally arched brows, small upturned nose, soft full naturally pink lips closed gently, dark brown straight hair to shoulders in simple low ponytail or loose, 155cm slim slight narrow-shouldered frame with inward posture, fair bright naturally clear Korean skin, quietly watchful contained adolescent presence"
+  },
+  "fal_route": "fal-ai/flux-pulid",
+  "fal_params": {
+    "num_inference_steps": 20,
+    "guidance_scale": 7.0,
+    "image_size": "landscape_16_9"
+  },
+  "pulid_weight": 0.85,
+  "reference_url": "https://pub-3004911807a7429c89c576d1aa468160.r2.dev/v3/characters/portraits/choi_eb_polystyle.png",
+  "is_default": true,
+  "style_prompt": "oil painting thick impasto brushstrokes, noir chiaroscuro, strictly four-color palette: deep black of spaces too large for a 14-year-old to fill, warm amber of family warmth she is trying not to want as primary light, steel blue of a child learning to take up less space, painterly figurative realism, Korean drama cinematic composition, adolescent stillness performing fine in oil weight",
+  "negative_prompt": "photorealistic, anime, flat cartoon, CGI, 3d render, colors outside palette, green, yellow, purple, extra limbs, ugly, deformed, text, watermark, adult appearance, mature features, idol makeup, glamorous, sexualized, airbrushed"
+}

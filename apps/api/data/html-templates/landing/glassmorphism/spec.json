@@ -1,0 +1,100 @@
+{
+  "id": "landing/glassmorphism",
+  "mode": "skeleton",
+  "label": "글라스모피즘 랜딩페이지",
+  "description": "Liquid Glass UI — 다크 배경 + 컬러 블롭 + backdrop-filter 글라스 카드. 히어로·기능·통계·FAQ·CTA 5섹션 구성.",
+  "skeleton_file": "skeleton.html",
+  "styles_file": "styles.css",
+  "palette": {
+    "background": "#07080f",
+    "surface_glass": "rgba(255,255,255,0.10)",
+    "accent_cyan": "#5ee7df",
+    "accent_violet": "#b490f5",
+    "accent_rose": "#f472b6",
+    "text_primary": "rgba(255,255,255,0.92)",
+    "text_muted": "rgba(255,255,255,0.55)"
+  },
+  "content_schema": {
+    "type": "object",
+    "required": ["brand", "hero", "features", "stats", "faq", "cta"],
+    "properties": {
+      "brand": {"type": "string"},
+      "nav_links": {"type": "array"},
+      "hero": {
+        "type": "object",
+        "required": ["eyebrow", "headline", "tagline", "cta_primary"],
+        "properties": {
+          "eyebrow": {"type": "string", "description": "상단 레이블 (짧게)"},
+          "headline": {"type": "string", "description": "메인 헤드라인"},
+          "tagline": {"type": "string", "description": "부제 (1~2문장)"},
+          "cta_primary": {"type": "string"},
+          "cta_secondary": {"type": "string"}
+        }
+      },
+      "features": {
+        "type": "object",
+        "required": ["heading", "items"],
+        "properties": {
+          "heading": {"type": "string"},
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "required": ["icon", "title", "desc"],
+              "properties": {
+                "icon": {"type": "string"},
+                "title": {"type": "string"},
+                "desc": {"type": "string"}
+              }
+            }
+          }
+        }
+      },
+      "stats": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "required": ["value", "label"],
+          "properties": {
+            "value": {"type": "string"},
+            "label": {"type": "string"}
+          }
+        }
+      },
+      "faq": {
+        "type": "object",
+        "required": ["heading", "items"],
+        "properties": {
+          "heading": {"type": "string"},
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 6,
+            "items": {
+              "type": "object",
+              "required": ["q", "a"],
+              "properties": {
+                "q": {"type": "string"},
+                "a": {"type": "string"}
+              }
+            }
+          }
+        }
+      },
+      "cta": {
+        "type": "object",
+        "required": ["heading", "body", "cta_label"],
+        "properties": {
+          "heading": {"type": "string"},
+          "body": {"type": "string"},
+          "cta_label": {"type": "string"},
+          "sub_text": {"type": "string"}
+        }
+      }
+    }
+  }
+}

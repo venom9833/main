@@ -1,0 +1,105 @@
+/* StackingCards Base — landing / product / portfolio 공유
+   브라우저: CSS Scroll-driven Animations (Chrome 115+, Edge 115+, Safari 18+, Firefox 128+)
+   미지원 시: sticky 스택만으로도 동작 (애니메이션 없음) */
+
+/* ─── 초기화 ─── */
+html, body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+/* ─── 스택 컨테이너 ─── */
+.sc-stack {
+  position: relative;
+  isolation: isolate;
+}
+
+/* ─── 카드 기본 ─── */
+.sc-card {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 560px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* z-index: 뒤쪽 카드가 앞쪽 카드를 덮음 */
+.sc-card:nth-child(1)  { z-index: 1; }
+.sc-card:nth-child(2)  { z-index: 2; }
+.sc-card:nth-child(3)  { z-index: 3; }
+.sc-card:nth-child(4)  { z-index: 4; }
+.sc-card:nth-child(5)  { z-index: 5; }
+.sc-card:nth-child(6)  { z-index: 6; }
+.sc-card:nth-child(7)  { z-index: 7; }
+.sc-card:nth-child(8)  { z-index: 8; }
+
+/* ─── 진입 애니메이션 (CSS Scroll-driven) ─── */
+@keyframes sc-enter {
+  from {
+    transform: translateY(3.5vh) scale(0.99);
+    opacity: 0.85;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .sc-card:not(:first-child) {
+    animation: sc-enter linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 55%;
+  }
+}
+
+/* ─── 콘텐츠 내부 ─── */
+.sc-inner {
+  width: 100%;
+  max-width: 760px;
+  padding: 3rem 2.5rem;
+  box-sizing: border-box;
+}
+
+.sc-inner--center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ─── 섹션 타이틀 공통 ─── */
+.sc-section-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  margin: 0 0 2rem;
+  opacity: 0.6;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 600px) {
+  .sc-inner {
+    padding: 2.5rem 1.5rem;
+  }
+  .sc-card {
+    align-items: flex-start;
+    padding-top: 4rem;
+  }
+}
+
+/* ─── 인쇄 ─── */
+@media print {
+  .sc-card {
+    position: relative;
+    height: auto;
+    min-height: 0;
+    page-break-after: always;
+  }
+}

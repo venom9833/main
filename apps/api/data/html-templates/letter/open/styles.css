@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Noto+Sans+KR:wght@400&display=swap');
+
+:root {
+  --font-base: 'Noto Sans KR', sans-serif;
+  --font-serif: 'Lora', serif;
+}
+
+/* Letter / Open — Formal Document on Parchment */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --font-serif: 'Times New Roman', Times, Georgia, serif;
+  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --fs-title:   clamp(2rem, 7vw, 3.6rem);
+  --fs-sub:     clamp(0.95rem, 3vw, 1.4rem);
+  --fs-body:    clamp(1rem, 2.2vw, 1.2rem);
+  --fs-meta:    clamp(0.78rem, 1.8vw, 0.92rem);
+  --max-width:  72ch;
+  --sp-xl: 3.5rem;
+  --sp-lg: 2.5rem;
+  --sp-md: 1.8rem;
+  --sp-sm: 1.2rem;
+  --sp-xs: 0.75rem;
+}
+
+body {
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font-family: var(--font-serif);
+  font-size: var(--fs-body);
+  line-height: 1.78;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--sp-lg) var(--sp-sm);
+  min-height: 100vh;
+}
+
+/* ─── DOCUMENT CARD ─── */
+.lo-document {
+  max-width: var(--max-width);
+  width: 100%;
+  background: var(--c-paper);
+  border: 1px solid var(--c-border);
+  box-shadow:
+    0 22px 38px -12px rgba(0,0,0,0.08),
+    0 2px 8px rgba(0,0,0,0.02);
+  padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3.5rem);
+  border-radius: 2px 2px 10px 10px;
+}
+
+/* ─── HEADER ─── */
+.lo-eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--c-burgundy);
+  opacity: 0.7;
+  margin-bottom: 0.55rem;
+}
+
+.lo-title {
+  font-family: var(--font-sans);
+  font-size: var(--fs-title);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: var(--c-burgundy);
+  border-left: 7px solid var(--c-gold);
+  padding-left: 1.1rem;
+  margin-bottom: var(--sp-xs);
+  text-wrap: balance;
+}
+
+.lo-subhead {
+  font-family: var(--font-sans);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-xs);
+  border-bottom: 2px solid var(--c-gold);
+  padding-bottom: var(--sp-sm);
+  margin-bottom: var(--sp-md);
+}
+
+.lo-subhead span {
+  background: var(--c-bg-subtle);
+  padding: 0.2rem 0.85rem;
+  font-size: var(--fs-meta);
+  border-radius: 30px;
+  color: var(--c-burgundy);
+  border: 1px solid var(--c-border);
+  font-family: var(--font-sans);
+}
+
+/* ─── BODY ─── */
+.lo-salutation {
+  font-style: italic;
+  font-size: var(--fs-sub);
+  color: var(--c-ink);
+  opacity: 0.82;
+  margin-bottom: var(--sp-sm);
+}
+
+.lo-section-label {
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  color: var(--c-burgundy);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: var(--sp-md);
+  margin-bottom: 0.35rem;
+}
+
+.lo-body p {
+  margin-bottom: 1.55em;
+  text-align: justify;
+  hyphens: auto;
+  hanging-punctuation: first allow-end last;
+}
+
+.lo-first-p::first-letter {
+  font-size: 4.2em;
+  float: left;
+  line-height: 0.8;
+  margin-right: 0.18rem;
+  padding-top: 0.1rem;
+  color: var(--c-burgundy);
+  font-weight: 500;
+  font-family: var(--font-serif);
+}
+
+.lo-closing {
+  font-style: italic;
+  margin-top: var(--sp-md) !important;
+}
+
+/* ─── SIGNATURE ─── */
+.lo-signature-block {
+  margin-top: var(--sp-xl);
+  font-family: var(--font-sans);
+  border-top: 2px dashed var(--c-border);
+  padding-top: var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+}
+
+.lo-signature-name {
+  font-size: var(--fs-sub);
+  font-weight: 500;
+  color: var(--c-burgundy);
+  letter-spacing: 0.02em;
+}
+
+.lo-signature-name small {
+  font-size: var(--fs-meta);
+  color: var(--c-ink);
+  opacity: 0.65;
+  font-variant: small-caps;
+  margin-left: 0.35rem;
+}
+
+.lo-signature-org {
+  font-size: var(--fs-meta);
+  opacity: 0.65;
+}
+
+.lo-attest {
+  font-size: var(--fs-meta);
+  font-style: italic;
+  opacity: 0.65;
+}
+
+/* ─── FOOTER ─── */
+.lo-doc-footer {
+  margin-top: var(--sp-xl);
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm) var(--sp-md);
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sp-sm) 0;
+  border-top: 1px solid var(--c-border);
+  opacity: 0.68;
+}
+
+.lo-badge {
+  background: color-mix(in srgb, var(--c-gold) 14%, transparent);
+  padding: 0.3rem 1rem;
+  border-radius: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--c-gold);
+  font-weight: 500;
+  color: var(--c-ink);
+  opacity: 1;
+}
+
+.lo-badge::before {
+  content: "✦";
+  color: var(--c-burgundy);
+  font-size: 1.05em;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 540px) {
+  .lo-document { padding: 2rem 1.2rem; }
+  .lo-subhead  { flex-direction: column; align-items: flex-start; }
+}
+
+@media print {
+  body { background: white; padding: 0; }
+  .lo-document { box-shadow: none; border: none; padding: 1cm 1.5cm; }
+}

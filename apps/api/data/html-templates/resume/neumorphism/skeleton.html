@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ content.person.name }} — {{ content.person.title }}</title>
+  <style>{{ shared_base_css }}</style>
+  <style>{{ shared_fonts_css }}</style>
+  {{ palette_vars }}
+  <style>{{ template_css }}</style>
+  <style>{{ shared_print_css }}</style>
+</head>
+<body>
+<div class="rnm-page">
+
+  <!-- ─── Header ─── -->
+  <header class="rnm-header">
+    <div class="rnm-header-main">
+      <h1 class="rnm-name">{{ content.person.name }}</h1>
+      <p class="rnm-title">{{ content.person.title }}</p>
+    </div>
+    <div class="rnm-contacts">
+      <span class="rnm-contact-item">✉ {{ content.person.email }}</span>
+      {% if content.person.phone %}<span class="rnm-contact-item">📞 {{ content.person.phone }}</span>{% endif %}
+      {% if content.person.location %}<span class="rnm-contact-item">📍 {{ content.person.location }}</span>{% endif %}
+      {% if content.person.github %}<span class="rnm-contact-item">⌨ {{ content.person.github }}</span>{% endif %}
+      {% if content.person.linkedin %}<span class="rnm-contact-item">🔗 {{ content.person.linkedin }}</span>{% endif %}
+    </div>
+  </header>
+
+  <!-- ─── 본문 2단 ─── -->
+  <div class="rnm-body">
+
+    <!-- 메인 컬럼 -->
+    <main class="rnm-main">
+
+      <!-- Summary -->
+      <section class="rnm-card">
+        <h2 class="rnm-section-title">{{ content.summary_heading }}</h2>
+        <p class="rnm-summary">{{ content.summary }}</p>
+      </section>
+
+      <!-- Experience -->
+      <section class="rnm-card">
+        <h2 class="rnm-section-title">{{ content.experience_heading }}</h2>
+        <div class="rnm-exp-list">
+          {% for exp in content.experiences %}
+          <div class="rnm-exp-item">
+            <div class="rnm-exp-header">
+              <div>
+                <span class="rnm-exp-role">{{ exp.role }}</span>
+                <span class="rnm-exp-company">{{ exp.company }}{% if exp.location %} · {{ exp.location }}{% endif %}</span>
+              </div>
+              <span class="rnm-exp-period">{{ exp.period }}</span>
+            </div>
+            <ul class="rnm-bullets">
+              {% for bullet in exp.bullets %}<li>{{ bullet }}</li>{% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 사이드 컬럼 -->
+    <aside class="rnm-side">
+
+      <!-- Skills -->
+      <section class="rnm-card">
+        <h2 class="rnm-section-title">{{ content.skills_heading }}</h2>
+        <div class="rnm-skill-groups">
+          {% for sg in content.skill_groups %}
+          <div class="rnm-skill-group">
+            <span class="rnm-skill-label">{{ sg.group }}</span>
+            <div class="rnm-skill-tags">
+              {% for skill in sg.skills %}<span class="rnm-skill-tag">{{ skill }}</span>{% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section class="rnm-card">
+        <h2 class="rnm-section-title">{{ content.education_heading }}</h2>
+        <div class="rnm-edu-list">
+          {% for edu in content.education %}
+          <div class="rnm-edu-item">
+            <span class="rnm-edu-school">{{ edu.school }}</span>
+            <span class="rnm-edu-degree">{{ edu.degree }}</span>
+            <span class="rnm-edu-period">{{ edu.period }}</span>
+            {% if edu.note %}<span class="rnm-edu-note">{{ edu.note }}</span>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Certifications (optional) -->
+      {% if content.certifications %}
+      <section class="rnm-card">
+        <h2 class="rnm-section-title">{{ content.certifications_heading }}</h2>
+        <div class="rnm-cert-list">
+          {% for cert in content.certifications %}
+          <div class="rnm-cert-item">
+            <span class="rnm-cert-name">{{ cert.name }}</span>
+            <span class="rnm-cert-meta">{{ cert.issuer }}{% if cert.year %} · {{ cert.year }}{% endif %}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+    </aside>
+  </div>
+
+</div>
+</body>
+</html>

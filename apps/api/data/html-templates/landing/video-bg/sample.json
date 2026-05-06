@@ -1,0 +1,61 @@
+{
+  "brand": "APEX STUDIO",
+  "nav_links": [
+    {"label": "Brand", "href": "#brand"},
+    {"label": "Work", "href": "#work"},
+    {"label": "About", "href": "#about"}
+  ],
+  "header_cta": "Get In Touch",
+  "sections": [
+    {
+      "type": "hero",
+      "headline": "AI로 만드는 영상의 미래",
+      "body": "Hollywood 수준의 영상을 AI 기술로. 속도는 10배, 비용은 1/10.",
+      "cta_primary": "쇼릴 보기",
+      "cta_secondary": null,
+      "tag": null,
+      "bg_gradient": "linear-gradient(135deg, #0f0c29, #302b63, #24243e)",
+      "video_url": ""
+    },
+    {
+      "type": "project",
+      "headline": "달빛 오페라",
+      "body": null,
+      "cta_primary": "프로젝트 보기",
+      "cta_secondary": "전체 작품 보기",
+      "tag": "오리지널 드라마",
+      "bg_gradient": "linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)",
+      "video_url": ""
+    },
+    {
+      "type": "project",
+      "headline": "Breaking Echo",
+      "body": null,
+      "cta_primary": "프로젝트 보기",
+      "cta_secondary": "전체 작품 보기",
+      "tag": "Music Video",
+      "bg_gradient": "linear-gradient(135deg, #0d0d0d, #1a0533, #3d0066)",
+      "video_url": ""
+    },
+    {
+      "type": "project",
+      "headline": "Urban Canvas",
+      "body": null,
+      "cta_primary": "프로젝트 보기",
+      "cta_secondary": "전체 작품 보기",
+      "tag": "Brand Film",
+      "bg_gradient": "linear-gradient(135deg, #1e3c72, #2a5298)",
+      "video_url": ""
+    },
+    {
+      "type": "final_cta",
+      "headline": "당신의 이야기를 영상으로",
+      "body": "AI 영상 제작의 새로운 기준. 지금 문의하세요.",
+      "cta_primary": "프로젝트 문의",
+      "cta_secondary": null,
+      "tag": null,
+      "bg_gradient": "linear-gradient(135deg, #0f0c29, #302b63, #24243e)",
+      "video_url": ""
+    }
+  ]
+}

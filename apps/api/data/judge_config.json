@@ -1,0 +1,55 @@
+{
+  "_comment": "Judge 슬롯 설정. 모델 정책 변경 시 이 파일만 편집하면 됩니다 (코드 수정 불필요).",
+  "_provider_note": "provider 값: 'cerebras' | 'openrouter' | 'nvidia_nim' | 'google_free'. 각 API 키는 config.py 참조.",
+  "slots": {
+    "style": {
+      "description": "한국어 문체 감사 — 감정→신체 / 대사=날것 / 설명금지 / 문장리듬 (원칙 ①②⑥⑦)",
+      "prompt_file": "judge_style_ko.md",
+      "models": [
+        {"provider": "cerebras",    "model": "llama-3.3-70b"},
+        {"provider": "google_free", "model": "gemini-2.0-flash"},
+        {"provider": "nvidia_nim",  "model": "meta/llama-3.3-70b-instruct"},
+        {"provider": "openrouter",  "model": "google/gemma-4-31b-it:free"},
+        {"provider": "openrouter",  "model": "meta-llama/llama-3.3-70b-instruct:free"},
+        {"provider": "openrouter",  "model": "mistralai/mistral-7b-instruct:free"}
+      ]
+    },
+    "structure": {
+      "description": "구조 감사 — 비트누락 / 대사초과 / 클리프행어 위치 / 비밀표지 (원칙 ⑧⑨⑪ + 구조항목)",
+      "prompt_file": "judge_structure.md",
+      "models": [
+        {"provider": "cerebras",    "model": "gpt-oss-120b"},
+        {"provider": "google_free", "model": "gemini-2.0-flash"},
+        {"provider": "openrouter",  "model": "openai/gpt-oss-120b:free"},
+        {"provider": "nvidia_nim",  "model": "qwen/qwen3-235b-a22b"},
+        {"provider": "cerebras",    "model": "qwen-3-235b"},
+        {"provider": "openrouter",  "model": "meta-llama/llama-3.3-70b-instruct:free"}
+      ]
+    },
+    "causality": {
+      "description": "인과 감사 — 비밀=징후 / 공간이말한다 / 매장면훅 / 긴장=행동선택 (원칙 ③④⑤⑩)",
+      "prompt_file": "judge_causality.md",
+      "models": [
+        {"provider": "nvidia_nim",  "model": "nvidia/llama-3.1-nemotron-70b-instruct"},
+        {"provider": "google_free", "model": "gemini-2.0-flash"},
+        {"provider": "openrouter",  "model": "nvidia/nemotron-3-super-120b-a12b:free"},
+        {"provider": "cerebras",    "model": "llama-3.3-70b"},
+        {"provider": "openrouter",  "model": "deepseek/deepseek-r1:free"},
+        {"provider": "cerebras",    "model": "qwen-3-235b"}
+      ]
+    }
+  },
+  "circuit_breaker": {
+    "failure_threshold": 3,
+    "disable_ttl_seconds": 600,
+    "_comment": "동일 provider:model 조합에서 3회 연속 실패 시 10분간 비활성화. TTL 경과 후 자동 복구."
+  },
+  "revise_thresholds": {
+    "judges_3": {"high_min": 1, "medium_min": 3},
+    "judges_2": {"high_min": 1, "medium_min": 4},
+    "judges_1": {"high_min": 1, "medium_min": 999},
+    "_comment": "활성 Judge 수에 따라 Revise 트리거 기준 조정 (Judge 수 줄수록 기준 엄격화)"
+  },
+  "timeout_seconds": 60,
+  "max_tokens": 1200
+}
